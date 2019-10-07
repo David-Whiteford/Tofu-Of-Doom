@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.28803.352
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Tofu-of-Doom", "Tofu-of-Doom\Tofu-of-Doom.vcxproj", "{192ED0FC-B1AC-439A-AC83-D8A69AFE1FBB}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{192ED0FC-B1AC-439A-AC83-D8A69AFE1FBB}.Debug|x64.ActiveCfg = Debug|x64
+		{192ED0FC-B1AC-439A-AC83-D8A69AFE1FBB}.Debug|x64.Build.0 = Debug|x64
+		{192ED0FC-B1AC-439A-AC83-D8A69AFE1FBB}.Debug|x86.ActiveCfg = Debug|Win32
+		{192ED0FC-B1AC-439A-AC83-D8A69AFE1FBB}.Debug|x86.Build.0 = Debug|Win32
+		{192ED0FC-B1AC-439A-AC83-D8A69AFE1FBB}.Release|x64.ActiveCfg = Release|x64
+		{192ED0FC-B1AC-439A-AC83-D8A69AFE1FBB}.Release|x64.Build.0 = Release|x64
+		{192ED0FC-B1AC-439A-AC83-D8A69AFE1FBB}.Release|x86.ActiveCfg = Release|Win32
+		{192ED0FC-B1AC-439A-AC83-D8A69AFE1FBB}.Release|x86.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {96035F2D-AFF0-4B3C-9D44-85D8FA7EF961}
+	EndGlobalSection
+EndGlobal
