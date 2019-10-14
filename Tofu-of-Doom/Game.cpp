@@ -47,6 +47,12 @@ void Game::run()
 
 void Game::initialise()
 {
+	for (int i = 0; i < ROOM_NUMBERS; i++)
+	{
+		anotherRoom[i].initialise(); 
+		anotherRoom[i].transform.position.x += (i * 10);
+		anotherRoom[i].setPosition();
+	}
 	// Load texture
 	filename = "cottage-texture.png";
 	stbi_set_flip_vertically_on_load(false);
@@ -59,8 +65,40 @@ void Game::initialise()
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 
-	bool res = m_modelLoader.loadOBJ("cottage.obj", vertices, uvs, normals);
 
+
+	for (int i = 0; i < ROOM_NUMBERS; i++)
+	{
+		/*if (distance(cameraPos, anotherRoom[i].position) < 50)
+		{*/
+
+		glGenBuffers(1, &vertexbuffer[i]);
+		glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer[i]);
+		glBufferData(GL_ARRAY_BUFFER, anotherRoom[i].getVertices().size() * sizeof(glm::vec3), &anotherRoom[i].getVertices()[0], GL_STATIC_DRAW);
+
+		glGenBuffers(1, &uvbuffer);
+		glBindBuffer(GL_ARRAY_BUFFER, uvbuffer);
+		glBufferData(GL_ARRAY_BUFFER, anotherRoom[0].getUvs().size() * sizeof(glm::vec2), &anotherRoom[i].getUvs()[0], GL_STATIC_DRAW);
+
+		glGenBuffers(1, &normalbuffer);
+		glBindBuffer(GL_ARRAY_BUFFER, normalbuffer);
+		glBufferData(GL_ARRAY_BUFFER, anotherRoom[0].getNormals().size() * sizeof(glm::vec3), &anotherRoom[0].getNormals()[0], GL_STATIC_DRAW);
+
+	}
+
+
+
+
+	/*bool res = m_modelLoader.loadOBJ("cottage.obj", vertices, uvs, normals);*/
+	int v = 0;
+	
+	/*for (int i = 0; i < vertices.size(); i++)
+	{
+		vertices[i].x += 90;
+		std::cout << std::to_string(vertices[i].x) << std::endl;
+
+	}*/
+	//std::cout << "There are " << std::to_string(v) << std::endl;
 	GLuint m_error = glewInit(); // Initialise GLEW
 
 	// Load vertex and fragment shader files into shader objects
@@ -69,30 +107,11 @@ void Game::initialise()
 	GLint isCompiled = 0;
 	GLint isLinked = 0;
 	
-	glGenVertexArrays(1, &VertexArrayID);
-	glBindVertexArray(VertexArrayID);
-
-	// Initialise buffers (vertices, UV and normals)
-	glGenBuffers(1, &vertexbuffer);
-	glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
-	glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(glm::vec3), &vertices[0], GL_STATIC_DRAW);
-
-	glGenBuffers(1, &uvbuffer);
-	glBindBuffer(GL_ARRAY_BUFFER, uvbuffer);
-	glBufferData(GL_ARRAY_BUFFER, uvs.size() * sizeof(glm::vec2), &uvs[0], GL_STATIC_DRAW);
-
-	glGenBuffers(1, &normalbuffer);
-	glBindBuffer(GL_ARRAY_BUFFER, normalbuffer);
-	glBufferData(GL_ARRAY_BUFFER, normals.size() * sizeof(glm::vec3), &normals[0], GL_STATIC_DRAW);
-
 	// Projection matrix 
 	projection = glm::perspective(45.0f, 4.0f / 3.0f, 1.0f, 500.0f);
 
-	// View (camera)
-	view = camera(m_eye, 0, 0);
-
-	// Model matrix (for now)
-	model = glm::mat4(1.0f);
+	// Model matrix
+	model = glm::mat4(glm::translate(glm::mat4(1), glm::vec3(10.0f, 0.0f, 0.0f)));
 
 	// Enable depth test
 	glEnable(GL_DEPTH_TEST);
@@ -141,24 +160,77 @@ void Game::processEvents()
 /// </summary>
 void Game::update(sf::Time t_deltaTime)
 {
-	// Update game controls
-	gameControls(t_deltaTime);
+	bool move = false;
 
-	// Update view (camera)
-	view = camera(m_eye, m_pitch, m_yaw);
+	// Update game controls
+	camera.input(t_deltaTime);
 
 	// Update model view projection
-	mvp = projection * view * model;
+	mvp = projection * camera.getView() * model;
+
+	
+
+	/// <summary>
+	/// This moves objects
+	/// </summary>
+	/// <param name="t_deltaTime"></param>
+	for (int i = 0; i < ROOM_NUMBERS; i++)
+	{
+		// Do soemthing like this if we have many enemies on screen to boost performance
+		if (Transform::distance(anotherRoom[i].transform.position, camera.transform.position) < 50)
+		{
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Y))
+			{
+				std::cout << "Y" << std::endl;
+				anotherRoom[i].transform.position.z += 1;
+				anotherRoom[i].setPosition();
+				move = true;
+			}
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::U))
+			{
+				std::cout << "U" << std::endl;
+				anotherRoom[i].transform.position.y += 1;
+				anotherRoom[i].setPosition();
+				move = true;
+			}
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::I))
+			{
+				std::cout << "I" << std::endl;
+				anotherRoom[i].transform.position.x += 1;
+				anotherRoom[i].setPosition();
+				move = true;
+			}
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::P))
+			{
+				std::cout << "P" << std::endl;
+				anotherRoom[i].transform.position.x -= 1;
+				anotherRoom[i].setPosition();
+				move = true;
+			}
+
+			if (move)
+			{
+				// update bind buffer
+				glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer[i]);
+				glBufferData(GL_ARRAY_BUFFER, anotherRoom[i].getVertices().size() * sizeof(glm::vec3), &anotherRoom[i].getVertices()[0], GL_STATIC_DRAW);
+			}
+		}
+		// end of moving objects in 3D space
+	}
 
 	// Send our transformation to the currently bound shader, in the "MVP" uniform
 	// This is done in the main loop since each model will have a different MVP matrix (At least for the M part)
 	glUniformMatrix4fv(MatrixID, 1, GL_FALSE, &mvp[0][0]);
 	glUniformMatrix4fv(ModelMatrixID, 1, GL_FALSE, &model[0][0]);
-	glUniformMatrix4fv(ViewMatrixID, 1, GL_FALSE, &view[0][0]);
+	glUniformMatrix4fv(ViewMatrixID, 1, GL_FALSE, &camera.getView()[0][0]);
 
 	glm::vec3 lightPos = glm::vec3(0, 3, 0);
+	camera.transform.position.x = camera.getEye().x;
+	camera.transform.position.y = camera.getEye().y;
+	camera.transform.position.z = camera.getEye().z;
+
 	// glUniform3f(LightID, lightPos.x, lightPos.y, lightPos.z); // Static light position
-	glUniform3f(LightID, m_eye.x, m_eye.y, m_eye.z);
+	glUniform3f(LightID, camera.getEye().x, camera.getEye().y, camera.getEye().z);
 }
 
 /// <summary>
@@ -168,71 +240,13 @@ void Game::render()
 {
 	// Clear the screen
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	m_window.clear();
 
-	// This is where any SFML related stuff can be drawn
-	m_window.pushGLStates();
+	DrawRooms();
 
-	/////////////////////////////////////
-	// SFML draw stuff can go in here! //
-	/////////////////////////////////////
 
-	m_window.popGLStates(); // End of SFML stuff
-
-	// Use our shader
-	glUseProgram(m_genericShader->m_programID);
-
-	// Bind our texture in Texture Unit 0
-	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, Texture);
-
-	// Set our "myTextureSampler" sampler to use Texture Unit 0
-	glUniform1i(TextureID, 0);
-
-	// Vertices buffer
-	glEnableVertexAttribArray(0);
-	glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
-	glVertexAttribPointer(
-		0,                  // attribute
-		3,                  // size
-		GL_FLOAT,           // type
-		GL_FALSE,           // normalized?
-		0,                  // stride
-		(void*)0            // array buffer offset
-	);
-
-	// UV buffer
-	glEnableVertexAttribArray(1);
-	glBindBuffer(GL_ARRAY_BUFFER, uvbuffer);
-	glVertexAttribPointer(
-		1,								  // attribute
-		2,                                // size
-		GL_FLOAT,                         // type
-		GL_FALSE,                         // normalized?
-		0,                                // stride
-		(void*)0                          // array buffer offset
-	);
-
-	// Normals buffer
-	glEnableVertexAttribArray(2);
-	glBindBuffer(GL_ARRAY_BUFFER, normalbuffer);
-	glVertexAttribPointer(
-		2,                                // attribute
-		3,                                // size
-		GL_FLOAT,                         // type
-		GL_FALSE,                         // normalized?
-		0,                                // stride
-		(void*)0                          // array buffer offset
-	);
-
-	// Draw
-	glDrawArrays(GL_TRIANGLES, 0, vertices.size());
-
-	glDisableVertexAttribArray(0);
-	glDisableVertexAttribArray(1);
-	glDisableVertexAttribArray(2);
-
+	
 	m_window.display();
-
 	// Check for OpenGL error code
 	error = glGetError();
 
@@ -242,100 +256,83 @@ void Game::render()
 	}
 }
 
-// TODO: Create a camera class
-/// <summary>
-/// Camera
-/// </summary>
-glm::mat4 Game::camera(glm::vec3 t_eye, double t_pitch, double t_yaw)
+
+
+
+
+void Game::DrawRooms()
 {
-	double cosPitch = cos(glm::radians(t_pitch));
-	double sinPitch = sin(glm::radians(t_pitch));
-	double cosYaw = cos(glm::radians(t_yaw));
-	double sinYaw = sin(glm::radians(t_yaw));
+	//// This is where any SFML related stuff can be drawn
+	//m_window.pushGLStates();
 
-	glm::vec3 xaxis = { cosYaw, 0, -sinYaw };
-	glm::vec3 yaxis = { sinYaw * sinPitch, cosPitch, cosYaw * sinPitch };
-	glm::vec3 zaxis = { sinYaw * cosPitch, -sinPitch, cosPitch * cosYaw };
+	///////////////////////////////////////
+	//// SFML draw stuff can go in here! //
+	///////////////////////////////////////
 
-	// Create a 4x4 view matrix from the right, up, forward and eye position vectors
-	glm::mat4 viewMatrix =
+	//m_window.popGLStates(); // End of SFML stuff
+
+
+	for (int i = 0; i < ROOM_NUMBERS; i++)
 	{
-		glm::vec4(xaxis.x,            yaxis.x,            zaxis.x,      0),
-		glm::vec4(xaxis.y,            yaxis.y,            zaxis.y,      0),
-		glm::vec4(xaxis.z,            yaxis.z,            zaxis.z,      0),
-		glm::vec4(-dot(xaxis, m_eye), -dot(yaxis, m_eye), -dot(zaxis, m_eye), 1)
-	};
+		if (Transform::distance(anotherRoom[i].transform.position, camera.transform.position) < 50)
+		{
 
-	return viewMatrix;
+			// Use our shader
+			glUseProgram(m_genericShader->m_programID);
+
+			// Bind our texture in Texture Unit 0
+			glActiveTexture(GL_TEXTURE0);
+			glBindTexture(GL_TEXTURE_2D, Texture);
+
+			// Set our "myTextureSampler" sampler to use Texture Unit 0
+			glUniform1i(TextureID, 0);
+
+			// Vertices buffer
+			glEnableVertexAttribArray(0);
+			glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer[i]);
+			glVertexAttribPointer(
+				0,                  // attribute
+				3,                  // size
+				GL_FLOAT,           // type
+				GL_FALSE,           // normalized?
+				0,                  // stride
+				(void*)(0)       // array buffer offset
+			);
+
+			// UV buffer
+			glEnableVertexAttribArray(1);
+			glBindBuffer(GL_ARRAY_BUFFER, uvbuffer);
+			glVertexAttribPointer(
+				1,								  // attribute
+				2,                                // size
+				GL_FLOAT,                         // type
+				GL_FALSE,                         // normalized?
+				0,                                // stride
+				(void*)(0)                       // array buffer offset
+			);
+
+			// Normals buffer
+			glEnableVertexAttribArray(2);
+			glBindBuffer(GL_ARRAY_BUFFER, normalbuffer);
+			glVertexAttribPointer(
+				2,                                // attribute
+				3,                                // size
+				GL_FLOAT,                         // type
+				GL_FALSE,                         // normalized?
+				0,                                // stride
+				(void*)(0)                          // array buffer offset
+			);
+
+
+			glDrawArrays(GL_TRIANGLES, 0, anotherRoom[i].getVertices().size() * sizeof(glm::vec3));
+
+			// Draw
+
+			glDisableVertexAttribArray(0);
+			glDisableVertexAttribArray(1);
+			glDisableVertexAttribArray(2);
+		} // end distance check
+	}
 }
 
-// Game controls
-void Game::gameControls(sf::Time t_deltaTime)
-{
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q))
-	{
-		glm::vec3 tempDirection(m_direction.x, m_direction.y, m_direction.z);
-		glm::normalize(tempDirection);
-		m_eye -= tempDirection * static_cast<float>(t_deltaTime.asMilliseconds() * speed);
-	}
-	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
-	{
-		glm::vec3 tempDirection(m_direction.x, m_direction.y, m_direction.z);
-		glm::normalize(tempDirection);
-		m_eye += tempDirection * static_cast<float>(t_deltaTime.asMilliseconds() * speed);
-	}
 
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
-	{
-		m_eye.x -= .1f;
-	}
-	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
-	{
-		m_eye.x += .1f;
-	}
-
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::N))
-	{
-		m_yaw += 2.0;
-		m_rotationMatrix = glm::rotate(glm::mat4(1.0f), glm::radians(-2.0f), glm::vec3(0.f, 1.f, 0.f));
-		m_direction = m_direction * m_rotationMatrix;
-		
-		if (m_yaw >= 360.0)
-		{
-			m_yaw = 0.0;
-			m_direction = glm::vec4(0.f, 0.f, 1.f, 0.f);
-		}
-	}
-	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::M))
-	{
-		m_yaw -= 2.0;
-		m_rotationMatrix = glm::rotate(glm::mat4(1.0f), glm::radians(2.0f), glm::vec3(0.f, 1.f, 0.f));
-		m_direction = m_direction * m_rotationMatrix;
-
-		if (m_yaw <= -360.0)
-		{
-			m_yaw = 0.0;
-			m_direction = glm::vec4(0.f, 0.f, 1.f, 0.f);
-		}
-	}
-
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
-	{
-		m_pitch += 1.0;
-
-		if (m_pitch >= 360.0)
-		{
-			m_pitch = 0.0;
-		}
-	}
-
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
-	{
-		m_pitch -= 1.0;
-
-		if (m_pitch <= -360.0)
-		{
-			m_pitch = 0.0;
-		}
-	}
-}
