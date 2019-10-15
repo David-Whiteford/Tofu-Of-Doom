@@ -7,7 +7,7 @@ void Room::initialise()
 
 
 		// Load texture
-		filename = "cottage-texture.png";
+	//	filename = "cottage-texture.png";
 		//	stbi_set_flip_vertically_on_load(false);
 		texture_data = stbi_load(filename.c_str(), &width, &height, &comp_count, 3);
 		textureValuesLoaded = true;
@@ -19,7 +19,7 @@ void Room::initialise()
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 
-	bool res = m_modelLoader.loadOBJ("plainCube.obj", vertices, uvs, normals);
+	bool res = m_modelLoader.loadOBJ("cottage.obj", vertices, uvs, normals);
 	verticesInit = vertices;
 
 	GLuint m_error = glewInit(); // Initialise GLEW

@@ -30,7 +30,7 @@ private:
 	bool m_exitGame{ false };
 
 	// Texture stuff
-	static std::string filename;
+	std::string filename;
 	int width; //width of texture
 	int height; //height of texture
 	int comp_count; //Component of texture
