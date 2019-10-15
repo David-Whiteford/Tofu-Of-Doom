@@ -76,16 +76,16 @@ void Game::initialise()
 		glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer[i]);
 		glBufferData(GL_ARRAY_BUFFER, anotherRoom[i].getVertices().size() * sizeof(glm::vec3), &anotherRoom[i].getVertices()[0], GL_STATIC_DRAW);
 
-		glGenBuffers(1, &uvbuffer);
-		glBindBuffer(GL_ARRAY_BUFFER, uvbuffer);
-		glBufferData(GL_ARRAY_BUFFER, anotherRoom[0].getUvs().size() * sizeof(glm::vec2), &anotherRoom[i].getUvs()[0], GL_STATIC_DRAW);
-
-		glGenBuffers(1, &normalbuffer);
-		glBindBuffer(GL_ARRAY_BUFFER, normalbuffer);
-		glBufferData(GL_ARRAY_BUFFER, anotherRoom[0].getNormals().size() * sizeof(glm::vec3), &anotherRoom[0].getNormals()[0], GL_STATIC_DRAW);
 
 	}
 
+	glGenBuffers(1, &uvbuffer);
+	glBindBuffer(GL_ARRAY_BUFFER, uvbuffer);
+	glBufferData(GL_ARRAY_BUFFER, anotherRoom[0].getUvs().size() * sizeof(glm::vec2), &anotherRoom[0].getUvs()[0], GL_STATIC_DRAW);
+
+	glGenBuffers(1, &normalbuffer);
+	glBindBuffer(GL_ARRAY_BUFFER, normalbuffer);
+	glBufferData(GL_ARRAY_BUFFER, anotherRoom[0].getNormals().size() * sizeof(glm::vec3), &anotherRoom[0].getNormals()[0], GL_STATIC_DRAW);
 
 
 

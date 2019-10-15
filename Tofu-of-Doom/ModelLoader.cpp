@@ -4,12 +4,7 @@
 // for writing normals, writing UVs and triangulating faces to guarantee compatibility with this feeble parser.
 bool tk::ModelLoader::loadOBJ(const char *path, std::vector<glm::vec3> &out_vertices, std::vector<glm::vec2> &out_uvs, std::vector<glm::vec3> &out_normals)
 {
-	std::vector<unsigned int> vertexIndices;
-	std::vector<unsigned int> uvIndices;
-	std::vector<unsigned int> normalIndices;
-	std::vector<glm::vec3> temp_vertices;
-	std::vector<glm::vec2> temp_uvs;
-	std::vector<glm::vec3> temp_normals;
+	
 
 	FILE *file = std::fopen(path, "r");
 
@@ -77,8 +72,8 @@ bool tk::ModelLoader::loadOBJ(const char *path, std::vector<glm::vec3> &out_vert
 		else 
 		{
 			// Probably a comment, eat up the rest of the line
-			char stupidBuffer[1000];
-			fgets(stupidBuffer, 1000, file);
+		//	char stupidBuffer[1000];
+		//	fgets(stupidBuffer, 1000, file);
 		}
 	}
 
