@@ -47,6 +47,11 @@ void Game::run()
 
 void Game::initialise()
 {
+	/*ctx = cs_make_context(0, 1, 1, 3, 0);
+	def = cs_make_def(&cs_load_wav("path_to_file/gunshot.wav"));
+	cs_play_sound(ctx, def);
+	cs_shutdown_context(ctx);*/
+
 	for (int i = 0; i < ROOM_NUMBERS; i++)
 	{
 		anotherRoom[i].initialise(); 

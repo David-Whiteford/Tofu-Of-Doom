@@ -50,5 +50,8 @@
     <ClInclude Include="ModelLoader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="cute_sound.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

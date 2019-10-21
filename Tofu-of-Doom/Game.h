@@ -8,7 +8,7 @@
 
 #include <SFML/Graphics.hpp>
 #include <SFML/OpenGL.hpp>
-
+#include "cute_sound.h"
 #include "Debug.h"
 #include "Shader.h"
 #include "ModelLoader.h"
@@ -23,7 +23,8 @@ public:
 	Game(sf::ContextSettings t_settings);
 	~Game();
 	void run();
-	
+	/*cs_context_t* ctx;
+	cs_play_sound_def_t def;*/
 private:
 	static const int ROOM_NUMBERS = 200;
 	sf::RenderWindow m_window;
