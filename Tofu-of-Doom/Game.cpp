@@ -9,7 +9,22 @@
 Game::Game(sf::ContextSettings t_settings)
 	:
 	m_window{ sf::VideoMode{ 1920, 1080, 32 }, "Tofu of Doom", sf::Style::Default, t_settings }
+	//, m_enemy()
+	//, m_enemyFollower()
+	//, m_player()
 {
+	//2D stuff
+	//m_enemy.setUpContent();
+	//m_enemyFollower.setUpContent();
+	//m_player.setUpContent();
+
+
+	//m_testRect.setFillColor(sf::Color::Red);
+	//m_testRect.setSize(sf::Vector2f(100, 50));
+	//m_testRect.setOutlineColor(sf::Color::Red);
+	//m_testRect.setOutlineThickness(5);
+	//m_testRect.setPosition(10, 20);
+
 	initialise();
 }
 
@@ -165,6 +180,13 @@ void Game::processEvents()
 /// </summary>
 void Game::update(sf::Time t_deltaTime)
 {
+
+
+	//2D stuff
+	/*m_playerRect = m_player.getPlayer();
+	m_enemy.update();
+	m_enemyFollower.update(m_playerRect);
+	m_player.update();*/
 	bool move = false;
 
 	// Update game controls
@@ -246,6 +268,13 @@ void Game::render()
 	// Clear the screen
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	m_window.clear();
+
+
+	//2D stuff
+	/*m_window.draw(m_testRect);
+	m_enemy.render(m_window);
+	m_enemyFollower.render(m_window);
+	m_player.render(m_window);*/
 
 	DrawRooms();
 

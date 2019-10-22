@@ -12,9 +12,11 @@
 #include "Debug.h"
 #include "Shader.h"
 #include "ModelLoader.h"
-
+#include "enemy.h"
+#include "EnemyFollower.h"
 #include "Room.h"
 #include "Camera.h"
+#include "ScreenSize.h"
 
 
 class Game
@@ -25,7 +27,18 @@ public:
 	void run();
 	/*cs_context_t* ctx;
 	cs_play_sound_def_t def;*/
+	//2D stuff
+	//Enemy m_enemy;
+	//EnemyFollower m_enemyFollower;
+	//Player m_player;
+
+
 private:
+
+	//2D stuff
+	//sf::RectangleShape m_playerRect;
+	//sf::RectangleShape m_testRect;
+
 	static const int ROOM_NUMBERS = 200;
 	sf::RenderWindow m_window;
 	bool m_exitGame{ false };
