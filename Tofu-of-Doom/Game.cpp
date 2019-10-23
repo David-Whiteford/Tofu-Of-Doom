@@ -2,7 +2,7 @@
 
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
-
+#include <irrKlang.h>
 /// <summary>
 /// Constructor for the Game class
 /// </summary>
