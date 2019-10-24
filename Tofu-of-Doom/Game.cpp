@@ -65,11 +65,16 @@ void Game::initialise()
 
 	engine = createIrrKlangDevice();
 
-	music = engine->play3D("Mindless Zombie Awakening.mp3",
+
+
+	//name of file , position in 3D space , play loop , start paused , track
+	background = engine->play3D("Zombie_Horde.mp3",
 		vec3df(0, 0, 0), true, false, true);
 
-	if (music)
-		music->setMinDistance(5.0f);
+
+
+	/*if (music)
+		music->setMinDistance(5.0f);*/
 
 
 	//engineZombie = createIrrKlangDevice();
@@ -83,6 +88,19 @@ void Game::initialise()
 		anotherRoom[i].initialise(); 
 		anotherRoom[i].transform.position.x += (i * 10);
 		anotherRoom[i].setPosition();
+		
+	}
+	int i = 5;
+	vec3df position(anotherRoom[5].transform.position.x, anotherRoom[5].transform.position.y, anotherRoom[5].transform.position.z);
+	/*vec3df pos*/
+
+	zombie = engine->play3D("Mindless Zombie Awakening.mp3", position, true, true, true);
+
+
+	if (zombie)
+	{
+		zombie->setMinDistance(30.0f); // a loud sound
+		zombie->setIsPaused(false); // unpause the sound
 	}
 	// Load texture
 	filename = "cottage-texture.png";
@@ -194,8 +212,7 @@ void Game::update(sf::Time t_deltaTime)
 
 	//sf::Time dt = sf::seconds(1.f / 60.f);
 	
-	engine->setListenerPosition(vec3df(0, 0, 0),
-		vec3df(0, 0, 1));
+
 	
 	
 	//2D stuff
@@ -212,7 +229,12 @@ void Game::update(sf::Time t_deltaTime)
 	mvp = projection * camera.getView() * model;
 
 	
+	irrklang::vec3df position(camera.transform.position.x, camera.transform.position.y, camera.transform.position.z);        // position of the listener
+	irrklang::vec3df lookDirection(10, 0, 10); // the direction the listener looks into
+	irrklang::vec3df velPerSecond(0, 0, 0);    // only relevant for doppler effects
+	irrklang::vec3df upVector(0, 1, 0);        // where 'up' is in your 3D scene
 
+	engine->setListenerPosition(position, lookDirection, velPerSecond, upVector);
 	/// <summary>
 	/// This moves objects
 	/// </summary>

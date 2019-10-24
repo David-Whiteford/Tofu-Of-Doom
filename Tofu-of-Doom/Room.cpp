@@ -68,7 +68,21 @@ void Room::setPosition()
 		vertices[i].z = verticesInit[i].z + transform.position.z;
 	}
 }
-
+float Room::getPositionX()
+{
+    float vertX = vertices[5].x;
+	return vertX;
+}
+float Room::getPositionY()
+{
+	float vertY = vertices[5].x;
+	return vertY;
+}
+float Room::getPositionZ()
+{
+	float vertZ = vertices[5].x;
+	return vertZ;
+}
 Room::Room()
 {
 }

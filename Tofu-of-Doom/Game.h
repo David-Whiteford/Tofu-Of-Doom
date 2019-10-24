@@ -34,8 +34,9 @@ public:
 	//EnemyFollower m_enemyFollower;
 	//Player m_player;
 	ISoundEngine* engine;
-	ISoundEngine* engineZombie;
 	ISound* music;
+	ISound* background;
+	ISound* zombie;
 	bool timer = false;
 private:
 	float m_timer = 0.0f;
@@ -87,11 +88,11 @@ private:
 	void update(sf::Time t_deltaTime);
 	void render();
 	void DrawRooms();
-
+	
 
 	// Rooms
 	Room anotherRoom[ROOM_NUMBERS];
-
+	Room room;
 	// Camera
 	Camera camera;
 	

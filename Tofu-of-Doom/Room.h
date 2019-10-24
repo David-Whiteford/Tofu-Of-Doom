@@ -43,6 +43,10 @@ public:
 	
 	GLuint getVertexBuffer();
 	void setPosition();
+	float getPositionX();
+	float getPositionY();
+	float getPositionZ();
+
 
 	bool made = false;
 private:
