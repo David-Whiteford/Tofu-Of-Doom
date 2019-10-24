@@ -37,6 +37,7 @@
     <ClInclude Include="Debug.h" />
     <ClInclude Include="enemy.h" />
     <ClInclude Include="EnemyFollower.h" />
+    <ClInclude Include="irrKlang.h" />
     <ClInclude Include="ModelLoader.h" />
     <ClInclude Include="Cube.h" />
     <ClInclude Include="Game.h" />

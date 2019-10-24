@@ -17,7 +17,9 @@
 #include "Room.h"
 #include "Camera.h"
 #include "ScreenSize.h"
-
+#include "irrKlang.h"
+using namespace irrklang;
+#pragma comment(lib, "irrKlang.lib") // link with irrKlang.dll
 
 class Game
 {
@@ -31,14 +33,16 @@ public:
 	//Enemy m_enemy;
 	//EnemyFollower m_enemyFollower;
 	//Player m_player;
-
-
+	ISoundEngine* engine;
+	ISoundEngine* engineZombie;
+	ISound* music;
+	bool timer = false;
 private:
-
+	float m_timer = 0.0f;
 	//2D stuff
 	//sf::RectangleShape m_playerRect;
 	//sf::RectangleShape m_testRect;
-
+	
 	static const int ROOM_NUMBERS = 200;
 	sf::RenderWindow m_window;
 	bool m_exitGame{ false };

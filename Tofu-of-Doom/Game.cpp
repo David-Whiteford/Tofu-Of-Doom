@@ -2,7 +2,7 @@
 
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
-#include <irrKlang.h>
+
 /// <summary>
 /// Constructor for the Game class
 /// </summary>
@@ -62,6 +62,17 @@ void Game::run()
 
 void Game::initialise()
 {
+
+	engine = createIrrKlangDevice();
+
+	music = engine->play3D("Mindless Zombie Awakening.mp3",
+		vec3df(0, 0, 0), true, false, true);
+
+	if (music)
+		music->setMinDistance(5.0f);
+
+
+	//engineZombie = createIrrKlangDevice();
 	/*ctx = cs_make_context(0, 1, 1, 3, 0);
 	def = cs_make_def(&cs_load_wav("path_to_file/gunshot.wav"));
 	cs_play_sound(ctx, def);
@@ -181,7 +192,12 @@ void Game::processEvents()
 void Game::update(sf::Time t_deltaTime)
 {
 
-
+	//sf::Time dt = sf::seconds(1.f / 60.f);
+	
+	engine->setListenerPosition(vec3df(0, 0, 0),
+		vec3df(0, 0, 1));
+	
+	
 	//2D stuff
 	/*m_playerRect = m_player.getPlayer();
 	m_enemy.update();
@@ -208,10 +224,13 @@ void Game::update(sf::Time t_deltaTime)
 		{
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Y))
 			{
+				// play some sound stream, looped
+				engine->play2D("gun.mp3", false);
 				std::cout << "Y" << std::endl;
 				anotherRoom[i].transform.position.z += 1;
 				anotherRoom[i].setPosition();
 				move = true;
+				timer = true;
 			}
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::U))
 			{
@@ -242,6 +261,7 @@ void Game::update(sf::Time t_deltaTime)
 				glBufferData(GL_ARRAY_BUFFER, anotherRoom[i].getVertices().size() * sizeof(glm::vec3), &anotherRoom[i].getVertices()[0], GL_STATIC_DRAW);
 			}
 		}
+		
 		// end of moving objects in 3D space
 	}
 
