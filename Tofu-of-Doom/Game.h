@@ -27,22 +27,25 @@ public:
 	Game(sf::ContextSettings t_settings);
 	~Game();
 	void run();
-	/*cs_context_t* ctx;
-	cs_play_sound_def_t def;*/
+
 	//2D stuff
-	//Enemy m_enemy;
-	//EnemyFollower m_enemyFollower;
-	//Player m_player;
+	Enemy m_enemy;
+	EnemyFollower m_enemyFollower;
+	Player m_player;
 	ISoundEngine* engine;
 	ISound* music;
 	ISound* background;
 	ISound* zombie;
+	ISound* shotgun;
+	ISound* pistol;
+	ISound* machinegun;
 	bool timer = false;
 private:
 	float m_timer = 0.0f;
+	bool m_timerStart = false;
 	//2D stuff
-	//sf::RectangleShape m_playerRect;
-	//sf::RectangleShape m_testRect;
+	sf::RectangleShape m_playerRect;
+	sf::RectangleShape m_testRect;
 	
 	static const int ROOM_NUMBERS = 200;
 	sf::RenderWindow m_window;

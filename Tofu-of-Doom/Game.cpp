@@ -9,21 +9,21 @@
 Game::Game(sf::ContextSettings t_settings)
 	:
 	m_window{ sf::VideoMode{ 1920, 1080, 32 }, "Tofu of Doom", sf::Style::Default, t_settings }
-	//, m_enemy()
-	//, m_enemyFollower()
-	//, m_player()
+	, m_enemy()
+	, m_enemyFollower()
+	, m_player()
 {
 	//2D stuff
-	//m_enemy.setUpContent();
-	//m_enemyFollower.setUpContent();
-	//m_player.setUpContent();
+	m_enemy.setUpContent();
+	m_enemyFollower.setUpContent();
+	m_player.setUpContent();
 
 
-	//m_testRect.setFillColor(sf::Color::Red);
-	//m_testRect.setSize(sf::Vector2f(100, 50));
-	//m_testRect.setOutlineColor(sf::Color::Red);
-	//m_testRect.setOutlineThickness(5);
-	//m_testRect.setPosition(10, 20);
+	m_testRect.setFillColor(sf::Color::Red);
+	m_testRect.setSize(sf::Vector2f(100, 50));
+	m_testRect.setOutlineColor(sf::Color::Red);
+	m_testRect.setOutlineThickness(5);
+	m_testRect.setPosition(10, 20);
 
 	initialise();
 }
@@ -66,22 +66,22 @@ void Game::initialise()
 	engine = createIrrKlangDevice();
 
 
-
+	shotgun = engine->play2D("gun.mp3", false , true);
 	//name of file , position in 3D space , play loop , start paused , track
-	background = engine->play3D("Zombie_Horde.mp3",
-		vec3df(0, 0, 0), true, false, true);
-
+	background = engine->play2D("Zombie_Horde.mp3" , true);
+	if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+	{
+		// left mouse button is pressed
+		// play some sound stream, looped
+		engine->play2D("gun.mp3", false);
+	}
 
 
 	/*if (music)
 		music->setMinDistance(5.0f);*/
 
 
-	//engineZombie = createIrrKlangDevice();
-	/*ctx = cs_make_context(0, 1, 1, 3, 0);
-	def = cs_make_def(&cs_load_wav("path_to_file/gunshot.wav"));
-	cs_play_sound(ctx, def);
-	cs_shutdown_context(ctx);*/
+
 
 	for (int i = 0; i < ROOM_NUMBERS; i++)
 	{
@@ -90,10 +90,8 @@ void Game::initialise()
 		anotherRoom[i].setPosition();
 		
 	}
-	int i = 5;
+	
 	vec3df position(anotherRoom[5].transform.position.x, anotherRoom[5].transform.position.y, anotherRoom[5].transform.position.z);
-	/*vec3df pos*/
-
 	zombie = engine->play3D("Mindless Zombie Awakening.mp3", position, true, true, true);
 
 
@@ -211,15 +209,22 @@ void Game::update(sf::Time t_deltaTime)
 {
 
 	//sf::Time dt = sf::seconds(1.f / 60.f);
+	if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+	{
+		m_timerStart = true;
+		// left mouse button is pressed
+		// play some sound stream, looped
+		shotgun->setIsPaused(false);
+	}
+	//shotgun->setIsPaused(true);
 	
-
 	
 	
 	//2D stuff
-	/*m_playerRect = m_player.getPlayer();
+	m_playerRect = m_player.getPlayer();
 	m_enemy.update();
 	m_enemyFollower.update(m_playerRect);
-	m_player.update();*/
+	m_player.update();
 	bool move = false;
 
 	// Update game controls
@@ -247,7 +252,6 @@ void Game::update(sf::Time t_deltaTime)
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Y))
 			{
 				// play some sound stream, looped
-				engine->play2D("gun.mp3", false);
 				std::cout << "Y" << std::endl;
 				anotherRoom[i].transform.position.z += 1;
 				anotherRoom[i].setPosition();
@@ -312,11 +316,7 @@ void Game::render()
 	m_window.clear();
 
 
-	//2D stuff
-	/*m_window.draw(m_testRect);
-	m_enemy.render(m_window);
-	m_enemyFollower.render(m_window);
-	m_player.render(m_window);*/
+
 
 	DrawRooms();
 
@@ -343,6 +343,13 @@ void Game::DrawRooms()
 
 	///////////////////////////////////////
 	//// SFML draw stuff can go in here! //
+	
+		//2D stuff
+	//m_window.draw(m_testRect);
+	//m_enemy.render(m_window);
+	//m_enemyFollower.render(m_window);
+	//m_player.render(m_window);
+
 	///////////////////////////////////////
 
 	//m_window.popGLStates(); // End of SFML stuff

@@ -1,1 +1,3 @@
-﻿  Tofu-of-Doom.vcxproj -> C:\Users\gameuser\Desktop\3rd Year\Project\Tofu-Of-Doom\Debug\Tofu-of-Doom.exe
+﻿  Game.cpp
+C:\Users\gameuser\Desktop\3rd Year\Project\Tofu-Of-Doom\Tofu-of-Doom\Transform.h(12): warning C4091:  'typedef ': ignored on left of 'Transform::Position' when no variable is declared
+  Tofu-of-Doom.vcxproj -> C:\Users\gameuser\Desktop\3rd Year\Project\Tofu-Of-Doom\Debug\Tofu-of-Doom.exe
