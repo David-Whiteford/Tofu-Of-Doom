@@ -22,7 +22,10 @@ glm::mat4 Camera::camera(glm::vec3 t_eye, double t_pitch, double t_yaw)
 
 	return viewMatrix;
 }
-
+/// <summary>
+/// gg
+/// </summary>
+/// <returns></returns>
 glm::vec3 Camera::getEye()
 {
 	return m_eye;
