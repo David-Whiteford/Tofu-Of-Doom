@@ -65,15 +65,33 @@ void Game::initialise()
 
 	engine = createIrrKlangDevice();
 
-
 	shotgun = engine->play2D("gun.mp3", false , true);
+	/*pistol = engine->play2D("gun.mp3", false, true);
+	machinegun = engine->play2D("gun.mp3", false, true);*/
+
 	//name of file , position in 3D space , play loop , start paused , track
 	background = engine->play2D("Zombie_Horde.mp3" , true);
+	int gunNum = 1;
 	if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
 	{
-		// left mouse button is pressed
-		// play some sound stream, looped
-		engine->play2D("gun.mp3", false);
+		if (gunNum == 1)
+		{
+			// left mouse button is pressed
+			// play some sound stream, looped
+			engine->play2D("shotgun.mp3", false);
+		}
+		//if (gunNum == 2)
+		//{
+		//	// left mouse button is pressed
+		//	// play some sound stream, looped
+		//	engine->play2D("Minigun.mp3", false);
+		//}
+		//if (gunNum == 3)
+		//{
+		//	// left mouse button is pressed
+		//	// play some sound stream, looped
+		//	engine->play2D("9mm.mp3", false);
+		//}
 	}
 
 
@@ -90,8 +108,30 @@ void Game::initialise()
 		anotherRoom[i].setPosition();
 		
 	}
+
+
+
+	//ISound* zombieEnemies;
+	//vec3df positionEnemies;
 	
-	vec3df position(anotherRoom[5].transform.position.x, anotherRoom[5].transform.position.y, anotherRoom[5].transform.position.z);
+
+	//for (int i = 0; i < 11; i++)
+	//{
+	//	j += 10;
+	//	positionEnemies[i](anotherRoom[j].transform.position.x, anotherRoom[j].transform.position.y, 
+	//		anotherRoom[j].transform.position.z);
+
+	//	zombieEnemies[i] = engine->play3D("Mindless Zombie Awakening.mp3", positionEnemies[i], true, true, true);
+	//	
+	//	if (zombie[i])
+	//	{
+	//		zombie[i]->setMinDistance(30.0f); // a loud sound
+	//		zombie[i]->setIsPaused(false); // unpause the sound
+	//	}
+
+	//}
+	vec3df position(anotherRoom[5].transform.position.x, anotherRoom[5].transform.position.y, 
+		anotherRoom[5].transform.position.z);
 	zombie = engine->play3D("Mindless Zombie Awakening.mp3", position, true, true, true);
 
 

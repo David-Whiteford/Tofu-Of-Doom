@@ -36,6 +36,10 @@ public:
 	ISound* music;
 	ISound* background;
 	ISound* zombie;
+
+	//ISound* zombieEnemies[11];
+	//vec3df positionEnemies[11];
+
 	ISound* shotgun;
 	ISound* pistol;
 	ISound* machinegun;
