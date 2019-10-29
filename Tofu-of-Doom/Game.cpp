@@ -70,7 +70,7 @@ void Game::initialise()
 	machinegun = engine->play2D("gun.mp3", false, true);*/
 
 	//name of file , position in 3D space , play loop , start paused , track
-	background = engine->play2D("Zombie_Horde.mp3" , true);
+	//background = engine->play2D("Zombie_Horde.mp3" , true);
 	int gunNum = 1;
 	if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
 	{
@@ -115,31 +115,30 @@ void Game::initialise()
 	//vec3df positionEnemies;
 	
 
-	//for (int i = 0; i < 11; i++)
-	//{
-	//	j += 10;
-	//	positionEnemies[i](anotherRoom[j].transform.position.x, anotherRoom[j].transform.position.y, 
-	//		anotherRoom[j].transform.position.z);
-
-	//	zombieEnemies[i] = engine->play3D("Mindless Zombie Awakening.mp3", positionEnemies[i], true, true, true);
-	//	
-	//	if (zombie[i])
-	//	{
-	//		zombie[i]->setMinDistance(30.0f); // a loud sound
-	//		zombie[i]->setIsPaused(false); // unpause the sound
-	//	}
-
-	//}
-	vec3df position(anotherRoom[5].transform.position.x, anotherRoom[5].transform.position.y, 
-		anotherRoom[5].transform.position.z);
-	zombie = engine->play3D("Mindless Zombie Awakening.mp3", position, true, true, true);
-
-
-	if (zombie)
+	for (int i = 0; i < 11; i++)
 	{
-		zombie->setMinDistance(30.0f); // a loud sound
-		zombie->setIsPaused(false); // unpause the sound
+		int j = 5;
+		positionEnemies[i].X = anotherRoom[j].transform.position.x;
+		positionEnemies[i].Y = anotherRoom[j].transform.position.y;
+		positionEnemies[i].Z = anotherRoom[j].transform.position.z;
+		j += 20;
+		zombieEnemies[i] = engine->play3D("Mindless Zombie Awakening.mp3", positionEnemies[i], true, true, true);
+		
+		if (zombieEnemies[i])
+		{
+			zombieEnemies[i]->setMinDistance(5.0f); // a loud sound
+			zombieEnemies[i]->setIsPaused(false); // unpause the sound
+		}
+
 	}
+	//vec3df position(anotherRoom[5].transform.position.x, anotherRoom[5].transform.position.y, 
+	//	anotherRoom[5].transform.position.z);
+	//zombie = engine->play3D("Mindless Zombie Awakening.mp3", position, true, true, true);
+	//if (zombie)
+	//{
+	//	zombie->setMinDistance(30.0f); // a loud sound
+	//	zombie->setIsPaused(false); // unpause the sound
+	//}
 	// Load texture
 	filename = "cottage-texture.png";
 	stbi_set_flip_vertically_on_load(false);
