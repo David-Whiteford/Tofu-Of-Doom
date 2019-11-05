@@ -22,10 +22,11 @@ public:
 	glm::vec3 getEye();
 	void setEye(glm::vec3 t_values);
 	glm::mat4 getView();
-	glm::vec4 getDirection();
-
+	glm::vec3 getDirection();
 	float getSpeed();
 	glm::mat4 camera(glm::vec3 t_eye, double t_pitch, double t_yaw);
+	float getYaw();
+
 private:
 	glm::mat4 view;
 	glm::vec3 m_eye{ transform.position.x,transform.position.y,transform.position.z }; // Current camera position

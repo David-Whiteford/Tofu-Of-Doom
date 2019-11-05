@@ -220,10 +220,12 @@ void Game::update(sf::Time t_deltaTime)
 	// Model matrix (for now)
 	// model_1 = glm::mat4(1.0f); // Identity matrix
 	model_2 = glm::translate(glm::mat4(1.0f), glm::vec3(60.0f, 0.0f, 0.0f)); // Moved 60 units on the X axis
-	model_3 = glm::translate(glm::mat4(1.0f), m_eye - glm::vec3(-0.3f, 3.2f, 0.0f)); // Machine gun moves with the player camera
+	// model_3 = glm::translate(glm::mat4(1.0f), camera.getEye() - glm::vec3(-0.3f, 3.2f, 0.0f)); // Machine gun moves with the player camera
+	glm::vec3 gunDirection(camera.getDirection().x, 1.5f, camera.getDirection().z);
+	model_3 = glm::translate(glm::mat4(1.0f), camera.getEye() - (gunDirection * 2.0f));
 
-	// Rotate machine gun to face away from player
-	model_3 = glm::rotate(model_3, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+	// Rotate machine gun with player
+	model_3 = glm::rotate(model_3, glm::radians(180.0f + camera.getYaw()), glm::vec3(0.0f, 1.0f, 0.0f));
 
 	// Send our transformation to the currently bound shader, in the "MVP" uniform
 	// This is done in the update loop since each model will have a different MVP matrix (At least for the M part)
