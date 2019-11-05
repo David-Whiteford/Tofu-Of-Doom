@@ -14,6 +14,10 @@
 #include "ModelLoader.h"
 #include "GameWorld.h"
 #include "irrKlang.h"
+
+
+#include "Camera.h"
+
 using namespace irrklang;
 #pragma comment(lib, "irrKlang.lib") // link with irrKlang.dll
 
@@ -40,6 +44,8 @@ public:
 	sf::Time m_ShotDelay;
 
 private:
+
+
 	enum DrawState
 	{
 		MAP,
@@ -105,7 +111,9 @@ private:
 	glm::mat4 model_2;
 	glm::mat4 model_3;
 	glm::mat4 projection;
-	glm::mat4 view;
+	// Matrices for model, view and projection (and everything combined)
+	glm::mat4 mvp;
+	
 
 	tk::Shader *m_genericShader; // Shader object
 	glm::vec3 m_eye{ 0.f, 4.0f, 0.f }; // Current camera position
@@ -121,7 +129,6 @@ private:
 	void processEvents();
 	void update(sf::Time t_deltaTime);
 	void render();
-	glm::mat4 camera(glm::vec3 t_eye, double t_pitch, double t_yaw);
 	void gameControls(sf::Time t_deltaTime);
 	void loadVAO(std::string t_textureFilename, const char *t_modelFilename, GLuint &t_vaoID,
 		GLuint &t_vboID, GLuint &t_normalBufferID, GLuint &t_textureID, GLuint &t_texture, GLuint &t_uvBufferID,
@@ -129,6 +136,8 @@ private:
 
 
 	bool m_buttonPressed = false;
+	//Player Camera
+	Camera camera;
 };
 
 #endif // !GAME_H

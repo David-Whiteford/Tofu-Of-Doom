@@ -158,6 +158,20 @@ void Game::processEvents()
 /// </summary>
 void Game::update(sf::Time t_deltaTime)
 {
+
+
+	// Update game controls
+	camera.input(t_deltaTime);
+
+
+	camera.transform.position.x = camera.getEye().x;
+	camera.transform.position.y = camera.getEye().y;
+	camera.transform.position.z = camera.getEye().z;
+
+
+	// Update model view projection
+	mvp = projection * camera.getView() * model_1;
+
 	std::cout << m_time.asSeconds() << std::endl;
 	if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
 	{
@@ -193,7 +207,7 @@ void Game::update(sf::Time t_deltaTime)
 	gameControls(t_deltaTime);
 
 	// Update view (camera)
-	view = camera(m_gameWorld->getCameraPosition(), m_gameWorld->getPitch(), m_gameWorld->getYaw());
+	camera.getView() = camera.camera(m_gameWorld->getCameraPosition(), m_gameWorld->getPitch(), m_gameWorld->getYaw());
 
 
 	irrklang::vec3df position(m_gameWorld->getCameraPosition().x , m_gameWorld->getCameraPosition().y, m_gameWorld->getCameraPosition().z);        // position of the listener
@@ -213,7 +227,7 @@ void Game::update(sf::Time t_deltaTime)
 
 	// Send our transformation to the currently bound shader, in the "MVP" uniform
 	// This is done in the update loop since each model will have a different MVP matrix (At least for the M part)
-	glUniformMatrix4fv(m_viewMatrixID, 1, GL_FALSE, &view[0][0]);
+	glUniformMatrix4fv(m_viewMatrixID, 1, GL_FALSE, &camera.getView()[0][0]);
 	glUniformMatrix4fv(m_projectionMatrixID, 1, GL_FALSE, &projection[0][0]);
 
 	glm::vec3 lightPos = glm::vec3(0, 10, 0);
@@ -309,32 +323,7 @@ void Game::render()
 	m_window.display();
 }
 
-// TODO: Create a camera class
-/// <summary>
-/// Camera
-/// </summary>
-glm::mat4 Game::camera(glm::vec3 t_eye, double t_pitch, double t_yaw)
-{
-	double cosPitch = cos(glm::radians(t_pitch));
-	double sinPitch = sin(glm::radians(t_pitch));
-	double cosYaw = cos(glm::radians(t_yaw));
-	double sinYaw = sin(glm::radians(t_yaw));
 
-	glm::vec3 xaxis = { cosYaw, 0, -sinYaw };
-	glm::vec3 yaxis = { sinYaw * sinPitch, cosPitch, cosYaw * sinPitch };
-	glm::vec3 zaxis = { sinYaw * cosPitch, -sinPitch, cosPitch * cosYaw };
-
-	// Create a 4x4 view matrix from the right, up, forward and eye position vectors
-	glm::mat4 viewMatrix =
-	{
-		glm::vec4(xaxis.x,            yaxis.x,            zaxis.x,      0),
-		glm::vec4(xaxis.y,            yaxis.y,            zaxis.y,      0),
-		glm::vec4(xaxis.z,            yaxis.z,            zaxis.z,      0),
-		glm::vec4(-dot(xaxis, m_eye), -dot(yaxis, m_eye), -dot(zaxis, m_eye), 1)
-	};
-
-	return viewMatrix;
-}
 
 /// <summary>
 /// Game controls
