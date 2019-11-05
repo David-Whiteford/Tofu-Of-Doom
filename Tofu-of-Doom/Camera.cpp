@@ -110,8 +110,8 @@ void Camera::input(sf::Time t_deltaTime)
 
 		if (Player1->GetState().Gamepad.sThumbRX < -7849)
 		{
-			m_yaw += 2.0;
-			m_rotationMatrix = glm::rotate(glm::mat4(1.0f), glm::radians(-2.0f), glm::vec3(0.f, 1.f, 0.f));
+			m_yaw += m_turnSpeed;
+			m_rotationMatrix = glm::rotate(glm::mat4(1.0f), glm::radians(-m_turnSpeed), glm::vec3(0.f, 1.f, 0.f));
 			m_direction = m_direction * m_rotationMatrix;
 
 			if (m_yaw >= 360.0)
@@ -122,8 +122,8 @@ void Camera::input(sf::Time t_deltaTime)
 		}
 		else if (Player1->GetState().Gamepad.sThumbRX > 7849)
 		{
-			m_yaw -= 2.0;
-			m_rotationMatrix = glm::rotate(glm::mat4(1.0f), glm::radians(2.0f), glm::vec3(0.f, 1.f, 0.f));
+			m_yaw -= m_turnSpeed;
+			m_rotationMatrix = glm::rotate(glm::mat4(1.0f), glm::radians(m_turnSpeed), glm::vec3(0.f, 1.f, 0.f));
 			m_direction = m_direction * m_rotationMatrix;
 
 			if (m_yaw <= -360.0)
