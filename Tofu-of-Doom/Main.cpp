@@ -20,6 +20,8 @@ int main()
 	sf::ContextSettings f_settings;
 	f_settings.depthBits = 24u; // For depth buffer (Z buffer)
 	f_settings.antialiasingLevel = 4u;
+	f_settings.majorVersion = 1;
+	f_settings.minorVersion = 1;
 
 	// Create a reference to the game and run
 	Game &f_game = Game(f_settings);

@@ -8,23 +8,12 @@
 /// </summary>
 Game::Game(sf::ContextSettings t_settings)
 	:
-	m_window{ sf::VideoMode{ 1920, 1080, 32 }, "Tofu of Doom", sf::Style::Default, t_settings }
-	, m_enemy()
-	, m_enemyFollower()
-	, m_player()
+	m_window{ sf::VideoMode{ 1280, 720, 32 }, "Tofu of Doom", sf::Style::Default, t_settings }
 {
-	//2D stuff
-	m_enemy.setUpContent();
-	m_enemyFollower.setUpContent();
-	m_player.setUpContent();
+	// Initialise GLEW
+	GLuint m_error = glewInit();
 
-
-	m_testRect.setFillColor(sf::Color::Red);
-	m_testRect.setSize(sf::Vector2f(100, 50));
-	m_testRect.setOutlineColor(sf::Color::Red);
-	m_testRect.setOutlineThickness(5);
-	m_testRect.setPosition(10, 20);
-
+	// Initialise everything else
 	initialise();
 }
 
@@ -33,7 +22,7 @@ Game::Game(sf::ContextSettings t_settings)
 /// </summary>
 Game::~Game()
 {
-
+	delete m_genericShader;
 }
 
 /// <summary>
@@ -42,13 +31,17 @@ Game::~Game()
 void Game::run()
 {
 	sf::Clock clock;
+	sf::Clock gunClock;
 	sf::Time timeSinceLastUpdate = sf::Time::Zero;
 	sf::Time timePerFrame = sf::seconds(1.f / 60.f);
+
+	m_deltaTime = timePerFrame;
 
 	while (m_window.isOpen() && !m_exitGame)
 	{
 		processEvents();
 		timeSinceLastUpdate += clock.restart();
+		m_time += gunClock.restart();
 
 		while (timeSinceLastUpdate > timePerFrame)
 		{
@@ -60,144 +53,65 @@ void Game::run()
 	}
 }
 
+/// <summary>
+/// Initialise OpenGL and load models and textures
+/// </summary>
 void Game::initialise()
 {
-
+	m_ShotDelay = sf::seconds(1.3f);
 	engine = createIrrKlangDevice();
 
-	shotgun = engine->play2D("gun.mp3", false , true);
-	/*pistol = engine->play2D("gun.mp3", false, true);
-	machinegun = engine->play2D("gun.mp3", false, true);*/
-
 	//name of file , position in 3D space , play loop , start paused , track
-	//background = engine->play2D("Zombie_Horde.mp3" , true);
-	int gunNum = 1;
-	if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
-	{
-		if (gunNum == 1)
-		{
-			// left mouse button is pressed
-			// play some sound stream, looped
-			engine->play2D("shotgun.mp3", false);
-		}
-		//if (gunNum == 2)
-		//{
-		//	// left mouse button is pressed
-		//	// play some sound stream, looped
-		//	engine->play2D("Minigun.mp3", false);
-		//}
-		//if (gunNum == 3)
-		//{
-		//	// left mouse button is pressed
-		//	// play some sound stream, looped
-		//	engine->play2D("9mm.mp3", false);
-		//}
-	}
+	background = engine->play2D("horror.mp3" , true);
+	glm::vec3 soundPos(25, 0, 25);
+	vec3df position(25, 0, 25);
+	positions.push_back(position);
 
-
-	/*if (music)
-		music->setMinDistance(5.0f);*/
-
-
-
-
-	for (int i = 0; i < ROOM_NUMBERS; i++)
-	{
-		anotherRoom[i].initialise(); 
-		anotherRoom[i].transform.position.x += (i * 10);
-		anotherRoom[i].setPosition();
-		
-	}
-
-
-
-	//ISound* zombieEnemies;
-	//vec3df positionEnemies;
-	
 
 	for (int i = 0; i < 11; i++)
 	{
 		int j = 5;
-		positionEnemies[i].X = anotherRoom[j].transform.position.x;
+	/*	positionEnemies[i].X = anotherRoom[j].transform.position.x;
 		positionEnemies[i].Y = anotherRoom[j].transform.position.y;
-		positionEnemies[i].Z = anotherRoom[j].transform.position.z;
+		positionEnemies[i].Z = anotherRoom[j].transform.position.z;*/
 		j += 20;
-		zombieEnemies[i] = engine->play3D("Mindless Zombie Awakening.mp3", positionEnemies[i], true, true, true);
-		
-		if (zombieEnemies[i])
-		{
-			zombieEnemies[i]->setMinDistance(5.0f); // a loud sound
-			zombieEnemies[i]->setIsPaused(false); // unpause the sound
-		}
+		zombieEnemies[i] = engine->play3D("Mindless Zombie Awakening.mp3", position, true, true, true);
+
+		//if (zombieEnemies[i])
+		//{
+		//	zombieEnemies[i]->setMinDistance(5.0f); // a loud sound
+		//	zombieEnemies[i]->setIsPaused(false); // unpause the sound
+		//}
 
 	}
-	//vec3df position(anotherRoom[5].transform.position.x, anotherRoom[5].transform.position.y, 
-	//	anotherRoom[5].transform.position.z);
-	//zombie = engine->play3D("Mindless Zombie Awakening.mp3", position, true, true, true);
-	//if (zombie)
-	//{
-	//	zombie->setMinDistance(30.0f); // a loud sound
-	//	zombie->setIsPaused(false); // unpause the sound
-	//}
-	// Load texture
-	filename = "cottage-texture.png";
-	stbi_set_flip_vertically_on_load(false);
-	texture_data = stbi_load(filename.c_str(), &width, &height, &comp_count, 3);
-
-	glGenTextures(1, &Texture);
-	glBindTexture(GL_TEXTURE_2D, Texture);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, texture_data);
-
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-
-
-
-	for (int i = 0; i < ROOM_NUMBERS; i++)
-	{
-		/*if (distance(cameraPos, anotherRoom[i].position) < 50)
-		{*/
-
-		glGenBuffers(1, &vertexbuffer[i]);
-		glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer[i]);
-		glBufferData(GL_ARRAY_BUFFER, anotherRoom[i].getVertices().size() * sizeof(glm::vec3), &anotherRoom[i].getVertices()[0], GL_STATIC_DRAW);
-
-
-	}
-
-	glGenBuffers(1, &uvbuffer);
-	glBindBuffer(GL_ARRAY_BUFFER, uvbuffer);
-	glBufferData(GL_ARRAY_BUFFER, anotherRoom[0].getUvs().size() * sizeof(glm::vec2), &anotherRoom[0].getUvs()[0], GL_STATIC_DRAW);
-
-	glGenBuffers(1, &normalbuffer);
-	glBindBuffer(GL_ARRAY_BUFFER, normalbuffer);
-	glBufferData(GL_ARRAY_BUFFER, anotherRoom[0].getNormals().size() * sizeof(glm::vec3), &anotherRoom[0].getNormals()[0], GL_STATIC_DRAW);
-
-
-
-	/*bool res = m_modelLoader.loadOBJ("cottage.obj", vertices, uvs, normals);*/
-	int v = 0;
 	
-	/*for (int i = 0; i < vertices.size(); i++)
+	zombie = engine->play3D("Mindless Zombie Awakening.mp3", position, true, true, true);
+	if (zombie)
 	{
-		vertices[i].x += 90;
-		std::cout << std::to_string(vertices[i].x) << std::endl;
+		zombie->setMinDistance(30.0f); // a loud sound
+		zombie->setIsPaused(false); // unpause the sound
+	}
+	
 
-	}*/
-	//std::cout << "There are " << std::to_string(v) << std::endl;
-	GLuint m_error = glewInit(); // Initialise GLEW
 
-	// Load vertex and fragment shader files into shader objects
+	// Load shader
 	m_genericShader = new tk::Shader("Standard.vert", "Standard.frag");
 
 	GLint isCompiled = 0;
 	GLint isLinked = 0;
-	
-	// Projection matrix 
-	projection = glm::perspective(45.0f, 4.0f / 3.0f, 1.0f, 500.0f);
 
-	// Model matrix
-	model = glm::mat4(glm::translate(glm::mat4(1), glm::vec3(10.0f, 0.0f, 0.0f)));
+	// Load models and textures and bind to VAOs
+	loadVAO("models/wallType1/wallType1.png", "models/wallType1/wallType1.obj", wallType1_VAO_ID, wallType1_VBO_ID,
+		wallType1_normalBufferID, wallType1_textureID, wallType1_texture, wallType1_uvBufferID, wallType1_vertices, wallType1_uvs, wallType1_normals);
+
+	loadVAO("models/wallType2/wallType2.png", "models/wallType2/wallType2.obj", wallType2_VAO_ID, wallType2_VBO_ID,
+		wallType2_normalBufferID, wallType2_textureID, wallType2_texture, wallType2_uvBufferID, wallType2_vertices, wallType2_uvs, wallType2_normals);
+
+	loadVAO("models/machineGun/machineGun.png", "models/machineGun/machineGun.obj", machineGun_VAO_ID, machineGun_VBO_ID,
+		machineGun_normalBufferID, machineGun_textureID, machineGun_texture, machineGun_uvBufferID, machineGun_vertices, machineGun_uvs, machineGun_normals);
+	   
+	// Projection matrix 
+	projection = glm::perspective(45.0f, 4.0f / 3.0f, 1.0f, 1000.0f);// Enable depth test
 
 	// Enable depth test
 	glEnable(GL_DEPTH_TEST);
@@ -205,16 +119,14 @@ void Game::initialise()
 	// Accept fragment if it closer to the camera than the former one
 	glDepthFunc(GL_LESS);
 
-	// Get a handle for our "MVP" uniform
-	// Only during the initialisation
-	MatrixID = glGetUniformLocation(m_genericShader->m_programID, "MVP");
-	ViewMatrixID = glGetUniformLocation(m_genericShader->m_programID, "V");
-	ModelMatrixID = glGetUniformLocation(m_genericShader->m_programID, "M");
+	// Uniforms for model, view and projection matrices
+	m_modelMatrixID = glGetUniformLocation(m_genericShader->m_programID, "M");
+	m_viewMatrixID = glGetUniformLocation(m_genericShader->m_programID, "V");
+	m_projectionMatrixID = glGetUniformLocation(m_genericShader->m_programID, "P");	
 
-	// Get a handle for our "myTextureSampler" uniform
-	TextureID = glGetUniformLocation(m_genericShader->m_programID, "myTextureSampler");
-
-	LightID = glGetUniformLocation(m_genericShader->m_programID, "LightPosition_worldspace");
+	// Other uniforms
+	m_currentTextureID = glGetUniformLocation(m_genericShader->m_programID, "currentTexture");
+	m_lightID = glGetUniformLocation(m_genericShader->m_programID, "LightPosition_worldspace");
 }
 
 /// <summary>
@@ -246,103 +158,66 @@ void Game::processEvents()
 /// </summary>
 void Game::update(sf::Time t_deltaTime)
 {
-
-	//sf::Time dt = sf::seconds(1.f / 60.f);
+	std::cout << m_time.asSeconds() << std::endl;
 	if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
 	{
-		m_timerStart = true;
-		// left mouse button is pressed
-		// play some sound stream, looped
-		shotgun->setIsPaused(false);
+		if (gunNum == 1 && m_time > m_ShotDelay)
+		{
+			// left mouse button is pressed
+			// play some sound stream, looped
+			engine->play2D("shotgun.mp3", false);
+			m_time = sf::Time::Zero;
+			
+		}
+		
+		//if (gunNum == 2)
+		//{
+		//	// left mouse button is pressed
+		//	// play some sound stream, looped
+		//	engine->play2D("Minigun.mp3", false);
+		//}
+		//if (gunNum == 3)
+		//{
+		//	// left mouse button is pressed
+		//	// play some sound stream, looped
+		//	engine->play2D("9mm.mp3", false);
+		//}
 	}
-	//shotgun->setIsPaused(true);
 	
 	
 	
-	//2D stuff
-	m_playerRect = m_player.getPlayer();
-	m_enemy.update();
-	m_enemyFollower.update(m_playerRect);
-	m_player.update();
-	bool move = false;
+
 
 	// Update game controls
-	camera.input(t_deltaTime);
+	m_gameWorld->gameControls();
+	gameControls(t_deltaTime);
 
-	// Update model view projection
-	mvp = projection * camera.getView() * model;
+	// Update view (camera)
+	view = camera(m_gameWorld->getCameraPosition(), m_gameWorld->getPitch(), m_gameWorld->getYaw());
 
-	
-	irrklang::vec3df position(camera.transform.position.x, camera.transform.position.y, camera.transform.position.z);        // position of the listener
+
+	irrklang::vec3df position(m_gameWorld->getCameraPosition().x , m_gameWorld->getCameraPosition().y, m_gameWorld->getCameraPosition().z);        // position of the listener
 	irrklang::vec3df lookDirection(10, 0, 10); // the direction the listener looks into
 	irrklang::vec3df velPerSecond(0, 0, 0);    // only relevant for doppler effects
 	irrklang::vec3df upVector(0, 1, 0);        // where 'up' is in your 3D scene
 
 	engine->setListenerPosition(position, lookDirection, velPerSecond, upVector);
-	/// <summary>
-	/// This moves objects
-	/// </summary>
-	/// <param name="t_deltaTime"></param>
-	for (int i = 0; i < ROOM_NUMBERS; i++)
-	{
-		// Do soemthing like this if we have many enemies on screen to boost performance
-		if (Transform::distance(anotherRoom[i].transform.position, camera.transform.position) < 50)
-		{
-			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Y))
-			{
-				// play some sound stream, looped
-				std::cout << "Y" << std::endl;
-				anotherRoom[i].transform.position.z += 1;
-				anotherRoom[i].setPosition();
-				move = true;
-				timer = true;
-			}
-			if (sf::Keyboard::isKeyPressed(sf::Keyboard::U))
-			{
-				std::cout << "U" << std::endl;
-				anotherRoom[i].transform.position.y += 1;
-				anotherRoom[i].setPosition();
-				move = true;
-			}
-			if (sf::Keyboard::isKeyPressed(sf::Keyboard::I))
-			{
-				std::cout << "I" << std::endl;
-				anotherRoom[i].transform.position.x += 1;
-				anotherRoom[i].setPosition();
-				move = true;
-			}
-			if (sf::Keyboard::isKeyPressed(sf::Keyboard::P))
-			{
-				std::cout << "P" << std::endl;
-				anotherRoom[i].transform.position.x -= 1;
-				anotherRoom[i].setPosition();
-				move = true;
-			}
 
-			if (move)
-			{
-				// update bind buffer
-				glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer[i]);
-				glBufferData(GL_ARRAY_BUFFER, anotherRoom[i].getVertices().size() * sizeof(glm::vec3), &anotherRoom[i].getVertices()[0], GL_STATIC_DRAW);
-			}
-		}
-		
-		// end of moving objects in 3D space
-	}
+	// Model matrix (for now)
+	// model_1 = glm::mat4(1.0f); // Identity matrix
+	model_2 = glm::translate(glm::mat4(1.0f), glm::vec3(60.0f, 0.0f, 0.0f)); // Moved 60 units on the X axis
+	model_3 = glm::translate(glm::mat4(1.0f), m_eye - glm::vec3(-0.3f, 3.2f, 0.0f)); // Machine gun moves with the player camera
+
+	// Rotate machine gun to face away from player
+	model_3 = glm::rotate(model_3, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 
 	// Send our transformation to the currently bound shader, in the "MVP" uniform
-	// This is done in the main loop since each model will have a different MVP matrix (At least for the M part)
-	glUniformMatrix4fv(MatrixID, 1, GL_FALSE, &mvp[0][0]);
-	glUniformMatrix4fv(ModelMatrixID, 1, GL_FALSE, &model[0][0]);
-	glUniformMatrix4fv(ViewMatrixID, 1, GL_FALSE, &camera.getView()[0][0]);
+	// This is done in the update loop since each model will have a different MVP matrix (At least for the M part)
+	glUniformMatrix4fv(m_viewMatrixID, 1, GL_FALSE, &view[0][0]);
+	glUniformMatrix4fv(m_projectionMatrixID, 1, GL_FALSE, &projection[0][0]);
 
-	glm::vec3 lightPos = glm::vec3(0, 3, 0);
-	camera.transform.position.x = camera.getEye().x;
-	camera.transform.position.y = camera.getEye().y;
-	camera.transform.position.z = camera.getEye().z;
-
-	// glUniform3f(LightID, lightPos.x, lightPos.y, lightPos.z); // Static light position
-	glUniform3f(LightID, camera.getEye().x, camera.getEye().y, camera.getEye().z);
+	glm::vec3 lightPos = glm::vec3(0, 10, 0);
+	glUniform3f(m_lightID, lightPos.x, lightPos.y, lightPos.z);
 }
 
 /// <summary>
@@ -350,18 +225,79 @@ void Game::update(sf::Time t_deltaTime)
 /// </summary>
 void Game::render()
 {
-	// Clear the screen
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	m_window.clear();
 
+	switch (m_drawState)
+	{
+	case DrawState::MAP:
+		m_window.pushGLStates();
+		m_gameWorld->drawWorld();
+		m_window.popGLStates();
 
+		break;
 
+	case DrawState::GAME:
+		// Use shader
+		glUseProgram(m_genericShader->m_programID);
 
-	DrawRooms();
+		// Bind our texture in Texture Unit 0
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, wallType1_texture);
 
+		// Set shader to use Texture Unit 0
+		glUniform1i(m_currentTextureID, 0);
 
-	
-	m_window.display();
+		glBindVertexArray(wallType1_VAO_ID);		
+
+		for (int i = 0; i < m_gameWorld->getWallData()->size(); ++i)
+		{
+			model_1 = glm::translate(glm::mat4(1.0f), m_gameWorld->getWallData()->at(i).first);
+			glUniformMatrix4fv(m_modelMatrixID, 1, GL_FALSE, &model_1[0][0]);
+			glDrawArrays(GL_TRIANGLES, 0, wallType1_vertices.size());
+		}	
+
+		glBindVertexArray(0);
+
+		// ---------------------------------------------------------------------------------------------------------------------
+
+		// Bind our texture in Texture Unit 1
+		glActiveTexture(GL_TEXTURE1);
+		glBindTexture(GL_TEXTURE_2D, wallType2_texture);
+
+		// Set shader to use Texture Unit 1
+		glUniform1i(m_currentTextureID, 1);
+
+		glBindVertexArray(wallType2_VAO_ID);
+		glUniformMatrix4fv(m_modelMatrixID, 1, GL_FALSE, &model_2[0][0]);
+		glDrawArrays(GL_TRIANGLES, 0, wallType2_vertices.size());
+		glBindVertexArray(0);
+
+		// ---------------------------------------------------------------------------------------------------------------------
+
+		// Bind our texture in Texture Unit 2
+		glActiveTexture(GL_TEXTURE2);
+		glBindTexture(GL_TEXTURE_2D, machineGun_texture);
+
+		// Set shader to use Texture Unit 2
+		glUniform1i(m_currentTextureID, 2);
+
+		glBindVertexArray(machineGun_VAO_ID);
+		glUniformMatrix4fv(m_modelMatrixID, 1, GL_FALSE, &model_3[0][0]);
+		glDrawArrays(GL_TRIANGLES, 0, machineGun_vertices.size());
+		glBindVertexArray(0);
+
+		// ---------------------------------------------------------------------------------------------------------------------
+
+		// Reset OpenGL
+		glBindVertexArray(GL_NONE);
+		glBindTexture(GL_TEXTURE_2D, 0);
+		glActiveTexture(GL_TEXTURE0);
+
+		// ---------------------------------------------------------------------------------------------------------------------
+		
+		break;
+	}
+
 	// Check for OpenGL error code
 	error = glGetError();
 
@@ -369,92 +305,146 @@ void Game::render()
 	{
 		DEBUG_MSG(error);
 	}
+
+	m_window.display();
 }
 
-
-
-
-
-void Game::DrawRooms()
+// TODO: Create a camera class
+/// <summary>
+/// Camera
+/// </summary>
+glm::mat4 Game::camera(glm::vec3 t_eye, double t_pitch, double t_yaw)
 {
-	//// This is where any SFML related stuff can be drawn
-	//m_window.pushGLStates();
+	double cosPitch = cos(glm::radians(t_pitch));
+	double sinPitch = sin(glm::radians(t_pitch));
+	double cosYaw = cos(glm::radians(t_yaw));
+	double sinYaw = sin(glm::radians(t_yaw));
 
-	///////////////////////////////////////
-	//// SFML draw stuff can go in here! //
-	
-		//2D stuff
-	//m_window.draw(m_testRect);
-	//m_enemy.render(m_window);
-	//m_enemyFollower.render(m_window);
-	//m_player.render(m_window);
+	glm::vec3 xaxis = { cosYaw, 0, -sinYaw };
+	glm::vec3 yaxis = { sinYaw * sinPitch, cosPitch, cosYaw * sinPitch };
+	glm::vec3 zaxis = { sinYaw * cosPitch, -sinPitch, cosPitch * cosYaw };
 
-	///////////////////////////////////////
-
-	//m_window.popGLStates(); // End of SFML stuff
-
-
-	for (int i = 0; i < ROOM_NUMBERS; i++)
+	// Create a 4x4 view matrix from the right, up, forward and eye position vectors
+	glm::mat4 viewMatrix =
 	{
-		if (Transform::distance(anotherRoom[i].transform.position, camera.transform.position) < 50)
+		glm::vec4(xaxis.x,            yaxis.x,            zaxis.x,      0),
+		glm::vec4(xaxis.y,            yaxis.y,            zaxis.y,      0),
+		glm::vec4(xaxis.z,            yaxis.z,            zaxis.z,      0),
+		glm::vec4(-dot(xaxis, m_eye), -dot(yaxis, m_eye), -dot(zaxis, m_eye), 1)
+	};
+
+	return viewMatrix;
+}
+
+/// <summary>
+/// Game controls
+/// </summary>
+void Game::gameControls(sf::Time t_deltaTime)
+{
+	m_eye = m_gameWorld->getCameraPosition();
+
+	// Switch between game and map screen
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::H))
+	{
+		if (m_drawState == DrawState::GAME)
 		{
-
-			// Use our shader
-			glUseProgram(m_genericShader->m_programID);
-
-			// Bind our texture in Texture Unit 0
-			glActiveTexture(GL_TEXTURE0);
-			glBindTexture(GL_TEXTURE_2D, Texture);
-
-			// Set our "myTextureSampler" sampler to use Texture Unit 0
-			glUniform1i(TextureID, 0);
-
-			// Vertices buffer
-			glEnableVertexAttribArray(0);
-			glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer[i]);
-			glVertexAttribPointer(
-				0,                  // attribute
-				3,                  // size
-				GL_FLOAT,           // type
-				GL_FALSE,           // normalized?
-				0,                  // stride
-				(void*)(0)       // array buffer offset
-			);
-
-			// UV buffer
-			glEnableVertexAttribArray(1);
-			glBindBuffer(GL_ARRAY_BUFFER, uvbuffer);
-			glVertexAttribPointer(
-				1,								  // attribute
-				2,                                // size
-				GL_FLOAT,                         // type
-				GL_FALSE,                         // normalized?
-				0,                                // stride
-				(void*)(0)                       // array buffer offset
-			);
-
-			// Normals buffer
-			glEnableVertexAttribArray(2);
-			glBindBuffer(GL_ARRAY_BUFFER, normalbuffer);
-			glVertexAttribPointer(
-				2,                                // attribute
-				3,                                // size
-				GL_FLOAT,                         // type
-				GL_FALSE,                         // normalized?
-				0,                                // stride
-				(void*)(0)                          // array buffer offset
-			);
-
-
-			glDrawArrays(GL_TRIANGLES, 0, anotherRoom[i].getVertices().size() * sizeof(glm::vec3));
-
-			// Draw
-
-			glDisableVertexAttribArray(0);
-			glDisableVertexAttribArray(1);
-			glDisableVertexAttribArray(2);
-		} // end distance check
+			m_drawState = DrawState::MAP;
+		}
+		else
+		{
+			m_drawState = DrawState::GAME;
+		}
 	}
+
+	// Look up OR down
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
+	{
+		m_pitch += 2.0 * static_cast<float>(t_deltaTime.asMilliseconds() * m_speed);
+
+		if (m_pitch >= 85.0)
+		{
+			m_pitch = 85.0;
+		}
+	}
+	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
+	{
+		m_pitch -= 2.0 * static_cast<float>(t_deltaTime.asMilliseconds() * m_speed);
+
+		if (m_pitch <= -85.0)
+		{
+			m_pitch = -85.0;
+		}
+	}
+}
+
+/// <summary>
+/// Load VAO
+///  
+/// This function loads a texture and model, and binds them to a given VAO
+/// </summary>
+void Game::loadVAO(std::string t_textureFilename, const char *t_modelFilename, GLuint &t_vaoID,
+	GLuint &t_vboID, GLuint &t_normalBufferID, GLuint &t_textureID, GLuint &t_texture, GLuint &t_uvBufferID,
+	std::vector<glm::vec3> &t_vertices, std::vector<glm::vec2> &t_UVs, std::vector<glm::vec3> &t_normals)
+{
+	// This is used to hold the texture data
+	unsigned char *f_data;
+
+	// Width, height, texture component and colour type (RGBA is the default value)
+	int f_width;
+	int f_height;
+	int f_compCount;
+	const int f_number = 4;
+
+	// Load model texture
+	stbi_set_flip_vertically_on_load(false);
+	f_data = stbi_load(t_textureFilename.c_str(), &f_width, &f_height, &f_compCount, 4);
+
+	glGenTextures(1, &t_texture);
+	glBindTexture(GL_TEXTURE_2D, t_texture);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, f_width, f_height, 0, GL_RGBA, GL_UNSIGNED_BYTE, f_data);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+
+	// Load .obj file
+	if (!tk::ModelLoader::loadOBJ(t_modelFilename, t_vertices, t_UVs, t_normals))
+	{
+		std::cout << "Error loading model!" << std::endl;
+	}
+
+	// Initialise buffers for model
+	glGenBuffers(1, &t_vboID);
+	glBindBuffer(GL_ARRAY_BUFFER, t_vboID);
+	glBufferData(GL_ARRAY_BUFFER, t_vertices.size() * sizeof(glm::vec3), &t_vertices[0], GL_STATIC_DRAW);
+
+	glGenBuffers(1, &t_uvBufferID);
+	glBindBuffer(GL_ARRAY_BUFFER, t_uvBufferID);
+	glBufferData(GL_ARRAY_BUFFER, t_UVs.size() * sizeof(glm::vec2), &t_UVs[0], GL_STATIC_DRAW);
+
+	glGenBuffers(1, &t_normalBufferID);
+	glBindBuffer(GL_ARRAY_BUFFER, t_normalBufferID);
+	glBufferData(GL_ARRAY_BUFFER, t_normals.size() * sizeof(glm::vec3), &t_normals[0], GL_STATIC_DRAW);
+
+	// This VAO stores all states for model
+	glGenVertexArrays(1, &t_vaoID);
+	glBindVertexArray(t_vaoID);
+
+	// Vertex buffer	
+	glBindBuffer(GL_ARRAY_BUFFER, t_vboID);
+	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
+
+	// UV buffer
+	glBindBuffer(GL_ARRAY_BUFFER, t_uvBufferID);
+	glEnableVertexAttribArray(1);
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 0, (void*)0);
+
+	// Normal buffer
+	glBindBuffer(GL_ARRAY_BUFFER, t_normalBufferID);
+	glEnableVertexAttribArray(2);
+	glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
+
+	glBindVertexArray(0);
 }
 
 

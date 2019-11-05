@@ -1,10 +1,16 @@
 #include "ModelLoader.h"
 
-// Function to load an OBJ file. When exporting an OBJ file using Blender, only tick the boxes in the export options
-// for writing normals, writing UVs and triangulating faces to guarantee compatibility with this feeble parser.
+/// <summary>
+/// This function loads an obj format model
+/// </summary>
 bool tk::ModelLoader::loadOBJ(const char *path, std::vector<glm::vec3> &out_vertices, std::vector<glm::vec2> &out_uvs, std::vector<glm::vec3> &out_normals)
 {
-	
+	std::vector<unsigned int> vertexIndices;
+	std::vector<unsigned int> uvIndices;
+	std::vector<unsigned int> normalIndices;
+	std::vector<glm::vec3> temp_vertices;
+	std::vector<glm::vec2> temp_uvs;
+	std::vector<glm::vec3> temp_normals;
 
 	FILE *file = std::fopen(path, "r");
 
@@ -54,7 +60,7 @@ bool tk::ModelLoader::loadOBJ(const char *path, std::vector<glm::vec3> &out_vert
 			
 			if (matches != 9) 
 			{
-				printf("File can't be read - make sure file is compatible.\n");
+				printf("File can't be read - make sure file is compatible!\n");
 				fclose(file);
 				return false;
 			}
@@ -72,14 +78,14 @@ bool tk::ModelLoader::loadOBJ(const char *path, std::vector<glm::vec3> &out_vert
 		else 
 		{
 			// Probably a comment, eat up the rest of the line
-		//	char stupidBuffer[1000];
-		//	fgets(stupidBuffer, 1000, file);
+			char stupidBuffer[1000];
+			fgets(stupidBuffer, 1000, file);
 		}
 	}
 
 	// For each vertex of each triangle
-	for (unsigned int i = 0; i < vertexIndices.size(); i++) {
-
+	for (unsigned int i = 0; i < vertexIndices.size(); i++)
+	{
 		// Get the indices of its attributes
 		unsigned int vertexIndex = vertexIndices[i];
 		unsigned int uvIndex = uvIndices[i];
@@ -94,9 +100,9 @@ bool tk::ModelLoader::loadOBJ(const char *path, std::vector<glm::vec3> &out_vert
 		out_vertices.push_back(vertex);
 		out_uvs.push_back(uv);
 		out_normals.push_back(normal);
-
 	}
 
 	fclose(file);
+
 	return true;
 }

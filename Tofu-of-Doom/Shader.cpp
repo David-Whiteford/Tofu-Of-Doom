@@ -1,5 +1,8 @@
 #include "Shader.h"
 
+/// <summary>
+/// Constructor for the Shader class
+/// </summary>
 tk::Shader::Shader(const std::string &t_vertexShaderFilename, const std::string &t_fragmentShaderFilename)
 {
 	std::string f_vertexShader = readFile(t_vertexShaderFilename);
@@ -8,6 +11,9 @@ tk::Shader::Shader(const std::string &t_vertexShaderFilename, const std::string 
 	glUseProgram(m_programID);
 }
 
+/// <summary>
+/// Destructor for the Shader class
+/// </summary>
 tk::Shader::~Shader()
 {
 	if (m_programID != 0)
@@ -16,6 +22,9 @@ tk::Shader::~Shader()
 	}
 }
 
+/// <summary>
+/// Opens and parses an external file
+/// </summary>
 std::string tk::Shader::readFile(const std::string &t_filePath)
 {
 	std::ifstream f_fileStream(t_filePath, std::ios::in);
@@ -38,6 +47,9 @@ std::string tk::Shader::readFile(const std::string &t_filePath)
 	return f_buffer.str();
 }
 
+/// <summary>
+/// Compile shader
+/// </summary>
 GLuint tk::Shader::compileShader(GLuint t_type, const std::string &t_source)
 {
 	GLuint f_shader = glCreateShader(t_type);
@@ -80,6 +92,9 @@ GLuint tk::Shader::compileShader(GLuint t_type, const std::string &t_source)
 	return f_shader;
 }
 
+/// <summary>
+/// Create shader
+/// </summary>
 void tk::Shader::createShader(const std::string &t_vertexShader, const std::string &t_fragmentShader)
 {
 	// Compile the two shaders given as string reference
@@ -123,7 +138,7 @@ void tk::Shader::createShader(const std::string &t_vertexShader, const std::stri
 		std::cout << "Vertex and fragment shader link failed." << std::endl;
 		std::cout << f_infoLog << std::endl;
 
-		// Delete shader (it's of no use anymore!)
+		// Delete shader
 		glDeleteProgram(m_programID);
 	
 		return;
