@@ -69,6 +69,11 @@ void Camera::input(sf::Time t_deltaTime)
 
 	glm::vec3 transformPos = { transform.position.x, transform.position.y,transform.position.z };
 
+	/*if (vibrationStarted + vibrationLength < t_deltaTime)
+	{
+		vibrate = false;
+		Player1->Vibrate();
+	////*/
 
 	Player1 = new CXBOXController(1);
 	if (Player1->IsConnected())
@@ -85,7 +90,14 @@ void Camera::input(sf::Time t_deltaTime)
 
 		if (Player1->GetState().Gamepad.wButtons & XINPUT_GAMEPAD_X)
 		{
+			//if (!vibrate)
+			//{
+			//	vibrate = true;
 			//	Player1->Vibrate(65535, 65535);
+			//	//vibrationStarted = t_deltaTime.asMilliseconds();
+			//	//std::cout << vibrationStarted << std::endl;
+			//}
+
 		}
 
 		if (Player1->GetState().Gamepad.wButtons & XINPUT_GAMEPAD_Y)

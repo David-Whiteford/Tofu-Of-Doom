@@ -7,16 +7,18 @@
 #include "libs/glm/glm.hpp"
 #include "libs/glm/gtc/matrix_transform.hpp"
 #include <SFML/Graphics.hpp>
-#include "Controller.h"
+#include "Globals.h"
 
 class Camera
 {
 public:
+
+	bool vibrate = false;
+	float vibrationLength = 0.3f;
+	float vibrationStarted = 0.0f;
 	bool canClimb = false;
 	Camera();
 	~Camera();
-	//CXBOXController control;
-	CXBOXController* Player1;
 	void input(sf::Time t_deltaTime);
 	// Camera and controls
 	Transform transform;
