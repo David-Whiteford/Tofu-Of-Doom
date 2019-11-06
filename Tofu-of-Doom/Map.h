@@ -10,6 +10,7 @@
 #include <SFML/OpenGL.hpp>
 
 #include "WallType.h"
+#include "DisplayScale.h"
 
 class Map
 {

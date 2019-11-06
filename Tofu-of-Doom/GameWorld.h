@@ -10,11 +10,13 @@
 #include <SFML/OpenGL.hpp>
 
 #include "Map.h"
+#include "DisplayScale.h"
+#include "Camera.h"
 
 class GameWorld
 {
 public:
-	GameWorld(sf::RenderWindow &t_window, sf::Time &t_deltaTime);
+	GameWorld(sf::RenderWindow &t_window, sf::Time &t_deltaTime, Camera &t_camera);
 	~GameWorld();
 	void updateWorld();
 	void gameControls();
@@ -27,6 +29,7 @@ public:
 
 private:
 	sf::RenderWindow &m_window;
+	Camera &m_camera;
 	Map *m_map = new Map();
 	sf::View m_mapView;
 	std::vector<std::pair<glm::vec3, WallType>> m_wallPositions;

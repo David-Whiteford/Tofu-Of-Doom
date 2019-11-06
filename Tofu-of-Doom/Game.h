@@ -17,6 +17,7 @@
 
 
 #include "Camera.h"
+#include "DisplayScale.h"
 
 using namespace irrklang;
 #pragma comment(lib, "irrKlang.lib") // link with irrKlang.dll
@@ -56,7 +57,7 @@ private:
 
 	sf::RenderWindow m_window; // Window
 	sf::Time m_deltaTime;
-	GameWorld *m_gameWorld = new GameWorld(m_window, m_deltaTime); // Create a game world
+	GameWorld *m_gameWorld = new GameWorld(m_window, m_deltaTime, camera); // Create a game world
 
 	bool m_exitGame{ false };
 
@@ -112,7 +113,7 @@ private:
 	glm::mat4 model_3;
 	glm::mat4 projection;
 	// Matrices for model, view and projection (and everything combined)
-	glm::mat4 mvp;
+	// glm::mat4 mvp;
 	
 
 	tk::Shader *m_genericShader; // Shader object
