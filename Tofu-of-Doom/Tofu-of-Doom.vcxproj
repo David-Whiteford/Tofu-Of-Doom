@@ -33,6 +33,7 @@
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Controller.h" />
     <ClInclude Include="Debug.h" />
+    <ClInclude Include="DisplayScale.h" />
     <ClInclude Include="GameWorld.h" />
     <ClInclude Include="Map.h" />
     <ClInclude Include="ModelLoader.h" />

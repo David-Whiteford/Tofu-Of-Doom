@@ -158,7 +158,7 @@ void Game::processEvents()
 /// </summary>
 void Game::update(sf::Time t_deltaTime)
 {
-
+	m_gameWorld->updateWorld();
 
 	// Update game controls
 	camera.input(t_deltaTime);
@@ -170,9 +170,8 @@ void Game::update(sf::Time t_deltaTime)
 
 
 	// Update model view projection
-	mvp = projection * camera.getView() * model_1;
+	// mvp = projection * camera.getView() * model_1;
 
-	std::cout << m_time.asSeconds() << std::endl;
 	if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
 	{
 		if (gunNum == 1 && m_time > m_ShotDelay)
@@ -202,8 +201,7 @@ void Game::update(sf::Time t_deltaTime)
 	
 
 
-	// Update game controls
-	m_gameWorld->gameControls();
+	// This is currently only used to display the mini-map
 	gameControls(t_deltaTime);
 
 	// Update view (camera)
@@ -217,14 +215,15 @@ void Game::update(sf::Time t_deltaTime)
 
 	engine->setListenerPosition(position, lookDirection, velPerSecond, upVector);
 
-	// Model matrix (for now)
-	// model_1 = glm::mat4(1.0f); // Identity matrix
-	model_2 = glm::translate(glm::mat4(1.0f), glm::vec3(60.0f, 0.0f, 0.0f)); // Moved 60 units on the X axis
-	// model_3 = glm::translate(glm::mat4(1.0f), camera.getEye() - glm::vec3(-0.3f, 3.2f, 0.0f)); // Machine gun moves with the player camera
+	// Test cube
+	model_2 = glm::translate(glm::mat4(1.0f), glm::vec3(15.0f, 0.0f, 15.0f));
+	
+	// Gun height is fixed at a Y value of 1.5 OpenGL units
+	// Gun will always face in the same direction as the camera / player
 	glm::vec3 gunDirection(camera.getDirection().x, 1.5f, camera.getDirection().z);
 	model_3 = glm::translate(glm::mat4(1.0f), camera.getEye() - (gunDirection * 2.0f));
 
-	// Rotate machine gun with player
+	// Rotate machine gun with player (180 degrees to flip the gun so it faces in the correct direction + actual rotation)
 	model_3 = glm::rotate(model_3, glm::radians(180.0f + camera.getYaw()), glm::vec3(0.0f, 1.0f, 0.0f));
 
 	// Send our transformation to the currently bound shader, in the "MVP" uniform
@@ -267,7 +266,7 @@ void Game::render()
 
 		for (int i = 0; i < m_gameWorld->getWallData()->size(); ++i)
 		{
-			model_1 = glm::translate(glm::mat4(1.0f), m_gameWorld->getWallData()->at(i).first);
+			model_1 = glm::translate(glm::mat4(1.0f), m_gameWorld->getWallData()->at(i).first / s_displayScale);
 			glUniformMatrix4fv(m_modelMatrixID, 1, GL_FALSE, &model_1[0][0]);
 			glDrawArrays(GL_TRIANGLES, 0, wallType1_vertices.size());
 		}	

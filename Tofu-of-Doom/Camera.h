@@ -1,4 +1,6 @@
-#pragma once
+#ifndef CAMERA_H
+#define CAMERA_H
+
 #include "Transform.h"
 #include "libs/glew/glew.h"
 #include "libs/glew/wglew.h"
@@ -37,6 +39,6 @@ private:
 
 	double m_yaw{ 0.0 }; // In degrees
 	double m_pitch{ 0.0 }; // For the love of Jebus, do NOT pitch more that 90 degress pos or neg! Thanks.
-
-
 };
+
+#endif // !GAME_H
