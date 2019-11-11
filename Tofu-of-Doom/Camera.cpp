@@ -124,18 +124,41 @@ void Camera::input(sf::Time t_deltaTime)
 			glm::vec3 tempDirection(m_direction.x, m_direction.y, m_direction.z);
 			glm::normalize(tempDirection);
 			transformPos += tempDirection * static_cast<float>(t_deltaTime.asMilliseconds() * m_speed);
+		}	
+		
+		// Strafe
+		if (Player1->GetState().Gamepad.sThumbLX > 17849)
+		{
+			glm::vec3 tempDirection(m_directionStrafe.x, m_directionStrafe.y, m_directionStrafe.z);
+			glm::normalize(tempDirection);
+
+
+
+			transformPos += tempDirection * static_cast<float>(t_deltaTime.asMilliseconds() * m_speed);
+
 		}
+		else if (Player1->GetState().Gamepad.sThumbLX < -17849)
+		{
+			glm::vec3 tempDirection(m_directionStrafe.x, m_directionStrafe.y, m_directionStrafe.z);
+			glm::normalize(tempDirection);
+			transformPos -= tempDirection * static_cast<float>(t_deltaTime.asMilliseconds() * m_speed);
+		}
+		// End Strafe
+
+
 
 		if (Player1->GetState().Gamepad.sThumbRX < -7849)
 		{
 			m_yaw += m_turnSpeed;
 			m_rotationMatrix = glm::rotate(glm::mat4(1.0f), glm::radians(-m_turnSpeed), glm::vec3(0.f, 1.f, 0.f));
 			m_direction = m_direction * m_rotationMatrix;
+			m_directionStrafe = m_directionStrafe * m_rotationMatrix;
 
 			if (m_yaw >= 360.0)
 			{
 				m_yaw = 0.0;
 				m_direction = glm::vec4(0.f, 0.f, 1.f, 0.f);
+				m_directionStrafe = glm::vec4(1.0f, 0.0f, 0.0f, 0.0f);
 			}
 		}
 		else if (Player1->GetState().Gamepad.sThumbRX > 7849)
@@ -143,11 +166,13 @@ void Camera::input(sf::Time t_deltaTime)
 			m_yaw -= m_turnSpeed;
 			m_rotationMatrix = glm::rotate(glm::mat4(1.0f), glm::radians(m_turnSpeed), glm::vec3(0.f, 1.f, 0.f));
 			m_direction = m_direction * m_rotationMatrix;
+			m_directionStrafe = m_directionStrafe * m_rotationMatrix;
 
 			if (m_yaw <= -360.0)
 			{
 				m_yaw = 0.0;
 				m_direction = glm::vec4(0.f, 0.f, 1.f, 0.f);
+				m_directionStrafe = glm::vec4(1.0f, 0.0f, 0.0f, 0.0f);
 			}
 		}
 		if (Player1->GetState().Gamepad.wButtons & XINPUT_GAMEPAD_Y)
@@ -177,74 +202,71 @@ void Camera::input(sf::Time t_deltaTime)
 		transform.position.z = m_eye.z;
 		delete(Player1);
 	}
-	/*if (control.aButton())
+	
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q))
 	{
+		glm::vec3 tempDirection(m_direction.x, m_direction.y, m_direction.z);
+		glm::normalize(tempDirection);
+		m_eye -= tempDirection * static_cast<float>(t_deltaTime.asMilliseconds() * m_speed);
+	}
+	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
+	{
+		glm::vec3 tempDirection(m_direction.x, m_direction.y, m_direction.z);
+		glm::normalize(tempDirection);
+		m_eye += tempDirection * static_cast<float>(t_deltaTime.asMilliseconds() * m_speed);
+	}
 
-	}*/
-	//if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q))
-	//{
-	//	glm::vec3 tempDirection(m_direction.x, m_direction.y, m_direction.z);
-	//	glm::normalize(tempDirection);
-	//	m_eye -= tempDirection * static_cast<float>(t_deltaTime.asMilliseconds() * m_speed);
-	//}
-	//else if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
-	//{
-	//	glm::vec3 tempDirection(m_direction.x, m_direction.y, m_direction.z);
-	//	glm::normalize(tempDirection);
-	//	m_eye += tempDirection * static_cast<float>(t_deltaTime.asMilliseconds() * m_speed);
-	//}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
+	{
+		m_eye.x -= .1f;
+	}
+	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
+	{
+		m_eye.x += .1f;
+	}
 
-	//if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
-	//{
-	//	m_eye.x -= .1f;
-	//}
-	//else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
-	//{
-	//	m_eye.x += .1f;
-	//}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::N))
+	{
+		m_yaw += 2.0;
+		m_rotationMatrix = glm::rotate(glm::mat4(1.0f), glm::radians(-2.0f), glm::vec3(0.f, 1.f, 0.f));
+		m_direction = m_direction * m_rotationMatrix;
 
-	//if (sf::Keyboard::isKeyPressed(sf::Keyboard::N))
-	//{
-	//	m_yaw += 2.0;
-	//	m_rotationMatrix = glm::rotate(glm::mat4(1.0f), glm::radians(-2.0f), glm::vec3(0.f, 1.f, 0.f));
-	//	m_direction = m_direction * m_rotationMatrix;
+		if (m_yaw >= 360.0)
+		{
+			m_yaw = 0.0;
+			m_direction = glm::vec4(0.f, 0.f, 1.f, 0.f);
+		}
+	}
+	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::M))
+	{
+		m_yaw -= 2.0;
+		m_rotationMatrix = glm::rotate(glm::mat4(1.0f), glm::radians(2.0f), glm::vec3(0.f, 1.f, 0.f));
+		m_direction = m_direction * m_rotationMatrix;
 
-	//	if (m_yaw >= 360.0)
-	//	{
-	//		m_yaw = 0.0;
-	//		m_direction = glm::vec4(0.f, 0.f, 1.f, 0.f);
-	//	}
-	//}
-	//else if (sf::Keyboard::isKeyPressed(sf::Keyboard::M))
-	//{
-	//	m_yaw -= 2.0;
-	//	m_rotationMatrix = glm::rotate(glm::mat4(1.0f), glm::radians(2.0f), glm::vec3(0.f, 1.f, 0.f));
-	//	m_direction = m_direction * m_rotationMatrix;
+		if (m_yaw <= -360.0)
+		{
+			m_yaw = 0.0;
+			m_direction = glm::vec4(0.f, 0.f, 1.f, 0.f);
+		}
+	}
 
-	//	if (m_yaw <= -360.0)
-	//	{
-	//		m_yaw = 0.0;
-	//		m_direction = glm::vec4(0.f, 0.f, 1.f, 0.f);
-	//	}
-	//}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
+	{
+		m_pitch += 1.0;
 
-	//if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
-	//{
-	//	m_pitch += 1.0;
+		if (m_pitch >= 360.0)
+		{
+			m_pitch = 0.0;
+		}
+	}
 
-	//	if (m_pitch >= 360.0)
-	//	{
-	//		m_pitch = 0.0;
-	//	}
-	//}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
+	{
+		m_pitch -= 1.0;
 
-	//if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
-	//{
-	//	m_pitch -= 1.0;
-
-	//	if (m_pitch <= -360.0)
-	//	{
-	//		m_pitch = 0.0;
-	//	}
-	//}
+		if (m_pitch <= -360.0)
+		{
+			m_pitch = 0.0;
+		}
+	}
 }

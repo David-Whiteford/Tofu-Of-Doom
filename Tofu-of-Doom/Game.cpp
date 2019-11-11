@@ -158,7 +158,6 @@ void Game::processEvents()
 /// </summary>
 void Game::update(sf::Time t_deltaTime)
 {
-	std::cout << m_time.asSeconds() << std::endl;
 	m_gameWorld->updateWorld();
 
 	// Update game controls
@@ -174,7 +173,7 @@ void Game::update(sf::Time t_deltaTime)
 	// mvp = projection * camera.getView() * model_1;
 
 	Player1 = new CXBOXController(1);
-	if (.2f < m_time.asSeconds())
+	if (.1f < m_time.asSeconds())
 	{
 		vibrate = false;
 		Player1->Vibrate(0,0);
@@ -198,8 +197,6 @@ void Game::update(sf::Time t_deltaTime)
 				{
 					vibrate = true;
 					Player1->Vibrate(65535, 65535);
-					//vibrationStarted = t_deltaTime.asMilliseconds();
-					//std::cout << vibrationStarted << std::endl;
 				}
 
 			}
