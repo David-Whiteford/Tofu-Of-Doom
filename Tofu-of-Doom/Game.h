@@ -29,10 +29,12 @@ public:
 	~Game();
 	void run();
 	std::vector< vec3df > positions;
-	ISoundEngine* engine;
+	ISoundEngine* soundEngine;
 	ISound* music;
 	ISound* background;
 	ISound* zombie;
+
+	bool vibrate = false;
 
 	ISound* zombieEnemies[11];
 	//vec3df positionEnemies[11];
