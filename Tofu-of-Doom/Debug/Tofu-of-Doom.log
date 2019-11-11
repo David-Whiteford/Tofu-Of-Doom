@@ -1,4 +1,16 @@
-﻿  Game.cpp
-C:\Users\Teresa\Desktop\Tofu-Of-Doom\Tofu-of-Doom\Transform.h(16): warning C4091: 'typedef ': ignored on left of 'Transform::Position' when no variable is declared
-C:\Users\Teresa\Desktop\Tofu-Of-Doom\Tofu-of-Doom\Game.cpp(267,21): warning C4018: '<': signed/unsigned mismatch
-  Tofu-of-Doom.vcxproj -> C:\Users\Teresa\Desktop\Tofu-Of-Doom\Debug\Tofu-of-Doom.exe
+﻿  Camera.cpp
+  Controller.cpp
+  Game.cpp
+D:\Users\dave2\Desktop\Tofu-Of-Doom\Tofu-of-Doom\Transform.h(6,10): fatal error C1083: Cannot open include file: 'SFML/Graphics.hpp': No such file or directory
+  GameWorld.cpp
+D:\Users\dave2\Desktop\Tofu-Of-Doom\Tofu-of-Doom\Game.h(9,10): fatal error C1083: Cannot open include file: 'SFML/Graphics.hpp': No such file or directory
+  Main.cpp
+D:\Users\dave2\Desktop\Tofu-Of-Doom\Tofu-of-Doom\GameWorld.h(9,10): fatal error C1083: Cannot open include file: 'SFML/Graphics.hpp': No such file or directory
+  Map.cpp
+D:\Users\dave2\Desktop\Tofu-Of-Doom\Tofu-of-Doom\Game.h(9,10): fatal error C1083: Cannot open include file: 'SFML/Graphics.hpp': No such file or directory
+  ModelLoader.cpp
+  Shader.cpp
+  Transform.cpp
+D:\Users\dave2\Desktop\Tofu-Of-Doom\Tofu-of-Doom\Map.h(9,10): fatal error C1083: Cannot open include file: 'SFML/Graphics.hpp': No such file or directory
+  Generating Code...
+D:\Users\dave2\Desktop\Tofu-Of-Doom\Tofu-of-Doom\Transform.h(6,10): fatal error C1083: Cannot open include file: 'SFML/Graphics.hpp': No such file or directory

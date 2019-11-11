@@ -58,15 +58,31 @@ void Game::run()
 /// </summary>
 void Game::initialise()
 {
+
+	
+
 	m_ShotDelay = sf::seconds(.7f); // .7f is the length for the reload sound to finish
 	soundEngine = createIrrKlangDevice();
 
+
+	//new sound code
+	/*shotgunSound = soundEngine->addSoundSourceFromFile("shotgun.wav");
+	pistolSound = soundEngine->addSoundSourceFromFile("9mm.wav");
+	machinegunSound = soundEngine->addSoundSourceFromFile("Minigun.wav");*/
+	
+	
+
+
 	//name of file , position in 3D space , play loop , start paused , track
 	background = soundEngine->play2D("horror.mp3" , true);
+	
 	glm::vec3 soundPos(25, 0, 25);
 	vec3df position(25, 0, 25);
 	positions.push_back(position);
 
+	/*soundQueue.push(shotgunSound);
+	soundQueue.push(pistolSound);
+	soundQueue.push(machinegunSound);*/
 
 	//for (int i = 0; i < 11; i++)
 	//{
@@ -183,16 +199,16 @@ void Game::update(sf::Time t_deltaTime)
 	{
 		if (Player1->GetState().Gamepad.wButtons & XINPUT_GAMEPAD_X)
 		{
-			
-
-		
 			if (gunNum == 1 && m_time > m_ShotDelay)
 			{
+				
 				// left mouse button is pressed
 				// play some sound stream, looped
 				soundEngine->play2D("shotgun.mp3", false);
 				m_time = sf::Time::Zero; 
+				//soundEngine->play2D(soundQueue.front());
 				
+			
 				if (!vibrate)
 				{
 					vibrate = true;
@@ -206,12 +222,14 @@ void Game::update(sf::Time t_deltaTime)
 			//	// left mouse button is pressed
 			//	// play some sound stream, looped
 			//	engine->play2D("Minigun.mp3", false);
+			//    soundEngine->play2D(soundQueue.front());
 			//}
 			//if (gunNum == 3)
 			//{
 			//	// left mouse button is pressed
 			//	// play some sound stream, looped
 			//	engine->play2D("9mm.mp3", false);
+			//    soundEngine->play2D(soundQueue.back());
 			//}
 		}
 	}
