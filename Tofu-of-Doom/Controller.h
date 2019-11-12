@@ -14,17 +14,72 @@
 // Now, the XInput Library
 #pragma comment(lib, "XInput.lib")
 
+#include <iostream>
+
 // XBOX Controller Class Definition
 class CXBOXController
 {
 private:
 	XINPUT_STATE _controllerState;
 	int _controllerNum;
+
+
+	// Key presses hidden from player
+	bool aButtonPressed = false;
+	bool bButtonPressed = false;
+	bool upButtonPressed = false;
+	bool downButtonPressed = false;
+	bool leftButtonPressed = false;
+	bool rightButtonPressed = false;
+	
+	//===============EndKEyPresses Hidden from player
+
+	float deadZone = 17000;
+
+	int m_playerID = 1;
+
 public:
+	CXBOXController();
+	~CXBOXController();
 	CXBOXController(int playerNumber);
 	XINPUT_STATE GetState();
+
+	CXBOXController* Player;
+
+	// Set and gets of player ID this will allow us to have other players if we so choose
+	void setPlayerIndex(int t_playerNumber) { m_playerID = t_playerNumber; };
+	int getPlayerIndex() { return m_playerID; };
+
 	bool IsConnected();
 	void Vibrate(int leftVal = 0, int rightVal = 0);
+	void Update(float t_deltaTime);
+
+	bool aButtonDown();
+	bool aButton();
+
+	bool bButtonDown();
+	bool bButton();
+
+	bool xButtonDown();
+	bool xButton();
+
+	bool upButtonDown();
+	bool upButton();
+
+	bool downButtonDown();
+	bool downButton();
+
+	//bool leftButtonDown();
+	bool leftButton();
+
+	//bool rightButtonDown();
+	bool rightButton();
+
+	// Right Thumbstick input 
+	bool rightButtonRTS();
+	bool leftButtonRTS();
+
+
 };
 
 #endif
