@@ -69,7 +69,7 @@ void Game::initialise()
 	shotgunSound = soundEngine->addSoundSourceFromFile("shotgun.mp3");
 	pistolSound = soundEngine->addSoundSourceFromFile("9mm.mp3");
 	machinegunSound = soundEngine->addSoundSourceFromFile("Minigun.mp3");
-	
+	zombieSound = soundEngine->addSoundSourceFromFile("Zombie_Horde.mp3");
 	
 
 
@@ -77,8 +77,7 @@ void Game::initialise()
 	background = soundEngine->play2D("horror.mp3" , true);
 	
 	glm::vec3 soundPos(25, 0, 25);
-	vec3df position(25, 0, 25);
-	positions.push_back(position);
+	//positions.push_back(position);
 
 	soundQueue.push(shotgunSound);
 	soundQueue.push(pistolSound);
@@ -101,10 +100,14 @@ void Game::initialise()
 
 	//}
 	//
-	//zombie = soundEngine->play3D("Mindless Zombie Awakening.mp3", position, true, true, true);
+
+
+	
+
+	//zombie = soundEngine->play3D(position, true, true, true);
 	//if (zombie)
 	//{
-	//	zombie->setMinDistance(30.0f); // a loud sound
+	//	zombie->setMinDistance(20.0f); // a loud sound
 	//	zombie->setIsPaused(false); // unpause the sound
 	//}
 	
@@ -176,6 +179,9 @@ void Game::update(sf::Time t_deltaTime)
 {
 	m_gameWorld->updateWorld();
 
+	vec3df position(m_gameWorld->getEnemyPosition().x, 0, m_gameWorld->getEnemyPosition().y);
+	soundEngine->play3D(zombieSound ,position, true, true, true);
+	
 	// Update game controls
 	camera.input(t_deltaTime);
 
@@ -246,7 +252,7 @@ void Game::update(sf::Time t_deltaTime)
 	camera.getView() = camera.camera(m_gameWorld->getCameraPosition(), m_gameWorld->getPitch(), m_gameWorld->getYaw());
 
 
-	irrklang::vec3df position(m_gameWorld->getCameraPosition().x , m_gameWorld->getCameraPosition().y, m_gameWorld->getCameraPosition().z);        // position of the listener
+	//irrklang::vec3df position(m_gameWorld->getCameraPosition().x , m_gameWorld->getCameraPosition().y, m_gameWorld->getCameraPosition().z);        // position of the listener
 	irrklang::vec3df lookDirection(10, 0, 10); // the direction the listener looks into
 	irrklang::vec3df velPerSecond(0, 0, 0);    // only relevant for doppler effects
 	irrklang::vec3df upVector(0, 1, 0);        // where 'up' is in your 3D scene

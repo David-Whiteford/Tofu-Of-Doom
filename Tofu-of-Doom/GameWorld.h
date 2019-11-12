@@ -20,8 +20,10 @@ public:
 	~GameWorld();
 	void updateWorld();
 	void gameControls();
+	void enemyMove();
 	void drawWorld();
 	sf::Vector2f getPlayerPosition();
+	sf::Vector2f getEnemyPosition();
 	glm::vec3 getCameraPosition();
 	double getPitch();
 	double getYaw();
@@ -34,6 +36,7 @@ private:
 	sf::View m_mapView;
 	std::vector<std::pair<glm::vec3, WallType>> m_wallPositions;
 	sf::CircleShape m_player;
+	sf::CircleShape m_enemy;
 	std::vector<sf::RectangleShape> m_walls;
 	glm::vec3 m_eye; // Current camera position
 	double m_yaw{ 0.0 }; // Look left and right (in degrees)
@@ -43,6 +46,11 @@ private:
 	sf::Time &m_deltaTime;
 	float m_speed{ 20.0f };
 	float m_wallCubeSize{ 5.0f }; // This is the value of the wall cube's x, y, and z.
+
+	bool m_moveRight{ true };
+	bool m_down{ false };
+	bool m_moveLeft{ true };
+	bool m_up{ false };
 };
 
 #endif // !GAMEWORLD_H

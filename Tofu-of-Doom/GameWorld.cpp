@@ -8,11 +8,16 @@ GameWorld::GameWorld(sf::RenderWindow &t_window, sf::Time &t_deltaTime, Camera &
 {
 	// Player
 	m_player.setRadius(25.0f);
-	m_player.setFillColor(sf::Color::Red);
+	m_player.setFillColor(sf::Color::Blue);
 	m_player.setOrigin(sf::Vector2f(25.0f, 25.0f));
 	m_player.setPosition(m_camera.getEye().x, m_camera.getEye().z); // Test starting position
 	// m_eye = glm::vec3(m_player.getPosition().x, 2.0f, m_player.getPosition().y);
 
+	
+	m_enemy.setRadius(25.0f);
+	m_enemy.setFillColor(sf::Color::Red);
+	m_enemy.setOrigin(sf::Vector2f(25.0f, 25.0f));
+	m_enemy.setPosition(100,100); // Test starting position
 	// View
 	m_mapView.setViewport(sf::FloatRect(0.25f, 0.25f, 0.5f, 0.5f));
 	m_mapView.setSize(m_window.getSize().x, m_window.getSize().y);
@@ -43,6 +48,7 @@ GameWorld::~GameWorld()
 void GameWorld::updateWorld()
 {
 	m_player.setPosition(m_camera.getEye().x * s_displayScale, m_camera.getEye().z * s_displayScale);
+	enemyMove();
 }
 
 /// <summary>
@@ -73,6 +79,50 @@ void GameWorld::gameControls()
 	}
 }
 
+void GameWorld::enemyMove()
+{
+
+		
+	if (m_moveRight == true)
+	{
+		m_enemy.setPosition(m_enemy.getPosition().x +1.0f , m_enemy.getPosition().y);
+		if (m_enemy.getPosition().x >= 400)
+		{
+			m_down = true;
+			m_moveRight = false;
+		}
+	}
+	if (m_down == true)
+	{
+		m_enemy.setPosition(m_enemy.getPosition().x, m_enemy.getPosition().y + 1.0f);
+		if (m_enemy.getPosition().y >= 400)
+		{
+			m_down = false;
+			m_moveLeft = true;
+		}
+	}
+	if (m_moveLeft == true)
+	{
+		m_enemy.setPosition(m_enemy.getPosition().x - 1.0f, m_enemy.getPosition().y);
+		if (m_enemy.getPosition().x <= 100)
+		{
+			m_moveLeft = false;
+			m_up = true;
+		}
+	}
+	if (m_up == true)
+	{
+		m_enemy.setPosition(m_enemy.getPosition().x, m_enemy.getPosition().y - 1.0f);
+		if (m_enemy.getPosition().y <= 100)
+		{
+			m_up = false;
+			m_moveRight = true;
+		}
+	}
+
+
+}
+
 /// <summary>
 /// Draw the world
 /// </summary>
@@ -88,6 +138,7 @@ void GameWorld::drawWorld()
 	m_mapView.setCenter(m_player.getPosition());
 	m_window.setView(m_mapView);
 	m_window.draw(m_player);
+	m_window.draw(m_enemy);
 }
 
 /// <summary>
@@ -96,6 +147,11 @@ void GameWorld::drawWorld()
 sf::Vector2f GameWorld::getPlayerPosition()
 {
 	return m_player.getPosition();
+}
+
+sf::Vector2f GameWorld::getEnemyPosition()
+{
+	return m_enemy.getPosition();
 }
 
 /// <summary>
