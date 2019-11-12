@@ -55,8 +55,11 @@ float Camera::getSpeed()
 	return m_speed;
 }
 
+
+
 Camera::Camera()
 {
+
 }
 
 Camera::~Camera()
@@ -65,141 +68,90 @@ Camera::~Camera()
 
 void Camera::input(sf::Time t_deltaTime)
 {
-	// Declae a temp Transform
 
 	glm::vec3 transformPos = { transform.position.x, transform.position.y,transform.position.z };
 
-	/*if (vibrationStarted + vibrationLength < t_deltaTime)
+
+
+
+
+	if (controller.upButton())
 	{
-		vibrate = false;
-		Player1->Vibrate();
-	////*/
-
-	Player1 = new CXBOXController(1);
-	if (Player1->IsConnected())
-	{
-		if (Player1->GetState().Gamepad.wButtons & XINPUT_GAMEPAD_A)
-		{
-			//	Player1->Vibrate(65535, 0);
-		}
-
-		if (Player1->GetState().Gamepad.wButtons & XINPUT_GAMEPAD_B)
-		{
-			//Player1->Vibrate(0, 65535);
-		}
-
-		if (Player1->GetState().Gamepad.wButtons & XINPUT_GAMEPAD_X)
-		{
-			//if (!vibrate)
-			//{
-			//	vibrate = true;
-			//	Player1->Vibrate(65535, 65535);
-			//	//vibrationStarted = t_deltaTime.asMilliseconds();
-			//	//std::cout << vibrationStarted << std::endl;
-			//}
-
-		}
-
-		if (Player1->GetState().Gamepad.wButtons & XINPUT_GAMEPAD_Y)
-		{
-			//	Player1->Vibrate();
-		}
-
-		if (Player1->GetState().Gamepad.wButtons & XINPUT_GAMEPAD_BACK)
-		{
-		}
-
-		if (Player1->GetState().Gamepad.sThumbLY > 7849)
-		{
-			glm::vec3 tempDirection(m_direction.x, m_direction.y, m_direction.z);
-			glm::normalize(tempDirection);
+		glm::vec3 tempDirection(m_direction.x, m_direction.y, m_direction.z);
+		glm::normalize(tempDirection);
 
 
 
-			transformPos -= tempDirection * static_cast<float>(t_deltaTime.asMilliseconds() * m_speed);
+		transformPos -= tempDirection * static_cast<float>(t_deltaTime.asMilliseconds() * m_speed);
 
-		}
-		else if (Player1->GetState().Gamepad.sThumbLY < -7849)
-		{
-			glm::vec3 tempDirection(m_direction.x, m_direction.y, m_direction.z);
-			glm::normalize(tempDirection);
-			transformPos += tempDirection * static_cast<float>(t_deltaTime.asMilliseconds() * m_speed);
-		}	
-		
-		// Strafe
-		if (Player1->GetState().Gamepad.sThumbLX > 17849)
-		{
-			glm::vec3 tempDirection(m_directionStrafe.x, m_directionStrafe.y, m_directionStrafe.z);
-			glm::normalize(tempDirection);
-
-
-
-			transformPos += tempDirection * static_cast<float>(t_deltaTime.asMilliseconds() * m_speed);
-
-		}
-		else if (Player1->GetState().Gamepad.sThumbLX < -17849)
-		{
-			glm::vec3 tempDirection(m_directionStrafe.x, m_directionStrafe.y, m_directionStrafe.z);
-			glm::normalize(tempDirection);
-			transformPos -= tempDirection * static_cast<float>(t_deltaTime.asMilliseconds() * m_speed);
-		}
-		// End Strafe
-
-
-
-		if (Player1->GetState().Gamepad.sThumbRX < -7849)
-		{
-			m_yaw += m_turnSpeed;
-			m_rotationMatrix = glm::rotate(glm::mat4(1.0f), glm::radians(-m_turnSpeed), glm::vec3(0.f, 1.f, 0.f));
-			m_direction = m_direction * m_rotationMatrix;
-			m_directionStrafe = m_directionStrafe * m_rotationMatrix;
-
-			if (m_yaw >= 360.0)
-			{
-				m_yaw = 0.0;
-				m_direction = glm::vec4(0.f, 0.f, 1.f, 0.f);
-				m_directionStrafe = glm::vec4(1.0f, 0.0f, 0.0f, 0.0f);
-			}
-		}
-		else if (Player1->GetState().Gamepad.sThumbRX > 7849)
-		{
-			m_yaw -= m_turnSpeed;
-			m_rotationMatrix = glm::rotate(glm::mat4(1.0f), glm::radians(m_turnSpeed), glm::vec3(0.f, 1.f, 0.f));
-			m_direction = m_direction * m_rotationMatrix;
-			m_directionStrafe = m_directionStrafe * m_rotationMatrix;
-
-			if (m_yaw <= -360.0)
-			{
-				m_yaw = 0.0;
-				m_direction = glm::vec4(0.f, 0.f, 1.f, 0.f);
-				m_directionStrafe = glm::vec4(1.0f, 0.0f, 0.0f, 0.0f);
-			}
-		}
-		if (Player1->GetState().Gamepad.wButtons & XINPUT_GAMEPAD_Y)
-		{
-			if (canClimb)
-			{
-				glm::vec3 tempDirection(0, 1, 0);
-				glm::normalize(tempDirection);
-				transformPos += tempDirection * static_cast<float>(t_deltaTime.asMilliseconds() * m_speed);
-			}
-
-		}
-		else if (Player1->GetState().Gamepad.wButtons & XINPUT_GAMEPAD_A)
-		{
-			if (canClimb)
-			{
-				glm::vec3 tempDirection(0, 1, 0);
-				glm::normalize(tempDirection);
-				transformPos -= tempDirection * static_cast<float>(t_deltaTime.asMilliseconds() * m_speed);
-			}
-
-		}
-
-		m_eye = transformPos;
-		transform.position.x = m_eye.x;
-		transform.position.y = m_eye.y;
-		transform.position.z = m_eye.z;
-		delete(Player1);
 	}
+	else if (controller.downButton())
+	{
+		glm::vec3 tempDirection(m_direction.x, m_direction.y, m_direction.z);
+		glm::normalize(tempDirection);
+		transformPos += tempDirection * static_cast<float>(t_deltaTime.asMilliseconds() * m_speed);
+	}
+
+	// Strafe
+	if (controller.rightButton())
+	{
+		glm::vec3 tempDirection(m_directionStrafe.x, m_directionStrafe.y, m_directionStrafe.z);
+		glm::normalize(tempDirection);
+
+
+
+		transformPos += tempDirection * static_cast<float>(t_deltaTime.asMilliseconds() * m_speed);
+
+	}
+	else if (controller.leftButton())
+	{
+		glm::vec3 tempDirection(m_directionStrafe.x, m_directionStrafe.y, m_directionStrafe.z);
+		glm::normalize(tempDirection);
+		transformPos -= tempDirection * static_cast<float>(t_deltaTime.asMilliseconds() * m_speed);
+	}
+	// End Strafe
+
+
+	// Turn Camera
+	if (controller.leftButtonRTS())
+	{
+		m_yaw += m_turnSpeed;
+		m_rotationMatrix = glm::rotate(glm::mat4(1.0f), glm::radians(-m_turnSpeed), glm::vec3(0.f, 1.f, 0.f));
+		m_direction = m_direction * m_rotationMatrix;
+		m_directionStrafe = m_directionStrafe * m_rotationMatrix;
+
+		if (m_yaw >= 360.0)
+		{
+			m_yaw = 0.0;
+			m_direction = glm::vec4(0.f, 0.f, 1.f, 0.f);
+			m_directionStrafe = glm::vec4(1.0f, 0.0f, 0.0f, 0.0f);
+		}
+	}
+	else if (controller.rightButtonRTS())
+	{
+		m_yaw -= m_turnSpeed;
+		m_rotationMatrix = glm::rotate(glm::mat4(1.0f), glm::radians(m_turnSpeed), glm::vec3(0.f, 1.f, 0.f));
+		m_direction = m_direction * m_rotationMatrix;
+		m_directionStrafe = m_directionStrafe * m_rotationMatrix;
+
+
+	}
+	// End turn player
+
+
+		if (m_yaw <= -360.0 || m_yaw >= 360.0)
+		{
+			m_yaw = 0.0;
+			m_direction = glm::vec4(0.f, 0.f, 1.f, 0.f);
+			m_directionStrafe = glm::vec4(1.0f, 0.0f, 0.0f, 0.0f);
+		}
+
+	
+
+
+	m_eye = transformPos;
+	transform.position.x = m_eye.x;
+	transform.position.y = m_eye.y;
+	transform.position.z = m_eye.z;
+
 }

@@ -7,7 +7,7 @@
 #include "libs/glm/glm.hpp"
 #include "libs/glm/gtc/matrix_transform.hpp"
 #include <SFML/Graphics.hpp>
-#include "Globals.h"
+#include "Controller.h"
 
 class Camera
 {
@@ -30,6 +30,8 @@ public:
 	float getSpeed();
 	glm::mat4 camera(glm::vec3 t_eye, double t_pitch, double t_yaw);
 	float getYaw();
+
+	CXBOXController controller;
 
 private:
 	glm::mat4 view;

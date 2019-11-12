@@ -41,10 +41,10 @@ void Game::run()
 	{
 		processEvents();
 		timeSinceLastUpdate += clock.restart();
-		m_time += gunClock.restart();
 
 		while (timeSinceLastUpdate > timePerFrame)
 		{
+			m_time += gunClock.restart();
 			timeSinceLastUpdate -= timePerFrame;
 			processEvents();
 			update(timePerFrame);
@@ -58,35 +58,21 @@ void Game::run()
 /// </summary>
 void Game::initialise()
 {
-	
-	
-
 	m_ShotDelay = sf::seconds(.7f); // .7f is the length for the reload sound to finish
+	m_vibrateLength = sf::seconds(.1f); // .7f is the length for the reload sound to finish
 	soundEngine = createIrrKlangDevice();
-
-
-	//new sound code
-	shotgunSound = soundEngine->addSoundSourceFromFile("shotgun.mp3");
-	pistolSound = soundEngine->addSoundSourceFromFile("9mm.mp3");
-	machinegunSound = soundEngine->addSoundSourceFromFile("Minigun.mp3");
-	zombieSound = soundEngine->addSoundSourceFromFile("Zombie_Horde.mp3");
-	
-
 
 	//name of file , position in 3D space , play loop , start paused , track
 	background = soundEngine->play2D("horror.mp3" , true);
-	
 	glm::vec3 soundPos(25, 0, 25);
-	//positions.push_back(position);
+	vec3df position(25, 0, 25);
+	positions.push_back(position);
 
-	soundQueue.push(shotgunSound);
-	soundQueue.push(pistolSound);
-	soundQueue.push(machinegunSound);
-	
+
 	//for (int i = 0; i < 11; i++)
 	//{
 	//	
-	///*positionEnemies[i].X = anotherRoom[j].transform.position.x;
+	///*	positionEnemies[i].X = anotherRoom[j].transform.position.x;
 	//	positionEnemies[i].Y = anotherRoom[j].transform.position.y;
 	//	positionEnemies[i].Z = anotherRoom[j].transform.position.z;*/
 	//	
@@ -100,14 +86,10 @@ void Game::initialise()
 
 	//}
 	//
-
-
-	
-
-	//zombie = soundEngine->play3D(position, true, true, true);
+	//zombie = soundEngine->play3D("Mindless Zombie Awakening.mp3", position, true, true, true);
 	//if (zombie)
 	//{
-	//	zombie->setMinDistance(20.0f); // a loud sound
+	//	zombie->setMinDistance(30.0f); // a loud sound
 	//	zombie->setIsPaused(false); // unpause the sound
 	//}
 	
@@ -179,9 +161,6 @@ void Game::update(sf::Time t_deltaTime)
 {
 	m_gameWorld->updateWorld();
 
-	vec3df position(m_gameWorld->getEnemyPosition().x, 0, m_gameWorld->getEnemyPosition().y);
-	soundEngine->play3D(zombieSound ,position, true, true, true);
-	
 	// Update game controls
 	camera.input(t_deltaTime);
 
@@ -194,55 +173,45 @@ void Game::update(sf::Time t_deltaTime)
 	// Update model view projection
 	// mvp = projection * camera.getView() * model_1;
 
-	Player1 = new CXBOXController(1);
-	if (.1f < m_time.asSeconds())
+	if (camera.controller.aButtonDown())
+	{
+
+		if (gunNum == 1 && m_time > m_ShotDelay)
+		{
+			// left mouse button is pressed
+			// play some sound stream, looped
+
+			soundEngine->play2D("shotgun.mp3", false);
+			m_time = sf::Time::Zero;
+			m_time = m_time.Zero;
+
+			vibrate = true;
+			camera.controller.Vibrate(65535, 65535);
+
+
+		}
+
+		//if (gunNum == 2)
+		//{
+		//	// left mouse button is pressed
+		//	// play some sound stream, looped
+		//	engine->play2D("Minigun.mp3", false);
+		//}
+		//if (gunNum == 3)
+		//{
+		//	// left mouse button is pressed
+		//	// play some sound stream, looped
+		//	engine->play2D("9mm.mp3", false);
+		//}
+	}
+
+	if (m_vibrateLength < m_time)
 	{
 		vibrate = false;
-		Player1->Vibrate(0,0);
+		camera.controller.Vibrate(0, 0);
 	}
+	std::cout << m_time.asSeconds() << std::endl;
 
-	if (Player1->IsConnected())
-	{
-		if (Player1->GetState().Gamepad.wButtons & XINPUT_GAMEPAD_X)
-		{
-			if (gunNum == 1 && m_time > m_ShotDelay)
-			{
-				
-				// left mouse button is pressed
-				// play some sound stream, looped
-				soundEngine->play2D(soundQueue.front());
-				m_time = sf::Time::Zero;
-				if (!vibrate)
-				{
-					vibrate = true;
-					Player1->Vibrate(65535, 65535);
-				}
-			}
-			if (gunNum == 2 && m_time > m_ShotDelay)
-			{
-				soundEngine->play2D(soundQueue.front());
-				m_time = sf::Time::Zero;
-				if (!vibrate)
-				{
-					vibrate = true;
-					Player1->Vibrate(65535, 65535);
-				}
-			}
-			if (gunNum == 3 && m_time > m_ShotDelay)
-			{
-				soundEngine->play2D(soundQueue.back());
-				m_time = sf::Time::Zero;
-				if (!vibrate)
-				{
-					vibrate = true;
-					Player1->Vibrate(65535, 65535);
-				}
-			}
-		}
-	}
-	
-
-	delete(Player1);
 
 
 	// This is currently only used to display the mini-map
@@ -252,7 +221,7 @@ void Game::update(sf::Time t_deltaTime)
 	camera.getView() = camera.camera(m_gameWorld->getCameraPosition(), m_gameWorld->getPitch(), m_gameWorld->getYaw());
 
 
-	//irrklang::vec3df position(m_gameWorld->getCameraPosition().x , m_gameWorld->getCameraPosition().y, m_gameWorld->getCameraPosition().z);        // position of the listener
+	irrklang::vec3df position(m_gameWorld->getCameraPosition().x , m_gameWorld->getCameraPosition().y, m_gameWorld->getCameraPosition().z);        // position of the listener
 	irrklang::vec3df lookDirection(10, 0, 10); // the direction the listener looks into
 	irrklang::vec3df velPerSecond(0, 0, 0);    // only relevant for doppler effects
 	irrklang::vec3df upVector(0, 1, 0);        // where 'up' is in your 3D scene

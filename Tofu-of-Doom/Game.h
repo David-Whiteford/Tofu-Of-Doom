@@ -14,7 +14,7 @@
 #include "ModelLoader.h"
 #include "GameWorld.h"
 #include "irrKlang.h"
-#include <queue> 
+
 
 #include "Camera.h"
 #include "DisplayScale.h"
@@ -33,24 +33,21 @@ public:
 	ISound* music;
 	ISound* background;
 	ISound* zombie;
-	irrklang::ISoundSource* shotgunSound;
-	irrklang::ISoundSource* pistolSound;
-	irrklang::ISoundSource* machinegunSound;
-	irrklang::ISoundSource* zombieSound;
+
 	bool vibrate = false;
 
 	ISound* zombieEnemies[11];
 	//vec3df positionEnemies[11];
 	int gunNum = 1;
-
-	
+	ISound* shotgun;
+	ISound* pistol;
+	ISound* machinegun;
 
 	sf::Time m_time;
 	sf::Time m_ShotDelay;
-
+	sf::Time m_vibrateLength;
 private:
-	std::queue <irrklang::ISoundSource*> soundQueue;
-	std::deque<int>::iterator it;
+
 
 	enum DrawState
 	{
