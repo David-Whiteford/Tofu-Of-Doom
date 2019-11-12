@@ -66,9 +66,9 @@ void Game::initialise()
 
 
 	//new sound code
-	/*shotgunSound = soundEngine->addSoundSourceFromFile("shotgun.wav");
-	pistolSound = soundEngine->addSoundSourceFromFile("9mm.wav");
-	machinegunSound = soundEngine->addSoundSourceFromFile("Minigun.wav");*/
+	shotgunSound = soundEngine->addSoundSourceFromFile("shotgun.mp3");
+	pistolSound = soundEngine->addSoundSourceFromFile("9mm.mp3");
+	machinegunSound = soundEngine->addSoundSourceFromFile("Minigun.mp3");
 	
 	
 
@@ -80,9 +80,9 @@ void Game::initialise()
 	vec3df position(25, 0, 25);
 	positions.push_back(position);
 
-	/*soundQueue.push(shotgunSound);
-	soundQueue.push(pistolSound);
-	soundQueue.push(machinegunSound);*/
+	/*soundQueue.push(10);
+	soundQueue.push(5);
+	soundQueue.push(5);*/
 
 	//for (int i = 0; i < 11; i++)
 	//{
@@ -204,7 +204,7 @@ void Game::update(sf::Time t_deltaTime)
 				
 				// left mouse button is pressed
 				// play some sound stream, looped
-				soundEngine->play2D("shotgun.mp3", false);
+				soundEngine->play2D(shotgunSound);
 				m_time = sf::Time::Zero; 
 				//soundEngine->play2D(soundQueue.front());
 				

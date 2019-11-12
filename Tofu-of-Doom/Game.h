@@ -33,9 +33,9 @@ public:
 	ISound* music;
 	ISound* background;
 	ISound* zombie;
-	/*irrklang::ISoundSource* shotgunSound;
+	irrklang::ISoundSource* shotgunSound;
 	irrklang::ISoundSource* pistolSound;
-	irrklang::ISoundSource* machinegunSound;*/
+	irrklang::ISoundSource* machinegunSound;
 	bool vibrate = false;
 
 	ISound* zombieEnemies[11];
@@ -50,7 +50,7 @@ public:
 	sf::Time m_ShotDelay;
 
 private:
-	/*std::queue <ISound*> soundQueue;*/
+	/*std::queue <int> soundQueue;*/
 
 
 	enum DrawState
