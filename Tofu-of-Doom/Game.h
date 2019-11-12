@@ -40,7 +40,7 @@ public:
 
 	ISound* zombieEnemies[11];
 	//vec3df positionEnemies[11];
-	int gunNum = 1;
+	int gunNum = 2;
 
 	ISound* shotgun;
 	ISound* pistol;
@@ -50,8 +50,8 @@ public:
 	sf::Time m_ShotDelay;
 
 private:
-	/*std::queue <int> soundQueue;*/
-
+	std::queue <irrklang::ISoundSource*> soundQueue;
+	std::deque<int>::iterator it;
 
 	enum DrawState
 	{

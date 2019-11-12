@@ -58,7 +58,7 @@ void Game::run()
 /// </summary>
 void Game::initialise()
 {
-
+	
 	
 
 	m_ShotDelay = sf::seconds(.7f); // .7f is the length for the reload sound to finish
@@ -80,14 +80,14 @@ void Game::initialise()
 	vec3df position(25, 0, 25);
 	positions.push_back(position);
 
-	/*soundQueue.push(10);
-	soundQueue.push(5);
-	soundQueue.push(5);*/
-
+	soundQueue.push(shotgunSound);
+	soundQueue.push(pistolSound);
+	soundQueue.push(machinegunSound);
+	
 	//for (int i = 0; i < 11; i++)
 	//{
 	//	
-	///*	positionEnemies[i].X = anotherRoom[j].transform.position.x;
+	///*positionEnemies[i].X = anotherRoom[j].transform.position.x;
 	//	positionEnemies[i].Y = anotherRoom[j].transform.position.y;
 	//	positionEnemies[i].Z = anotherRoom[j].transform.position.z;*/
 	//	
@@ -204,33 +204,34 @@ void Game::update(sf::Time t_deltaTime)
 				
 				// left mouse button is pressed
 				// play some sound stream, looped
-				soundEngine->play2D(shotgunSound);
-				m_time = sf::Time::Zero; 
-				//soundEngine->play2D(soundQueue.front());
-				
-			
+				soundEngine->play2D(soundQueue.front());
+				m_time = sf::Time::Zero;
 				if (!vibrate)
 				{
 					vibrate = true;
 					Player1->Vibrate(65535, 65535);
 				}
-
 			}
-
-			//if (gunNum == 2)
-			//{
-			//	// left mouse button is pressed
-			//	// play some sound stream, looped
-			//	engine->play2D("Minigun.mp3", false);
-			//    soundEngine->play2D(soundQueue.front());
-			//}
-			//if (gunNum == 3)
-			//{
-			//	// left mouse button is pressed
-			//	// play some sound stream, looped
-			//	engine->play2D("9mm.mp3", false);
-			//    soundEngine->play2D(soundQueue.back());
-			//}
+			if (gunNum == 2 && m_time > m_ShotDelay)
+			{
+				soundEngine->play2D(soundQueue.front());
+				m_time = sf::Time::Zero;
+				if (!vibrate)
+				{
+					vibrate = true;
+					Player1->Vibrate(65535, 65535);
+				}
+			}
+			if (gunNum == 3 && m_time > m_ShotDelay)
+			{
+				soundEngine->play2D(soundQueue.back());
+				m_time = sf::Time::Zero;
+				if (!vibrate)
+				{
+					vibrate = true;
+					Player1->Vibrate(65535, 65535);
+				}
+			}
 		}
 	}
 	
