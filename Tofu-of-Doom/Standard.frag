@@ -20,12 +20,12 @@ void main(){
 	// Light emission properties
 	// You probably want to put them as uniforms
 	vec3 LightColor = vec3(1,1,1);
-	float LightPower = 50.0f;
+	float LightPower = 80.0f;
 	
 	// Material properties
 	vec3 MaterialDiffuseColor = texture( currentTexture, UV ).rgb;
-	vec3 MaterialAmbientColor = vec3(0.6,0.6,0.6) * MaterialDiffuseColor;
-	vec3 MaterialSpecularColor = vec3(0.3,0.3,0.3);
+	vec3 MaterialAmbientColor = vec3(0.1,0.1,0.1) * MaterialDiffuseColor;
+	vec3 MaterialSpecularColor = vec3(1,1,1);
 
 	// Distance to the light
 	float distance = length( LightPosition_worldspace - Position_worldspace );
