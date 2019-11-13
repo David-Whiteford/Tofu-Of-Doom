@@ -18,6 +18,7 @@ GameWorld::GameWorld(sf::RenderWindow &t_window, sf::Time &t_deltaTime, Camera &
 	m_enemy.setFillColor(sf::Color::Red);
 	m_enemy.setOrigin(sf::Vector2f(25.0f, 25.0f));
 	m_enemy.setPosition(100,100); // Test starting position
+
 	// View
 	m_mapView.setViewport(sf::FloatRect(0.25f, 0.25f, 0.5f, 0.5f));
 	m_mapView.setSize(m_window.getSize().x, m_window.getSize().y);
@@ -51,76 +52,51 @@ void GameWorld::updateWorld()
 	enemyMove();
 }
 
-/// <summary>
-/// Game controls
-/// </summary>
-void GameWorld::gameControls()
-{
-	// Move left OR right
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
-	{
-		glm::vec4 tempDirection_1(m_direction.x, m_direction.y, m_direction.z, 1.0f);
-		m_rotationMatrix = glm::rotate(glm::mat4(1.0f), glm::radians(-90.0f), glm::vec3(0.f, 1.f, 0.f));
-		tempDirection_1 = tempDirection_1 * m_rotationMatrix;
-		glm::normalize(tempDirection_1);
-		glm::vec3 tempDirection_2(tempDirection_1.x, tempDirection_1.y, tempDirection_1.z);
-		m_eye -= tempDirection_2 * static_cast<float>(m_deltaTime.asSeconds() * m_speed * 2.0f);
-		m_player.setPosition(m_eye.x * 12.0f, m_eye.z * 12.0f);
-	}
-	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
-	{
-		glm::vec4 tempDirection_1(m_direction.x, m_direction.y, m_direction.z, 1.0f);
-		m_rotationMatrix = glm::rotate(glm::mat4(1.0f), glm::radians(90.0f), glm::vec3(0.f, 1.f, 0.f));
-		tempDirection_1 = tempDirection_1 * m_rotationMatrix;
-		glm::normalize(tempDirection_1);
-		glm::vec3 tempDirection_2(tempDirection_1.x, tempDirection_1.y, tempDirection_1.z);
-		m_eye -= tempDirection_2 * static_cast<float>(m_deltaTime.asSeconds() * m_speed * 2.0f);
-		m_player.setPosition(m_eye.x * 12.0f, m_eye.z * 12.0f);
-	}
-}
-
 void GameWorld::enemyMove()
-{
-
-		
+{		
 	if (m_moveRight == true)
 	{
 		m_enemy.setPosition(m_enemy.getPosition().x +1.0f , m_enemy.getPosition().y);
+
 		if (m_enemy.getPosition().x >= 400)
 		{
 			m_down = true;
 			m_moveRight = false;
 		}
 	}
+
 	if (m_down == true)
 	{
 		m_enemy.setPosition(m_enemy.getPosition().x, m_enemy.getPosition().y + 1.0f);
+
 		if (m_enemy.getPosition().y >= 400)
 		{
 			m_down = false;
 			m_moveLeft = true;
 		}
 	}
+
 	if (m_moveLeft == true)
 	{
 		m_enemy.setPosition(m_enemy.getPosition().x - 1.0f, m_enemy.getPosition().y);
+
 		if (m_enemy.getPosition().x <= 100)
 		{
 			m_moveLeft = false;
 			m_up = true;
 		}
 	}
+
 	if (m_up == true)
 	{
 		m_enemy.setPosition(m_enemy.getPosition().x, m_enemy.getPosition().y - 1.0f);
+
 		if (m_enemy.getPosition().y <= 100)
 		{
 			m_up = false;
 			m_moveRight = true;
 		}
 	}
-
-
 }
 
 /// <summary>

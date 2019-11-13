@@ -46,6 +46,7 @@ public:
 	sf::Time m_time;
 	sf::Time m_ShotDelay;
 	sf::Time m_vibrateLength;
+
 private:
 
 
@@ -99,6 +100,30 @@ private:
 	std::vector<glm::vec2> machineGun_uvs;
 	std::vector<glm::vec3> machineGun_normals;	
 
+	// Oil drum
+	unsigned char* oilDrum_data;
+	GLuint oilDrum_VAO_ID;
+	GLuint oilDrum_VBO_ID;
+	GLuint oilDrum_normalBufferID;
+	GLuint oilDrum_textureID;
+	GLuint oilDrum_texture;
+	GLuint oilDrum_uvBufferID;
+	std::vector<glm::vec3> oilDrum_vertices;
+	std::vector<glm::vec2> oilDrum_uvs;
+	std::vector<glm::vec3> oilDrum_normals;
+
+	// Fire extinguisher
+	unsigned char* fireExtinguisher_data;
+	GLuint fireExtinguisher_VAO_ID;
+	GLuint fireExtinguisher_VBO_ID;
+	GLuint fireExtinguisher_normalBufferID;
+	GLuint fireExtinguisher_textureID;
+	GLuint fireExtinguisher_texture;
+	GLuint fireExtinguisher_uvBufferID;
+	std::vector<glm::vec3> fireExtinguisher_vertices;
+	std::vector<glm::vec2> fireExtinguisher_uvs;
+	std::vector<glm::vec3> fireExtinguisher_normals;
+
 	// Shader IDs
 	GLuint m_lightID;
 	GLuint m_modelMatrixID;
@@ -113,6 +138,8 @@ private:
 	glm::mat4 model_1;
 	glm::mat4 model_2;
 	glm::mat4 model_3;
+	glm::mat4 model_4;
+	glm::mat4 model_5;
 	glm::mat4 projection;
 	// Matrices for model, view and projection (and everything combined)
 	// glm::mat4 mvp;

@@ -35,7 +35,8 @@ public:
 
 private:
 	glm::mat4 view;
-	glm::vec3 m_eye{ transform.position.x,transform.position.y,transform.position.z }; // Current camera position
+	// glm::vec3 m_eye{ transform.position.x,transform.position.y,transform.position.z }; // Current camera position
+	glm::vec3 m_eye;
 	glm::mat4 m_rotationMatrix;
 	glm::vec4 m_direction{ 0.f, 0.f, 1.f, 0.f }; // You move in this direction(z)
 	glm::vec4 m_directionStrafe{ 1.0f, 0.f, 0.f, 0.f }; // You move in this direction(z)
@@ -43,7 +44,7 @@ private:
 	float m_turnSpeed = 3;
 
 	double m_yaw{ 0.0 }; // In degrees
-	double m_pitch{ 0.0 }; // For the love of Jebus, do NOT pitch more that 90 degress pos or neg! Thanks.
+	double m_pitch{ 0.0 }; // This isn't really used anymore
 };
 
 #endif // !GAME_H

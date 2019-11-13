@@ -111,8 +111,14 @@ void Game::initialise()
 	loadVAO("models/machineGun/machineGun.png", "models/machineGun/machineGun.obj", machineGun_VAO_ID, machineGun_VBO_ID,
 		machineGun_normalBufferID, machineGun_textureID, machineGun_texture, machineGun_uvBufferID, machineGun_vertices, machineGun_uvs, machineGun_normals);
 	   
+	loadVAO("models/oilDrum/oilDrum.jpg", "models/oilDrum/oilDrum.obj", oilDrum_VAO_ID, oilDrum_VBO_ID,
+		oilDrum_normalBufferID, oilDrum_textureID, oilDrum_texture, oilDrum_uvBufferID, oilDrum_vertices, oilDrum_uvs, oilDrum_normals);
+	
+	loadVAO("models/fireExtinguisher/fireExtinguisher.png", "models/fireExtinguisher/fireExtinguisher.obj", fireExtinguisher_VAO_ID, fireExtinguisher_VBO_ID,
+		fireExtinguisher_normalBufferID, fireExtinguisher_textureID, fireExtinguisher_texture, fireExtinguisher_uvBufferID, fireExtinguisher_vertices, fireExtinguisher_uvs, fireExtinguisher_normals);
+	
 	// Projection matrix 
-	projection = glm::perspective(45.0f, 4.0f / 3.0f, 1.0f, 1000.0f);// Enable depth test
+	projection = glm::perspective(45.0f, 4.0f / 3.0f, 1.0f, 1000.0f); // Enable depth test
 
 	// Enable depth test
 	glEnable(GL_DEPTH_TEST);
@@ -210,7 +216,8 @@ void Game::update(sf::Time t_deltaTime)
 		vibrate = false;
 		camera.controller.Vibrate(0, 0);
 	}
-	std::cout << m_time.asSeconds() << std::endl;
+
+	// std::cout << m_time.asSeconds() << std::endl;
 
 
 
@@ -244,7 +251,7 @@ void Game::update(sf::Time t_deltaTime)
 	glUniformMatrix4fv(m_viewMatrixID, 1, GL_FALSE, &camera.getView()[0][0]);
 	glUniformMatrix4fv(m_projectionMatrixID, 1, GL_FALSE, &projection[0][0]);
 
-	glm::vec3 lightPos = glm::vec3(0, 10, 0);
+	glm::vec3 lightPos = glm::vec3(25, 8, 25);
 	glUniform3f(m_lightID, lightPos.x, lightPos.y, lightPos.z);
 }
 
@@ -316,6 +323,48 @@ void Game::render()
 
 		// ---------------------------------------------------------------------------------------------------------------------
 
+		// Bind our texture in Texture Unit 3
+		glActiveTexture(GL_TEXTURE3);
+		glBindTexture(GL_TEXTURE_2D, oilDrum_texture);
+
+		// Set shader to use Texture Unit 3
+		glUniform1i(m_currentTextureID, 3);
+
+		glBindVertexArray(oilDrum_VAO_ID);
+
+		for (int i = 0; i < 5; ++i)
+		{
+			model_4 = glm::translate(glm::mat4(1.0f), glm::vec3(20.0f + (i * 4.0f), -2.5f, 15.0f));
+			model_4 = glm::scale(model_4, glm::vec3(i + 1, i + 1, i + 1));  // Add 1 because 0 can't be used to scale
+			glUniformMatrix4fv(m_modelMatrixID, 1, GL_FALSE, &model_4[0][0]);
+			glDrawArrays(GL_TRIANGLES, 0, oilDrum_vertices.size());
+		}
+
+		glBindVertexArray(0);
+
+		// ---------------------------------------------------------------------------------------------------------------------
+
+		// Bind our texture in Texture Unit 4
+		glActiveTexture(GL_TEXTURE4);
+		glBindTexture(GL_TEXTURE_2D, fireExtinguisher_texture);
+
+		// Set shader to use Texture Unit 4
+		glUniform1i(m_currentTextureID, 4);
+
+		glBindVertexArray(fireExtinguisher_VAO_ID);
+
+		for (int i = 0; i < 5; ++i)
+		{
+			model_5 = glm::translate(glm::mat4(1.0f), glm::vec3(30.0f + (i * 0.8f), -2.5f, 20.0f));
+			model_5 = glm::scale(model_5, glm::vec3(i + 1, i + 1, i + 1)); // Add 1 because 0 can't be used to scale
+			glUniformMatrix4fv(m_modelMatrixID, 1, GL_FALSE, &model_5[0][0]);
+			glDrawArrays(GL_TRIANGLES, 0, fireExtinguisher_vertices.size());
+		}
+
+		glBindVertexArray(0);
+
+		// ---------------------------------------------------------------------------------------------------------------------
+		
 		// Reset OpenGL
 		glBindVertexArray(GL_NONE);
 		glBindTexture(GL_TEXTURE_2D, 0);

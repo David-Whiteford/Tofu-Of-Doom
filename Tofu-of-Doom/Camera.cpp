@@ -55,11 +55,12 @@ float Camera::getSpeed()
 	return m_speed;
 }
 
-
-
 Camera::Camera()
 {
-
+	// Used to position player, temporary for now
+	transform.position.x = 25.0f;
+	transform.position.y = 0.0f;
+	transform.position.z = 35.0f;
 }
 
 Camera::~Camera()
