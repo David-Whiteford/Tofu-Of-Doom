@@ -38,9 +38,12 @@ public:
 
 	ISound* zombieEnemies[11];
 	//vec3df positionEnemies[11];
+
+	// 1 is pistol, 2 is rifle, 3 is machine gun)
 	int gunNum = 1;
-	ISound* shotgun;
+
 	ISound* pistol;
+	ISound* shotgun;
 	ISound* machinegun;
 
 	sf::Time m_time;
@@ -124,6 +127,30 @@ private:
 	std::vector<glm::vec2> fireExtinguisher_uvs;
 	std::vector<glm::vec3> fireExtinguisher_normals;
 
+	// Rifle
+	unsigned char* rifle_data;
+	GLuint rifle_VAO_ID;
+	GLuint rifle_VBO_ID;
+	GLuint rifle_normalBufferID;
+	GLuint rifle_textureID;
+	GLuint rifle_texture;
+	GLuint rifle_uvBufferID;
+	std::vector<glm::vec3> rifle_vertices;
+	std::vector<glm::vec2> rifle_uvs;
+	std::vector<glm::vec3> rifle_normals;
+
+	// Pistol
+	unsigned char* pistol_data;
+	GLuint pistol_VAO_ID;
+	GLuint pistol_VBO_ID;
+	GLuint pistol_normalBufferID;
+	GLuint pistol_textureID;
+	GLuint pistol_texture;
+	GLuint pistol_uvBufferID;
+	std::vector<glm::vec3> pistol_vertices;
+	std::vector<glm::vec2> pistol_uvs;
+	std::vector<glm::vec3> pistol_normals;
+
 	// Shader IDs
 	GLuint m_lightID;
 	GLuint m_modelMatrixID;
@@ -137,13 +164,12 @@ private:
 	// The model matrices will eventually be stored in an array (probably on the GPU)
 	glm::mat4 model_1;
 	glm::mat4 model_2;
-	glm::mat4 model_3;
+	glm::mat4 model_3; // Machine gun matrix
 	glm::mat4 model_4;
 	glm::mat4 model_5;
-	glm::mat4 projection;
-	// Matrices for model, view and projection (and everything combined)
-	// glm::mat4 mvp;
-	
+	glm::mat4 model_6; // Rifle matrix
+	glm::mat4 model_7; // Pistol matrix
+	glm::mat4 projection;	
 
 	tk::Shader *m_genericShader; // Shader object
 	glm::vec3 m_eye{ 0.f, 4.0f, 0.f }; // Current camera position
@@ -154,6 +180,7 @@ private:
 
 	double m_yaw{ 0.0 }; // Look left and right (in degrees)
 	double m_pitch{ 0.0 }; // Look up and down (in degrees)
+	bool gunRecoil{ false };
 
 	void initialise();
 	void processEvents();
@@ -163,6 +190,7 @@ private:
 	void loadVAO(std::string t_textureFilename, const char *t_modelFilename, GLuint &t_vaoID,
 		GLuint &t_vboID, GLuint &t_normalBufferID, GLuint &t_textureID, GLuint &t_texture, GLuint &t_uvBufferID,
 		std::vector<glm::vec3>& t_vertices, std::vector<glm::vec2>& t_UVs, std::vector<glm::vec3>& t_normals);
+	void gunAnimation(glm::mat4 &t_gunMatrix);
 
 
 	bool m_buttonPressed = false;

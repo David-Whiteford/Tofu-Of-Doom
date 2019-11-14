@@ -26,6 +26,7 @@ private:
 
 	// Key presses hidden from player
 	bool aButtonPressed = false;
+	bool yButtonPressed = false;
 	bool bButtonPressed = false;
 	bool upButtonPressed = false;
 	bool downButtonPressed = false;
@@ -62,6 +63,9 @@ public:
 
 	bool xButtonDown();
 	bool xButton();
+
+	bool yButtonDown();
+	bool yButton();
 
 	bool upButtonDown();
 	bool upButton();

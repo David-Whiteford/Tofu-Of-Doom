@@ -9,6 +9,7 @@
 Game::Game(sf::ContextSettings t_settings)
 	:
 	m_window{ sf::VideoMode{ 1280, 720, 32 }, "Tofu of Doom", sf::Style::Default, t_settings }
+	// m_window{ sf::VideoMode{ 3840, 2160, 32 }, "Tofu of Doom", sf::Style::Default, t_settings }
 {
 	// Initialise GLEW
 	GLuint m_error = glewInit();
@@ -117,6 +118,12 @@ void Game::initialise()
 	loadVAO("models/fireExtinguisher/fireExtinguisher.png", "models/fireExtinguisher/fireExtinguisher.obj", fireExtinguisher_VAO_ID, fireExtinguisher_VBO_ID,
 		fireExtinguisher_normalBufferID, fireExtinguisher_textureID, fireExtinguisher_texture, fireExtinguisher_uvBufferID, fireExtinguisher_vertices, fireExtinguisher_uvs, fireExtinguisher_normals);
 	
+	loadVAO("models/rifle/rifle.png", "models/rifle/rifle.obj", rifle_VAO_ID, rifle_VBO_ID,
+		rifle_normalBufferID, rifle_textureID, rifle_texture, rifle_uvBufferID, rifle_vertices, rifle_uvs, rifle_normals);
+
+	loadVAO("models/pistol/pistol.jpg", "models/pistol/pistol.obj", pistol_VAO_ID, pistol_VBO_ID,
+		pistol_normalBufferID, pistol_textureID, pistol_texture, pistol_uvBufferID, pistol_vertices, pistol_uvs, pistol_normals);
+	
 	// Projection matrix 
 	projection = glm::perspective(45.0f, 4.0f / 3.0f, 1.0f, 1000.0f); // Enable depth test
 
@@ -181,12 +188,9 @@ void Game::update(sf::Time t_deltaTime)
 
 	if (camera.controller.aButtonDown())
 	{
-
+		// Sorry, this is a bit messy, I just copied and pasted to get the gun recoil working, refactor later - Alan
 		if (gunNum == 1 && m_time > m_ShotDelay)
 		{
-			// left mouse button is pressed
-			// play some sound stream, looped
-
 			soundEngine->play2D("shotgun.mp3", false);
 			m_time = sf::Time::Zero;
 			m_time = m_time.Zero;
@@ -194,32 +198,52 @@ void Game::update(sf::Time t_deltaTime)
 			vibrate = true;
 			camera.controller.Vibrate(65535, 65535);
 
-
+			gunRecoil = true; // If the gun is being shot, create some recoil
 		}
+		else if (gunNum == 2 && m_time > m_ShotDelay)
+		{
+			soundEngine->play2D("shotgun.mp3", false);
+			m_time = sf::Time::Zero;
+			m_time = m_time.Zero;
 
-		//if (gunNum == 2)
-		//{
-		//	// left mouse button is pressed
-		//	// play some sound stream, looped
-		//	engine->play2D("Minigun.mp3", false);
-		//}
-		//if (gunNum == 3)
-		//{
-		//	// left mouse button is pressed
-		//	// play some sound stream, looped
-		//	engine->play2D("9mm.mp3", false);
-		//}
+			vibrate = true;
+			camera.controller.Vibrate(65535, 65535);
+
+			gunRecoil = true; // If the gun is being shot, create some recoil
+		}
+		else if (gunNum == 3 && m_time > m_ShotDelay)
+		{
+			soundEngine->play2D("shotgun.mp3", false);
+			m_time = sf::Time::Zero;
+			m_time = m_time.Zero;
+
+			vibrate = true;
+			camera.controller.Vibrate(65535, 65535);
+
+			gunRecoil = true; // If the gun is being shot, create some recoil
+		}
 	}
 
 	if (m_vibrateLength < m_time)
 	{
 		vibrate = false;
 		camera.controller.Vibrate(0, 0);
+
+		gunRecoil = false; // Gun is not being fired, disable recoil
+
+		// Switch between guns, but only when a shot being fired is finished
+		if (camera.controller.yButtonDown())
+		{
+			gunNum++;
+
+			if (gunNum == 4)
+			{
+				gunNum = 1;
+			}
+		}
 	}
 
 	// std::cout << m_time.asSeconds() << std::endl;
-
-
 
 	// This is currently only used to display the mini-map
 	gameControls(t_deltaTime);
@@ -237,14 +261,6 @@ void Game::update(sf::Time t_deltaTime)
 
 	// Test cube
 	model_2 = glm::translate(glm::mat4(1.0f), glm::vec3(15.0f, 0.0f, 15.0f));
-	
-	// Gun height is fixed at a Y value of 1.5 OpenGL units
-	// Gun will always face in the same direction as the camera / player
-	glm::vec3 gunDirection(camera.getDirection().x, 1.5f, camera.getDirection().z);
-	model_3 = glm::translate(glm::mat4(1.0f), camera.getEye() - (gunDirection * 2.0f));
-
-	// Rotate machine gun with player (180 degrees to flip the gun so it faces in the correct direction + actual rotation)
-	model_3 = glm::rotate(model_3, glm::radians(180.0f + camera.getYaw()), glm::vec3(0.0f, 1.0f, 0.0f));
 
 	// Send our transformation to the currently bound shader, in the "MVP" uniform
 	// This is done in the update loop since each model will have a different MVP matrix (At least for the M part)
@@ -308,18 +324,25 @@ void Game::render()
 		glBindVertexArray(0);
 
 		// ---------------------------------------------------------------------------------------------------------------------
+		
+		// This section contains the machine gun draw data
+		if (gunNum == 3)
+		{
+			// Bind our texture in Texture Unit 2
+			glActiveTexture(GL_TEXTURE2);
+			glBindTexture(GL_TEXTURE_2D, machineGun_texture);
 
-		// Bind our texture in Texture Unit 2
-		glActiveTexture(GL_TEXTURE2);
-		glBindTexture(GL_TEXTURE_2D, machineGun_texture);
+			// Set shader to use Texture Unit 2
+			glUniform1i(m_currentTextureID, 2);
 
-		// Set shader to use Texture Unit 2
-		glUniform1i(m_currentTextureID, 2);
+			glBindVertexArray(machineGun_VAO_ID);
 
-		glBindVertexArray(machineGun_VAO_ID);
-		glUniformMatrix4fv(m_modelMatrixID, 1, GL_FALSE, &model_3[0][0]);
-		glDrawArrays(GL_TRIANGLES, 0, machineGun_vertices.size());
-		glBindVertexArray(0);
+			gunAnimation(model_3); // Does nothing if recoil is false
+
+			glUniformMatrix4fv(m_modelMatrixID, 1, GL_FALSE, &model_3[0][0]);
+			glDrawArrays(GL_TRIANGLES, 0, machineGun_vertices.size());
+			glBindVertexArray(0);
+		}
 
 		// ---------------------------------------------------------------------------------------------------------------------
 
@@ -364,6 +387,46 @@ void Game::render()
 		glBindVertexArray(0);
 
 		// ---------------------------------------------------------------------------------------------------------------------
+
+		// This section contains the rifle draw data
+		if (gunNum == 2)
+		{
+			// Bind our texture in Texture Unit 5
+			glActiveTexture(GL_TEXTURE5);
+			glBindTexture(GL_TEXTURE_2D, rifle_texture);
+
+			// Set shader to use Texture Unit 5
+			glUniform1i(m_currentTextureID, 5);
+
+			glBindVertexArray(rifle_VAO_ID);
+
+			gunAnimation(model_6); // Does nothing if recoil is false
+
+			glUniformMatrix4fv(m_modelMatrixID, 1, GL_FALSE, &model_6[0][0]);
+			glDrawArrays(GL_TRIANGLES, 0, rifle_vertices.size());
+			glBindVertexArray(0);
+		}
+
+		// ---------------------------------------------------------------------------------------------------------------------
+
+		// This section contains the pistol draw data
+		if (gunNum == 1)
+		{
+			// Bind our texture in Texture Unit 6
+			glActiveTexture(GL_TEXTURE6);
+			glBindTexture(GL_TEXTURE_2D, pistol_texture);
+
+			// Set shader to use Texture Unit 6
+			glUniform1i(m_currentTextureID, 6);
+
+			glBindVertexArray(pistol_VAO_ID);
+
+			gunAnimation(model_7); // Does nothing if recoil is false
+
+			glUniformMatrix4fv(m_modelMatrixID, 1, GL_FALSE, &model_7[0][0]);
+			glDrawArrays(GL_TRIANGLES, 0, pistol_vertices.size());
+			glBindVertexArray(0);
+		}
 		
 		// Reset OpenGL
 		glBindVertexArray(GL_NONE);
@@ -385,8 +448,6 @@ void Game::render()
 
 	m_window.display();
 }
-
-
 
 /// <summary>
 /// Game controls
@@ -497,6 +558,47 @@ void Game::loadVAO(std::string t_textureFilename, const char *t_modelFilename, G
 	glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
 
 	glBindVertexArray(0);
+}
+
+void Game::gunAnimation(glm::mat4 &t_gunMatrix)
+{
+	glm::vec3 gunDirection(camera.getDirection().x, 1.5f, camera.getDirection().z);
+
+	// Gun height is fixed at a Y value of 1.5 OpenGL units
+	// Gun will always face in the same direction as the camera / player
+	// Gun is rotated with player (180 degrees to flip the gun so it faces in the correct direction + actual player rotation)
+
+	float gunDistance; // This is the distance the gun will be from the front of the camera
+	float gunRotation; // Gun models need to be rotated to point away from the player
+
+	if (gunNum == 1)
+	{
+		gunDistance = 2.8f;
+		gunRotation = 0.0f;
+	}
+	else if (gunNum == 2)
+	{
+		gunDistance = 2.0f;
+		gunRotation = 90.0f;
+	}
+	else
+	{
+		gunDistance = 2.0f;
+		gunRotation = 180.0f;
+	}
+
+	if (!gunRecoil)
+	{			
+		glm::vec3 gunDirection(camera.getDirection().x, 1.5f, camera.getDirection().z);
+		t_gunMatrix = glm::translate(glm::mat4(1.0f), camera.getEye() - (gunDirection * gunDistance));
+		t_gunMatrix = glm::rotate(t_gunMatrix, glm::radians(gunRotation + camera.getYaw()), glm::vec3(0.0f, 1.0f, 0.0f));
+	}
+	else
+	{
+		glm::vec3 gunDirection(camera.getDirection().x, 1.6f, camera.getDirection().z);
+		t_gunMatrix = glm::translate(glm::mat4(1.0f), camera.getEye() - (gunDirection * (gunDistance - 0.2f)));
+		t_gunMatrix = glm::rotate(t_gunMatrix, glm::radians(gunRotation + camera.getYaw()), glm::vec3(0.0f, 1.0f, 0.0f));
+	}
 }
 
 

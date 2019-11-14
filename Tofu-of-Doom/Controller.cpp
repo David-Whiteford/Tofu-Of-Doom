@@ -171,7 +171,26 @@ bool CXBOXController::aButtonDown()
 		aButtonPressed = false;
 		return false;
 	}
+}
 
+bool CXBOXController::yButtonDown()
+{
+	if (yButton() && !yButtonPressed)
+	{
+		aButtonPressed = true;
+		return true;
+	}
+	// holding Y but button was already pressed down last frame
+	else if (yButton() && yButtonPressed)
+	{
+		return false;
+	}
+	// is not pressing or holding Y we reset the button going down to false
+	else
+	{
+		yButtonPressed = false;
+		return false;
+	}
 }
 
 ///<summary> 
@@ -189,6 +208,37 @@ bool CXBOXController::aButton()
 			return true;
 		}
 		// is not holding A 
+		else
+		{
+			delete(Player);
+			return false;
+
+		}
+	} // end is connected
+	else
+	{
+		delete(Player);
+		// No Controller found
+		std::cout << "Error no controller found for Player 1" << std::endl;
+		return false;
+	}
+}
+
+///<summary> 
+/// yButton() checks for the continuation of a button being held down
+///</summary>
+bool CXBOXController::yButton()
+{
+	Player = new CXBOXController(m_playerID);
+
+	if (Player->IsConnected())
+	{
+		if (Player->GetState().Gamepad.wButtons & XINPUT_GAMEPAD_Y)
+		{
+			delete(Player); // remove instance from memeory
+			return true;
+		}
+		// is not holding Y
 		else
 		{
 			delete(Player);
