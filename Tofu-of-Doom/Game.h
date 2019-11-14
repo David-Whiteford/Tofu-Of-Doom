@@ -39,7 +39,7 @@ public:
 	ISound* zombieEnemies[11];
 	//vec3df positionEnemies[11];
 
-	// 1 is pistol (not implemented yet), 2 is rifle, 3 is machine gun)
+	// 1 is pistol, 2 is rifle, 3 is machine gun)
 	int gunNum = 1;
 
 	ISound* pistol;

@@ -8,8 +8,8 @@
 /// </summary>
 Game::Game(sf::ContextSettings t_settings)
 	:
-	// m_window{ sf::VideoMode{ 1280, 720, 32 }, "Tofu of Doom", sf::Style::Default, t_settings }
-	m_window{ sf::VideoMode{ 3840, 2160, 32 }, "Tofu of Doom", sf::Style::Default, t_settings }
+	m_window{ sf::VideoMode{ 1280, 720, 32 }, "Tofu of Doom", sf::Style::Default, t_settings }
+	// m_window{ sf::VideoMode{ 3840, 2160, 32 }, "Tofu of Doom", sf::Style::Default, t_settings }
 {
 	// Initialise GLEW
 	GLuint m_error = glewInit();
@@ -188,11 +188,20 @@ void Game::update(sf::Time t_deltaTime)
 
 	if (camera.controller.aButtonDown())
 	{
-		if (gunNum == 2 && m_time > m_ShotDelay)
+		// Sorry, this is a bit messy, I just copied and pasted to get the gun recoil working, refactor later - Alan
+		if (gunNum == 1 && m_time > m_ShotDelay)
 		{
-			// left mouse button is pressed
-			// play some sound stream, looped
+			soundEngine->play2D("shotgun.mp3", false);
+			m_time = sf::Time::Zero;
+			m_time = m_time.Zero;
 
+			vibrate = true;
+			camera.controller.Vibrate(65535, 65535);
+
+			gunRecoil = true; // If the gun is being shot, create some recoil
+		}
+		else if (gunNum == 2 && m_time > m_ShotDelay)
+		{
 			soundEngine->play2D("shotgun.mp3", false);
 			m_time = sf::Time::Zero;
 			m_time = m_time.Zero;
@@ -225,11 +234,9 @@ void Game::update(sf::Time t_deltaTime)
 		// Switch between guns, but only when a shot being fired is finished
 		if (camera.controller.yButtonDown())
 		{
-			if (gunNum < 4)
-			{
-				gunNum++;
-			}
-			else
+			gunNum++;
+
+			if (gunNum == 4)
 			{
 				gunNum = 1;
 			}
@@ -560,17 +567,37 @@ void Game::gunAnimation(glm::mat4 &t_gunMatrix)
 	// Gun height is fixed at a Y value of 1.5 OpenGL units
 	// Gun will always face in the same direction as the camera / player
 	// Gun is rotated with player (180 degrees to flip the gun so it faces in the correct direction + actual player rotation)
+
+	float gunDistance; // This is the distance the gun will be from the front of the camera
+	float gunRotation; // Gun models need to be rotated to point away from the player
+
+	if (gunNum == 1)
+	{
+		gunDistance = 2.8f;
+		gunRotation = 0.0f;
+	}
+	else if (gunNum == 2)
+	{
+		gunDistance = 2.0f;
+		gunRotation = 90.0f;
+	}
+	else
+	{
+		gunDistance = 2.0f;
+		gunRotation = 180.0f;
+	}
+
 	if (!gunRecoil)
-	{	
+	{			
 		glm::vec3 gunDirection(camera.getDirection().x, 1.5f, camera.getDirection().z);
-		t_gunMatrix = glm::translate(glm::mat4(1.0f), camera.getEye() - (gunDirection * 2.0f));
-		t_gunMatrix = glm::rotate(t_gunMatrix, glm::radians(180.0f + camera.getYaw()), glm::vec3(0.0f, 1.0f, 0.0f));
+		t_gunMatrix = glm::translate(glm::mat4(1.0f), camera.getEye() - (gunDirection * gunDistance));
+		t_gunMatrix = glm::rotate(t_gunMatrix, glm::radians(gunRotation + camera.getYaw()), glm::vec3(0.0f, 1.0f, 0.0f));
 	}
 	else
 	{
 		glm::vec3 gunDirection(camera.getDirection().x, 1.6f, camera.getDirection().z);
-		t_gunMatrix = glm::translate(glm::mat4(1.0f), camera.getEye() - (gunDirection * 1.8f));
-		t_gunMatrix = glm::rotate(t_gunMatrix, glm::radians(180.0f + camera.getYaw()), glm::vec3(0.0f, 1.0f, 0.0f));
+		t_gunMatrix = glm::translate(glm::mat4(1.0f), camera.getEye() - (gunDirection * (gunDistance - 0.2f)));
+		t_gunMatrix = glm::rotate(t_gunMatrix, glm::radians(gunRotation + camera.getYaw()), glm::vec3(0.0f, 1.0f, 0.0f));
 	}
 }
 
