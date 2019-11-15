@@ -69,6 +69,17 @@ void Game::initialise()
 	vec3df position(25, 0, 25);
 	positions.push_back(position);
 
+	shotgunSound = soundEngine->addSoundSourceFromFile("shotgun.mp3");
+	machinegunSound = soundEngine->addSoundSourceFromFile("shotgun.mp3");
+	pistolSound = soundEngine->addSoundSourceFromFile("shotgun.mp3");
+	zombiePosition = vec3df(m_gameWorld->getEnemyPosition().x, 0 , m_gameWorld->getEnemyPosition().y);
+	zombie = soundEngine->play3D("Mindless Zombie Awakening.mp3", zombiePosition, true, true, true);
+	if (zombie)
+	{
+		zombie->setMinDistance(15.0f); // a loud sound
+		zombie->setIsPaused(false); // unpause the sound
+	}
+	
 
 	//for (int i = 0; i < 11; i++)
 	//{
@@ -123,6 +134,10 @@ void Game::initialise()
 
 	loadVAO("models/pistol/pistol.jpg", "models/pistol/pistol.obj", pistol_VAO_ID, pistol_VBO_ID,
 		pistol_normalBufferID, pistol_textureID, pistol_texture, pistol_uvBufferID, pistol_vertices, pistol_uvs, pistol_normals);
+
+
+	loadVAO("models/oilDrum/oilDrum.jpg", "models/oilDrum/oilDrum.obj", enemyTest_VAO_ID, enemyTest_VBO_ID,
+		enemyTest_normalBufferID, enemyTest_textureID, enemyTest_texture, enemyTest_uvBufferID, enemyTest_vertices, enemyTest_uvs, enemyTest_normals);
 	
 	// Projection matrix 
 	projection = glm::perspective(45.0f, 4.0f / 3.0f, 1.0f, 1000.0f); // Enable depth test
@@ -172,26 +187,23 @@ void Game::processEvents()
 /// </summary>
 void Game::update(sf::Time t_deltaTime)
 {
+	//update the zombie sound position to follow test zombie
+	zombiePosition = vec3df(m_gameWorld->getEnemyPosition().x, 0, m_gameWorld->getEnemyPosition().y);
 	m_gameWorld->updateWorld();
-
 	// Update game controls
 	camera.input(t_deltaTime);
-
-
 	camera.transform.position.x = camera.getEye().x;
 	camera.transform.position.y = camera.getEye().y;
 	camera.transform.position.z = camera.getEye().z;
 
-
 	// Update model view projection
 	// mvp = projection * camera.getView() * model_1;
-
 	if (camera.controller.aButtonDown())
 	{
 		// Sorry, this is a bit messy, I just copied and pasted to get the gun recoil working, refactor later - Alan
 		if (gunNum == 1 && m_time > m_ShotDelay)
 		{
-			soundEngine->play2D("shotgun.mp3", false);
+			soundEngine->play2D(shotgunSound);
 			m_time = sf::Time::Zero;
 			m_time = m_time.Zero;
 
@@ -202,7 +214,7 @@ void Game::update(sf::Time t_deltaTime)
 		}
 		else if (gunNum == 2 && m_time > m_ShotDelay)
 		{
-			soundEngine->play2D("shotgun.mp3", false);
+			soundEngine->play2D(pistolSound);
 			m_time = sf::Time::Zero;
 			m_time = m_time.Zero;
 
@@ -213,7 +225,7 @@ void Game::update(sf::Time t_deltaTime)
 		}
 		else if (gunNum == 3 && m_time > m_ShotDelay)
 		{
-			soundEngine->play2D("shotgun.mp3", false);
+			soundEngine->play2D(machinegunSound);
 			m_time = sf::Time::Zero;
 			m_time = m_time.Zero;
 
@@ -250,8 +262,6 @@ void Game::update(sf::Time t_deltaTime)
 
 	// Update view (camera)
 	camera.getView() = camera.camera(m_gameWorld->getCameraPosition(), m_gameWorld->getPitch(), m_gameWorld->getYaw());
-
-
 	irrklang::vec3df position(m_gameWorld->getCameraPosition().x , m_gameWorld->getCameraPosition().y, m_gameWorld->getCameraPosition().z);        // position of the listener
 	irrklang::vec3df lookDirection(10, 0, 10); // the direction the listener looks into
 	irrklang::vec3df velPerSecond(0, 0, 0);    // only relevant for doppler effects
@@ -427,14 +437,32 @@ void Game::render()
 			glDrawArrays(GL_TRIANGLES, 0, pistol_vertices.size());
 			glBindVertexArray(0);
 		}
+
+		// ---------------------------------------------------------------------------------------------------------------------
+		// Bind our texture in Texture Unit7
+		glActiveTexture(GL_TEXTURE1);
+		glBindTexture(GL_TEXTURE_2D, enemyTest_texture);
+
+		// Set shader to use Texture Unit 7
+		glUniform1i(m_currentTextureID, 7);
+		glBindVertexArray(enemyTest_VAO_ID);
+		
+		
+
+		glUniformMatrix4fv(m_modelMatrixID, 1, GL_FALSE, &model_8[0][0]);
+		glDrawArrays(GL_TRIANGLES, 0, enemyTest_vertices.size());
+		glBindVertexArray(0);
+
+		// ---------------------------------------------------------------------------------------------------------------------
+
+
 		
 		// Reset OpenGL
 		glBindVertexArray(GL_NONE);
 		glBindTexture(GL_TEXTURE_2D, 0);
 		glActiveTexture(GL_TEXTURE0);
 
-		// ---------------------------------------------------------------------------------------------------------------------
-		
+
 		break;
 	}
 
@@ -468,7 +496,6 @@ void Game::gameControls(sf::Time t_deltaTime)
 			m_drawState = DrawState::GAME;
 		}
 	}
-
 	// Look up OR down
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
 	{
@@ -599,6 +626,10 @@ void Game::gunAnimation(glm::mat4 &t_gunMatrix)
 		t_gunMatrix = glm::translate(glm::mat4(1.0f), camera.getEye() - (gunDirection * (gunDistance - 0.2f)));
 		t_gunMatrix = glm::rotate(t_gunMatrix, glm::radians(gunRotation + camera.getYaw()), glm::vec3(0.0f, 1.0f, 0.0f));
 	}
+}
+
+void Game::moveEnemy(glm::mat4& t_gunMatrix)
+{
 }
 
 

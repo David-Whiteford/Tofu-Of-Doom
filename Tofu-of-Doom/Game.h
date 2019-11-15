@@ -33,9 +33,11 @@ public:
 	ISound* music;
 	ISound* background;
 	ISound* zombie;
-
+	irrklang::ISoundSource* shotgunSound;
+	irrklang::ISoundSource* machinegunSound;
+	irrklang::ISoundSource* pistolSound;
 	bool vibrate = false;
-
+	vec3df zombiePosition;
 	ISound* zombieEnemies[11];
 	//vec3df positionEnemies[11];
 
@@ -115,6 +117,19 @@ private:
 	std::vector<glm::vec2> oilDrum_uvs;
 	std::vector<glm::vec3> oilDrum_normals;
 
+	// Oil drum
+	unsigned char* enemyTest_data;
+	GLuint enemyTest_VAO_ID;
+	GLuint enemyTest_VBO_ID;
+	GLuint enemyTest_normalBufferID;
+	GLuint enemyTest_textureID;
+	GLuint enemyTest_texture;
+	GLuint enemyTest_uvBufferID;
+	std::vector<glm::vec3> enemyTest_vertices;
+	std::vector<glm::vec2> enemyTest_uvs;
+	std::vector<glm::vec3> enemyTest_normals;
+
+
 	// Fire extinguisher
 	unsigned char* fireExtinguisher_data;
 	GLuint fireExtinguisher_VAO_ID;
@@ -169,6 +184,7 @@ private:
 	glm::mat4 model_5;
 	glm::mat4 model_6; // Rifle matrix
 	glm::mat4 model_7; // Pistol matrix
+	glm::mat4 model_8; // test enemy matrix
 	glm::mat4 projection;	
 
 	tk::Shader *m_genericShader; // Shader object
@@ -191,6 +207,7 @@ private:
 		GLuint &t_vboID, GLuint &t_normalBufferID, GLuint &t_textureID, GLuint &t_texture, GLuint &t_uvBufferID,
 		std::vector<glm::vec3>& t_vertices, std::vector<glm::vec2>& t_UVs, std::vector<glm::vec3>& t_normals);
 	void gunAnimation(glm::mat4 &t_gunMatrix);
+	void moveEnemy(glm::mat4& t_gunMatrix);
 
 
 	bool m_buttonPressed = false;

@@ -1,4 +1,7 @@
 ﻿  Game.cpp
-C:\Users\Teresa\Desktop\Tofu-Of-Doom\Tofu-of-Doom\Transform.h(16): warning C4091: 'typedef ': ignored on left of 'Transform::Position' when no variable is declared
-C:\Users\Teresa\Desktop\Tofu-Of-Doom\Tofu-of-Doom\Game.cpp(303,21): warning C4018: '<': signed/unsigned mismatch
-  Tofu-of-Doom.vcxproj -> C:\Users\Teresa\Desktop\Tofu-Of-Doom\Debug\Tofu-of-Doom.exe
+C:\Users\gameuser\Desktop\Tofu-Of-Doom\Tofu-of-Doom\Transform.h(16): warning C4091:  'typedef ': ignored on left of 'Transform::Position' when no variable is declared
+  Main.cpp
+C:\Users\gameuser\Desktop\Tofu-Of-Doom\Tofu-of-Doom\Game.cpp(313,21): warning C4018:  '<': signed/unsigned mismatch
+  Generating Code...
+C:\Users\gameuser\Desktop\Tofu-Of-Doom\Tofu-of-Doom\Transform.h(16): warning C4091:  'typedef ': ignored on left of 'Transform::Position' when no variable is declared
+  Tofu-of-Doom.vcxproj -> C:\Users\gameuser\Desktop\Tofu-Of-Doom\Debug\Tofu-of-Doom.exe
