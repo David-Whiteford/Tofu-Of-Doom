@@ -44,7 +44,10 @@ public:
 	//vec3df positionEnemies[11];
 
 	// 1 is pistol, 2 is rifle, 3 is machine gun)
-	int gunNum = 1;
+	int gunNum = 3;
+
+	bool yButtonPressed{ false }; // This is used so that a gun is only changed when Y is released
+	bool backButtonPressed{ false }; // This is used so that the map is only displayed when the Back button is released
 
 	ISound* pistol;
 	ISound* shotgun;

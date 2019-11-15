@@ -8,8 +8,8 @@
 /// </summary>
 Game::Game(sf::ContextSettings t_settings)
 	:
-	m_window{ sf::VideoMode{ 1280, 720, 32 }, "Tofu of Doom", sf::Style::Default, t_settings }
-	// m_window{ sf::VideoMode{ 3840, 2160, 32 }, "Tofu of Doom", sf::Style::Default, t_settings }
+	// m_window{ sf::VideoMode{ 1280, 720, 32 }, "Tofu of Doom", sf::Style::Default, t_settings }
+	m_window{ sf::VideoMode{ 3840, 2160, 32 }, "Tofu of Doom", sf::Style::Default, t_settings }
 {
 	// Initialise GLEW
 	GLuint m_error = glewInit();
@@ -198,20 +198,19 @@ void Game::update(sf::Time t_deltaTime)
 	//update the zombie sound position to follow test zombie
 	zombiePosition = vec3df(m_gameWorld->getEnemyPosition().x, 0, m_gameWorld->getEnemyPosition().y);
 	m_gameWorld->updateWorld();
+
 	// Update game controls
 	camera.input(t_deltaTime);
 	camera.transform.position.x = camera.getEye().x;
 	camera.transform.position.y = camera.getEye().y;
 	camera.transform.position.z = camera.getEye().z;
 
-	// Update model view projection
-	// mvp = projection * camera.getView() * model_1;
+	// Fire a shot with chosen gun
 	if (camera.controller.aButtonDown())
 	{
 		// Sorry, this is a bit messy, I just copied and pasted to get the gun recoil working, refactor later - Alan
-		if (gunNum == 1)
-		{
-		
+		if (gunNum == 1) // Pistol
+		{		
 			gunSoundEngine->play2D(shotgunQueue.front());
 			if (gunSoundEngine->isCurrentlyPlaying(shotgunSound) == false)
 			{
@@ -226,7 +225,7 @@ void Game::update(sf::Time t_deltaTime)
 
 			gunRecoil = true; // If the gun is being shot, create some recoil
 		}
-		else if (gunNum == 2 && m_time > m_ShotDelay)
+		else if (gunNum == 2 && m_time > m_ShotDelay) // Rifle
 		{
 			soundEngine->play2D(pistolSound);
 			m_time = sf::Time::Zero;
@@ -237,7 +236,7 @@ void Game::update(sf::Time t_deltaTime)
 
 			gunRecoil = true; // If the gun is being shot, create some recoil
 		}
-		else if (gunNum == 3 && m_time > m_ShotDelay)
+		else if (gunNum == 3 && m_time > m_ShotDelay) // Machine gun
 		{
 			soundEngine->play2D(machinegunSound);
 			m_time = sf::Time::Zero;
@@ -257,8 +256,12 @@ void Game::update(sf::Time t_deltaTime)
 
 		gunRecoil = false; // Gun is not being fired, disable recoil
 
-		// Switch between guns, but only when a shot being fired is finished
-		if (camera.controller.yButtonDown())
+		// Switch between guns, but only when a shot being fired is finished, and only when the Y button is released
+		if (camera.controller.yButtonDown() && !yButtonPressed)
+		{
+			yButtonPressed = true;
+		}
+		else if (!camera.controller.yButtonDown() && yButtonPressed)
 		{
 			gunNum++;
 
@@ -266,6 +269,8 @@ void Game::update(sf::Time t_deltaTime)
 			{
 				gunNum = 1;
 			}
+
+			yButtonPressed = false;
 		}
 	}
 
@@ -276,6 +281,8 @@ void Game::update(sf::Time t_deltaTime)
 
 	// Update view (camera)
 	camera.getView() = camera.camera(m_gameWorld->getCameraPosition(), m_gameWorld->getPitch(), m_gameWorld->getYaw());
+
+	// Get this code out of here
 	irrklang::vec3df position(m_gameWorld->getCameraPosition().x , m_gameWorld->getCameraPosition().y, m_gameWorld->getCameraPosition().z);        // position of the listener
 	irrklang::vec3df lookDirection(10, 0, 10); // the direction the listener looks into
 	irrklang::vec3df velPerSecond(0, 0, 0);    // only relevant for doppler effects
@@ -459,23 +466,18 @@ void Game::render()
 
 		// Set shader to use Texture Unit 7
 		glUniform1i(m_currentTextureID, 7);
-		glBindVertexArray(enemyTest_VAO_ID);
-		
-		
+		glBindVertexArray(enemyTest_VAO_ID);		
 
 		glUniformMatrix4fv(m_modelMatrixID, 1, GL_FALSE, &model_8[0][0]);
 		glDrawArrays(GL_TRIANGLES, 0, enemyTest_vertices.size());
 		glBindVertexArray(0);
 
 		// ---------------------------------------------------------------------------------------------------------------------
-
-
 		
 		// Reset OpenGL
 		glBindVertexArray(GL_NONE);
 		glBindTexture(GL_TEXTURE_2D, 0);
 		glActiveTexture(GL_TEXTURE0);
-
 
 		break;
 	}
@@ -499,7 +501,11 @@ void Game::gameControls(sf::Time t_deltaTime)
 	m_eye = m_gameWorld->getCameraPosition();
 
 	// Switch between game and map screen
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::H))
+	if (camera.controller.backButtonDown() && !backButtonPressed)
+	{
+		backButtonPressed = true;
+	}
+	else if (!camera.controller.backButtonDown() && backButtonPressed)
 	{
 		if (m_drawState == DrawState::GAME)
 		{
@@ -509,7 +515,10 @@ void Game::gameControls(sf::Time t_deltaTime)
 		{
 			m_drawState = DrawState::GAME;
 		}
+
+		backButtonPressed = false;
 	}
+
 	// Look up OR down
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
 	{
@@ -614,30 +623,30 @@ void Game::gunAnimation(glm::mat4 &t_gunMatrix)
 
 	if (gunNum == 1)
 	{
-		gunDistance = 2.8f;
+		gunDistance = 0.0f;
 		gunRotation = 0.0f;
 	}
 	else if (gunNum == 2)
 	{
-		gunDistance = 2.0f;
-		gunRotation = 90.0f;
+		gunDistance = 0.0f;
+		gunRotation = 0.0f;
 	}
 	else
 	{
-		gunDistance = 2.0f;
-		gunRotation = 180.0f;
+		gunDistance = 0.0f;
+		gunRotation = 0.0f;
 	}
 
 	if (!gunRecoil)
 	{			
 		glm::vec3 gunDirection(camera.getDirection().x, 1.5f, camera.getDirection().z);
-		t_gunMatrix = glm::translate(glm::mat4(1.0f), camera.getEye() - (gunDirection * gunDistance));
+		t_gunMatrix = glm::translate(glm::mat4(1.0f), camera.getEye());
 		t_gunMatrix = glm::rotate(t_gunMatrix, glm::radians(gunRotation + camera.getYaw()), glm::vec3(0.0f, 1.0f, 0.0f));
 	}
 	else
 	{
-		glm::vec3 gunDirection(camera.getDirection().x, 1.6f, camera.getDirection().z);
-		t_gunMatrix = glm::translate(glm::mat4(1.0f), camera.getEye() - (gunDirection * (gunDistance - 0.2f)));
+		glm::vec3 gunDirection(camera.getDirection().x, 1.5f, camera.getDirection().z);
+		t_gunMatrix = glm::translate(glm::mat4(1.0f), camera.getEye() + camera.getDirection());
 		t_gunMatrix = glm::rotate(t_gunMatrix, glm::radians(gunRotation + camera.getYaw()), glm::vec3(0.0f, 1.0f, 0.0f));
 	}
 }
