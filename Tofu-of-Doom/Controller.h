@@ -32,6 +32,7 @@ private:
 	bool downButtonPressed = false;
 	bool leftButtonPressed = false;
 	bool rightButtonPressed = false;
+	bool backButtonPressed = false;
 	
 	//===============EndKEyPresses Hidden from player
 
@@ -72,6 +73,9 @@ public:
 
 	bool downButtonDown();
 	bool downButton();
+
+	bool backButtonDown();
+	bool backButton();
 
 	//bool leftButtonDown();
 	bool leftButton();

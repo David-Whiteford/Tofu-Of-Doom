@@ -63,7 +63,7 @@ void CXBOXController::Vibrate(int leftVal, int rightVal)
 
 void CXBOXController::Update(float t_deltaTime)
 {
-	// Declae a temp Transform
+	// Declare a temp Transform
 
 
 	/*if (vibrationStarted + vibrationLength < t_deltaTime)
@@ -105,6 +105,7 @@ void CXBOXController::Update(float t_deltaTime)
 
 		if (Player->GetState().Gamepad.wButtons & XINPUT_GAMEPAD_BACK)
 		{
+
 		}
 
 		if (Player->GetState().Gamepad.sThumbLY > 7849)
@@ -193,6 +194,26 @@ bool CXBOXController::yButtonDown()
 	}
 }
 
+bool CXBOXController::backButtonDown()
+{
+	if (backButton() && !backButtonPressed)
+	{
+		backButtonPressed = true;
+		return true;
+	}
+	// holding Back but button was already pressed down last frame
+	else if (backButton() && backButtonPressed)
+	{
+		return false;
+	}
+	// is not pressing or holding Back we reset the button going down to false
+	else
+	{
+		backButtonPressed = false;
+		return false;
+	}
+}
+
 ///<summary> 
 /// aButton() checks for the continuation of a button being held down
 ///</summary>
@@ -234,6 +255,34 @@ bool CXBOXController::yButton()
 	if (Player->IsConnected())
 	{
 		if (Player->GetState().Gamepad.wButtons & XINPUT_GAMEPAD_Y)
+		{
+			delete(Player); // remove instance from memeory
+			return true;
+		}
+		// is not holding Y
+		else
+		{
+			delete(Player);
+			return false;
+
+		}
+	} // end is connected
+	else
+	{
+		delete(Player);
+		// No Controller found
+		std::cout << "Error no controller found for Player 1" << std::endl;
+		return false;
+	}
+}
+
+bool CXBOXController::backButton()
+{
+	Player = new CXBOXController(m_playerID);
+
+	if (Player->IsConnected())
+	{
+		if (Player->GetState().Gamepad.wButtons & XINPUT_GAMEPAD_BACK)
 		{
 			delete(Player); // remove instance from memeory
 			return true;
