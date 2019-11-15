@@ -62,7 +62,7 @@ void Game::initialise()
 	m_ShotDelay = sf::seconds(.7f); // .7f is the length for the reload sound to finish
 	m_vibrateLength = sf::seconds(.1f); // .7f is the length for the reload sound to finish
 	soundEngine = createIrrKlangDevice();
-
+	gunSoundEngine = createIrrKlangDevice();
 	//name of file , position in 3D space , play loop , start paused , track
 	background = soundEngine->play2D("horror.mp3" , true);
 	glm::vec3 soundPos(25, 0, 25);
@@ -72,8 +72,16 @@ void Game::initialise()
 	shotgunSound = soundEngine->addSoundSourceFromFile("shotgun.mp3");
 	machinegunSound = soundEngine->addSoundSourceFromFile("shotgun.mp3");
 	pistolSound = soundEngine->addSoundSourceFromFile("shotgun.mp3");
+	
+	shotgunQueue.push(shotgunSound);
+	shotgunQueue.push(shotgunSound);
+	shotgunQueue.push(shotgunSound);
+	shotgunQueue.push(shotgunSound);
+
+
 	zombiePosition = vec3df(m_gameWorld->getEnemyPosition().x, 0 , m_gameWorld->getEnemyPosition().y);
 	zombie = soundEngine->play3D("Mindless Zombie Awakening.mp3", zombiePosition, true, true, true);
+	
 	if (zombie)
 	{
 		zombie->setMinDistance(15.0f); // a loud sound
@@ -201,9 +209,15 @@ void Game::update(sf::Time t_deltaTime)
 	if (camera.controller.aButtonDown())
 	{
 		// Sorry, this is a bit messy, I just copied and pasted to get the gun recoil working, refactor later - Alan
-		if (gunNum == 1 && m_time > m_ShotDelay)
+		if (gunNum == 1)
 		{
-			soundEngine->play2D(shotgunSound);
+		
+			gunSoundEngine->play2D(shotgunQueue.front());
+			if (gunSoundEngine->isCurrentlyPlaying(shotgunSound) == false)
+			{
+				shotgunQueue.pop();
+			}
+			//soundEngine->play2D(shotgunSound);
 			m_time = sf::Time::Zero;
 			m_time = m_time.Zero;
 

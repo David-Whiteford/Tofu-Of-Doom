@@ -9,6 +9,7 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/OpenGL.hpp>
 #include <vector>
+#include <queue>
 #include "Debug.h"
 #include "Shader.h"
 #include "ModelLoader.h"
@@ -30,6 +31,7 @@ public:
 	void run();
 	std::vector< vec3df > positions;
 	ISoundEngine* soundEngine;
+	ISoundEngine* gunSoundEngine;
 	ISound* music;
 	ISound* background;
 	ISound* zombie;
@@ -51,6 +53,8 @@ public:
 	sf::Time m_time;
 	sf::Time m_ShotDelay;
 	sf::Time m_vibrateLength;
+
+	std::queue <ISoundSource*> shotgunQueue;
 
 private:
 
