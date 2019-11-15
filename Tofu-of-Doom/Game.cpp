@@ -23,7 +23,7 @@ Game::Game(sf::ContextSettings t_settings)
 /// </summary>
 Game::~Game()
 {
-	delete m_genericShader;
+	delete m_mainShader;
 }
 
 /// <summary>
@@ -116,7 +116,7 @@ void Game::initialise()
 
 
 	// Load shader
-	m_genericShader = new tk::Shader("Standard.vert", "Standard.frag");
+	m_mainShader = new tk::Shader("shaders/mainShader.vert", "shaders/mainShader.frag");
 
 	GLint isCompiled = 0;
 	GLint isLinked = 0;
@@ -157,13 +157,13 @@ void Game::initialise()
 	glDepthFunc(GL_LESS);
 
 	// Uniforms for model, view and projection matrices
-	m_modelMatrixID = glGetUniformLocation(m_genericShader->m_programID, "M");
-	m_viewMatrixID = glGetUniformLocation(m_genericShader->m_programID, "V");
-	m_projectionMatrixID = glGetUniformLocation(m_genericShader->m_programID, "P");	
+	m_modelMatrixID = glGetUniformLocation(m_mainShader->m_programID, "M");
+	m_viewMatrixID = glGetUniformLocation(m_mainShader->m_programID, "V");
+	m_projectionMatrixID = glGetUniformLocation(m_mainShader->m_programID, "P");	
 
 	// Other uniforms
-	m_currentTextureID = glGetUniformLocation(m_genericShader->m_programID, "currentTexture");
-	m_lightID = glGetUniformLocation(m_genericShader->m_programID, "LightPosition_worldspace");
+	m_currentTextureID = glGetUniformLocation(m_mainShader->m_programID, "currentTexture");
+	m_lightID = glGetUniformLocation(m_mainShader->m_programID, "LightPosition_worldspace");
 }
 
 /// <summary>
@@ -320,7 +320,7 @@ void Game::render()
 
 	case DrawState::GAME:
 		// Use shader
-		glUseProgram(m_genericShader->m_programID);
+		glUseProgram(m_mainShader->m_programID);
 
 		// Bind our texture in Texture Unit 0
 		glActiveTexture(GL_TEXTURE0);
@@ -568,6 +568,8 @@ void Game::loadVAO(std::string t_textureFilename, const char *t_modelFilename, G
 
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+
+	stbi_image_free(f_data); // Unload data from CPU as it's on the GPU now
 
 	// Load .obj file
 	if (!tk::ModelLoader::loadOBJ(t_modelFilename, t_vertices, t_UVs, t_normals))

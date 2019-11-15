@@ -44,7 +44,7 @@ public:
 	//vec3df positionEnemies[11];
 
 	// 1 is pistol, 2 is rifle, 3 is machine gun)
-	int gunNum = 3;
+	int gunNum = 1;
 
 	bool yButtonPressed{ false }; // This is used so that a gun is only changed when Y is released
 	bool backButtonPressed{ false }; // This is used so that the map is only displayed when the Back button is released
@@ -194,7 +194,7 @@ private:
 	glm::mat4 model_8; // test enemy matrix
 	glm::mat4 projection;	
 
-	tk::Shader *m_genericShader; // Shader object
+	tk::Shader *m_mainShader; // Shader object
 	glm::vec3 m_eye{ 0.f, 4.0f, 0.f }; // Current camera position
 	
 	glm::mat4 m_rotationMatrix;
