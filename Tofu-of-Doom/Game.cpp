@@ -8,8 +8,7 @@
 /// </summary>
 Game::Game(sf::ContextSettings t_settings)
 	:
-	// m_window{ sf::VideoMode{ 1280, 720, 32 }, "Tofu of Doom", sf::Style::Default, t_settings }
-	m_window{ sf::VideoMode{ 3840, 2160, 32 }, "Tofu of Doom", sf::Style::Default, t_settings }
+	m_window{ sf::VideoMode{ 1280, 720, 32 }, "Tofu of Doom", sf::Style::Default, t_settings }
 {
 	// Initialise GLEW
 	GLuint m_error = glewInit();
@@ -282,7 +281,7 @@ void Game::update(sf::Time t_deltaTime)
 	// Update view (camera)
 	camera.getView() = camera.camera(m_gameWorld->getCameraPosition(), m_gameWorld->getPitch(), m_gameWorld->getYaw());
 
-	// Get this code out of here
+	// Leave this here for now
 	irrklang::vec3df position(m_gameWorld->getCameraPosition().x , m_gameWorld->getCameraPosition().y, m_gameWorld->getCameraPosition().z);        // position of the listener
 	irrklang::vec3df lookDirection(10, 0, 10); // the direction the listener looks into
 	irrklang::vec3df velPerSecond(0, 0, 0);    // only relevant for doppler effects
@@ -612,45 +611,23 @@ void Game::loadVAO(std::string t_textureFilename, const char *t_modelFilename, G
 	glBindVertexArray(0);
 }
 
+/// <summary>
+/// This functions handles gun recoil
+/// </summary>
 void Game::gunAnimation(glm::mat4 &t_gunMatrix)
 {
 	glm::vec3 gunDirection(camera.getDirection().x, 1.5f, camera.getDirection().z);
 
-	// Gun height is fixed at a Y value of 1.5 OpenGL units
-	// Gun will always face in the same direction as the camera / player
-	// Gun is rotated with player (180 degrees to flip the gun so it faces in the correct direction + actual player rotation)
-
-	float gunDistance; // This is the distance the gun will be from the front of the camera
-	float gunRotation; // Gun models need to be rotated to point away from the player
-
-	if (gunNum == 1)
-	{
-		gunDistance = 0.0f;
-		gunRotation = 0.0f;
-	}
-	else if (gunNum == 2)
-	{
-		gunDistance = 0.0f;
-		gunRotation = 0.0f;
-	}
-	else
-	{
-		gunDistance = 0.0f;
-		gunRotation = 0.0f;
-	}
-
 	if (!gunRecoil)
-	{			
-		glm::vec3 gunDirection(camera.getDirection().x, 1.5f, camera.getDirection().z);
+	{
 		t_gunMatrix = glm::translate(glm::mat4(1.0f), camera.getEye());
-		t_gunMatrix = glm::rotate(t_gunMatrix, glm::radians(gunRotation + camera.getYaw()), glm::vec3(0.0f, 1.0f, 0.0f));
 	}
 	else
 	{
-		glm::vec3 gunDirection(camera.getDirection().x, 1.5f, camera.getDirection().z);
 		t_gunMatrix = glm::translate(glm::mat4(1.0f), camera.getEye() + camera.getDirection());
-		t_gunMatrix = glm::rotate(t_gunMatrix, glm::radians(gunRotation + camera.getYaw()), glm::vec3(0.0f, 1.0f, 0.0f));
 	}
+
+	t_gunMatrix = glm::rotate(t_gunMatrix, glm::radians(camera.getYaw()), glm::vec3(0.0f, 1.0f, 0.0f));
 }
 
 void Game::moveEnemy(glm::mat4& t_gunMatrix)
