@@ -127,7 +127,7 @@ sf::Vector2f GameWorld::getPlayerPosition()
 
 sf::Vector2f GameWorld::getEnemyPosition()
 {
-	return m_enemy.getPosition();
+	return m_enemy.getPosition() / s_displayScale;
 }
 
 /// <summary>
