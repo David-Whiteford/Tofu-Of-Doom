@@ -142,8 +142,7 @@ void Game::initialise()
 	loadVAO("models/pistol/pistol.jpg", "models/pistol/pistol.obj", pistol_VAO_ID, pistol_VBO_ID,
 		pistol_normalBufferID, pistol_textureID, pistol_texture, pistol_uvBufferID, pistol_vertices, pistol_uvs, pistol_normals);
 
-
-	loadVAO("models/oilDrum/oilDrum.jpg", "models/oilDrum/oilDrum.obj", enemyTest_VAO_ID, enemyTest_VBO_ID,
+	loadVAO("models/enemyTest/enemyTest.png", "models/enemyTest/enemyTest.obj", enemyTest_VAO_ID, enemyTest_VBO_ID,
 		enemyTest_normalBufferID, enemyTest_textureID, enemyTest_texture, enemyTest_uvBufferID, enemyTest_vertices, enemyTest_uvs, enemyTest_normals);
 	
 	// Projection matrix 
@@ -281,7 +280,7 @@ void Game::update(sf::Time t_deltaTime)
 	// Update view (camera)
 	camera.getView() = camera.camera(m_gameWorld->getCameraPosition(), m_gameWorld->getPitch(), m_gameWorld->getYaw());
 
-	// Leave this here for now
+	// Sound stuff
 	irrklang::vec3df position(m_gameWorld->getCameraPosition().x , m_gameWorld->getCameraPosition().y, m_gameWorld->getCameraPosition().z);        // position of the listener
 	irrklang::vec3df lookDirection(10, 0, 10); // the direction the listener looks into
 	irrklang::vec3df velPerSecond(0, 0, 0);    // only relevant for doppler effects
@@ -299,6 +298,10 @@ void Game::update(sf::Time t_deltaTime)
 
 	glm::vec3 lightPos = glm::vec3(25, 8, 25);
 	glUniform3f(m_lightID, lightPos.x, lightPos.y, lightPos.z);
+
+	// Update test enemy matrix
+	model_8 = glm::translate(glm::mat4(1.0f), glm::vec3(m_gameWorld->getEnemyPosition().x, 0.0f, m_gameWorld->getEnemyPosition().y));
+	model_8 = glm::scale(model_8, glm::vec3(0.5f, 0.5f, 0.5f));
 }
 
 /// <summary>
@@ -460,7 +463,7 @@ void Game::render()
 
 		// ---------------------------------------------------------------------------------------------------------------------
 		// Bind our texture in Texture Unit7
-		glActiveTexture(GL_TEXTURE1);
+		glActiveTexture(GL_TEXTURE7);
 		glBindTexture(GL_TEXTURE_2D, enemyTest_texture);
 
 		// Set shader to use Texture Unit 7
