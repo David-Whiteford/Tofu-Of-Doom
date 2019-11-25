@@ -1,4 +1,1 @@
-﻿  Camera.cpp
-D:\Tofu-of-Doom\Tofu-of-Doom\Transform.h(16): warning C4091: 'typedef ': ignored on left of 'Transform::Position' when no variable is declared
-D:\Tofu-of-Doom\Tofu-of-Doom\Collider2D.h(13): warning C4091: 'typedef ': ignored on left of 'Collider2D::Bounds' when no variable is declared
-  Tofu-of-Doom.vcxproj -> D:\Tofu-of-Doom\Debug\Tofu-of-Doom.exe
+﻿  Tofu-of-Doom.vcxproj -> D:\Users\dave2\Desktop\Tofu-Of-Doom\Debug\Tofu-of-Doom.exe
