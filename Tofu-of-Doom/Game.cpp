@@ -71,21 +71,23 @@ void Game::initialise()
 	shotgunSound = soundEngine->addSoundSourceFromFile("shotgun.mp3");
 	machinegunSound = soundEngine->addSoundSourceFromFile("shotgun.mp3");
 	pistolSound = soundEngine->addSoundSourceFromFile("shotgun.mp3");
+	zombie = soundEngine->addSoundSourceFromFile("Monster.mp3");
+	shotgunQueue.push(shotgunSound);
+	shotgunQueue.push(shotgunSound);
+	shotgunQueue.push(shotgunSound);
+	shotgunQueue.push(shotgunSound);
+
 	
-	shotgunQueue.push(shotgunSound);
-	shotgunQueue.push(shotgunSound);
-	shotgunQueue.push(shotgunSound);
-	shotgunQueue.push(shotgunSound);
-
-
 	zombiePosition = vec3df(m_gameWorld->getEnemyPosition().x, 0 , m_gameWorld->getEnemyPosition().y);
-	zombie = soundEngine->play3D("Mindless Zombie Awakening.mp3", zombiePosition, true, true, true);
-	
-	if (zombie)
-	{
-		zombie->setMinDistance(15.0f); // a loud sound
-		zombie->setIsPaused(false); // unpause the sound
-	}
+
+	soundEngine->play3D(zombie, zombiePosition, true, false, false, false);
+	//zombie = soundEngine->play3D("Monster.mp3", zombiePosition, true, true, true);
+	//
+	//if (zombie)
+	//{
+	//	zombie->setMinDistance(15.0f); // a loud sound
+	//	zombie->setIsPaused(false); // unpause the sound
+	//}
 	
 
 	//for (int i = 0; i < 11; i++)
@@ -206,7 +208,8 @@ void Game::update(sf::Time t_deltaTime)
 	}
 
 	//update the zombie sound position to follow test zombie
-	zombiePosition = vec3df(m_gameWorld->getEnemyPosition().x, 0, m_gameWorld->getEnemyPosition().y);
+	zombiePosition = vec3df(m_gameWorld->getEnemyPosition().x, 0, m_gameWorld->getEnemyPosition().y); 
+	
 	m_gameWorld->updateWorld();
 
 	// Update game controls
@@ -220,11 +223,17 @@ void Game::update(sf::Time t_deltaTime)
 	{
 		// Sorry, this is a bit messy, I just copied and pasted to get the gun recoil working, refactor later - Alan
 		if (gunNum == 1) // Pistol
-		{		
-			gunSoundEngine->play2D(shotgunQueue.front());
-			if (gunSoundEngine->isCurrentlyPlaying(shotgunSound) == false)
+		{
+			/*if (m_time > m_ShotDelay)
 			{
+				gunSoundEngine->setAllSoundsPaused(true);
+			}*/
+			gunSoundEngine->play2D(shotgunQueue.front());
+			if (gunSoundEngine->isCurrentlyPlaying(shotgunSound) == false )
+			{
+				
 				shotgunQueue.pop();
+				//gunSoundEngine->setAllSoundsPaused(false);
 			}
 			//soundEngine->play2D(shotgunSound);
 			m_time = sf::Time::Zero;

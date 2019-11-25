@@ -12,12 +12,17 @@ GameWorld::GameWorld(sf::RenderWindow &t_window, sf::Time &t_deltaTime, Camera &
 	m_player.setOrigin(sf::Vector2f(25.0f, 25.0f));
 	m_player.setPosition(m_camera.getEye().x, m_camera.getEye().z); // Test starting position
 	// m_eye = glm::vec3(m_player.getPosition().x, 2.0f, m_player.getPosition().y);
-
+	m_enemies.push_back(m_enemy);
+	m_enemies.push_back(m_enemy);
 	
-	m_enemy.setRadius(25.0f);
-	m_enemy.setFillColor(sf::Color::Red);
-	m_enemy.setOrigin(sf::Vector2f(25.0f, 25.0f));
-	m_enemy.setPosition(100,100); // Test starting position
+	
+	for (int i = 0; i < m_enemies.size(); i++)
+	{
+		m_enemies[i].setRadius(25.0f);
+		m_enemies[i].setFillColor(sf::Color::Red);
+		m_enemies[i].setOrigin(sf::Vector2f(25.0f, 25.0f));
+		m_enemies[i].setPosition(100, 100); // Test starting position
+	}
 
 	// View
 	m_mapView.setViewport(sf::FloatRect(0.25f, 0.25f, 0.5f, 0.5f));
@@ -56,9 +61,9 @@ void GameWorld::enemyMove()
 {		
 	if (m_moveRight == true)
 	{
-		m_enemy.setPosition(m_enemy.getPosition().x +1.0f , m_enemy.getPosition().y);
+		m_enemies.front().setPosition(m_enemies.front().getPosition().x +1.0f , m_enemies.front().getPosition().y);
 
-		if (m_enemy.getPosition().x >= 400)
+		if (m_enemies.front().getPosition().x >= 400)
 		{
 			m_down = true;
 			m_moveRight = false;
@@ -67,9 +72,9 @@ void GameWorld::enemyMove()
 
 	if (m_down == true)
 	{
-		m_enemy.setPosition(m_enemy.getPosition().x, m_enemy.getPosition().y + 1.0f);
+		m_enemies.front().setPosition(m_enemies.front().getPosition().x, m_enemies.front().getPosition().y + 1.0f);
 
-		if (m_enemy.getPosition().y >= 400)
+		if (m_enemies.front().getPosition().y >= 400)
 		{
 			m_down = false;
 			m_moveLeft = true;
@@ -78,9 +83,9 @@ void GameWorld::enemyMove()
 
 	if (m_moveLeft == true)
 	{
-		m_enemy.setPosition(m_enemy.getPosition().x - 1.0f, m_enemy.getPosition().y);
+		m_enemies.front().setPosition(m_enemies.front().getPosition().x - 1.0f, m_enemies.front().getPosition().y);
 
-		if (m_enemy.getPosition().x <= 100)
+		if (m_enemies.front().getPosition().x <= 100)
 		{
 			m_moveLeft = false;
 			m_up = true;
@@ -89,14 +94,22 @@ void GameWorld::enemyMove()
 
 	if (m_up == true)
 	{
-		m_enemy.setPosition(m_enemy.getPosition().x, m_enemy.getPosition().y - 1.0f);
+		m_enemies.front().setPosition(m_enemies.front().getPosition().x, m_enemies.front().getPosition().y - 1.0f);
 
-		if (m_enemy.getPosition().y <= 100)
+		if (m_enemies.front().getPosition().y <= 100)
 		{
 			m_up = false;
 			m_moveRight = true;
 		}
 	}
+
+	int xPos = m_enemies.back().getPosition().x;
+	std::cout << "xPos" << xPos << std::endl;
+	sf::Vector2f direction = (m_player.getPosition() - m_enemies.back().getPosition());
+	//sf::Vector2f newDirection = Vector3.Normalize(direction);
+	
+	
+	
 }
 
 /// <summary>
@@ -114,7 +127,13 @@ void GameWorld::drawWorld()
 	m_mapView.setCenter(m_player.getPosition());
 	m_window.setView(m_mapView);
 	m_window.draw(m_player);
-	m_window.draw(m_enemy);
+
+	for (int i = 0; i < m_enemies.size(); i++)
+	{
+		m_window.draw(m_enemies[i]);
+	}
+
+	
 }
 
 /// <summary>
@@ -127,7 +146,7 @@ sf::Vector2f GameWorld::getPlayerPosition()
 
 sf::Vector2f GameWorld::getEnemyPosition()
 {
-	return m_enemy.getPosition() / s_displayScale;
+	return m_enemies.front().getPosition() / s_displayScale;
 }
 
 /// <summary>

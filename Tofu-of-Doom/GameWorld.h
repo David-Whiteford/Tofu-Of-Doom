@@ -37,6 +37,7 @@ private:
 	std::vector<std::pair<glm::vec3, WallType>> m_wallPositions;
 	sf::CircleShape m_player;
 	sf::CircleShape m_enemy;
+	std::vector<sf::CircleShape> m_enemies;
 	std::vector<sf::RectangleShape> m_walls;
 	glm::vec3 m_eye; // Current camera position
 	double m_yaw{ 0.0 }; // Look left and right (in degrees)

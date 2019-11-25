@@ -1,1 +1,5 @@
-﻿  Tofu-of-Doom.vcxproj -> D:\Users\dave2\Desktop\Tofu-Of-Doom\Debug\Tofu-of-Doom.exe
+﻿  Game.cpp
+D:\Users\dave2\Desktop\Tofu-Of-Doom\Tofu-of-Doom\Transform.h(16): warning C4091: 'typedef ': ignored on left of 'Transform::Position' when no variable is declared
+D:\Users\dave2\Desktop\Tofu-Of-Doom\Tofu-of-Doom\Collider2D.h(13): warning C4091: 'typedef ': ignored on left of 'Collider2D::Bounds' when no variable is declared
+D:\Users\dave2\Desktop\Tofu-Of-Doom\Tofu-of-Doom\Game.cpp(363,21): warning C4018: '<': signed/unsigned mismatch
+  Tofu-of-Doom.vcxproj -> D:\Users\dave2\Desktop\Tofu-Of-Doom\Debug\Tofu-of-Doom.exe

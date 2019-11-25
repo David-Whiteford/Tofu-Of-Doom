@@ -37,7 +37,8 @@ public:
 	ISoundEngine* gunSoundEngine;
 	ISound* music;
 	ISound* background;
-	ISound* zombie;
+
+	irrklang::ISoundSource* zombie;
 	irrklang::ISoundSource* shotgunSound;
 	irrklang::ISoundSource* machinegunSound;
 	irrklang::ISoundSource* pistolSound;
