@@ -193,6 +193,18 @@ void Game::processEvents()
 /// </summary>
 void Game::update(sf::Time t_deltaTime)
 {
+
+	//======DEBUG COLLISION ====//
+	system("cls");
+	std::cout << "Player: " << "x: " << camera.collider.bounds.x1 <<
+		"y: " << camera.collider.bounds.y1 << " x2: " << camera.collider.bounds.x2 << " y2: " << camera.collider.bounds.y2 << std::endl;
+	std::cout << "cube: " << "x: " << cubeCollider.bounds.x1 <<
+		"y: " << cubeCollider.bounds.y1 << " x2: " << cubeCollider.bounds.x2 << " y2: " << cubeCollider.bounds.y2 << std::endl;
+	if (Collider2D::isColliding(camera.collider.bounds, cubeCollider.bounds))
+	{
+		std::cout << "Working" << std::endl;
+	}
+
 	//update the zombie sound position to follow test zombie
 	zombiePosition = vec3df(m_gameWorld->getEnemyPosition().x, 0, m_gameWorld->getEnemyPosition().y);
 	m_gameWorld->updateWorld();
@@ -290,6 +302,12 @@ void Game::update(sf::Time t_deltaTime)
 
 	// Test cube
 	model_2 = glm::translate(glm::mat4(1.0f), glm::vec3(15.0f, 0.0f, 15.0f));
+	cubeCollider.bounds.x1 = 10;
+	cubeCollider.bounds.x2 = 20;
+	cubeCollider.bounds.y1 = 10;
+	cubeCollider.bounds.y2 = 20;
+	//============================================================================== DEBUG ONLY 
+
 
 	// Send our transformation to the currently bound shader, in the "MVP" uniform
 	// This is done in the update loop since each model will have a different MVP matrix (At least for the M part)

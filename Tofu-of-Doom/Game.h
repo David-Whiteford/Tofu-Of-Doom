@@ -20,6 +20,9 @@
 #include "Camera.h"
 #include "DisplayScale.h"
 
+// Debug Only Remove and place in own class for model cube //
+#include "Collider2D.h"
+
 using namespace irrklang;
 #pragma comment(lib, "irrKlang.lib") // link with irrKlang.dll
 
@@ -185,7 +188,7 @@ private:
 
 	// The model matrices will eventually be stored in an array (probably on the GPU)
 	glm::mat4 model_1;
-	glm::mat4 model_2;
+	glm::mat4 model_2; /* Cube Test*/ Collider2D cubeCollider; // Remove and place in own class after debugging
 	glm::mat4 model_3; // Machine gun matrix
 	glm::mat4 model_4;
 	glm::mat4 model_5;

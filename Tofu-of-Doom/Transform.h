@@ -15,6 +15,8 @@ class Transform
 		float z = 0;
 	};
 
+	
+
 public:
 	static float distance(Position& pos_1, Position& pos_2);
 	//static float length(Position& pos);

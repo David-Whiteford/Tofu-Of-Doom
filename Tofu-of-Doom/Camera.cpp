@@ -61,6 +61,11 @@ Camera::Camera()
 	transform.position.x = 25.0f;
 	transform.position.y = 0.0f;
 	transform.position.z = 35.0f;
+
+	collider.bounds.x1 = -50;
+	collider.bounds.y1 = -50;
+	collider.bounds.x2 = -50;
+	collider.bounds.y2 = -50;
 }
 
 Camera::~Camera()
@@ -154,5 +159,11 @@ void Camera::input(sf::Time t_deltaTime)
 	transform.position.x = m_eye.x;
 	transform.position.y = m_eye.y;
 	transform.position.z = m_eye.z;
+
+	// DEBUG FOR COLLIDER BOUNDS
+	collider.bounds.x1 = m_eye.x - 0.1f;
+	collider.bounds.x2 = m_eye.x + 0.1f;
+	collider.bounds.y1 = m_eye.z - 0.1f;
+	collider.bounds.y2 = m_eye.z + 0.1f;
 
 }

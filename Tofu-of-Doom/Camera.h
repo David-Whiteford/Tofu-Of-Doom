@@ -8,6 +8,7 @@
 #include "libs/glm/gtc/matrix_transform.hpp"
 #include <SFML/Graphics.hpp>
 #include "Controller.h"
+#include "Collider2D.h"
 
 class Camera
 {
@@ -32,6 +33,8 @@ public:
 	float getYaw();
 
 	CXBOXController controller;
+
+	Collider2D collider;
 
 private:
 	glm::mat4 view;
