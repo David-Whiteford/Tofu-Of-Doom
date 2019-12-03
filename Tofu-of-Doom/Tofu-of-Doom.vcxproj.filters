@@ -13,6 +13,18 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Header Files\StateMachine">
+      <UniqueIdentifier>{a703bb86-f26c-4b56-af6a-765962313c86}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\StateMachine\FSM">
+      <UniqueIdentifier>{33ce08d3-b4a8-4171-accc-2d5f0e7992f0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\StateMachine">
+      <UniqueIdentifier>{205cdec2-df34-4711-8171-795add676839}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\StateMachine\FSM">
+      <UniqueIdentifier>{0d4d636a-a36f-4971-ac5c-8bb62cc0b720}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -44,6 +56,21 @@
     </ClCompile>
     <ClCompile Include="Collider2D.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Events.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="EnemyFollowState.cpp">
+      <Filter>Source Files\StateMachine\FSM</Filter>
+    </ClCompile>
+    <ClCompile Include="EnemyPatrolState.cpp">
+      <Filter>Source Files\StateMachine\FSM</Filter>
+    </ClCompile>
+    <ClCompile Include="IdleEnemyState.cpp">
+      <Filter>Source Files\StateMachine\FSM</Filter>
+    </ClCompile>
+    <ClCompile Include="EnemyState.cpp">
+      <Filter>Source Files\StateMachine\FSM</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -157,6 +184,21 @@
     </ClInclude>
     <ClInclude Include="Collider2D.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Events.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemyState.h">
+      <Filter>Header Files\StateMachine\FSM</Filter>
+    </ClInclude>
+    <ClInclude Include="IdleEnemyState.h">
+      <Filter>Header Files\StateMachine\FSM</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemyPatrolState.h">
+      <Filter>Header Files\StateMachine\FSM</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemyFollowState.h">
+      <Filter>Header Files\StateMachine\FSM</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
