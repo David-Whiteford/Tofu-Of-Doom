@@ -1,30 +1,33 @@
 #ifndef AIMOVEEVENTS_H
 #define AIMOVEEVENTS_H
 
-
-class Events
+namespace en
 {
-
-public:
-	Events();
-	~Events();
-
-	enum class AIEVENT
+	class Events
 	{
-		NONE,
-		LEFT,
-		RIGHT,
-		UP,
-		ATTACK,
-		FOLLOW,
+
+	public:
+		Events();
+		~Events();
+
+		enum class AIEVENT
+		{
+			NONE,
+			LEFT,
+			RIGHT,
+			UP,
+			ATTACK,
+			FOLLOW,
+			PATROL
+		};
+
+		void currentEvent(AIEVENT);
+		AIEVENT getCurrentEvent();
+
+	private:
+		AIEVENT m_currentAiEvent;
 	};
-
-	void currentEvent(AIEVENT);
-	AIEVENT getCurrentEvent();
-
-private:
-	AIEVENT m_currentAiEvent;
-};
+}
 
 
 

@@ -1,18 +1,20 @@
 #include "Events.h"
 
-Events::Events()
+en::Events::Events()
+{
+	m_currentAiEvent = AIEVENT::PATROL;
+
+}
+
+en::Events::~Events()
 {
 }
 
-Events::~Events()
+void en::Events::currentEvent(en::Events::AIEVENT event)
 {
 }
 
-void Events::currentEvent(AIEVENT)
-{
-}
-
-Events::AIEVENT Events::getCurrentEvent()
+en::Events::AIEVENT en::Events::getCurrentEvent()
 {
 	return AIEVENT();
 }
