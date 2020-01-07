@@ -58,6 +58,7 @@ void Game::run()
 /// </summary>
 void Game::initialise()
 {
+	graph = new Graph<NodeData, int>(25);
 	m_ShotDelay = sf::seconds(.7f); // .7f is the length for the reload sound to finish
 	m_vibrateLength = sf::seconds(.1f); // .7f is the length for the reload sound to finish
 	soundEngine = createIrrKlangDevice();
@@ -81,6 +82,29 @@ void Game::initialise()
 	zombiePosition = vec3df(m_gameWorld->getEnemyPosition().x, 0 , m_gameWorld->getEnemyPosition().y);
 
 	soundEngine->play3D(zombie, zombiePosition, true, false, false, false);
+
+	
+
+	//Astar stuff
+	// List all neighbors:
+	for (int direction = 0; direction < 9; direction++)
+	{
+		if (direction == 4) continue; // Skip 4, this is ourself.
+
+		int n_row = row + ((direction % 3) - 1); // Neighbor row
+		int n_col = col + ((direction / 3) - 1); // Neighbor column
+
+		// Check the bounds:
+		if (n_row >= 0 && n_row < ROWS && n_col >= 0 && n_col < COLS) 
+		{
+			//graph->addArc(1, 2, 10);
+			// Add an arc from cell id 24 to cell id arr[n_row][n_col] 
+			// A valid neighbor:
+			std::cout << "Neighbor: " << n_row << "," << n_col << ": " << arr[n_row][n_col] << std::endl;
+		}
+	}
+
+
 	//zombie = soundEngine->play3D("Monster.mp3", zombiePosition, true, true, true);
 	//
 	//if (zombie)
