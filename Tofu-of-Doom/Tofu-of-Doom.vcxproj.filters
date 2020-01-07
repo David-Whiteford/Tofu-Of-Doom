@@ -25,6 +25,9 @@
     <Filter Include="Source Files\StateMachine\FSM">
       <UniqueIdentifier>{0d4d636a-a36f-4971-ac5c-8bb62cc0b720}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\AStar">
+      <UniqueIdentifier>{f4bc5a02-2653-4a63-9b76-3211a5f92706}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -199,6 +202,18 @@
     </ClInclude>
     <ClInclude Include="EnemyFollowState.h">
       <Filter>Header Files\StateMachine\FSM</Filter>
+    </ClInclude>
+    <ClInclude Include="aStarStuff\Graph.h">
+      <Filter>Header Files\AStar</Filter>
+    </ClInclude>
+    <ClInclude Include="aStarStuff\GraphArc.h">
+      <Filter>Header Files\AStar</Filter>
+    </ClInclude>
+    <ClInclude Include="aStarStuff\GraphNode.h">
+      <Filter>Header Files\AStar</Filter>
+    </ClInclude>
+    <ClInclude Include="aStarStuff\NodeData.h">
+      <Filter>Header Files\AStar</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

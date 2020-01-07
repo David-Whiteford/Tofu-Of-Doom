@@ -39,6 +39,10 @@
     <ClCompile Include="Transform.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="aStarStuff\Graph.h" />
+    <ClInclude Include="aStarStuff\GraphArc.h" />
+    <ClInclude Include="aStarStuff\GraphNode.h" />
+    <ClInclude Include="aStarStuff\NodeData.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Collider2D.h" />
     <ClInclude Include="Controller.h" />
