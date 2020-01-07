@@ -1,6 +1,6 @@
 #include "EnemyState.h"
 
-EnemyState EnemyState::handleInputs(Events&)
+EnemyState EnemyState::handleInputs()
 {
 	return EnemyState();
 }

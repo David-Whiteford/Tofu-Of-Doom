@@ -9,7 +9,7 @@ class EnemyState
 	public:
 		virtual ~EnemyState()
 		{};
-		virtual EnemyState handleInputs(Events&);
+		virtual EnemyState handleInputs();
 		virtual void update();
 		virtual void enter();
 		virtual void exit();
