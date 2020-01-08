@@ -8,6 +8,7 @@
 
 #include <SFML/Graphics.hpp>
 #include <SFML/OpenGL.hpp>
+#include <fstream>
 
 #include "WallType.h"
 #include "DisplayScale.h"
@@ -17,8 +18,9 @@ class Map
 public:
 	Map();
 	~Map();
-	void loadMap();
+	void loadMapData(std::string t_fileName, std::vector<std::pair<glm::vec3, WallType>> &t_array);
 	std::vector<std::pair<glm::vec3, WallType>> *getMap();
+	void loadMap();
 
 private:
 	std::vector<std::pair<glm::vec3, WallType>> m_map;

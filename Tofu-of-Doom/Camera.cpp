@@ -58,9 +58,9 @@ float Camera::getSpeed()
 Camera::Camera()
 {
 	// Used to position player, temporary for now
-	transform.position.x = 25.0f;
+	transform.position.x = 225.0f;
 	transform.position.y = 0.0f;
-	transform.position.z = 35.0f;
+	transform.position.z = 225.0f;
 
 	collider.bounds.x1 = -50;
 	collider.bounds.y1 = -50;

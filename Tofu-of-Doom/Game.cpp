@@ -221,7 +221,7 @@ void Game::update(sf::Time t_deltaTime)
 {
 
 	//======DEBUG COLLISION ====//
-	system("cls");
+	// system("cls");
 	std::cout << "Player: " << "x: " << camera.collider.bounds.x1 <<
 		"y: " << camera.collider.bounds.y1 << " x2: " << camera.collider.bounds.x2 << " y2: " << camera.collider.bounds.y2 << std::endl;
 	std::cout << "cube: " << "x: " << cubeCollider.bounds.x1 <<
@@ -347,7 +347,7 @@ void Game::update(sf::Time t_deltaTime)
 	glUniformMatrix4fv(m_viewMatrixID, 1, GL_FALSE, &camera.getView()[0][0]);
 	glUniformMatrix4fv(m_projectionMatrixID, 1, GL_FALSE, &projection[0][0]);
 
-	glm::vec3 lightPos = glm::vec3(25, 8, 25);
+	glm::vec3 lightPos = glm::vec3(225, 8, 225);
 	glUniform3f(m_lightID, lightPos.x, lightPos.y, lightPos.z);
 
 	// Update test enemy matrix
@@ -386,9 +386,12 @@ void Game::render()
 
 		for (int i = 0; i < m_gameWorld->getWallData()->size(); ++i)
 		{
-			model_1 = glm::translate(glm::mat4(1.0f), m_gameWorld->getWallData()->at(i).first / s_displayScale);
-			glUniformMatrix4fv(m_modelMatrixID, 1, GL_FALSE, &model_1[0][0]);
-			glDrawArrays(GL_TRIANGLES, 0, wallType1_vertices.size());
+			if (m_gameWorld->getWallData()->at(i).second == WallType::WALLTYPE_1)
+			{
+				model_1 = glm::translate(glm::mat4(1.0f), m_gameWorld->getWallData()->at(i).first / s_displayScale);
+				glUniformMatrix4fv(m_modelMatrixID, 1, GL_FALSE, &model_1[0][0]);
+				glDrawArrays(GL_TRIANGLES, 0, wallType1_vertices.size());
+			}
 		}	
 
 		glBindVertexArray(0);
