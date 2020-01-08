@@ -5,7 +5,7 @@
 /// </summary>
 Map::Map()
 {
-	loadMap();
+	loadMapData("level_data/level_1_map.txt", m_map);
 }
 
 /// <summary>
@@ -14,6 +14,50 @@ Map::Map()
 Map::~Map()
 {
 
+}
+
+/// <summary>
+/// Reads map data from an external .txt file
+/// </summary>
+void Map::loadMapData(std::string t_fileName, std::vector<std::pair<glm::vec3, WallType>> &t_array)
+{
+	float f_wallWidth = 50.0f; // The width / depth / height of the wall in pixels
+	int f_mapWidth = 50; // How many tiles wide the map is
+
+	std::ifstream f_textFile(t_fileName);
+	std::string f_line;
+	int f_value;
+	std::pair<glm::vec3, WallType> f_tempPair;
+	glm::vec3 f_tempVec;
+	WallType f_tempWallType;
+	int x = 0;
+	int z = 0;
+
+	while (std::getline(f_textFile, f_line, ','))
+	{
+		f_value = (int)std::atof(f_line.c_str());
+
+		// Check if it's a wall or it's empty
+		if (f_value == 2)
+		{
+			f_tempWallType = WallType::EMPTY;
+		}
+		else if (f_value == 1)
+		{
+			f_tempWallType = WallType::WALLTYPE_1;
+		}
+
+		f_tempPair = std::make_pair(glm::vec3(x * f_wallWidth, 0.0f, z * f_wallWidth), f_tempWallType);
+		t_array.push_back(f_tempPair);
+
+		x++;
+
+		if (x == f_mapWidth)
+		{
+			x = 0;
+			z++;
+		}
+	}
 }
 
 /// <summary>

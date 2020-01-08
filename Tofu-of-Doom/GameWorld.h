@@ -19,7 +19,6 @@ public:
 	GameWorld(sf::RenderWindow &t_window, sf::Time &t_deltaTime, Camera &t_camera);
 	~GameWorld();
 	void updateWorld();
-	void gameControls();
 	void enemyMove();
 	void drawWorld();
 	sf::Vector2f getPlayerPosition();

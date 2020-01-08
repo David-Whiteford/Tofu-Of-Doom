@@ -1,3 +1,4 @@
+
 #include "GameWorld.h"
 
 /// <summary>
@@ -13,8 +14,7 @@ GameWorld::GameWorld(sf::RenderWindow &t_window, sf::Time &t_deltaTime, Camera &
 	m_player.setPosition(m_camera.getEye().x, m_camera.getEye().z); // Test starting position
 	// m_eye = glm::vec3(m_player.getPosition().x, 2.0f, m_player.getPosition().y);
 	m_enemies.push_back(m_enemy);
-	m_enemies.push_back(m_enemy);
-	
+	m_enemies.push_back(m_enemy);	
 	
 	for (int i = 0; i < m_enemies.size(); i++)
 	{
@@ -25,23 +25,26 @@ GameWorld::GameWorld(sf::RenderWindow &t_window, sf::Time &t_deltaTime, Camera &
 	}
 
 	// View
-	m_mapView.setViewport(sf::FloatRect(0.25f, 0.25f, 0.5f, 0.5f));
+	// m_mapView.setViewport(sf::FloatRect(0.0, 0.0f, 0.25f, 0.25f));
 	m_mapView.setSize(m_window.getSize().x, m_window.getSize().y);
 
-	// Create an array to store the walls in
+	// Create an array to store the walls in (for the pause screen map)
 	for (int i = 0; i < m_map->getMap()->size(); ++i)
 	{
-		sf::RectangleShape f_tempWall;
-		f_tempWall.setSize(sf::Vector2f(s_wallWidth, s_wallWidth));
-		f_tempWall.setOrigin(s_wallWidth / 2.0f, s_wallWidth / 2.0f);
-		f_tempWall.setFillColor(sf::Color::Green);
-		f_tempWall.setPosition(m_map->getMap()->at(i).first.x, m_map->getMap()->at(i).first.z);
-		m_walls.push_back(f_tempWall);
+		if (m_map->getMap()->at(i).second == WallType::WALLTYPE_1)
+		{
+			sf::RectangleShape f_tempWall;
+			f_tempWall.setSize(sf::Vector2f(s_wallWidth, s_wallWidth));
+			f_tempWall.setOrigin(s_wallWidth / 2.0f, s_wallWidth / 2.0f);
+			f_tempWall.setFillColor(sf::Color::Green);
+			f_tempWall.setPosition(m_map->getMap()->at(i).first.x, m_map->getMap()->at(i).first.z);
+			m_walls.push_back(f_tempWall);
+		}
 	}
 }
 
 /// <summary>
-/// Constructor for the GameWorld class
+/// Destructor for the GameWorld class
 /// </summary>
 GameWorld::~GameWorld()
 {
@@ -57,6 +60,9 @@ void GameWorld::updateWorld()
 	enemyMove();
 }
 
+/// <summary>
+/// Moves the enemy
+/// </summary>
 void GameWorld::enemyMove()
 {		
 	if (m_moveRight == true)
@@ -106,10 +112,7 @@ void GameWorld::enemyMove()
 	int xPos = m_enemies.back().getPosition().x;
 	std::cout << "xPos" << xPos << std::endl;
 	sf::Vector2f direction = (m_player.getPosition() - m_enemies.back().getPosition());
-	//sf::Vector2f newDirection = Vector3.Normalize(direction);
-	
-	
-	
+	//sf::Vector2f newDirection = Vector3.Normalize(direction);	
 }
 
 /// <summary>
@@ -117,8 +120,6 @@ void GameWorld::enemyMove()
 /// </summary>
 void GameWorld::drawWorld()
 {
-	// gameControls(); // This function shouldn't be here. It's evil. IT'S EVIL I TELLS YA!
- 
 	for (int i = 0; i < m_walls.size(); ++i)
 	{
 		m_window.draw(m_walls[i]);
@@ -131,9 +132,7 @@ void GameWorld::drawWorld()
 	for (int i = 0; i < m_enemies.size(); i++)
 	{
 		m_window.draw(m_enemies[i]);
-	}
-
-	
+	}	
 }
 
 /// <summary>
@@ -144,6 +143,9 @@ sf::Vector2f GameWorld::getPlayerPosition()
 	return m_player.getPosition();
 }
 
+/// <summary>
+/// Returns the position of enemies
+/// </summary>
 sf::Vector2f GameWorld::getEnemyPosition()
 {
 	return m_enemies.front().getPosition() / s_displayScale;
@@ -157,11 +159,17 @@ glm::vec3 GameWorld::getCameraPosition()
 	return m_eye;
 }
 
+/// <summary>
+/// Returns the current pitch of the camera
+/// </summary>
 double GameWorld::getPitch()
 {
 	return m_pitch;
 }
 
+/// <summary>
+/// Returns the current yaw of the camera
+/// </summary>
 double GameWorld::getYaw()
 {
 	return m_yaw;
