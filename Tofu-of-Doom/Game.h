@@ -71,15 +71,15 @@ public:
 	/// Astar stuff with graph for storing nodes
 	/// settng up the astar algorithm
 	/// </summary>
-
+	std::map<std::string, int> nodeMap;
 	Graph<NodeData, int>* graph;
 	std::vector<Node*> graphPath;
-	std::map<std::string, int> nodeMap;
+	
 	NodeData nodeData;
 	int nodeIndex{ 0 };
 
 	std::ifstream myfile;
-
+	int val = 0;
 	int static const ROWS = 5;
 	int static const COLS = 5;
 	int arr[ROWS][COLS] =
@@ -90,6 +90,7 @@ public:
 		{ 15, 16, 17, 18, 19 },
 		{ 20, 21, 22, 23, 24 }
 	};
+
 
 	//find the neighbours of row 4 and column 4(temp Test
 	int row = 0;
