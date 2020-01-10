@@ -69,13 +69,13 @@ void Game::initialise()
 	vec3df position(25, 0, 25);
 	positions.push_back(position);
 
-	shotgunSound = soundEngine->addSoundSourceFromFile("shotgun.mp3");
-	machinegunSound = soundEngine->addSoundSourceFromFile("shotgun.mp3");
-	pistolSound = soundEngine->addSoundSourceFromFile("shotgun.mp3");
+	shotgunSound = soundEngine->addSoundSourceFromFile("cg1.wav");
+	machinegunSound = soundEngine->addSoundSourceFromFile("cg1.wav");
+	pistolSound = soundEngine->addSoundSourceFromFile("cg1.wav");
 	zombie = soundEngine->addSoundSourceFromFile("Monster.mp3");
 	shotgunQueue.push(shotgunSound);
-	shotgunQueue.push(shotgunSound);
-	shotgunQueue.push(shotgunSound);
+	shotgunQueue.push(machinegunSound);
+	shotgunQueue.push(pistolSound);
 	shotgunQueue.push(shotgunSound);
 
 	
@@ -242,80 +242,7 @@ void Game::update(sf::Time t_deltaTime)
 	camera.transform.position.y = camera.getEye().y;
 	camera.transform.position.z = camera.getEye().z;
 
-	// Fire a shot with chosen gun
-	if (camera.controller.aButtonDown())
-	{
-		// Sorry, this is a bit messy, I just copied and pasted to get the gun recoil working, refactor later - Alan
-		if (gunNum == 1) // Pistol
-		{
-			/*if (m_time > m_ShotDelay)
-			{
-				gunSoundEngine->setAllSoundsPaused(true);
-			}*/
-			gunSoundEngine->play2D(shotgunQueue.front());
-			if (gunSoundEngine->isCurrentlyPlaying(shotgunSound) == false )
-			{
-				
-				shotgunQueue.pop();
-				//gunSoundEngine->setAllSoundsPaused(false);
-			}
-			//soundEngine->play2D(shotgunSound);
-			m_time = sf::Time::Zero;
-			m_time = m_time.Zero;
-
-			vibrate = true;
-			camera.controller.Vibrate(65535, 65535);
-
-			gunRecoil = true; // If the gun is being shot, create some recoil
-		}
-		else if (gunNum == 2 && m_time > m_ShotDelay) // Rifle
-		{
-			soundEngine->play2D(pistolSound);
-			m_time = sf::Time::Zero;
-			m_time = m_time.Zero;
-
-			vibrate = true;
-			camera.controller.Vibrate(65535, 65535);
-
-			gunRecoil = true; // If the gun is being shot, create some recoil
-		}
-		else if (gunNum == 3 && m_time > m_ShotDelay) // Machine gun
-		{
-			soundEngine->play2D(machinegunSound);
-			m_time = sf::Time::Zero;
-			m_time = m_time.Zero;
-
-			vibrate = true;
-			camera.controller.Vibrate(65535, 65535);
-
-			gunRecoil = true; // If the gun is being shot, create some recoil
-		}
-	}
-
-	if (m_vibrateLength < m_time)
-	{
-		vibrate = false;
-		camera.controller.Vibrate(0, 0);
-
-		gunRecoil = false; // Gun is not being fired, disable recoil
-
-		// Switch between guns, but only when a shot being fired is finished, and only when the Y button is released
-		if (camera.controller.yButtonDown() && !yButtonPressed)
-		{
-			yButtonPressed = true;
-		}
-		else if (!camera.controller.yButtonDown() && yButtonPressed)
-		{
-			gunNum++;
-
-			if (gunNum == 4)
-			{
-				gunNum = 1;
-			}
-
-			yButtonPressed = false;
-		}
-	}
+	fireGun();
 
 	// std::cout << m_time.asSeconds() << std::endl;
 
@@ -685,6 +612,89 @@ void Game::gunAnimation(glm::mat4 &t_gunMatrix)
 	}
 
 	t_gunMatrix = glm::rotate(t_gunMatrix, glm::radians(camera.getYaw()), glm::vec3(0.0f, 1.0f, 0.0f));
+}
+
+void Game::fireGun()
+{
+
+	if (gunNum == 1)
+	{
+		if (camera.controller.aButtonDown())
+		{
+
+			gunSoundEngine->play2D(shotgunQueue.front());
+			if (gunSoundEngine->isCurrentlyPlaying(shotgunSound) == false)
+			{
+
+				shotgunQueue.pop();
+			}
+
+			m_time = sf::Time::Zero;
+			m_time = m_time.Zero;
+
+			vibrate = true;
+			camera.controller.Vibrate(65535, 65535);
+
+			gunRecoil = true; // If the gun is being shot, create some recoil
+		}
+
+	}
+	else if (gunNum == 2 && m_time > m_ShotDelay) // Rifle
+	{
+		if (camera.controller.aButtonDown())
+		{
+
+			gunSoundEngine->play2D(shotgunQueue.front());
+			m_time = sf::Time::Zero;
+			m_time = m_time.Zero;
+
+			vibrate = true;
+			camera.controller.Vibrate(65535, 65535);
+
+			gunRecoil = true; // If the gun is being shot, create some recoil
+		}
+	}
+	else if (gunNum == 3 && m_time > m_ShotDelay / (float)6) // Machine gun
+	{
+		// Fire a shot with chosen gun
+		if (camera.controller.aButton())
+		{
+			gunSoundEngine->play2D(shotgunQueue.front());
+			m_time = sf::Time::Zero;
+			m_time = m_time.Zero;
+
+			vibrate = true;
+			camera.controller.Vibrate(65535, 65535);
+
+			gunRecoil = true; // If the gun is being shot, create some recoil
+		}
+	}
+
+	// Recoil 
+	if (m_vibrateLength < m_time)
+	{
+		vibrate = false;
+		camera.controller.Vibrate(0, 0);
+
+		gunRecoil = false; // Gun is not being fired, disable recoil
+
+		// Switch between guns, but only when a shot being fired is finished, and only when the Y button is released
+		if (camera.controller.yButtonDown() && !yButtonPressed)
+		{
+			yButtonPressed = true;
+		}
+		else if (!camera.controller.yButtonDown() && yButtonPressed)
+		{
+			gunNum++;
+
+			if (gunNum == 4)
+			{
+				gunNum = 1;
+			}
+
+			yButtonPressed = false;
+		}
+	}
 }
 
 void Game::moveEnemy(glm::mat4& t_gunMatrix)
