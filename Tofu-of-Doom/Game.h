@@ -269,6 +269,8 @@ private:
 	bool m_buttonPressed = false;
 	//Player Camera
 	Camera camera;
+
+	void fireGun();
 };
 
 #endif // !GAME_H
