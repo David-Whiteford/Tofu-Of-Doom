@@ -75,6 +75,9 @@
     <ClCompile Include="EnemyState.cpp">
       <Filter>Source Files\StateMachine\FSM</Filter>
     </ClCompile>
+    <ClCompile Include="Path.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -213,6 +216,9 @@
       <Filter>Header Files\AStar</Filter>
     </ClInclude>
     <ClInclude Include="aStarStuff\NodeData.h">
+      <Filter>Header Files\AStar</Filter>
+    </ClInclude>
+    <ClInclude Include="Path.h">
       <Filter>Header Files\AStar</Filter>
     </ClInclude>
   </ItemGroup>

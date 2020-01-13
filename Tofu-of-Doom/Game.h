@@ -26,8 +26,6 @@
 #include <iostream>
 #include <fstream>
 #include <string>
-#include "aStarStuff/Graph.h"
-#include "aStarStuff/NodeData.h"
 #include <map>
 /// </summary>
 
@@ -41,7 +39,7 @@ using namespace irrklang;
 #pragma comment(lib, "irrKlang.lib") // link with irrKlang.dll
 
 
-typedef GraphNode<NodeData, int> Node;
+
 
 class Game
 {
@@ -67,34 +65,6 @@ public:
 	// 1 is pistol, 2 is rifle, 3 is machine gun)
 	int gunNum = 1;
 
-	/// <summary>
-	/// Astar stuff with graph for storing nodes
-	/// settng up the astar algorithm
-	/// </summary>
-	std::map<std::string, int> nodeMap;
-	Graph<NodeData, int>* graph;
-	std::vector<Node*> graphPath;
-	
-	NodeData nodeData;
-	int nodeIndex{ 0 };
-
-	std::ifstream myfile;
-	int val = 0;
-	int static const ROWS = 5;
-	int static const COLS = 5;
-	int arr[ROWS][COLS] =
-	{
-		{ 0, 1, 2, 3, 4 },
-		{ 5, 6, 7, 8, 9 },
-		{ 10, 11, 12, 13, 14 },
-		{ 15, 16, 17, 18, 19 },
-		{ 20, 21, 22, 23, 24 }
-	};
-
-
-	//find the neighbours of row 4 and column 4(temp Test
-	int row = 0;
-	int col = 0;
 
 	bool yButtonPressed{ false }; // This is used so that a gun is only changed when Y is released
 	bool backButtonPressed{ false }; // This is used so that the map is only displayed when the Back button is released
