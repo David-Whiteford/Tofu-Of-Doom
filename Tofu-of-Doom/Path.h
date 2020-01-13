@@ -8,14 +8,14 @@
 class Path
 {
 public:
-	Path();
+	Path(sf::RenderWindow& t_window);
 	~Path();
-	void draw(sf::RenderWindow& t_window);
+	void draw();
 	void neighbourAlgor(int nodeIndex);
 	void initAStar();
 
 private:
-	std::vector<sf::RectangleShape> squares;
+	sf::RenderWindow& m_window;
 	std::map<std::string, int> nodeMap;
 	Graph<NodeData, int>* graph;
 	std::vector<NodeData*> graphPath;
@@ -23,7 +23,7 @@ private:
 	NodeData nodeData;
 	int nodeIndex{ 0 };
 
-	
+	std::vector<sf::RectangleShape> m_nodeSquare;
 	int val = 0;
 	int static const ROWS = 5;
 	int static const COLS = 5;
@@ -41,7 +41,7 @@ private:
 	int row = 0;
 	int col = 0;
 
-
+	sf::RectangleShape m_nodeShape;
 	int m_nodeSize = 20;
 };
 

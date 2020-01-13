@@ -13,7 +13,7 @@
 #include <queue>
 #include <map>
 #include <string>
-
+#include "Path.h"
 
 #include "Debug.h"
 #include "Shader.h"
@@ -92,6 +92,7 @@ private:
 
 	sf::RenderWindow m_window; // Window
 	sf::Time m_deltaTime;
+	Path *m_gamePath = new Path(m_window);
 	GameWorld *m_gameWorld = new GameWorld(m_window, m_deltaTime, camera); // Create a game world
 
 	bool m_exitGame{ false };

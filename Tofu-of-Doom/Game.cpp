@@ -61,7 +61,7 @@ void Game::initialise()
 
 	
 	
-	
+	m_gamePath->initAStar();
 	m_ShotDelay = sf::seconds(.7f); // .7f is the length for the reload sound to finish
 	m_vibrateLength = sf::seconds(.1f); // .7f is the length for the reload sound to finish
 	soundEngine = createIrrKlangDevice();
@@ -354,7 +354,7 @@ void Game::render()
 		m_window.pushGLStates();
 		m_gameWorld->drawWorld();
 		m_window.popGLStates();
-
+		m_gamePath->draw();
 		break;
 
 	case DrawState::GAME:

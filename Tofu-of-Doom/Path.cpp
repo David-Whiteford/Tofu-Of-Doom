@@ -1,6 +1,7 @@
 #include "Path.h"
 
-Path::Path()
+Path::Path(sf::RenderWindow& t_window):
+	m_window(t_window)
 {
 }
 
@@ -8,9 +9,18 @@ Path::~Path()
 {
 }
 
-void Path::draw(sf::RenderWindow& t_window)
+void Path::draw()
 {
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q))
+	{
+		for (auto node : m_nodeSquare)
+		{
+			m_window.draw(node);
+		}
+	}
 }
+
+
 
 void Path::neighbourAlgor(int nodeIndex)
 {
@@ -47,6 +57,9 @@ void Path::neighbourAlgor(int nodeIndex)
 
 void Path::initAStar()
 {
+
+	
+	
 	graph = new Graph<NodeData, int>(25);
 
 	int nodeIndex = 0;
@@ -56,12 +69,17 @@ void Path::initAStar()
 		{
 			
 			nodeData.m_name = arr[i][j];
-			nodeData.m_x =0;
-			nodeData.m_y =0;
+			nodeData.m_x = i * m_nodeSize;
+			nodeData.m_y = j * m_nodeSize;
 
 			graph->addNode(nodeData, nodeIndex);
-			nodeIndex++;
 			
+
+			m_nodeShape.setSize(sf::Vector2f(m_nodeSize, m_nodeSize));
+			m_nodeShape.setFillColor(sf::Color(sf::Color::Blue));
+			m_nodeShape.setPosition(i * m_nodeSize, j * m_nodeSize);
+			m_nodeSquare.push_back(m_nodeShape);
+			nodeIndex++;
 		
 		}
 	}
