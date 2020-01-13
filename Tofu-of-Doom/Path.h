@@ -11,7 +11,7 @@ public:
 	Path();
 	~Path();
 	void draw(sf::RenderWindow& t_window);
-	void neighbourAlgor();
+	void neighbourAlgor(int nodeIndex);
 	void initAStar();
 
 private:
@@ -42,7 +42,7 @@ private:
 	int col = 0;
 
 
-	int NodeSize = 0;
+	int m_nodeSize = 20;
 };
 
 
