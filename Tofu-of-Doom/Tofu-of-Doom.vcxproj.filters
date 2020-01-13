@@ -216,4 +216,15 @@
       <Filter>Header Files\AStar</Filter>
     </ClInclude>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="shaders\mainShader.frag">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="shaders\mainShader.vert">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="shaders\mainShaderMultipleLights.frag">
+      <Filter>Source Files</Filter>
+    </None>
+  </ItemGroup>
 </Project>

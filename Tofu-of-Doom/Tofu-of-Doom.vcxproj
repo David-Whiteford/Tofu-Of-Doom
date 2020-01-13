@@ -86,6 +86,11 @@
     <ClInclude Include="stb_image.h" />
     <ClInclude Include="XInput.h" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="shaders\mainShader.frag" />
+    <None Include="shaders\mainShader.vert" />
+    <None Include="shaders\mainShaderMultipleLights.frag" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
     <ProjectGuid>{192ed0fc-b1ac-439a-ac83-d8a69afe1fbb}</ProjectGuid>
