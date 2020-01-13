@@ -58,6 +58,13 @@ void Game::run()
 /// </summary>
 void Game::initialise()
 {
+	// Set light positions
+	m_lightPositions.push_back(glm::vec3(225.0f, 15.0f, 225.0f));
+	m_lightPositions.push_back(glm::vec3(25.0f, 15.0f, 25.0f));
+	m_lightPositions.push_back(glm::vec3(100.0f, 15.0f, 100.0f));
+	m_lightPositions.push_back(glm::vec3(150.0f, 15.0f, 150.0f));
+	m_lightPositions.push_back(glm::vec3(60.0f, 15.0f, 20.0f));
+
 	graph = new Graph<NodeData, int>(25);
 	m_ShotDelay = sf::seconds(.7f); // .7f is the length for the reload sound to finish
 	m_vibrateLength = sf::seconds(.1f); // .7f is the length for the reload sound to finish
@@ -141,7 +148,7 @@ void Game::initialise()
 
 
 	// Load shader
-	m_mainShader = new tk::Shader("shaders/mainShader.vert", "shaders/mainShader.frag");
+	m_mainShader = new tk::Shader("shaders/mainShader.vert", "shaders/mainShaderMultipleLights.frag");
 
 	GLint isCompiled = 0;
 	GLint isLinked = 0;
@@ -187,7 +194,8 @@ void Game::initialise()
 
 	// Other uniforms
 	m_currentTextureID = glGetUniformLocation(m_mainShader->m_programID, "currentTexture");
-	m_lightID = glGetUniformLocation(m_mainShader->m_programID, "LightPosition_worldspace");
+	// m_lightID = glGetUniformLocation(m_mainShader->m_programID, "LightPosition_worldspace");
+	m_lightPositionsID = glGetUniformLocation(m_mainShader->m_programID, "lightPositionsWorldspace");
 }
 
 /// <summary>
@@ -232,7 +240,7 @@ void Game::update(sf::Time t_deltaTime)
 	}
 
 	//update the zombie sound position to follow test zombie
-	zombiePosition = vec3df(m_gameWorld->getEnemyPosition().x, 0, m_gameWorld->getEnemyPosition().y); 
+	zombiePosition = vec3df(m_gameWorld->getEnemyPosition().x, 3.5f, m_gameWorld->getEnemyPosition().y); 
 	
 	m_gameWorld->updateWorld();
 
@@ -274,11 +282,14 @@ void Game::update(sf::Time t_deltaTime)
 	glUniformMatrix4fv(m_viewMatrixID, 1, GL_FALSE, &camera.getView()[0][0]);
 	glUniformMatrix4fv(m_projectionMatrixID, 1, GL_FALSE, &projection[0][0]);
 
-	glm::vec3 lightPos = glm::vec3(225, 8, 225);
-	glUniform3f(m_lightID, lightPos.x, lightPos.y, lightPos.z);
+	// glm::vec3 lightPos = glm::vec3(225, 8, 225);
+	// glUniform3f(m_lightID, lightPos.x, lightPos.y, lightPos.z);
+
+	// Send array of light positions to shader
+	glUniform3fv(m_lightPositionsID, LIGHT_AMOUNT * sizeof(glm::vec3), &m_lightPositions[0][0]);
 
 	// Update test enemy matrix
-	model_8 = glm::translate(glm::mat4(1.0f), glm::vec3(m_gameWorld->getEnemyPosition().x, 0.0f, m_gameWorld->getEnemyPosition().y));
+	model_8 = glm::translate(glm::mat4(1.0f), glm::vec3(m_gameWorld->getEnemyPosition().x, 3.5f, m_gameWorld->getEnemyPosition().y));
 	model_8 = glm::scale(model_8, glm::vec3(0.5f, 0.5f, 0.5f));
 }
 
@@ -311,6 +322,8 @@ void Game::render()
 
 		glBindVertexArray(wallType1_VAO_ID);		
 
+		glm::vec3 f_offset(0.0f, 50.0f, 0.0f);
+
 		for (int i = 0; i < m_gameWorld->getWallData()->size(); ++i)
 		{
 			if (m_gameWorld->getWallData()->at(i).second == WallType::WALLTYPE_1)
@@ -318,8 +331,31 @@ void Game::render()
 				model_1 = glm::translate(glm::mat4(1.0f), m_gameWorld->getWallData()->at(i).first / s_displayScale);
 				glUniformMatrix4fv(m_modelMatrixID, 1, GL_FALSE, &model_1[0][0]);
 				glDrawArrays(GL_TRIANGLES, 0, wallType1_vertices.size());
+
+				model_1 = glm::translate(glm::mat4(1.0f), (m_gameWorld->getWallData()->at(i).first + f_offset) / s_displayScale);
+				glUniformMatrix4fv(m_modelMatrixID, 1, GL_FALSE, &model_1[0][0]);
+				glDrawArrays(GL_TRIANGLES, 0, wallType1_vertices.size());
+
+				model_1 = glm::translate(glm::mat4(1.0f), (m_gameWorld->getWallData()->at(i).first + (f_offset * 2.0f)) / s_displayScale);
+				glUniformMatrix4fv(m_modelMatrixID, 1, GL_FALSE, &model_1[0][0]);
+				glDrawArrays(GL_TRIANGLES, 0, wallType1_vertices.size());
+
 			}
 		}	
+
+		// Draw floors and ceilings
+		for (int i = 0; i < m_gameWorld->getWallData()->size(); ++i)
+		{
+			// Floor
+			model_1 = glm::translate(glm::mat4(1.0f), (m_gameWorld->getWallData()->at(i).first - f_offset) / s_displayScale);
+			glUniformMatrix4fv(m_modelMatrixID, 1, GL_FALSE, &model_1[0][0]);
+			glDrawArrays(GL_TRIANGLES, 0, wallType1_vertices.size());
+
+			// Ceiling
+			model_1 = glm::translate(glm::mat4(1.0f), (m_gameWorld->getWallData()->at(i).first + (f_offset * 3.0f)) / s_displayScale);
+			glUniformMatrix4fv(m_modelMatrixID, 1, GL_FALSE, &model_1[0][0]);
+			glDrawArrays(GL_TRIANGLES, 0, wallType1_vertices.size());
+		}
 
 		glBindVertexArray(0);
 
