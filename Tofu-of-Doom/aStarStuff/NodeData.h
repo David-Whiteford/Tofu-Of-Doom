@@ -13,5 +13,6 @@ struct NodeData
 	int CostReachGoalH;
 	int m_row, m_col;
 	int m_x, m_y;
+	bool passable;
 
 };

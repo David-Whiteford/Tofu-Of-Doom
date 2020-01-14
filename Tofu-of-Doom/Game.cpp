@@ -61,7 +61,7 @@ void Game::initialise()
 
 	
 	
-	m_gamePath->initAStar();
+	
 	m_ShotDelay = sf::seconds(.7f); // .7f is the length for the reload sound to finish
 	m_vibrateLength = sf::seconds(.1f); // .7f is the length for the reload sound to finish
 	soundEngine = createIrrKlangDevice();
@@ -354,7 +354,7 @@ void Game::render()
 		m_window.pushGLStates();
 		m_gameWorld->drawWorld();
 		m_window.popGLStates();
-		m_gamePath->draw();
+		
 		break;
 
 	case DrawState::GAME:
@@ -543,7 +543,7 @@ void Game::gameControls(sf::Time t_deltaTime)
 	m_eye = m_gameWorld->getCameraPosition();
 
 	// Switch between game and map screen
-	if (camera.controller.backButtonDown() && !backButtonPressed)
+	if (camera.controller.backButtonDown() && !backButtonPressed|| sf::Keyboard::isKeyPressed(sf::Keyboard::M))
 	{
 		backButtonPressed = true;
 	}

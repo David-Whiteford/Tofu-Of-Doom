@@ -24,9 +24,13 @@ GameWorld::GameWorld(sf::RenderWindow &t_window, sf::Time &t_deltaTime, Camera &
 		m_enemies[i].setPosition(100, 100); // Test starting position
 	}
 
+
+
 	// View
 	// m_mapView.setViewport(sf::FloatRect(0.0, 0.0f, 0.25f, 0.25f));
 	m_mapView.setSize(m_window.getSize().x, m_window.getSize().y);
+	//Astar
+	
 
 	// Create an array to store the walls in (for the pause screen map)
 	for (int i = 0; i < m_map->getMap()->size(); ++i)
@@ -41,6 +45,8 @@ GameWorld::GameWorld(sf::RenderWindow &t_window, sf::Time &t_deltaTime, Camera &
 			m_walls.push_back(f_tempWall);
 		}
 	}
+
+	m_gamePath->initAStar(m_walls);
 }
 
 /// <summary>
@@ -56,6 +62,8 @@ GameWorld::~GameWorld()
 /// </summary>
 void GameWorld::updateWorld()
 {
+
+	
 	m_player.setPosition(m_camera.getEye().x * s_displayScale, m_camera.getEye().z * s_displayScale);
 	enemyMove();
 }
@@ -64,55 +72,66 @@ void GameWorld::updateWorld()
 /// Moves the enemy
 /// </summary>
 void GameWorld::enemyMove()
-{		
-	if (m_moveRight == true)
-	{
-		m_enemies.front().setPosition(m_enemies.front().getPosition().x +1.0f , m_enemies.front().getPosition().y);
+{	
+	graphPath = m_gamePath->getGraphPath();
+	sf::Vector2f destination = sf::Vector2f(graphPath.back()->m_data.m_x, graphPath.back()->m_data.m_y);
 
-		if (m_enemies.front().getPosition().x >= 400)
-		{
-			m_down = true;
-			m_moveRight = false;
-		}
-	}
+	sf::Vector2f direction = (destination - m_enemies.front().getPosition());
+	//sf::Vector2f newDirection =
+	
+	
+	
+	
 
-	if (m_down == true)
-	{
-		m_enemies.front().setPosition(m_enemies.front().getPosition().x, m_enemies.front().getPosition().y + 1.0f);
 
-		if (m_enemies.front().getPosition().y >= 400)
-		{
-			m_down = false;
-			m_moveLeft = true;
-		}
-	}
+	//if (m_moveRight == true)
+	//{
+	//	m_enemies.front().setPosition(m_enemies.front().getPosition().x +1.0f , m_enemies.front().getPosition().y);
 
-	if (m_moveLeft == true)
-	{
-		m_enemies.front().setPosition(m_enemies.front().getPosition().x - 1.0f, m_enemies.front().getPosition().y);
+	//	if (m_enemies.front().getPosition().x >= 400)
+	//	{
+	//		m_down = true;
+	//		m_moveRight = false;
+	//	}
+	//}
 
-		if (m_enemies.front().getPosition().x <= 100)
-		{
-			m_moveLeft = false;
-			m_up = true;
-		}
-	}
+	//if (m_down == true)
+	//{
+	//	m_enemies.front().setPosition(m_enemies.front().getPosition().x, m_enemies.front().getPosition().y + 1.0f);
 
-	if (m_up == true)
-	{
-		m_enemies.front().setPosition(m_enemies.front().getPosition().x, m_enemies.front().getPosition().y - 1.0f);
+	//	if (m_enemies.front().getPosition().y >= 400)
+	//	{
+	//		m_down = false;
+	//		m_moveLeft = true;
+	//	}
+	//}
 
-		if (m_enemies.front().getPosition().y <= 100)
-		{
-			m_up = false;
-			m_moveRight = true;
-		}
-	}
+	//if (m_moveLeft == true)
+	//{
+	//	m_enemies.front().setPosition(m_enemies.front().getPosition().x - 1.0f, m_enemies.front().getPosition().y);
 
-	int xPos = m_enemies.back().getPosition().x;
-	std::cout << "xPos" << xPos << std::endl;
-	sf::Vector2f direction = (m_player.getPosition() - m_enemies.back().getPosition());
-	//sf::Vector2f newDirection = Vector3.Normalize(direction);	
+	//	if (m_enemies.front().getPosition().x <= 100)
+	//	{
+	//		m_moveLeft = false;
+	//		m_up = true;
+	//	}
+	//}
+
+	//if (m_up == true)
+	//{
+	//	m_enemies.front().setPosition(m_enemies.front().getPosition().x, m_enemies.front().getPosition().y - 1.0f);
+
+	//	if (m_enemies.front().getPosition().y <= 100)
+	//	{
+	//		m_up = false;
+	//		m_moveRight = true;
+	//	}
+	//}
+
+	//int xPos = m_enemies.back().getPosition().x;
+	//std::cout << "xPos" << xPos << std::endl;
+	//sf::Vector2f direction = (m_player.getPosition() - m_enemies.back().getPosition());
+	////sf::Vector2f newDirection = Vector3.Normalize(direction);	
 }
 
 /// <summary>
@@ -120,19 +139,23 @@ void GameWorld::enemyMove()
 /// </summary>
 void GameWorld::drawWorld()
 {
+	
 	for (int i = 0; i < m_walls.size(); ++i)
 	{
 		m_window.draw(m_walls[i]);
 	}
-
+	
 	m_mapView.setCenter(m_player.getPosition());
 	m_window.setView(m_mapView);
 	m_window.draw(m_player);
+
+	
 
 	for (int i = 0; i < m_enemies.size(); i++)
 	{
 		m_window.draw(m_enemies[i]);
 	}	
+	m_gamePath->draw();
 }
 
 /// <summary>
