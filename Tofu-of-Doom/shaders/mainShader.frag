@@ -15,8 +15,8 @@ uniform sampler2D currentTexture;
 uniform mat4 MV;
 uniform vec3 LightPosition_worldspace;
 
-void main(){
-
+void main()
+{
 	// Light emission properties
 	// You probably want to put them as uniforms
 	vec3 LightColor = vec3(1,1,1);
@@ -24,7 +24,7 @@ void main(){
 	
 	// Material properties
 	vec3 MaterialDiffuseColor = texture( currentTexture, UV ).rgb;
-	vec3 MaterialAmbientColor = vec3(0.1,0.1,0.1) * MaterialDiffuseColor;
+	vec3 MaterialAmbientColor = vec3(0.3,0.3,0.3) * MaterialDiffuseColor;
 	vec3 MaterialSpecularColor = vec3(1,1,1);
 
 	// Distance to the light

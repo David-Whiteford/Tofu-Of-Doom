@@ -193,7 +193,10 @@ private:
 	std::vector<glm::vec3> pistol_normals;
 
 	// Shader IDs
+	const static int LIGHT_AMOUNT = 5;
 	GLuint m_lightID;
+	GLuint m_lightPositionsID;
+	std::vector<glm::vec3> m_lightPositions;
 	GLuint m_modelMatrixID;
 	GLuint m_viewMatrixID;
 	GLuint m_projectionMatrixID;	
@@ -239,6 +242,8 @@ private:
 	bool m_buttonPressed = false;
 	//Player Camera
 	Camera camera;
+
+	void fireGun();
 };
 
 #endif // !GAME_H

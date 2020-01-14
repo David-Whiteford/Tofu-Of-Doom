@@ -75,7 +75,11 @@
     <ClCompile Include="EnemyState.cpp">
       <Filter>Source Files\StateMachine\FSM</Filter>
     </ClCompile>
+<<<<<<< HEAD
     <ClCompile Include="Path.cpp">
+=======
+    <ClCompile Include="ShotTrajectory.cpp">
+>>>>>>> a54f45c8355975d68d50577634c884c4cb167ae8
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -218,8 +222,25 @@
     <ClInclude Include="aStarStuff\NodeData.h">
       <Filter>Header Files\AStar</Filter>
     </ClInclude>
+<<<<<<< HEAD
     <ClInclude Include="Path.h">
       <Filter>Header Files\AStar</Filter>
     </ClInclude>
+=======
+    <ClInclude Include="ShotTrajectory.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="shaders\mainShader.frag">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="shaders\mainShader.vert">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="shaders\mainShaderMultipleLights.frag">
+      <Filter>Source Files</Filter>
+    </None>
+>>>>>>> a54f45c8355975d68d50577634c884c4cb167ae8
   </ItemGroup>
 </Project>

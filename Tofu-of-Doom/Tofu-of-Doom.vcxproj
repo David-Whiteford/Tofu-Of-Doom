@@ -37,6 +37,7 @@
     <ClCompile Include="ModelLoader.cpp" />
     <ClCompile Include="Path.cpp" />
     <ClCompile Include="Shader.cpp" />
+    <ClCompile Include="ShotTrajectory.cpp" />
     <ClCompile Include="Transform.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -81,12 +82,21 @@
     <ClInclude Include="Map.h" />
     <ClInclude Include="ModelLoader.h" />
     <ClInclude Include="Game.h" />
+<<<<<<< HEAD
     <ClInclude Include="Path.h" />
+=======
+    <ClInclude Include="ShotTrajectory.h" />
+>>>>>>> a54f45c8355975d68d50577634c884c4cb167ae8
     <ClInclude Include="Transform.h" />
     <ClInclude Include="WallType.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="stb_image.h" />
     <ClInclude Include="XInput.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="shaders\mainShader.frag" />
+    <None Include="shaders\mainShader.vert" />
+    <None Include="shaders\mainShaderMultipleLights.frag" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
@@ -145,10 +155,10 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>C:\SFML-2.5.1\include;C:\SFML-2.5.1-windows-vc15-32-bit\SFML-2.5.1\include;$(SFML_SDK)\include; .\include; </AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\SFML-2.5.1-windows-vc15-32-bit\SFML-2.5.1\include;$(SFML_SDK)\include; .\include; </AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <AdditionalLibraryDirectories>C:\SFML-2.5.1\lib;C:\SFML-2.5.1-windows-vc15-32-bit\SFML-2.5.1\lib;$(SFML_SDK)\lib;libs\glew;</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\SFML-2.5.1-windows-vc15-32-bit\SFML-2.5.1\lib;$(SFML_SDK)\lib;libs\glew;</AdditionalLibraryDirectories>
       <AdditionalDependencies>sfml-graphics-d.lib;sfml-window-d.lib;sfml-system-d.lib;opengl32.lib;glew32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>

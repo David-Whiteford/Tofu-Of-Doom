@@ -12,6 +12,13 @@ GameWorld::GameWorld(sf::RenderWindow &t_window, sf::Time &t_deltaTime, Camera &
 	m_player.setFillColor(sf::Color::Blue);
 	m_player.setOrigin(sf::Vector2f(25.0f, 25.0f));
 	m_player.setPosition(m_camera.getEye().x, m_camera.getEye().z); // Test starting position
+
+	m_playerGun.setRadius(5.0f);
+	m_playerGun.setFillColor(sf::Color::Red);
+	m_playerGun.setOrigin(sf::Vector2f(5, 5));
+	m_playerGun.setPosition(m_camera.getEye().x, m_camera.getEye().z + 5); // Test starting position
+
+
 	// m_eye = glm::vec3(m_player.getPosition().x, 2.0f, m_player.getPosition().y);
 	m_enemies.push_back(m_enemy);
 	m_enemies.push_back(m_enemy);	
@@ -65,6 +72,8 @@ void GameWorld::updateWorld()
 
 	
 	m_player.setPosition(m_camera.getEye().x * s_displayScale, m_camera.getEye().z * s_displayScale);
+	setGunPosition();
+
 	enemyMove();
 }
 
@@ -148,6 +157,7 @@ void GameWorld::drawWorld()
 	m_mapView.setCenter(m_player.getPosition());
 	m_window.setView(m_mapView);
 	m_window.draw(m_player);
+	m_window.draw(m_playerGun);
 
 	
 
@@ -204,5 +214,19 @@ double GameWorld::getYaw()
 std::vector<std::pair<glm::vec3, WallType>> *GameWorld::getWallData()
 {
 	return m_map->getMap();
+}
+
+void GameWorld::setGunPosition()
+{
+	glm::vec3 tempDirection(m_camera.getDirection().x, m_camera.getDirection().y, m_camera.getDirection().z);
+	glm::normalize(tempDirection);
+	glm::vec3 offsetPos = tempDirection * -2.0f;
+
+	sf::Vector2f position = sf::Vector2f((offsetPos.x + m_camera.transform.position.x) * s_displayScale,
+		(offsetPos.z + m_camera.transform.position.z) * s_displayScale);
+
+	// gun position equals z + 5 normalised 
+
+	m_playerGun.setPosition(sf::Vector2f(position.x, position.y));
 }
 
