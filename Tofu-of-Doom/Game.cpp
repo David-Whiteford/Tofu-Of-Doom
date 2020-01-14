@@ -230,10 +230,10 @@ void Game::update(sf::Time t_deltaTime)
 
 	//======DEBUG COLLISION ====//
 	// system("cls");
-	std::cout << "Player: " << "x: " << camera.collider.bounds.x1 <<
+	/*std::cout << "Player: " << "x: " << camera.collider.bounds.x1 <<
 		"y: " << camera.collider.bounds.y1 << " x2: " << camera.collider.bounds.x2 << " y2: " << camera.collider.bounds.y2 << std::endl;
 	std::cout << "cube: " << "x: " << cubeCollider.bounds.x1 <<
-		"y: " << cubeCollider.bounds.y1 << " x2: " << cubeCollider.bounds.x2 << " y2: " << cubeCollider.bounds.y2 << std::endl;
+		"y: " << cubeCollider.bounds.y1 << " x2: " << cubeCollider.bounds.x2 << " y2: " << cubeCollider.bounds.y2 << std::endl;*/
 	if (Collider2D::isColliding(camera.collider.bounds, cubeCollider.bounds))
 	{
 		std::cout << "Working" << std::endl;
