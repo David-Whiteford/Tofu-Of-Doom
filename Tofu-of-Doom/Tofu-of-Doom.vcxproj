@@ -35,6 +35,7 @@
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Map.cpp" />
     <ClCompile Include="ModelLoader.cpp" />
+    <ClCompile Include="Path.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="ShotTrajectory.cpp" />
     <ClCompile Include="Transform.cpp" />
@@ -81,6 +82,7 @@
     <ClInclude Include="Map.h" />
     <ClInclude Include="ModelLoader.h" />
     <ClInclude Include="Game.h" />
+    <ClInclude Include="Path.h" />
     <ClInclude Include="ShotTrajectory.h" />
     <ClInclude Include="Transform.h" />
     <ClInclude Include="WallType.h" />

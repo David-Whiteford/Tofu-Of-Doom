@@ -8,7 +8,7 @@
 
 #include <SFML/Graphics.hpp>
 #include <SFML/OpenGL.hpp>
-
+#include "Path.h"
 #include "Map.h"
 #include "DisplayScale.h"
 #include "Camera.h"
@@ -33,7 +33,9 @@ public:
 	std::vector<std::pair<glm::vec3, WallType>> *getWallData();
 
 private:
+	std::vector<Node*> graphPath;
 	sf::RenderWindow &m_window;
+	Path* m_gamePath = new Path(m_window);
 	Camera &m_camera;
 	Map *m_map = new Map();
 	sf::View m_mapView;

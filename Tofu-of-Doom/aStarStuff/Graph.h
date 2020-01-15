@@ -59,7 +59,7 @@ public:
     void breadthFirst( Node* node, std::function<void(Node *)> f_visit);
 	void adaptedBreadthFirst( Node* current, Node* goal);
 	void ucs(Node* start, Node* dest, std::function<void(Node*)> f_visit, std::vector<Node*>& path);
-	void aStar(Node* start, Node* dest, std::function<void(Node*)> f_visit, std::vector<Node*>& path);
+	void aStar(Node* start, Node* dest,  std::vector<Node*>& path);
 private:
 	
 
@@ -459,18 +459,23 @@ inline void Graph<NodeType, ArcType>::ucs(Node* start, Node* dest, std::function
 }
 
 template<class NodeType, class ArcType>
-inline void Graph<NodeType, ArcType>::aStar(Node* start, Node* dest, std::function<void(Node*)> f_visit, std::vector<Node*>& path)
+inline void Graph<NodeType, ArcType>::aStar(Node* start, Node* dest , std::vector<Node*>& path)
 {
 	Node* startingNode = start;
 	Node* goalNode = dest;
 	std::priority_queue<Node*, std::vector<Node*>, NodeSearchCostComparer<NodeType, ArcType>> pq;
 	
-	
+	int index = 0;
 	for (auto node : m_nodes)
-	{		//dont forget to square the values
-		node->m_data.CostReachGoalH = std::sqrt((node->m_data.x - dest->m_data.x , 2) * (node->m_data.x - dest->m_data.x, 2)
-			+ (node->m_data.y - dest->m_data.y , 2) * (node->m_data.y - dest->m_data.y, 2));
+	{		
+		if (node == nullptr)
+		{
+			std::cout << "index of null node: " << index << std::endl;
+		}
+		node->m_data.CostReachGoalH = std::sqrt((node->m_data.m_x - dest->m_data.m_x , 2) * (node->m_data.m_x - dest->m_data.m_x, 2)
+			+ (node->m_data.m_y - dest->m_data.m_y, 2) * (node->m_data.m_y - dest->m_data.m_y, 2));
 		node->m_data.pathCost = std::numeric_limits<int>::max();	
+		index++;
 	}
 	startingNode->m_data.pathCost = 0;
 	dest->m_data.CostReachGoalH = 0;
@@ -481,7 +486,7 @@ inline void Graph<NodeType, ArcType>::aStar(Node* start, Node* dest, std::functi
 	while (pq.size() != 0 && pq.top() != goalNode)
 	{
 
-		f_visit(pq.top());
+		
 		//f_visit(pq.top());
 		auto iter = pq.top()->arcList().begin();
 		auto endIter = pq.top()->arcList().end();

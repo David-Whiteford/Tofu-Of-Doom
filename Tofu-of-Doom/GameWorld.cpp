@@ -48,6 +48,8 @@ GameWorld::GameWorld(sf::RenderWindow &t_window, sf::Time &t_deltaTime, Camera &
 			m_walls.push_back(f_tempWall);
 		}
 	}
+	//Astar
+	m_gamePath->initAStar(m_walls);
 }
 
 /// <summary>
@@ -73,7 +75,13 @@ void GameWorld::updateWorld()
 /// Moves the enemy
 /// </summary>
 void GameWorld::enemyMove()
-{		
+{
+
+	//graphPath = m_gamePath->getGraphPath();
+	//sf::Vector2f destination = sf::Vector2f(graphPath.back()->m_data.m_x, graphPath.back()->m_data.m_y);
+
+	//sf::Vector2f direction = (destination - m_enemies.front().getPosition());
+	////sf::Vector2f newDirection =
 	if (m_moveRight == true)
 	{
 		m_enemies.front().setPosition(m_enemies.front().getPosition().x +1.0f , m_enemies.front().getPosition().y);
@@ -143,6 +151,7 @@ void GameWorld::drawWorld()
 	{
 		m_window.draw(m_enemies[i]);
 	}	
+	m_gamePath->draw();
 }
 
 /// <summary>
