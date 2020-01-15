@@ -52,7 +52,7 @@ void Path::neighbourAlgor(int nodeIndex)
 								graph->addArc(nodeIndex, index, m_nodeSize);
 								// Add an arc from cell id 24 to cell id arr[n_row][n_col] 
 								// A valid neighbor:
-								std::cout << "Neighbor: " << n_row << "," << n_col << ": " << arr[n_row][n_col] << std::endl;
+								//std::cout << "Neighbor: " << n_row << "," << n_col << ": " << arr[n_row][n_col] << std::endl;
 							}
 							index++;
 						}
@@ -104,7 +104,7 @@ void Path::initAStar(std::vector<sf::RectangleShape> t_walls)
 	}
 	nodeIndex = 0;
 	neighbourAlgor(nodeIndex);
-	graph->aStar(graph->nodeIndex(0), graph->nodeIndex(29), graphPath);
+	graph->aStar(graph->nodeIndex(0), graph->nodeIndex(55), graphPath);
 
 }
 

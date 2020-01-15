@@ -5,13 +5,14 @@
 #include "libs/glew/wglew.h"
 #include "libs/glm/glm.hpp"
 #include "libs/glm/gtc/matrix_transform.hpp"
-
+#include "Vector2.h"
 #include <SFML/Graphics.hpp>
 #include <SFML/OpenGL.hpp>
 #include "Path.h"
 #include "Map.h"
 #include "DisplayScale.h"
 #include "Camera.h"
+#include "Transform.h"
 
 class GameWorld
 {
@@ -23,7 +24,7 @@ public:
 	void drawWorld();
 	void drawBulletTrajectory();
 
-
+	
 	sf::Vector2f getPlayerPosition();
 	sf::Vector2f getEnemyPosition();
 	glm::vec3 getCameraPosition();
@@ -33,6 +34,9 @@ public:
 	std::vector<std::pair<glm::vec3, WallType>> *getWallData();
 
 private:
+
+	Transform m_transform;
+	
 	std::vector<Node*> graphPath;
 	sf::RenderWindow &m_window;
 	Path* m_gamePath = new Path(m_window);
@@ -40,7 +44,7 @@ private:
 	Map *m_map = new Map();
 	sf::View m_mapView;
 	std::vector<std::pair<glm::vec3, WallType>> m_wallPositions;
-
+	sf::Vector2f m_newPosition;
 	void setGunPosition();
 
 	sf::CircleShape m_player;

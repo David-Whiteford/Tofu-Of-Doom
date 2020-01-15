@@ -12,7 +12,7 @@ GameWorld::GameWorld(sf::RenderWindow &t_window, sf::Time &t_deltaTime, Camera &
 	m_player.setFillColor(sf::Color::Blue);
 	m_player.setOrigin(sf::Vector2f(25.0f, 25.0f));
 	m_player.setPosition(m_camera.getEye().x, m_camera.getEye().z); // Test starting position
-
+	m_newPosition = sf::Vector2f(0, 0);
 	m_playerGun.setRadius(5.0f);
 	m_playerGun.setFillColor(sf::Color::Red);
 	m_playerGun.setOrigin(sf::Vector2f(5, 5));
@@ -77,59 +77,70 @@ void GameWorld::updateWorld()
 void GameWorld::enemyMove()
 {
 
-	//graphPath = m_gamePath->getGraphPath();
-	//sf::Vector2f destination = sf::Vector2f(graphPath.back()->m_data.m_x, graphPath.back()->m_data.m_y);
+	graphPath = m_gamePath->getGraphPath();
+	
 
-	//sf::Vector2f direction = (destination - m_enemies.front().getPosition());
-	////sf::Vector2f newDirection =
-	if (m_moveRight == true)
-	{
-		m_enemies.front().setPosition(m_enemies.front().getPosition().x +1.0f , m_enemies.front().getPosition().y);
 
-		if (m_enemies.front().getPosition().x >= 400)
-		{
-			m_down = true;
-			m_moveRight = false;
-		}
-	}
+	
+	//float distance = Transform::distance(m_enemies.front().transform graphPath.back()->m_data.m_x;
+	//// works
 
-	if (m_down == true)
-	{
-		m_enemies.front().setPosition(m_enemies.front().getPosition().x, m_enemies.front().getPosition().y + 1.0f);
+	//moveTo = this.transform.moveTowards(this.transform.position.get(), this.player.transform.position.get(), this.speed);
 
-		if (m_enemies.front().getPosition().y >= 400)
-		{
-			m_down = false;
-			m_moveLeft = true;
-		}
-	}
 
-	if (m_moveLeft == true)
-	{
-		m_enemies.front().setPosition(m_enemies.front().getPosition().x - 1.0f, m_enemies.front().getPosition().y);
+	//this.transform.position.setPosition(this.moveTo);
 
-		if (m_enemies.front().getPosition().x <= 100)
-		{
-			m_moveLeft = false;
-			m_up = true;
-		}
-	}
 
-	if (m_up == true)
-	{
-		m_enemies.front().setPosition(m_enemies.front().getPosition().x, m_enemies.front().getPosition().y - 1.0f);
+	graphPath.pop_back();
+	
+	//if (m_moveRight == true)
+	//{
+	//	m_enemies.front().setPosition(m_enemies.front().getPosition().x +1.0f , m_enemies.front().getPosition().y);
 
-		if (m_enemies.front().getPosition().y <= 100)
-		{
-			m_up = false;
-			m_moveRight = true;
-		}
-	}
+	//	if (m_enemies.front().getPosition().x >= 400)
+	//	{
+	//		m_down = true;
+	//		m_moveRight = false;
+	//	}
+	//}
 
-	int xPos = m_enemies.back().getPosition().x;
-	std::cout << "xPos" << xPos << std::endl;
-	sf::Vector2f direction = (m_player.getPosition() - m_enemies.back().getPosition());
-	//sf::Vector2f newDirection = Vector3.Normalize(direction);	
+	//if (m_down == true)
+	//{
+	//	m_enemies.front().setPosition(m_enemies.front().getPosition().x, m_enemies.front().getPosition().y + 1.0f);
+
+	//	if (m_enemies.front().getPosition().y >= 400)
+	//	{
+	//		m_down = false;
+	//		m_moveLeft = true;
+	//	}
+	//}
+
+	//if (m_moveLeft == true)
+	//{
+	//	m_enemies.front().setPosition(m_enemies.front().getPosition().x - 1.0f, m_enemies.front().getPosition().y);
+
+	//	if (m_enemies.front().getPosition().x <= 100)
+	//	{
+	//		m_moveLeft = false;
+	//		m_up = true;
+	//	}
+	//}
+
+	//if (m_up == true)
+	//{
+	//	m_enemies.front().setPosition(m_enemies.front().getPosition().x, m_enemies.front().getPosition().y - 1.0f);
+
+	//	if (m_enemies.front().getPosition().y <= 100)
+	//	{
+	//		m_up = false;
+	//		m_moveRight = true;
+	//	}
+	//}
+
+	//int xPos = m_enemies.back().getPosition().x;
+	//std::cout << "xPos" << xPos << std::endl;
+	//sf::Vector2f direction = (m_player.getPosition() - m_enemies.back().getPosition());
+	////sf::Vector2f newDirection = Vector3.Normalize(direction);	
 }
 
 /// <summary>

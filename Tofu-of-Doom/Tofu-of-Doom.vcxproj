@@ -39,6 +39,7 @@
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="ShotTrajectory.cpp" />
     <ClCompile Include="Transform.cpp" />
+    <ClCompile Include="Vector2.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="aStarStuff\Graph.h" />
@@ -85,6 +86,7 @@
     <ClInclude Include="Path.h" />
     <ClInclude Include="ShotTrajectory.h" />
     <ClInclude Include="Transform.h" />
+    <ClInclude Include="Vector2.h" />
     <ClInclude Include="WallType.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="stb_image.h" />

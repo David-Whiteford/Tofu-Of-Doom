@@ -89,3 +89,26 @@ float Transform::angleBetween(Position& pos_1, Position& pos_2)
 {
 	return std::acos(dotProduct(pos_1, pos_2) / distance(pos_1, pos_2));
 }
+
+Transform::Position Transform::moveTowards(Position t_position, Position t_targetPosition , float maxDistance)
+{
+
+	float toVecX = t_targetPosition.x - t_position.x;
+	float toVecY = t_targetPosition.y - t_position.y;
+
+	float squaredDistance = toVecX * toVecX + toVecY * toVecY;
+
+	if (squaredDistance == 0 || maxDistance >= 0
+		&& squaredDistance <= maxDistance * maxDistance)
+	{
+		return t_targetPosition;
+
+	}
+	float dist = std::sqrt(squaredDistance);
+	Position pos;
+	pos.x = t_position.x + toVecX / dist * maxDistance;
+	pos.y = t_position.y + toVecY / dist * maxDistance;
+	pos.z = 0;
+	return pos;
+}
+
