@@ -13,6 +13,7 @@
 #include "DisplayScale.h"
 #include "Camera.h"
 #include "Transform.h"
+#include "Vector2.h"
 
 class GameWorld
 {
@@ -23,7 +24,7 @@ public:
 	void enemyMove();
 	void drawWorld();
 	void drawBulletTrajectory();
-
+	float Pi = 3.14;
 	
 	sf::Vector2f getPlayerPosition();
 	sf::Vector2f getEnemyPosition();
@@ -34,9 +35,10 @@ public:
 	std::vector<std::pair<glm::vec3, WallType>> *getWallData();
 
 private:
-
+	MyVector2 vector2;
 	Transform m_transform;
-	
+	Transform::Position enemyPos;
+	Transform::Position graphPos;
 	std::vector<Node*> graphPath;
 	sf::RenderWindow &m_window;
 	Path* m_gamePath = new Path(m_window);
@@ -58,10 +60,12 @@ private:
 	double m_yaw{ 0.0 }; // Look left and right (in degrees)
 	double m_pitch{ 0.0 }; // Look up and down (in degrees)
 	glm::vec4 m_direction{ 0.f, 0.f, 1.f, 0.f };
-
+	double const DEG_TO_RAD = Pi / 180.0f;
 	glm::mat4 m_rotationMatrix;
 	sf::Time &m_deltaTime;
 	float m_speed{ 20.0f };
+	float m_speedEn{ 1.1f };
+	int m_radius = 5;
 	float m_wallCubeSize{ 5.0f }; // This is the value of the wall cube's x, y, and z.
 
 	bool m_moveRight{ true };

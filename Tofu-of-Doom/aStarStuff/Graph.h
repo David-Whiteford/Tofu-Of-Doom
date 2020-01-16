@@ -483,7 +483,7 @@ inline void Graph<NodeType, ArcType>::aStar(Node* start, Node* dest , std::vecto
 	pq.push(startingNode);
 	startingNode->setMarked(true);
 
-	while (pq.size() != 0 && pq.top() != goalNode)
+	while (pq.size() != 0 && pq.top() != goalNode /**&& timer not expired*/)
 	{
 
 		
@@ -494,7 +494,7 @@ inline void Graph<NodeType, ArcType>::aStar(Node* start, Node* dest , std::vecto
 		for (; iter != endIter; iter++)
 		{
 			Arc arc = (*iter);
-
+			
 			if (arc.node() != pq.top()->previous())
 			{
 				// distC is the cost so far to pq.top + weight of arc from pq.top to this child
@@ -519,7 +519,7 @@ inline void Graph<NodeType, ArcType>::aStar(Node* start, Node* dest , std::vecto
 	while (currentNode != nullptr)
 	{
 		path.push_back(currentNode);
-		std::cout << currentNode->m_data.m_name << std::endl;
+		std::cout << "Node In Astar " << currentNode->m_data.m_name << std::endl;
 		currentNode = currentNode->previous();
 	}
 

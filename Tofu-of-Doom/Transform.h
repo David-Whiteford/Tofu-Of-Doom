@@ -8,6 +8,7 @@
 
 class Transform
 {
+public:
 	typedef struct Position
 	{
 		float x = 0;
@@ -16,15 +17,14 @@ class Transform
 	};
 
 
-public:
 
 
-	static float distance(Position& pos_1, Position& pos_2);
+	static float distance(sf::Vector2f pos_1, sf::Vector2f pos_2);
 	//static float length(Position& pos);
 	static float dotProduct(Position& pos_1, Position& pos_2);
 	static float angleBetween(Position& pos_1, Position& pos_2);
 	static float normalise(Position&);
-	static Position moveTowards(Position t_position, Position t_targetPosition , float maxDistance);
+	static sf::Vector2f moveTowards(sf::Vector2f t_position, sf::Vector2f t_targetPosition , float maxDistance);
 
 	Position position;
 

@@ -28,7 +28,7 @@ void Path::neighbourAlgor(int nodeIndex)
 	{
 		for (int j = 0; j < COLS; j++)
 		{
-			std::cout << "NAme " << arr[i][j] << std::endl;
+			
 
 			// L neighbors Algorithm:
 			for (int direction = 0; direction < 9; direction++)
@@ -104,7 +104,7 @@ void Path::initAStar(std::vector<sf::RectangleShape> t_walls)
 	}
 	nodeIndex = 0;
 	neighbourAlgor(nodeIndex);
-	graph->aStar(graph->nodeIndex(0), graph->nodeIndex(55), graphPath);
+	graph->aStar(graph->nodeIndex(0), graph->nodeIndex(105), graphPath);
 
 }
 

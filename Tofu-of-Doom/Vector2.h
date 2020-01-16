@@ -30,13 +30,13 @@ public:
 
 	// negative of a vector 
 	MyVector2 operator -();
-	double length()const;
+	double length(sf::Vector2f t_pos)const;
 	double lengthSquared()const;
 	double dot(const MyVector2 t_other) const;
 	//MyVector3 crossProduct(const MyVector3 t_other)const;
 	double angleBetween(const MyVector2 t_other)const;
 	MyVector2 unit() const;
-	void normalise(); 
+	sf::Vector2f normalise(sf::Vector2f t_pos);
 	MyVector2 projection(const MyVector2 t_other)const;
 	// projection of other onto the current vector so answer will parralell to current vector.
 	MyVector2 rejection(const MyVector2 t_other)const;

@@ -76,22 +76,22 @@ void GameWorld::updateWorld()
 /// </summary>
 void GameWorld::enemyMove()
 {
-
+	
 	graphPath = m_gamePath->getGraphPath();
-	
+	std::cout << "Node" << graphPath.back()->m_data.m_name << std::endl;
+	sf::Vector2f graphPathVec = sf::Vector2f(graphPath.back()->m_data.m_x, graphPath.back()->m_data.m_y);
+	float dist = m_transform.distance(m_enemies.front().getPosition(), graphPathVec);
+	sf::Vector2f moveTo = m_transform.moveTowards(m_enemies.front().getPosition(), graphPathVec, m_speedEn);
 
+	m_enemies.front().setPosition(moveTo);
 
-	
-	//float distance = Transform::distance(m_enemies.front().transform graphPath.back()->m_data.m_x;
-	//// works
+	if (m_enemies.front().getPosition().x == graphPath.back()->m_data.m_x  &&
+		m_enemies.front().getPosition().y == graphPath.back()->m_data.m_y )
+	{
+		std::cout << "Pop graph vec" << graphPath.size();
+		graphPath.pop_back();
+	}
 
-	//moveTo = this.transform.moveTowards(this.transform.position.get(), this.player.transform.position.get(), this.speed);
-
-
-	//this.transform.position.setPosition(this.moveTo);
-
-
-	graphPath.pop_back();
 	
 	//if (m_moveRight == true)
 	//{
