@@ -119,7 +119,7 @@ void GameWorld::enemyMove()
 	}
 
 	int xPos = m_enemies.back().getPosition().x;
-	std::cout << "xPos" << xPos << std::endl;
+	//std::cout << "xPos" << xPos << std::endl;
 	sf::Vector2f direction = (m_player.getPosition() - m_enemies.back().getPosition());
 	//sf::Vector2f newDirection = Vector3.Normalize(direction);	
 }

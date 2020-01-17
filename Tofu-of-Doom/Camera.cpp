@@ -30,6 +30,54 @@ float Camera::getYaw()
 	return float(m_yaw);
 }
 
+void Camera::setCameraShake(bool t_bool)
+{
+	cameraShaking = t_bool;
+}
+
+void Camera::cameraShake()
+{
+	if (cameraShaking)
+	{
+		if (cameraShakeUp)
+		{
+			m_pitch += cameraShakeSpeed;
+
+			if (m_pitch >= cameraShakeMax)
+			{
+				cameraShakeUp = false;
+			}
+		}
+		else
+		{
+			m_pitch -= cameraShakeSpeed;
+
+			if (m_pitch <= 0)
+			{
+				m_pitch = 0;
+				cameraShaking = false;
+				cameraShakeUp = true;
+			}
+		}
+	} // end camerashaking = true
+
+}
+
+bool Camera::isCameraShaking()
+{
+	return cameraShaking;
+}
+
+void Camera::setCameraShakeSpeed(float t_speed)
+{
+	cameraShakeSpeed = t_speed;
+}
+
+void Camera::setCameraShakeMax(float t_max)
+{
+	cameraShakeMax = t_max;
+}
+
 glm::vec3 Camera::getEye()
 {
 	return m_eye;

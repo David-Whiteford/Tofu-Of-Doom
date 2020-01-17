@@ -107,7 +107,7 @@ void Game::initialise()
 			//graph->addArc(1, 2, 10);
 			// Add an arc from cell id 24 to cell id arr[n_row][n_col] 
 			// A valid neighbor:
-			std::cout << "Neighbor: " << n_row << "," << n_col << ": " << arr[n_row][n_col] << std::endl;
+			//std::cout << "Neighbor: " << n_row << "," << n_col << ": " << arr[n_row][n_col] << std::endl;
 		}
 	}
 
@@ -236,7 +236,7 @@ void Game::update(sf::Time t_deltaTime)
 		"y: " << cubeCollider.bounds.y1 << " x2: " << cubeCollider.bounds.x2 << " y2: " << cubeCollider.bounds.y2 << std::endl;*/
 	if (Collider2D::isColliding(camera.collider.bounds, cubeCollider.bounds))
 	{
-		std::cout << "Working" << std::endl;
+	//	std::cout << "Working" << std::endl;
 	}
 
 	//update the zombie sound position to follow test zombie
@@ -249,6 +249,7 @@ void Game::update(sf::Time t_deltaTime)
 	camera.transform.position.x = camera.getEye().x;
 	camera.transform.position.y = camera.getEye().y;
 	camera.transform.position.z = camera.getEye().z;
+
 
 	fireGun();
 
@@ -668,6 +669,11 @@ void Game::fireGun()
 			m_time = sf::Time::Zero;
 			m_time = m_time.Zero;
 
+			if (camera.isCameraShaking() == false)
+			{
+				camera.setCameraShake(true);
+			}
+
 			vibrate = true;
 			camera.controller.Vibrate(65535, 65535);
 
@@ -684,6 +690,11 @@ void Game::fireGun()
 			m_time = sf::Time::Zero;
 			m_time = m_time.Zero;
 
+			if (camera.isCameraShaking() == false)
+			{
+				camera.setCameraShake(true);
+			}
+
 			vibrate = true;
 			camera.controller.Vibrate(65535, 65535);
 
@@ -695,10 +706,15 @@ void Game::fireGun()
 		// Fire a shot with chosen gun
 		if (camera.controller.aButton())
 		{
+
 			gunSoundEngine->play2D(shotgunQueue.front());
 			m_time = sf::Time::Zero;
 			m_time = m_time.Zero;
 
+			if (camera.isCameraShaking() == false)
+			{
+				camera.setCameraShake(true);
+			}
 			vibrate = true;
 			camera.controller.Vibrate(65535, 65535);
 
@@ -728,9 +744,23 @@ void Game::fireGun()
 				gunNum = 1;
 			}
 
+			if (gunNum % 2 == 0)
+			{
+				camera.setCameraShakeMax(8);
+				camera.setCameraShakeSpeed(2);
+			}
+			else
+			{
+				camera.setCameraShakeMax(4);
+				camera.setCameraShakeSpeed(2);
+			}
+
 			yButtonPressed = false;
 		}
 	}
+
+
+	camera.cameraShake();
 }
 
 void Game::moveEnemy(glm::mat4& t_gunMatrix)
