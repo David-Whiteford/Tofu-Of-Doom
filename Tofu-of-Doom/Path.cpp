@@ -48,6 +48,7 @@ void Path::neighbourAlgor(int nodeIndex)
 							if (graph->nodeIndex(index)->m_data.m_row == n_row && graph->nodeIndex(index)->m_data.m_col == n_col)
 							{
 								graph->addArc(nodeIndex, index, m_nodeSize);
+								
 								// Add an arc from cell id 24 to cell id arr[n_row][n_col] 
 								// A valid neighbor:
 								//std::cout << "Neighbor: " << n_row << "," << n_col << ": " <<arr[n_row][n_col]<< std::endl;
@@ -97,7 +98,8 @@ void Path::initAStar(std::vector<sf::RectangleShape> t_walls)
 				if (m_nodeShape[nodeIndex].getGlobalBounds().intersects(wall.getGlobalBounds()))
 				{
 					m_nodeShape[nodeIndex].setFillColor(sf::Color(sf::Color::Black));
-					nodeData.passable = false;
+					graph->nodeIndex(nodeIndex)->m_data.passable = false;
+					
 				}
 
 			}
