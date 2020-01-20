@@ -10,6 +10,7 @@ void Bullet::bulletInit(sf::Vector2f t_dir, float t_aliveAt, sf::Vector2f t_star
 	m_bulletShape.setRadius(5);
 
 	m_time = m_time.Zero;
+	m_aliveAt = 0;
 	setActive(true);
 
 
@@ -58,9 +59,9 @@ void Bullet::setPosition(sf::Vector2f t_pos)
 
 bool Bullet::checkCollision(sf::Vector2f t_enemyPos, float t_radius)
 {
-	float dist = std::pow((m_position.x - t_enemyPos.x), 2) + std::pow((m_position.y - t_enemyPos.y), 2);
+	float dist = std::pow((m_bulletShape.getPosition().x - t_enemyPos.x), 2) + std::pow((m_bulletShape.getPosition().y - t_enemyPos.y), 2);
 
-	if (dist <= 25.0f + m_radius)
+	if (dist <= (t_radius + m_radius) * (t_radius + m_radius))
 	{
 		return true;
 	}
@@ -69,10 +70,11 @@ bool Bullet::checkCollision(sf::Vector2f t_enemyPos, float t_radius)
 
 void Bullet::update()
 {
+	m_aliveAt++;
 	m_position -= m_direction * speed;
 	m_bulletShape.setPosition(m_position);
 
-	if (m_timeToLive + m_aliveAt < m_time.asSeconds())
+	if ( m_aliveAt > 1000)
 	{
 		m_alive = false;
 	}

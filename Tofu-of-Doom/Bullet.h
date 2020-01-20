@@ -51,7 +51,7 @@ private:
 
 	sf::CircleShape m_bulletShape;
 
-	float m_aliveAt = 0;
+	int m_aliveAt = 0;
 	float m_timeToLive = 5;
 
 	float speed = 25;
