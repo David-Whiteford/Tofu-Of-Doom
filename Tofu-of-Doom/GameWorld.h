@@ -51,6 +51,7 @@ private:
 
 
 	std::vector<sf::CircleShape> m_enemies;
+
 	std::vector<sf::RectangleShape> m_walls;
 
 	glm::vec3 m_eye; // Current camera position

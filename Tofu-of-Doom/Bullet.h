@@ -31,6 +31,8 @@ public:
 	void setDirection(sf::Vector2f t_dir);
 	void setPosition(sf::Vector2f t_pos);
 
+	bool checkCollision(sf::Vector2f t_enemyPos, float t_radius);
+
 	void update();
 
 	sf::CircleShape bulletSprite();

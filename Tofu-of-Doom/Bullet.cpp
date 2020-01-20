@@ -56,10 +56,22 @@ void Bullet::setPosition(sf::Vector2f t_pos)
 	m_position = t_pos;
 }
 
+bool Bullet::checkCollision(sf::Vector2f t_enemyPos, float t_radius)
+{
+	float dist = std::pow((m_position.x - t_enemyPos.x), 2) + std::pow((m_position.y - t_enemyPos.y), 2);
+
+	if (dist <= 25.0f + m_radius)
+	{
+		return true;
+	}
+	return false;
+}
+
 void Bullet::update()
 {
 	m_position -= m_direction * speed;
 	m_bulletShape.setPosition(m_position);
+
 	if (m_timeToLive + m_aliveAt < m_time.asSeconds())
 	{
 		m_alive = false;

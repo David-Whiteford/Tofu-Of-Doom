@@ -73,6 +73,15 @@ void GameWorld::updateWorld()
 		if (bullets[i].isActive())
 		{
 			bullets[i].update();
+
+			for (int x = 0; x < 2; x++)
+			{
+				if (bullets[i].checkCollision(m_enemies.at(x).getPosition(), m_enemies[x].getRadius()))
+				{
+					m_enemies[x].setPosition(0, 0);
+					bullets[i].setActive(false);
+				}
+			}
 		}
 	}
 }
