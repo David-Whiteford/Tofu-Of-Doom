@@ -67,6 +67,14 @@ void GameWorld::updateWorld()
 	setGunPosition();
 
 	enemyMove();
+
+	for (int i = 0; i < 100; i++)
+	{
+		if (bullets[i].isActive())
+		{
+			bullets[i].update();
+		}
+	}
 }
 
 /// <summary>
@@ -143,6 +151,28 @@ void GameWorld::drawWorld()
 	{
 		m_window.draw(m_enemies[i]);
 	}	
+
+	for (int i = 0; i < 100; i++)
+	{
+		if (bullets[i].isActive())
+		{
+			m_window.draw(bullets[i].bulletSprite());
+		}
+	}
+}
+
+void GameWorld::fireBullet()
+{
+	for (int i = 0; i < 100; i++)
+	{
+		if (bullets[i].isActive() == false)
+		{
+			glm::vec3 tempDirection(m_camera.getDirection().x, m_camera.getDirection().y, m_camera.getDirection().z);
+			glm::normalize(tempDirection);
+			bullets[i].bulletInit(sf::Vector2f(tempDirection.x,tempDirection.z),0,m_playerGun.getPosition());
+			break;
+		}
+	}
 }
 
 /// <summary>

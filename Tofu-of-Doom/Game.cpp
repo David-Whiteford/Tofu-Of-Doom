@@ -658,6 +658,7 @@ void Game::fireGun()
 	{
 		if (camera.controller.aButtonDown())
 		{
+			m_gameWorld->fireBullet();
 
 			gunSoundEngine->play2D(shotgunQueue.front());
 			if (gunSoundEngine->isCurrentlyPlaying(shotgunSound) == false)
@@ -686,6 +687,8 @@ void Game::fireGun()
 		if (camera.controller.aButtonDown())
 		{
 
+			m_gameWorld->fireBullet();
+
 			gunSoundEngine->play2D(shotgunQueue.front());
 			m_time = sf::Time::Zero;
 			m_time = m_time.Zero;
@@ -706,6 +709,8 @@ void Game::fireGun()
 		// Fire a shot with chosen gun
 		if (camera.controller.aButton())
 		{
+
+			m_gameWorld->fireBullet();
 
 			gunSoundEngine->play2D(shotgunQueue.front());
 			m_time = sf::Time::Zero;

@@ -67,6 +67,7 @@ public:
 	// 1 is pistol, 2 is rifle, 3 is machine gun)
 	int gunNum = 1;
 
+
 	/// <summary>
 	/// Astar stuff with graph for storing nodes
 	/// settng up the astar algorithm

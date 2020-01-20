@@ -12,6 +12,7 @@
 #include "Map.h"
 #include "DisplayScale.h"
 #include "Camera.h"
+#include "Bullet.h"
 
 class GameWorld
 {
@@ -21,7 +22,9 @@ public:
 	void updateWorld();
 	void enemyMove();
 	void drawWorld();
-	void drawBulletTrajectory();
+
+	void fireBullet();
+	Bullet bullets[100];
 
 
 	sf::Vector2f getPlayerPosition();
@@ -44,6 +47,8 @@ private:
 	sf::CircleShape m_player;
 	sf::CircleShape m_enemy;
 	sf::CircleShape m_playerGun;
+	
+
 
 	std::vector<sf::CircleShape> m_enemies;
 	std::vector<sf::RectangleShape> m_walls;
