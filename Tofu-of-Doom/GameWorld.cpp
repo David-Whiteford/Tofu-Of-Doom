@@ -50,6 +50,7 @@ GameWorld::GameWorld(sf::RenderWindow &t_window, sf::Time &t_deltaTime, Camera &
 	}
 	//Astar
 	m_gamePath->initAStar(m_walls);
+	graphPath = m_gamePath->getGraphPath();
 }
 
 /// <summary>
@@ -77,10 +78,10 @@ void GameWorld::updateWorld()
 void GameWorld::enemyMove()
 {
 	
-	graphPath = m_gamePath->getGraphPath();
+	
 	std::cout << "Node" << graphPath.back()->m_data.m_name << std::endl;
 	sf::Vector2f graphPathVec = sf::Vector2f(graphPath.back()->m_data.m_x, graphPath.back()->m_data.m_y);
-	float dist = m_transform.distance(m_enemies.front().getPosition(), graphPathVec);
+	
 	sf::Vector2f moveTo = m_transform.moveTowards(m_enemies.front().getPosition(), graphPathVec, m_speedEn);
 
 	m_enemies.front().setPosition(moveTo);
@@ -90,57 +91,9 @@ void GameWorld::enemyMove()
 	{
 		std::cout << "Pop graph vec" << graphPath.size();
 		graphPath.pop_back();
+
 	}
 
-	
-	//if (m_moveRight == true)
-	//{
-	//	m_enemies.front().setPosition(m_enemies.front().getPosition().x +1.0f , m_enemies.front().getPosition().y);
-
-	//	if (m_enemies.front().getPosition().x >= 400)
-	//	{
-	//		m_down = true;
-	//		m_moveRight = false;
-	//	}
-	//}
-
-	//if (m_down == true)
-	//{
-	//	m_enemies.front().setPosition(m_enemies.front().getPosition().x, m_enemies.front().getPosition().y + 1.0f);
-
-	//	if (m_enemies.front().getPosition().y >= 400)
-	//	{
-	//		m_down = false;
-	//		m_moveLeft = true;
-	//	}
-	//}
-
-	//if (m_moveLeft == true)
-	//{
-	//	m_enemies.front().setPosition(m_enemies.front().getPosition().x - 1.0f, m_enemies.front().getPosition().y);
-
-	//	if (m_enemies.front().getPosition().x <= 100)
-	//	{
-	//		m_moveLeft = false;
-	//		m_up = true;
-	//	}
-	//}
-
-	//if (m_up == true)
-	//{
-	//	m_enemies.front().setPosition(m_enemies.front().getPosition().x, m_enemies.front().getPosition().y - 1.0f);
-
-	//	if (m_enemies.front().getPosition().y <= 100)
-	//	{
-	//		m_up = false;
-	//		m_moveRight = true;
-	//	}
-	//}
-
-	//int xPos = m_enemies.back().getPosition().x;
-	//std::cout << "xPos" << xPos << std::endl;
-	//sf::Vector2f direction = (m_player.getPosition() - m_enemies.back().getPosition());
-	////sf::Vector2f newDirection = Vector3.Normalize(direction);	
 }
 
 /// <summary>
