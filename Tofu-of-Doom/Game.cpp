@@ -299,6 +299,7 @@ void Game::update(sf::Time t_deltaTime)
 /// </summary>
 void Game::render()
 {
+
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	switch (m_drawState)
@@ -658,7 +659,7 @@ void Game::fireGun()
 	{
 		if (camera.controller.aButtonDown())
 		{
-			m_gameWorld->fireBullet();
+			m_gameWorld->fireBullet(gunNum);
 
 			gunSoundEngine->play2D(shotgunQueue.front());
 			if (gunSoundEngine->isCurrentlyPlaying(shotgunSound) == false)
@@ -687,7 +688,7 @@ void Game::fireGun()
 		if (camera.controller.aButtonDown())
 		{
 
-			m_gameWorld->fireBullet();
+			m_gameWorld->fireBullet(gunNum);
 
 			gunSoundEngine->play2D(shotgunQueue.front());
 			m_time = sf::Time::Zero;
@@ -710,7 +711,7 @@ void Game::fireGun()
 		if (camera.controller.aButton())
 		{
 
-			m_gameWorld->fireBullet();
+			m_gameWorld->fireBullet(gunNum);
 
 			gunSoundEngine->play2D(shotgunQueue.front());
 			m_time = sf::Time::Zero;

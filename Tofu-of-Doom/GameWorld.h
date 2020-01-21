@@ -23,7 +23,7 @@ public:
 	void enemyMove();
 	void drawWorld();
 
-	void fireBullet();
+	void fireBullet(int t_gunType);
 	Bullet bullets[100];
 
 
