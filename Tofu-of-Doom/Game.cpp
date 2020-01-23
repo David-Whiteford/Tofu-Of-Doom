@@ -33,23 +33,26 @@ void Game::run()
 	sf::Clock clock;
 	sf::Clock gunClock;
 	sf::Time timeSinceLastUpdate = sf::Time::Zero;
-	sf::Time timePerFrame = sf::seconds(1.f / 60.f);
+	sf::Time timePerFrame = sf::seconds((1.f / 35.0f));
 
 	m_deltaTime = timePerFrame;
 
 	while (m_window.isOpen() && !m_exitGame)
 	{
-		processEvents();
 		timeSinceLastUpdate += clock.restart();
 
-		while (timeSinceLastUpdate > timePerFrame)
+		if(timeSinceLastUpdate > timePerFrame)
 		{
 			m_time += gunClock.restart();
-			timeSinceLastUpdate -= timePerFrame;
 			processEvents();
 			update(timePerFrame);
-			render();
+			timeSinceLastUpdate -= timePerFrame;
+			processEvents();
+
 		}
+		render();
+
+		
 	}
 }
 
@@ -76,14 +79,14 @@ void Game::initialise()
 	vec3df position(25, 0, 25);
 	positions.push_back(position);
 
-	shotgunSound = soundEngine->addSoundSourceFromFile("cg1.wav");
+	shotgunSound = soundEngine->addSoundSourceFromFile("shotgun.mp3");
 	machinegunSound = soundEngine->addSoundSourceFromFile("cg1.wav");
-	pistolSound = soundEngine->addSoundSourceFromFile("cg1.wav");
+	pistolSound = soundEngine->addSoundSourceFromFile("9mm.mp3");
 	zombie = soundEngine->addSoundSourceFromFile("Monster.mp3");
-	shotgunQueue.push(shotgunSound);
-	shotgunQueue.push(machinegunSound);
-	shotgunQueue.push(pistolSound);
-	shotgunQueue.push(shotgunSound);
+	shotgunQueue.push(shotgunSound); // 4
+	shotgunQueue.push(machinegunSound); // 3
+	shotgunQueue.push(pistolSound); // 2
+	shotgunQueue.push(shotgunSound); // 1
 
 	
 	zombiePosition = vec3df(m_gameWorld->getEnemyPosition().x, 0 , m_gameWorld->getEnemyPosition().y);
@@ -299,6 +302,7 @@ void Game::update(sf::Time t_deltaTime)
 /// </summary>
 void Game::render()
 {
+
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	switch (m_drawState)
@@ -656,15 +660,16 @@ void Game::fireGun()
 
 	if (gunNum == 1)
 	{
-		if (camera.controller.aButtonDown())
+		if (camera.controller.rightTriggerDown())
 		{
+			m_gameWorld->fireBullet(gunNum);
 
-			gunSoundEngine->play2D(shotgunQueue.front());
-			if (gunSoundEngine->isCurrentlyPlaying(shotgunSound) == false)
+			gunSoundEngine->play2D(pistolSound);
+			/*if (gunSoundEngine->isCurrentlyPlaying(shotgunSound) == false)
 			{
 
 				shotgunQueue.pop();
-			}
+			}*/
 
 			m_time = sf::Time::Zero;
 			m_time = m_time.Zero;
@@ -683,8 +688,10 @@ void Game::fireGun()
 	}
 	else if (gunNum == 2 && m_time > m_ShotDelay) // Rifle
 	{
-		if (camera.controller.aButtonDown())
+		if (camera.controller.rightTriggerDown())
 		{
+
+			m_gameWorld->fireBullet(gunNum);
 
 			gunSoundEngine->play2D(shotgunQueue.front());
 			m_time = sf::Time::Zero;
@@ -704,10 +711,12 @@ void Game::fireGun()
 	else if (gunNum == 3 && m_time > m_ShotDelay / (float)6) // Machine gun
 	{
 		// Fire a shot with chosen gun
-		if (camera.controller.aButton())
+		if (camera.controller.rightTrigger())
 		{
 
-			gunSoundEngine->play2D(shotgunQueue.front());
+			m_gameWorld->fireBullet(gunNum);
+
+			gunSoundEngine->play2D(machinegunSound);
 			m_time = sf::Time::Zero;
 			m_time = m_time.Zero;
 

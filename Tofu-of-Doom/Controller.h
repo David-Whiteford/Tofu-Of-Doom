@@ -33,6 +33,8 @@ private:
 	bool leftButtonPressed = false;
 	bool rightButtonPressed = false;
 	bool backButtonPressed = false;
+	bool rightTriggerPressed = false;
+	bool leftTriggerPressed = false;
 	
 	//===============EndKEyPresses Hidden from player
 
@@ -86,6 +88,12 @@ public:
 	// Right Thumbstick input 
 	bool rightButtonRTS();
 	bool leftButtonRTS();
+
+	bool leftTrigger();
+	bool rightTrigger();
+
+	bool leftTriggerDown();
+	bool rightTriggerDown();
 
 
 };

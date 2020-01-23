@@ -67,6 +67,23 @@ void GameWorld::updateWorld()
 	setGunPosition();
 
 	enemyMove();
+
+	for (int i = 0; i < 100; i++)
+	{
+		if (bullets[i].isActive())
+		{
+			bullets[i].update();
+
+			for (int x = 0; x < 2; x++)
+			{
+				if (bullets[i].checkCollision(m_enemies.at(x).getPosition(), m_enemies[x].getRadius()))
+				{
+					m_enemies[x].setPosition(0, 0);
+					bullets[i].setActive(false);
+				}
+			}
+		}
+	}
 }
 
 /// <summary>
@@ -143,6 +160,59 @@ void GameWorld::drawWorld()
 	{
 		m_window.draw(m_enemies[i]);
 	}	
+
+	for (int i = 0; i < 100; i++)
+	{
+		if (bullets[i].isActive())
+		{
+			m_window.draw(bullets[i].bulletSprite());
+		}
+	}
+}
+
+void GameWorld::fireBullet(int t_gunType)
+{
+	if (t_gunType == 1 || t_gunType == 3)
+	{
+		for (int i = 0; i < 100; i++)
+		{
+			if (bullets[i].isActive() == false)
+			{
+				bullets[i].setTimeToLive(400);
+				glm::vec3 tempDirection(m_camera.getDirection().x, m_camera.getDirection().y, m_camera.getDirection().z);
+				glm::normalize(tempDirection);
+				bullets[i].bulletInit(sf::Vector2f(tempDirection.x, tempDirection.z), 0, m_playerGun.getPosition());
+				break;
+			}
+		}
+	}
+	else if (t_gunType == 2)
+	{
+		int bulletSpreadAmount = 0;
+		for (int i = 0; i < 100; i++)
+		{
+			if (bullets[i].isActive() == false)
+			{
+				glm::vec3 tempDirection(m_camera.getDirection().x, m_camera.getDirection().y, m_camera.getDirection().z);
+
+				float offsetX = ((float(rand()) / float(RAND_MAX)) * (0.2f - -0.2f)) + -0.2f;
+				float offsetZ = ((float(rand()) / float(RAND_MAX)) * (0.2f - -0.2f)) + -0.2f;
+
+				bullets[i].setTimeToLive(200);
+				//float randomSpread = rand() % 0 + (-0.32f);
+				glm::normalize(tempDirection);
+				//tempDirection += tempDirection * static_cast<float>(randomSpread);
+
+				bullets[i].bulletInit(sf::Vector2f(tempDirection.x + offsetX, tempDirection.z + offsetZ), 0, m_playerGun.getPosition());
+				bulletSpreadAmount++;
+
+				if (bulletSpreadAmount > 4)
+				{
+					break;
+				}
+			}
+		}
+	}
 }
 
 /// <summary>
