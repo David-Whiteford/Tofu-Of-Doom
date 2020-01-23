@@ -12,7 +12,7 @@ in mat4 view;
 out vec3 color;
 
 // Number of lights
-const int LIGHT_AMOUNT = 5;
+const int LIGHT_AMOUNT = 25;
 
 // Values that stay constant for the whole mesh.
 uniform sampler2D currentTexture;

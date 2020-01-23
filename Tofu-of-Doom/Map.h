@@ -21,9 +21,11 @@ public:
 	void loadMapData(std::string t_fileName, std::vector<std::pair<glm::vec3, WallType>> &t_array);
 	std::vector<std::pair<glm::vec3, WallType>> *getMap();
 	void loadMap();
+	std::vector<glm::vec3> *getLightPositions();
 
 private:
 	std::vector<std::pair<glm::vec3, WallType>> m_map;
+	std::vector<glm::vec3> m_lightPositions;
 };
 
 #endif // !MAP_H
