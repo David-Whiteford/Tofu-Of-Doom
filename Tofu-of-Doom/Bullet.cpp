@@ -32,6 +32,11 @@ void Bullet::setTimeAliveAt(float t_time)
 	m_aliveAt = t_time;
 }
 
+void Bullet::setTimeToLive(float t_time)
+{
+	m_timeToLive = t_time;
+}
+
 bool Bullet::isActive()
 {
 	return m_alive;
@@ -74,7 +79,7 @@ void Bullet::update()
 	m_position -= m_direction * speed;
 	m_bulletShape.setPosition(m_position);
 
-	if ( m_aliveAt > 1000)
+	if ( m_aliveAt > m_timeToLive)
 	{
 		m_alive = false;
 	}

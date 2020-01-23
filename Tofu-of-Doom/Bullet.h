@@ -25,6 +25,7 @@ public:
 	void setDamageAmount(int t_damage);
 	void setActive(bool t_alive);
 	void setTimeAliveAt(float t_time);
+	void setTimeToLive(float t_time);
 	bool isActive();
 	int getDamageAmount();
 	void setSpeed(float t_speed);
@@ -52,7 +53,7 @@ private:
 	sf::CircleShape m_bulletShape;
 
 	int m_aliveAt = 0;
-	float m_timeToLive = 5;
+	float m_timeToLive = 400;
 
 	float speed = 25;
 

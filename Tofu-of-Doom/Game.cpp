@@ -33,23 +33,26 @@ void Game::run()
 	sf::Clock clock;
 	sf::Clock gunClock;
 	sf::Time timeSinceLastUpdate = sf::Time::Zero;
-	sf::Time timePerFrame = sf::seconds(1.f / 60.f);
+	sf::Time timePerFrame = sf::seconds((1.f / 35.0f));
 
 	m_deltaTime = timePerFrame;
 
 	while (m_window.isOpen() && !m_exitGame)
 	{
-		processEvents();
 		timeSinceLastUpdate += clock.restart();
 
-		while (timeSinceLastUpdate > timePerFrame)
+		if(timeSinceLastUpdate > timePerFrame)
 		{
 			m_time += gunClock.restart();
-			timeSinceLastUpdate -= timePerFrame;
 			processEvents();
 			update(timePerFrame);
-			render();
+			timeSinceLastUpdate -= timePerFrame;
+			processEvents();
+
 		}
+		render();
+
+		
 	}
 }
 
@@ -76,14 +79,14 @@ void Game::initialise()
 	vec3df position(25, 0, 25);
 	positions.push_back(position);
 
-	shotgunSound = soundEngine->addSoundSourceFromFile("cg1.wav");
+	shotgunSound = soundEngine->addSoundSourceFromFile("shotgun.mp3");
 	machinegunSound = soundEngine->addSoundSourceFromFile("cg1.wav");
-	pistolSound = soundEngine->addSoundSourceFromFile("cg1.wav");
+	pistolSound = soundEngine->addSoundSourceFromFile("9mm.mp3");
 	zombie = soundEngine->addSoundSourceFromFile("Monster.mp3");
-	shotgunQueue.push(shotgunSound);
-	shotgunQueue.push(machinegunSound);
-	shotgunQueue.push(pistolSound);
-	shotgunQueue.push(shotgunSound);
+	shotgunQueue.push(shotgunSound); // 4
+	shotgunQueue.push(machinegunSound); // 3
+	shotgunQueue.push(pistolSound); // 2
+	shotgunQueue.push(shotgunSound); // 1
 
 	
 	zombiePosition = vec3df(m_gameWorld->getEnemyPosition().x, 0 , m_gameWorld->getEnemyPosition().y);
@@ -661,12 +664,12 @@ void Game::fireGun()
 		{
 			m_gameWorld->fireBullet(gunNum);
 
-			gunSoundEngine->play2D(shotgunQueue.front());
-			if (gunSoundEngine->isCurrentlyPlaying(shotgunSound) == false)
+			gunSoundEngine->play2D(pistolSound);
+			/*if (gunSoundEngine->isCurrentlyPlaying(shotgunSound) == false)
 			{
 
 				shotgunQueue.pop();
-			}
+			}*/
 
 			m_time = sf::Time::Zero;
 			m_time = m_time.Zero;
@@ -713,7 +716,7 @@ void Game::fireGun()
 
 			m_gameWorld->fireBullet(gunNum);
 
-			gunSoundEngine->play2D(shotgunQueue.front());
+			gunSoundEngine->play2D(machinegunSound);
 			m_time = sf::Time::Zero;
 			m_time = m_time.Zero;
 

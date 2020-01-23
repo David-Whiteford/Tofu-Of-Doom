@@ -178,6 +178,7 @@ void GameWorld::fireBullet(int t_gunType)
 		{
 			if (bullets[i].isActive() == false)
 			{
+				bullets[i].setTimeToLive(400);
 				glm::vec3 tempDirection(m_camera.getDirection().x, m_camera.getDirection().y, m_camera.getDirection().z);
 				glm::normalize(tempDirection);
 				bullets[i].bulletInit(sf::Vector2f(tempDirection.x, tempDirection.z), 0, m_playerGun.getPosition());
@@ -194,8 +195,10 @@ void GameWorld::fireBullet(int t_gunType)
 			{
 				glm::vec3 tempDirection(m_camera.getDirection().x, m_camera.getDirection().y, m_camera.getDirection().z);
 
-				float offsetX = ((float(rand()) / float(RAND_MAX)) * (0.1f - -0.1f)) + -0.1f;
-				float offsetZ = ((float(rand()) / float(RAND_MAX)) * (0.1f - -0.1f)) + -0.1f;
+				float offsetX = ((float(rand()) / float(RAND_MAX)) * (0.2f - -0.2f)) + -0.2f;
+				float offsetZ = ((float(rand()) / float(RAND_MAX)) * (0.2f - -0.2f)) + -0.2f;
+
+				bullets[i].setTimeToLive(200);
 				//float randomSpread = rand() % 0 + (-0.32f);
 				glm::normalize(tempDirection);
 				//tempDirection += tempDirection * static_cast<float>(randomSpread);
