@@ -46,11 +46,11 @@ void Game::run()
 			m_time += gunClock.restart();
 			processEvents();
 			update(timePerFrame);
+			render();
 			timeSinceLastUpdate -= timePerFrame;
 			processEvents();
 
 		}
-		render();
 
 		
 	}

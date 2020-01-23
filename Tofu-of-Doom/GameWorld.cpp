@@ -65,7 +65,6 @@ void GameWorld::updateWorld()
 {
 	m_player.setPosition(m_camera.getEye().x * s_displayScale, m_camera.getEye().z * s_displayScale);
 	setGunPosition();
-
 	enemyMove();
 
 	for (int i = 0; i < 100; i++)
@@ -150,7 +149,6 @@ void GameWorld::drawWorld()
 	{
 		m_window.draw(m_walls[i]);
 	}
-
 	m_mapView.setCenter(m_player.getPosition());
 	m_window.setView(m_mapView);
 	m_window.draw(m_player);
@@ -166,6 +164,7 @@ void GameWorld::drawWorld()
 		if (bullets[i].isActive())
 		{
 			m_window.draw(bullets[i].bulletSprite());
+			m_window.draw(bullets[i].line, 2, sf::Lines);
 		}
 	}
 }

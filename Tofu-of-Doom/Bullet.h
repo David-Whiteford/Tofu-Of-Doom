@@ -20,7 +20,8 @@
 class Bullet
 {
 public:
-
+	Bullet();
+	~Bullet();
 	void bulletInit(sf::Vector2f t__dir, float t_aliveAt, sf::Vector2f t_startPos);
 	void setDamageAmount(int t_damage);
 	void setActive(bool t_alive);
@@ -31,12 +32,22 @@ public:
 	void setSpeed(float t_speed);
 	void setDirection(sf::Vector2f t_dir);
 	void setPosition(sf::Vector2f t_pos);
+	void setFiredFromPosition(sf::Vector2f t_pos);
 
 	bool checkCollision(sf::Vector2f t_enemyPos, float t_radius);
-
 	void update();
 
-	sf::CircleShape bulletSprite();
+	sf::CircleShape bulletSprite(); 
+	sf::Vertex line[2] =
+	{
+		sf::Vertex(sf::Vector2f(10, 10)),
+		sf::Vertex(sf::Vector2f(150, 150))
+	};
+
+
+	//
+
+	void interpolateCollision(sf::Vector2f t_enemyPos, float t_enemyRadius);
 
 
 
@@ -53,12 +64,13 @@ private:
 	sf::CircleShape m_bulletShape;
 
 	int m_aliveAt = 0;
-	float m_timeToLive = 400;
+	float m_timeToLive = 2;
 
-	float speed = 25;
+	float speed = 1000;
 
 	sf::Vector2f m_direction = sf::Vector2f(0, 0);
 	sf::Vector2f m_position = sf::Vector2f(0, 0);
+	sf::Vector2f m_firedFrom = sf::Vector2f(0, 0);
 
 	// direction will need glm and sf vector for game and game world respectively
 
