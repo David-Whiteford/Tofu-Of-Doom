@@ -31,6 +31,7 @@ public:
 	double getPitch();
 	double getYaw();
 	std::vector<std::pair<glm::vec3, WallType>> *getWallData();
+	std::vector<glm::vec3> *getLightPositions();
 
 private:
 	sf::RenderWindow &m_window;
