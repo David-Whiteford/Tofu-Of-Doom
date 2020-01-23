@@ -50,7 +50,7 @@ void Map::loadMapData(std::string t_fileName, std::vector<std::pair<glm::vec3, W
 		// Value 3 is a floor with a light above it
 		if (f_value == 3)
 		{
-			m_lightPositions.push_back(glm::vec3(x * f_wallWidth, 100.0f, z * f_wallWidth));
+			m_lightPositions.push_back(glm::vec3(x * f_wallWidth, 150.0f, z * f_wallWidth));
 		}
 
 		f_tempPair = std::make_pair(glm::vec3(x * f_wallWidth, 0.0f, z * f_wallWidth), f_tempWallType);

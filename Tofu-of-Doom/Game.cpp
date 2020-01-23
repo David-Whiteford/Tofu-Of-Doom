@@ -286,8 +286,8 @@ void Game::update(sf::Time t_deltaTime)
 	glUniformMatrix4fv(m_viewMatrixID, 1, GL_FALSE, &camera.getView()[0][0]);
 	glUniformMatrix4fv(m_projectionMatrixID, 1, GL_FALSE, &projection[0][0]);
 
-	// glm::vec3 lightPos = glm::vec3(225, 8, 225);
-	// glUniform3f(m_lightID, lightPos.x, lightPos.y, lightPos.z);
+	glm::vec3 lightPos = glm::vec3(m_gameWorld->getPlayerPosition().x, 3.5f, m_gameWorld->getPlayerPosition().y);
+	glUniform3f(m_lightID, lightPos.x, lightPos.y, lightPos.z);
 
 	// Send array of light positions to shader
 	glUniform3fv(m_lightPositionsID, LIGHT_AMOUNT * sizeof(glm::vec3), &m_lightPositions[0][0]);
