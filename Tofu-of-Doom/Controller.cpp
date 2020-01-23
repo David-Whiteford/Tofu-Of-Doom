@@ -472,3 +472,83 @@ bool CXBOXController::rightButtonRTS()
 	std::cout << "No Controller connected for port 1 player 1" << std::endl;
 	return false;
 }
+
+// Return value of left trigger
+bool CXBOXController::leftTrigger()
+{
+	Player = new CXBOXController(m_playerID);
+
+	if (Player->IsConnected())
+	{
+		if (Player->GetState().Gamepad.bLeftTrigger > XINPUT_GAMEPAD_TRIGGER_THRESHOLD)
+		{
+
+				return true;
+
+		}
+		return false; // Trigger was not pressed
+	}
+	// not connected
+	return false;
+}
+
+// Return value of right trigger
+bool CXBOXController::rightTrigger()
+{
+	Player = new CXBOXController(m_playerID);
+
+	if (Player->IsConnected())
+	{
+		if (Player->GetState().Gamepad.bRightTrigger > XINPUT_GAMEPAD_TRIGGER_THRESHOLD)
+		{
+
+			return true;
+
+		}
+		return false; // Trigger was not pressed
+	}
+	// not connected
+	return false;
+}
+
+// Return value of left trigger
+bool CXBOXController::leftTriggerDown()
+{
+	if (leftTrigger() && !leftTriggerPressed)
+	{
+		leftTriggerPressed = true;
+		return true;
+	}
+	// holding up but button was already pressed down last frame
+	else if (leftTrigger() && leftTriggerPressed)
+	{
+		return false;
+	}
+	// is not pressing or holding down we reset the button going down to false
+	else
+	{
+		leftTriggerPressed = false;
+		return false;
+	}
+}
+
+// Return value of right trigger
+bool CXBOXController::rightTriggerDown()
+{
+	if (rightTrigger() && !rightTriggerPressed)
+	{
+		rightTriggerPressed = true;
+		return true;
+	}
+	// holding up but button was already pressed down last frame
+	else if (rightTrigger() && rightTriggerPressed)
+	{
+		return false;
+	}
+	// is not pressing or holding down we reset the button going down to false
+	else
+	{
+		rightTriggerPressed = false;
+		return false;
+	}
+}

@@ -660,7 +660,7 @@ void Game::fireGun()
 
 	if (gunNum == 1)
 	{
-		if (camera.controller.aButtonDown())
+		if (camera.controller.rightTriggerDown())
 		{
 			m_gameWorld->fireBullet(gunNum);
 
@@ -688,7 +688,7 @@ void Game::fireGun()
 	}
 	else if (gunNum == 2 && m_time > m_ShotDelay) // Rifle
 	{
-		if (camera.controller.aButtonDown())
+		if (camera.controller.rightTriggerDown())
 		{
 
 			m_gameWorld->fireBullet(gunNum);
@@ -711,7 +711,7 @@ void Game::fireGun()
 	else if (gunNum == 3 && m_time > m_ShotDelay / (float)6) // Machine gun
 	{
 		// Fire a shot with chosen gun
-		if (camera.controller.aButton())
+		if (camera.controller.rightTrigger())
 		{
 
 			m_gameWorld->fireBullet(gunNum);
