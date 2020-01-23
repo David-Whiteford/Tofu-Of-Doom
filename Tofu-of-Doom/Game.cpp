@@ -61,12 +61,12 @@ void Game::run()
 /// </summary>
 void Game::initialise()
 {
-	// Set light positions
-	m_lightPositions.push_back(glm::vec3(225.0f, 15.0f, 225.0f));
-	m_lightPositions.push_back(glm::vec3(25.0f, 15.0f, 25.0f));
-	m_lightPositions.push_back(glm::vec3(100.0f, 15.0f, 100.0f));
-	m_lightPositions.push_back(glm::vec3(150.0f, 15.0f, 150.0f));
-	m_lightPositions.push_back(glm::vec3(60.0f, 15.0f, 20.0f));
+	// Set light positions (this will be put into a level loader probably)
+	for (int i = 0; i < LIGHT_AMOUNT; ++i)
+	{
+		glm::vec3 f_temp = glm::vec3(m_gameWorld->getLightPositions()->at(i).x / s_displayScale, m_gameWorld->getLightPositions()->at(i).y / s_displayScale, m_gameWorld->getLightPositions()->at(i).z / s_displayScale);
+		m_lightPositions.push_back(f_temp);
+	}
 
 	graph = new Graph<NodeData, int>(25);
 	m_ShotDelay = sf::seconds(.7f); // .7f is the length for the reload sound to finish

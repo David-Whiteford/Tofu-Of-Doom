@@ -263,6 +263,14 @@ std::vector<std::pair<glm::vec3, WallType>> *GameWorld::getWallData()
 	return m_map->getMap();
 }
 
+/// <summary>
+/// Gets the light positions from the GameWorld map
+/// </summary>
+std::vector<glm::vec3> *GameWorld::getLightPositions()
+{
+	return m_map->getLightPositions();
+}
+
 void GameWorld::setGunPosition()
 {
 	glm::vec3 tempDirection(m_camera.getDirection().x, m_camera.getDirection().y, m_camera.getDirection().z);

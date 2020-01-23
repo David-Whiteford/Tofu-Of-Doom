@@ -224,7 +224,7 @@ private:
 	std::vector<glm::vec3> pistol_normals;
 
 	// Shader IDs
-	const static int LIGHT_AMOUNT = 5;
+	const static int LIGHT_AMOUNT = 25;
 	GLuint m_lightID;
 	GLuint m_lightPositionsID;
 	std::vector<glm::vec3> m_lightPositions;
