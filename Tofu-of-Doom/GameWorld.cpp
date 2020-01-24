@@ -65,7 +65,6 @@ void GameWorld::updateWorld()
 {
 	m_player.setPosition(m_camera.getEye().x * s_displayScale, m_camera.getEye().z * s_displayScale);
 	setGunPosition();
-
 	enemyMove();
 
 	for (int i = 0; i < 100; i++)
@@ -78,9 +77,26 @@ void GameWorld::updateWorld()
 			{
 				if (bullets[i].checkCollision(m_enemies.at(x).getPosition(), m_enemies[x].getRadius()))
 				{
-					m_enemies[x].setPosition(0, 0);
+					if (bullets[i].raycast.isInterpolating())
+					{
+						bullets[i].raycast.addToHitObjects(&m_enemies.at(x));
+					}
+					else
+					{
+						m_enemies.at(x).setPosition(10, 10);
+					}
 					bullets[i].setActive(false);
 				}
+			}
+			
+		}
+		if (bullets[i].canDrawBulletTracer())
+		{
+			bullets[i].update();
+			while (bullets[i].raycast.getHitObjects().size() > 0)
+			{
+				bullets[i].raycast.getClosest();
+
 			}
 		}
 	}
@@ -150,7 +166,6 @@ void GameWorld::drawWorld()
 	{
 		m_window.draw(m_walls[i]);
 	}
-
 	m_mapView.setCenter(m_player.getPosition());
 	m_window.setView(m_mapView);
 	m_window.draw(m_player);
@@ -166,6 +181,10 @@ void GameWorld::drawWorld()
 		if (bullets[i].isActive())
 		{
 			m_window.draw(bullets[i].bulletSprite());
+		}
+		if (bullets[i].canDrawBulletTracer())
+		{
+			m_window.draw(bullets[i].raycast.drawRay());
 		}
 	}
 }

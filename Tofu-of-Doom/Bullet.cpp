@@ -1,17 +1,33 @@
 #include "Bullet.h"
 
+Bullet::Bullet()
+{
+	setActive(false);
+}
+
+Bullet::~Bullet()
+{
+
+}
+
 void Bullet::bulletInit(sf::Vector2f t_dir, float t_aliveAt, sf::Vector2f t_startPos)
 {
 	setDirection(t_dir);
-	setTimeAliveAt(t_aliveAt);
-	setPosition(t_startPos);
 
+	setPosition(t_startPos);
+	setFiredFromPosition(t_startPos);
+	setTimeToLive(1);
+
+	raycast.setRayValues(m_firedFrom, m_direction, 1000);
 	m_bulletShape.setFillColor(sf::Color::Red);
 	m_bulletShape.setRadius(5);
 
 	m_time = m_time.Zero;
 	m_aliveAt = 0;
+	m_canDrawRayLine = true;
 	setActive(true);
+
+
 
 
 
@@ -47,6 +63,21 @@ int Bullet::getDamageAmount()
 	return m_damage;
 }
 
+int Bullet::getAliveForTime()
+{
+	return m_alive;
+}
+
+int Bullet::getTimeToLive()
+{
+	return m_timeToLive;
+}
+
+bool Bullet::canDrawBulletTracer()
+{
+	return m_canDrawRayLine;
+}
+
 void Bullet::setSpeed(float t_speed)
 {
 	speed = t_speed;
@@ -62,30 +93,45 @@ void Bullet::setPosition(sf::Vector2f t_pos)
 	m_position = t_pos;
 }
 
+void Bullet::setFiredFromPosition(sf::Vector2f t_pos)
+{
+	m_firedFrom = t_pos;
+}
+
 bool Bullet::checkCollision(sf::Vector2f t_enemyPos, float t_radius)
 {
-	float dist = std::pow((m_bulletShape.getPosition().x - t_enemyPos.x), 2) + std::pow((m_bulletShape.getPosition().y - t_enemyPos.y), 2);
-
-	if (dist <= (t_radius + m_radius) * (t_radius + m_radius))
-	{
-		return true;
-	}
-	return false;
+	return raycast.circleHit(t_enemyPos, t_radius);
 }
 
 void Bullet::update()
 {
-	m_aliveAt++;
-	m_position -= m_direction * speed;
-	m_bulletShape.setPosition(m_position);
+	if (m_alive)
+	{
+		m_position -= m_direction * speed;
+		m_bulletShape.setPosition(m_position);
+	}
 
-	if ( m_aliveAt > m_timeToLive)
+
+
+	if (m_aliveAt > 1)
 	{
 		m_alive = false;
+		m_canDrawRayLine = false;
 	}
+
+	m_aliveAt+=1;
+
 }
 
 sf::CircleShape Bullet::bulletSprite()
 {
 	return m_bulletShape;
+}
+
+bool Bullet::interpolateCollision(sf::Vector2f t_enemyPos, float t_enemyRadius)
+{
+	return false;
+
+
+
 }

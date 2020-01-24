@@ -46,11 +46,11 @@ void Game::run()
 			m_time += gunClock.restart();
 			processEvents();
 			update(timePerFrame);
+			render();
 			timeSinceLastUpdate -= timePerFrame;
 			processEvents();
 
 		}
-		render();
 
 		
 	}
@@ -246,7 +246,6 @@ void Game::update(sf::Time t_deltaTime)
 	//update the zombie sound position to follow test zombie
 	zombiePosition = vec3df(m_gameWorld->getEnemyPosition().x, 3.5f, m_gameWorld->getEnemyPosition().y); 
 	
-	m_gameWorld->updateWorld();
 
 	// Update game controls
 	camera.input(t_deltaTime);
@@ -261,6 +260,9 @@ void Game::update(sf::Time t_deltaTime)
 
 	// This is currently only used to display the mini-map
 	gameControls(t_deltaTime);
+
+
+	m_gameWorld->updateWorld();
 
 	// Update view (camera)
 	camera.getView() = camera.camera(m_gameWorld->getCameraPosition(), m_gameWorld->getPitch(), m_gameWorld->getYaw());
