@@ -113,7 +113,7 @@ void Bullet::update()
 
 
 
-	if (m_aliveAt > 0)
+	if (m_aliveAt > 1)
 	{
 		m_alive = false;
 		m_canDrawRayLine = false;
@@ -132,26 +132,6 @@ bool Bullet::interpolateCollision(sf::Vector2f t_enemyPos, float t_enemyRadius)
 {
 	return false;
 
-	// Intersection Point in case we wish to have particles on wall
-	//// compute the line AB direction vector components
-	//float Dx = (t_firedFrom.x - m_position.x) / D;
-	//float Dy = (t_firedFrom.y - m_position.y) / D;
-
-	//// compute the distance from A toward B of closest point to C
-	//float t = Dx * (t_enemyPos.x - m_position.x) + Dy * (t_enemyPos.y - m_position.y);
-
-	//// t should be equal to sqrt( (Cx-Ax)² + (Cy-Ay)² - h² )
-
-	//// compute the intersection point distance from t
-	//float dt = std::sqrt((t_enemyRadius * t_enemyRadius) - (h * h));
-
-	//// compute first intersection point coordinate
-	//float Ex = m_position.x + (t - dt) * Dx;
-	//float Ey = m_position.y + (t - dt) * Dy;
-
-	//// compute second intersection point coordinate
-	//float Fx = m_position.x + (t + dt) * Dx;
-	//float Fy = m_position.y + (t + dt) * Dy;
 
 
 }

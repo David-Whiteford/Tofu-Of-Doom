@@ -77,14 +77,27 @@ void GameWorld::updateWorld()
 			{
 				if (bullets[i].checkCollision(m_enemies.at(x).getPosition(), m_enemies[x].getRadius()))
 				{
-					m_enemies[x].setPosition(0, 0);
+					if (bullets[i].raycast.isInterpolating())
+					{
+						bullets[i].raycast.addToHitObjects(&m_enemies.at(x));
+					}
+					else
+					{
+						m_enemies.at(x).setPosition(10, 10);
+					}
 					bullets[i].setActive(false);
 				}
 			}
+			
 		}
-		else if (bullets[i].canDrawBulletTracer())
+		if (bullets[i].canDrawBulletTracer())
 		{
 			bullets[i].update();
+			while (bullets[i].raycast.getHitObjects().size() > 0)
+			{
+				bullets[i].raycast.getClosest();
+
+			}
 		}
 	}
 }
