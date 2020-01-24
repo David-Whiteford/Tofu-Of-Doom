@@ -13,15 +13,20 @@
 #include "Map.h"
 #include "DisplayScale.h"
 
-#include "Collider2D.h"
+
 
 #include "Transform.h"
+
+#include "Raycast.h"
 
 class Bullet
 {
 public:
 	Bullet();
 	~Bullet();
+
+	Raycast raycast;
+
 	void bulletInit(sf::Vector2f t__dir, float t_aliveAt, sf::Vector2f t_startPos);
 	void setDamageAmount(int t_damage);
 	void setActive(bool t_alive);
@@ -29,6 +34,9 @@ public:
 	void setTimeToLive(float t_time);
 	bool isActive();
 	int getDamageAmount();
+	int getAliveForTime();
+	int getTimeToLive();
+	bool canDrawBulletTracer();
 	void setSpeed(float t_speed);
 	void setDirection(sf::Vector2f t_dir);
 	void setPosition(sf::Vector2f t_pos);
@@ -38,11 +46,7 @@ public:
 	void update();
 
 	sf::CircleShape bulletSprite(); 
-	sf::Vertex line[2] =
-	{
-		sf::Vertex(sf::Vector2f(10, 10)),
-		sf::Vertex(sf::Vector2f(150, 150))
-	};
+
 
 
 	//
@@ -50,12 +54,12 @@ public:
 	bool interpolateCollision(sf::Vector2f t_enemyPos, float t_enemyRadius);
 
 
-
 private:
 	sf::Time m_time;
 
 	int m_damage = 1;
 	bool m_alive = false;
+	bool m_canDrawRayLine = false;
 
 	Transform m_transform;
 

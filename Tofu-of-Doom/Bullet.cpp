@@ -7,6 +7,7 @@ Bullet::Bullet()
 
 Bullet::~Bullet()
 {
+
 }
 
 void Bullet::bulletInit(sf::Vector2f t_dir, float t_aliveAt, sf::Vector2f t_startPos)
@@ -16,14 +17,17 @@ void Bullet::bulletInit(sf::Vector2f t_dir, float t_aliveAt, sf::Vector2f t_star
 	setPosition(t_startPos);
 	setFiredFromPosition(t_startPos);
 	setTimeToLive(1);
+
+	raycast.setRayValues(m_firedFrom, m_direction, 1000);
 	m_bulletShape.setFillColor(sf::Color::Red);
 	m_bulletShape.setRadius(5);
 
 	m_time = m_time.Zero;
 	m_aliveAt = 0;
+	m_canDrawRayLine = true;
 	setActive(true);
 
-	line->color = sf::Color::Red;
+
 
 
 
@@ -59,6 +63,21 @@ int Bullet::getDamageAmount()
 	return m_damage;
 }
 
+int Bullet::getAliveForTime()
+{
+	return m_alive;
+}
+
+int Bullet::getTimeToLive()
+{
+	return m_timeToLive;
+}
+
+bool Bullet::canDrawBulletTracer()
+{
+	return m_canDrawRayLine;
+}
+
 void Bullet::setSpeed(float t_speed)
 {
 	speed = t_speed;
@@ -81,30 +100,23 @@ void Bullet::setFiredFromPosition(sf::Vector2f t_pos)
 
 bool Bullet::checkCollision(sf::Vector2f t_enemyPos, float t_radius)
 {
-	float dist = std::pow((m_bulletShape.getPosition().x - t_enemyPos.x), 2) + std::pow((m_bulletShape.getPosition().y - t_enemyPos.y), 2);
-
-	// Is an expensive call
-	return interpolateCollision(t_enemyPos, t_radius);
-
-	if (dist <= (t_radius + m_radius) * (t_radius + m_radius))
-	{
-		return true;
-	}
-
-	return false;
+	return raycast.circleHit(t_enemyPos, t_radius);
 }
 
 void Bullet::update()
 {
-	m_position -= m_direction * speed;
-	m_bulletShape.setPosition(m_position);
-	line[1].position = m_position;
-	line[0].position = m_firedFrom;
+	if (m_alive)
+	{
+		m_position -= m_direction * speed;
+		m_bulletShape.setPosition(m_position);
+	}
 
 
-	if (m_aliveAt >= m_timeToLive)
+
+	if (m_aliveAt > 0)
 	{
 		m_alive = false;
+		m_canDrawRayLine = false;
 	}
 
 	m_aliveAt+=1;
@@ -118,39 +130,7 @@ sf::CircleShape Bullet::bulletSprite()
 
 bool Bullet::interpolateCollision(sf::Vector2f t_enemyPos, float t_enemyRadius)
 {
-
-	float leftSide = t_enemyPos.x - t_enemyRadius;
-	float rightSide = t_enemyPos.x + t_enemyRadius;
-	float topSide = t_enemyPos.y - t_enemyRadius;
-	float bottomSide = t_enemyPos.y + t_enemyRadius;
-
-
-	if ((m_firedFrom.x < leftSide && m_position.x < leftSide) ||
-		(m_firedFrom.x > rightSide&& m_position.x > rightSide))
-	{
-		return false;
-	}
-
-	if ((m_firedFrom.y < topSide && m_position.y < topSide) ||
-		(m_firedFrom.y > bottomSide&& m_position.y > bottomSide))
-	{
-		return false;
-	}
-	// compute double area
-	float area = std::abs(((m_firedFrom.x - m_position.x) * (t_enemyPos.y - m_position.y)) - ((t_enemyPos.x - m_position.x) * (m_firedFrom.y - m_position.y)));
-	area = area * 2;
-	// compute the AB segment length
-	float D = std::sqrt(std::pow((m_firedFrom.x - m_position.x), 2) + std::pow((m_firedFrom.y - m_position.y), 2));
-	float h = area / D;
-
-
-
-	if (h <= t_enemyRadius * 2)
-	{
-		return true;
-	}
 	return false;
-
 
 	// Intersection Point in case we wish to have particles on wall
 	//// compute the line AB direction vector components

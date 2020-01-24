@@ -82,6 +82,10 @@ void GameWorld::updateWorld()
 				}
 			}
 		}
+		else if (bullets[i].canDrawBulletTracer())
+		{
+			bullets[i].update();
+		}
 	}
 }
 
@@ -164,7 +168,10 @@ void GameWorld::drawWorld()
 		if (bullets[i].isActive())
 		{
 			m_window.draw(bullets[i].bulletSprite());
-			m_window.draw(bullets[i].line, 2, sf::Lines);
+		}
+		if (bullets[i].canDrawBulletTracer())
+		{
+			m_window.draw(bullets[i].raycast.drawRay());
 		}
 	}
 }
