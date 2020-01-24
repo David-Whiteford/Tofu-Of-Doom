@@ -197,8 +197,9 @@ void Game::initialise()
 
 	// Other uniforms
 	m_currentTextureID = glGetUniformLocation(m_mainShader->m_programID, "currentTexture");
-	// m_lightID = glGetUniformLocation(m_mainShader->m_programID, "LightPosition_worldspace");
+	m_lightID = glGetUniformLocation(m_mainShader->m_programID, "LightPosition_worldspace");
 	m_lightPositionsID = glGetUniformLocation(m_mainShader->m_programID, "lightPositionsWorldspace");
+	m_muzzleFlashIntensityID = glGetUniformLocation(m_mainShader->m_programID, "muzzleFlashIntensity");
 }
 
 /// <summary>
@@ -286,7 +287,7 @@ void Game::update(sf::Time t_deltaTime)
 	glUniformMatrix4fv(m_viewMatrixID, 1, GL_FALSE, &camera.getView()[0][0]);
 	glUniformMatrix4fv(m_projectionMatrixID, 1, GL_FALSE, &projection[0][0]);
 
-	glm::vec3 lightPos = glm::vec3(m_gameWorld->getPlayerPosition().x, 3.5f, m_gameWorld->getPlayerPosition().y);
+	glm::vec3 lightPos = camera.getEye();
 	glUniform3f(m_lightID, lightPos.x, lightPos.y, lightPos.z);
 
 	// Send array of light positions to shader
@@ -682,9 +683,13 @@ void Game::fireGun()
 			vibrate = true;
 			camera.controller.Vibrate(65535, 65535);
 
+			m_muzzleFlashIntensity = 300.0f;
 			gunRecoil = true; // If the gun is being shot, create some recoil
 		}
-
+		else
+		{
+			m_muzzleFlashIntensity = 0.0f;
+		}
 	}
 	else if (gunNum == 2 && m_time > m_ShotDelay) // Rifle
 	{
@@ -705,7 +710,12 @@ void Game::fireGun()
 			vibrate = true;
 			camera.controller.Vibrate(65535, 65535);
 
+			m_muzzleFlashIntensity = 300.0f;
 			gunRecoil = true; // If the gun is being shot, create some recoil
+		}
+		else
+		{
+			m_muzzleFlashIntensity = 0.0f;
 		}
 	}
 	else if (gunNum == 3 && m_time > m_ShotDelay / (float)6) // Machine gun
@@ -727,7 +737,12 @@ void Game::fireGun()
 			vibrate = true;
 			camera.controller.Vibrate(65535, 65535);
 
+			m_muzzleFlashIntensity = 300.0f;
 			gunRecoil = true; // If the gun is being shot, create some recoil
+		}
+		else
+		{
+			m_muzzleFlashIntensity = 0.0f;
 		}
 	}
 
@@ -768,7 +783,7 @@ void Game::fireGun()
 		}
 	}
 
-
+	glUniform1f(m_muzzleFlashIntensityID, m_muzzleFlashIntensity);
 	camera.cameraShake();
 }
 

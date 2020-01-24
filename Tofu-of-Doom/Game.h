@@ -227,6 +227,8 @@ private:
 	const static int LIGHT_AMOUNT = 25;
 	GLuint m_lightID;
 	GLuint m_lightPositionsID;
+	GLuint m_muzzleFlashIntensityID;
+	float m_muzzleFlashIntensity{ 0.0f };
 	std::vector<glm::vec3> m_lightPositions;
 	GLuint m_modelMatrixID;
 	GLuint m_viewMatrixID;

@@ -18,13 +18,15 @@ const int LIGHT_AMOUNT = 25;
 uniform sampler2D currentTexture;
 uniform vec3 LightPosition_worldspace;
 uniform vec3 lightPositionsWorldspace[LIGHT_AMOUNT];
+uniform float muzzleFlashIntensity;
 
 void main()
 {
 	// Light emission properties
 	// You probably want to put them as uniforms
-	vec3 LightColor = vec3(1, 1, 1);
-	float LightPower = 300.0f;
+	vec3 LightColor = vec3(1, 1, 1); // White
+	vec3 muzzleFlashColor = vec3(0.98, 0.72, 0.01); // Weird orange
+	float LightPower = 200.0f;
 	
 	// Material properties
 	vec3 MaterialDiffuseColor = texture(currentTexture, UV).rgb;
@@ -68,12 +70,9 @@ void main()
 			MaterialDiffuseColor * LightColor * LightPower * cosTheta / (distance*distance) +
 			// Specular : reflective highlight, like a mirror
 			MaterialSpecularColor * LightColor * LightPower * pow(cosAlpha,5) / (distance*distance);
-
-		// ---------------------------------------------------------------------------------------------
-
-
 	}
 
+	// I should probably put this in a function so it can be used above, leave it for now
 	vec3 LightPosition_cameraspace_temp = ( view * vec4(LightPosition_worldspace, 1)).xyz;
 	vec3 LightDirection_cameraspace = LightPosition_cameraspace_temp + EyeDirection_cameraspace;
 
@@ -105,7 +104,7 @@ void main()
 		// Ambient : simulates indirect lighting
 		MaterialAmbientColor +
 		// Diffuse : "color" of the object
-		MaterialDiffuseColor * LightColor * LightPower * cosTheta / (distance*distance) +
+		MaterialDiffuseColor * muzzleFlashColor * muzzleFlashIntensity * cosTheta / (distance*distance) +
 		// Specular : reflective highlight, like a mirror
-		MaterialSpecularColor * LightColor * LightPower * pow(cosAlpha,5) / (distance*distance);
+		MaterialSpecularColor * muzzleFlashColor * muzzleFlashIntensity * pow(cosAlpha,5) / (distance*distance);
 }
