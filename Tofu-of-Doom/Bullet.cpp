@@ -84,7 +84,7 @@ bool Bullet::checkCollision(sf::Vector2f t_enemyPos, float t_radius)
 	float dist = std::pow((m_bulletShape.getPosition().x - t_enemyPos.x), 2) + std::pow((m_bulletShape.getPosition().y - t_enemyPos.y), 2);
 
 	// Is an expensive call
-	interpolateCollision(t_enemyPos, t_radius);
+	return interpolateCollision(t_enemyPos, t_radius);
 
 	if (dist <= (t_radius + m_radius) * (t_radius + m_radius))
 	{
@@ -116,31 +116,42 @@ sf::CircleShape Bullet::bulletSprite()
 	return m_bulletShape;
 }
 
-void Bullet::interpolateCollision(sf::Vector2f t_enemyPos, float t_enemyRadius)
+bool Bullet::interpolateCollision(sf::Vector2f t_enemyPos, float t_enemyRadius)
 {
-	// if inbetween the start and end position
-	if ((((t_enemyPos.x <= m_firedFrom.x && t_enemyPos.x >= m_position.x) ||
-		(t_enemyPos.x >= m_firedFrom.x && t_enemyPos.x <= m_position.x))) &&
-		(((t_enemyPos.y <= m_firedFrom.y && t_enemyPos.y >= m_position.y) ||
-		(t_enemyPos.y >= m_firedFrom.y && t_enemyPos.y <= m_position.y))))
+
+	float leftSide = t_enemyPos.x - t_enemyRadius;
+	float rightSide = t_enemyPos.x + t_enemyRadius;
+	float topSide = t_enemyPos.y - t_enemyRadius;
+	float bottomSide = t_enemyPos.y + t_enemyRadius;
+
+
+	if ((m_firedFrom.x < leftSide && m_position.x < leftSide) ||
+		(m_firedFrom.x > rightSide&& m_position.x > rightSide))
 	{
-		//// Finding the distance of line from center. 
-		//int dist = (abs(a * x + b * y + c)) /
-		//	sqrt(a * a + b * b);
-		// compute double area
-		float area = std::abs((-(m_firedFrom.x - m_position.x) * -(t_enemyPos.y - m_position.y)) - (-(t_enemyPos.x - m_position.x) * -(m_firedFrom.y - m_position.y)));
-		area = area * 2;
-		// compute the AB segment length
-		float D = std::sqrt(std::pow((m_firedFrom.x - m_position.x), 2) + std::pow((m_firedFrom.y - m_position.y), 2));
-		float h = area / D;
-
-
-
-		if (h <= t_enemyRadius * 2)
-		{
-			std::cout << "an interpolated hit" << std::endl;
-		}
+		return false;
 	}
+
+	if ((m_firedFrom.y < topSide && m_position.y < topSide) ||
+		(m_firedFrom.y > bottomSide&& m_position.y > bottomSide))
+	{
+		return false;
+	}
+	// compute double area
+	float area = std::abs(((m_firedFrom.x - m_position.x) * (t_enemyPos.y - m_position.y)) - ((t_enemyPos.x - m_position.x) * (m_firedFrom.y - m_position.y)));
+	area = area * 2;
+	// compute the AB segment length
+	float D = std::sqrt(std::pow((m_firedFrom.x - m_position.x), 2) + std::pow((m_firedFrom.y - m_position.y), 2));
+	float h = area / D;
+
+
+
+	if (h <= t_enemyRadius * 2)
+	{
+		return true;
+	}
+	return false;
+
+
 	// Intersection Point in case we wish to have particles on wall
 	//// compute the line AB direction vector components
 	//float Dx = (t_firedFrom.x - m_position.x) / D;
@@ -161,5 +172,6 @@ void Bullet::interpolateCollision(sf::Vector2f t_enemyPos, float t_enemyRadius)
 	//// compute second intersection point coordinate
 	//float Fx = m_position.x + (t + dt) * Dx;
 	//float Fy = m_position.y + (t + dt) * Dy;
-	
+
+
 }

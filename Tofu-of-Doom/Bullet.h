@@ -47,7 +47,7 @@ public:
 
 	//
 
-	void interpolateCollision(sf::Vector2f t_enemyPos, float t_enemyRadius);
+	bool interpolateCollision(sf::Vector2f t_enemyPos, float t_enemyRadius);
 
 
 
