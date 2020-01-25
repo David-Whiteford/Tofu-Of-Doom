@@ -136,14 +136,14 @@ void Camera::input(sf::Time t_deltaTime)
 
 
 
-		transformPos -= tempDirection * static_cast<float>(t_deltaTime.asMilliseconds() * m_speed);
+		transformPos -= tempDirection * static_cast<float>(t_deltaTime.asMilliseconds())* m_speed;
 
 	}
 	else if (controller.downButton())
 	{
 		glm::vec3 tempDirection(m_direction.x, m_direction.y, m_direction.z);
 		glm::normalize(tempDirection);
-		transformPos += tempDirection * static_cast<float>(t_deltaTime.asMilliseconds() * m_speed);
+		transformPos += tempDirection * static_cast<float>(t_deltaTime.asMilliseconds())* m_speed;
 	}
 
 	// Strafe
@@ -154,14 +154,14 @@ void Camera::input(sf::Time t_deltaTime)
 
 
 
-		transformPos += tempDirection * static_cast<float>(t_deltaTime.asMilliseconds() * m_speed);
+		transformPos += tempDirection * static_cast<float>(t_deltaTime.asMilliseconds())* m_speed;
 
 	}
 	else if (controller.leftButton())
 	{
 		glm::vec3 tempDirection(m_directionStrafe.x, m_directionStrafe.y, m_directionStrafe.z);
 		glm::normalize(tempDirection);
-		transformPos -= tempDirection * static_cast<float>(t_deltaTime.asMilliseconds() * m_speed);
+		transformPos -= tempDirection * static_cast<float>(t_deltaTime.asMilliseconds()) * m_speed;
 	}
 	// End Strafe
 

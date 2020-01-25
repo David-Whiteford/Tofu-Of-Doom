@@ -42,6 +42,15 @@ private:
 
 	int m_playerID = 1;
 
+	float m_rumbleTimeLeft = 0;
+
+	float m_speedToRemoveRumbleTime = 80;
+
+	float m_rightRumble = 60000;
+	float m_leftRumble = 60000;
+
+	const float DEFAULT_RUMBLE_STRENGTH = 60000;
+
 public:
 	CXBOXController();
 	~CXBOXController();
@@ -94,6 +103,9 @@ public:
 
 	bool leftTriggerDown();
 	bool rightTriggerDown();
+
+	void setRumbleTime(float t_rumbleTime);
+	void setRumbleStrength(float t_left, float t_right);
 
 
 };

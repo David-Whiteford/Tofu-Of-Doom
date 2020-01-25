@@ -25,6 +25,11 @@ Game::~Game()
 	delete m_mainShader;
 }
 
+double Game::clockToMilliseconds(clock_t ticks) {
+	// units/(units/time) => time (seconds) * 1000 = milliseconds
+	return (ticks / (double)CLOCKS_PER_SEC) * 1000.0;
+}
+
 /// <summary>
 /// Run
 /// </summary>
@@ -32,24 +37,28 @@ void Game::run()
 {
 	sf::Clock clock;
 	sf::Clock gunClock;
+	sf::Time oldTime = sf::Time::Zero;
 	sf::Time timeSinceLastUpdate = sf::Time::Zero;
-	sf::Time timePerFrame = sf::seconds((1.f / 35.0f));
+	sf::Time timePerFrame = sf::seconds((1.f / 60.0f));
 
-	m_deltaTime = timePerFrame;
 
 	while (m_window.isOpen() && !m_exitGame)
 	{
-		timeSinceLastUpdate += clock.restart();
+		m_deltaTime = clock.getElapsedTime() - oldTime;
+		//timeSinceLastUpdate += clock.restart();
 
-		if(timeSinceLastUpdate > timePerFrame)
+		if(clock.getElapsedTime() < oldTime + timePerFrame)
+		{
+		}
+		else
 		{
 			m_time += gunClock.restart();
 			processEvents();
-			update(timePerFrame);
-			render();
-			timeSinceLastUpdate -= timePerFrame;
+			update(m_deltaTime);
+			//timeSinceLastUpdate -= timePerFrame;
 			processEvents();
-
+			render();
+			oldTime = clock.getElapsedTime();
 		}
 
 		
@@ -685,6 +694,7 @@ void Game::fireGun()
 			vibrate = true;
 			camera.controller.Vibrate(65535, 65535);
 
+			m_vibrateLength = m_ShotDelay/(float)10;
 			m_muzzleFlashIntensity = 300.0f;
 			gunRecoil = true; // If the gun is being shot, create some recoil
 		}
@@ -711,7 +721,7 @@ void Game::fireGun()
 
 			vibrate = true;
 			camera.controller.Vibrate(65535, 65535);
-
+			m_vibrateLength = m_ShotDelay *.8f;
 			m_muzzleFlashIntensity = 300.0f;
 			gunRecoil = true; // If the gun is being shot, create some recoil
 		}
@@ -739,6 +749,7 @@ void Game::fireGun()
 			vibrate = true;
 			camera.controller.Vibrate(65535, 65535);
 
+			m_vibrateLength = m_ShotDelay/(float)2;
 			m_muzzleFlashIntensity = 300.0f;
 			gunRecoil = true; // If the gun is being shot, create some recoil
 		}
