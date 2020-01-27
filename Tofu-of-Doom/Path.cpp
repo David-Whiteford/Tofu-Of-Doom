@@ -22,8 +22,10 @@ void Path::draw()
 
 
 
-void Path::neighbourAlgor(int nodeIndex)
+void Path::neighbourAlgor()
 {
+
+	int nodeIndex = 0;
 	for (int i = 0; i < ROWS; i++)
 	{
 		for (int j = 0; j < COLS; j++)
@@ -39,13 +41,15 @@ void Path::neighbourAlgor(int nodeIndex)
 				// Check the bounds:
 				if (n_row >= 0 && n_row < ROWS && n_col >= 0 && n_col < COLS)
 				{
+					
 					int index = 0;
 					
 					for (int i = 0; i < ROWS; i++)
 					{
 						for (int j = 0; j < COLS; j++)
 						{
-							if (graph->nodeIndex(index)->m_data.m_row == n_row && graph->nodeIndex(index)->m_data.m_col == n_col)
+							if (graph->nodeIndex(index)->m_data.m_row == n_row 
+								&& graph->nodeIndex(index)->m_data.m_col == n_col)
 							{
 								graph->addArc(nodeIndex, index, m_nodeSize);
 								
@@ -76,10 +80,10 @@ void Path::initAStar(std::vector<sf::RectangleShape> t_walls)
 		for (int j = 0; j < COLS; j++)
 		{
 
-			arr[i][j] = nodeIndex;
+		
 			nodeData.m_name = std::to_string(nodeIndex);
-			nodeData.m_x = i * m_nodeSize;
-			nodeData.m_y = j * m_nodeSize;
+			nodeData.m_x = j * m_nodeSize;
+			nodeData.m_y = i * m_nodeSize;
 			nodeData.m_row = i;
 			nodeData.m_col = j;
 			
@@ -89,8 +93,8 @@ void Path::initAStar(std::vector<sf::RectangleShape> t_walls)
 			m_nodeShape[nodeIndex].setSize(sf::Vector2f(m_nodeSize, m_nodeSize));
 			m_nodeShape[nodeIndex].setPosition(nodeData.m_x, nodeData.m_y);
 			m_nodeShape[nodeIndex].setOrigin(25, 25);
-	/*		m_nodeShape[nodeIndex].setOutlineColor(sf::Color(sf::Color::Blue));
-			m_nodeShape[nodeIndex].setOutlineThickness(1);*/
+			//m_nodeShape[nodeIndex].setOutlineColor(sf::Color(sf::Color::Blue));
+			//m_nodeShape[nodeIndex].setOutlineThickness(1);
 			m_nodeShape[nodeIndex].setFillColor(sf::Color(sf::Color::Yellow));
 
 			for (auto wall : t_walls)
@@ -108,9 +112,9 @@ void Path::initAStar(std::vector<sf::RectangleShape> t_walls)
 
 		}
 	}
-	nodeIndex = 0;
-	neighbourAlgor(nodeIndex);
-	graph->aStar(graph->nodeIndex(0), graph->nodeIndex(49), graphPath);
+	
+	neighbourAlgor();
+	graph->aStar(graph->nodeIndex(0), graph->nodeIndex(96), graphPath);
 
 }
 

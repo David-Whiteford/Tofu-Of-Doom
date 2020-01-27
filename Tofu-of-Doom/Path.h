@@ -11,7 +11,7 @@ public:
 	Path(sf::RenderWindow& t_window);
 	~Path();
 	void draw();
-	void neighbourAlgor(int nodeIndex);
+	void neighbourAlgor();
 	void initAStar(std::vector<sf::RectangleShape> t_walls);
 	void update();
 	std::vector<Node*> getGraphPath();

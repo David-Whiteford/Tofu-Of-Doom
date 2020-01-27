@@ -78,22 +78,27 @@ void GameWorld::updateWorld()
 void GameWorld::enemyMove()
 {
 	
-	
-	std::cout << "Node" << graphPath.back()->m_data.m_name << std::endl;
-	sf::Vector2f graphPathVec = sf::Vector2f(graphPath.back()->m_data.m_x, graphPath.back()->m_data.m_y);
-	
-	sf::Vector2f moveTo = m_transform.moveTowards(m_enemies.front().getPosition(), graphPathVec, m_speedEn);
-
-	m_enemies.front().setPosition(moveTo);
-
-	if (m_enemies.front().getPosition().x == graphPath.back()->m_data.m_x  &&
-		m_enemies.front().getPosition().y == graphPath.back()->m_data.m_y )
+	if (graphPath.empty() == false)
 	{
-		std::cout << "Pop graph vec" << graphPath.size();
-		graphPath.pop_back();
+		std::cout << "Node" << graphPath.back()->m_data.m_name << std::endl;
+		sf::Vector2f graphPathVec = sf::Vector2f(graphPath.back()->m_data.m_x, graphPath.back()->m_data.m_y);
+
+		sf::Vector2f moveTo = m_transform.moveTowards(m_enemies.front().getPosition(), graphPathVec, m_speedEn);
+
+		m_enemies.front().setPosition(moveTo);
+
+		if (m_enemies.front().getPosition().x == graphPath.back()->m_data.m_x &&
+			m_enemies.front().getPosition().y == graphPath.back()->m_data.m_y)
+		{
+			std::cout << "Pop graph vec" << graphPath.size();
+			graphPath.pop_back();
+
+		}
+	}
+	else
+	{
 
 	}
-
 }
 
 /// <summary>
