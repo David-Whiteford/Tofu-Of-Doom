@@ -214,4 +214,20 @@ void Camera::input(sf::Time t_deltaTime)
 	collider.bounds.y1 = m_eye.z - 0.1f;
 	collider.bounds.y2 = m_eye.z + 0.1f;
 
+	// RAYCAST DEBUG TESTS
+	sf::Vector2f pos = sf::Vector2f(transformPos.x * 10, transformPos.z * 10);
+
+	glm::vec3 tempDirection(m_directionStrafe.x, m_directionStrafe.y, m_directionStrafe.z);
+	glm::normalize(tempDirection);
+	raycastToLeft.setRayValues(pos, sf::Vector2f(tempDirection.x, tempDirection.z), 30);
+	raycastToRight.setRayValues(pos, sf::Vector2f(-tempDirection.x, -tempDirection.z), 30);
+
+	glm::vec3 tempDirection2(m_direction.x, m_direction.y, m_direction.z);
+	glm::normalize(tempDirection2);
+	raycastForward.setRayValues(pos, sf::Vector2f(tempDirection2.x, tempDirection2.z), 30);
+	raycastBehind.setRayValues(pos, sf::Vector2f(-tempDirection2.x, -tempDirection2.z), 30);
+
+
+	// END DEBUG TESTS
+
 }

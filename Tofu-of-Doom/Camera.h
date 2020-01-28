@@ -9,6 +9,7 @@
 #include <SFML/Graphics.hpp>
 #include "Controller.h"
 #include "Collider2D.h"
+#include "Raycast.h"
 
 class Camera
 {
@@ -42,6 +43,8 @@ public:
 	CXBOXController controller;
 
 	Collider2D collider;
+
+	Raycast raycastForward,raycastBehind,raycastToLeft,raycastToRight;
 
 private:
 	bool cameraShaking = false;

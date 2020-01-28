@@ -3,8 +3,8 @@
 /// <summary>
 /// Constructor for the GameWorld class
 /// </summary>
-GameWorld::GameWorld(sf::RenderWindow &t_window, sf::Time &t_deltaTime, Camera &t_camera) 
-	: m_window(t_window), m_deltaTime(t_deltaTime), m_camera(t_camera)
+GameWorld::GameWorld(sf::RenderWindow &t_window, sf::Time &t_deltaTime, Camera *t_camera) 
+	: m_window(t_window), m_deltaTime(t_deltaTime), m_camera(*t_camera)
 {
 	// Player
 	m_player.setRadius(25.0f);
@@ -69,12 +69,22 @@ void GameWorld::updateWorld()
 	setGunPosition();
 	enemyMove();
 
+	
+
 	for (int i = 0; i < 100; i++)
 	{
 		if (bullets[i].isActive())
 		{
 			bullets[i].update();
-
+			for (int x = 0; x < m_walls.size(); x++)
+			{
+				if(bullets[i].checkCollision(m_walls.at(x).getPosition(), m_walls.at(x).getSize().x/2))
+				{
+					std::cout << "hit" << std::endl;
+					break;
+				}
+				std::cout << x << std::endl;
+			}
 			for (int x = 0; x < 2; x++)
 			{
 				if (bullets[i].checkCollision(m_enemies.at(x).getPosition(), m_enemies[x].getRadius()))
@@ -147,6 +157,11 @@ void GameWorld::drawWorld()
 	m_window.setView(m_mapView);
 	m_window.draw(m_player);
 	m_window.draw(m_playerGun);
+
+	m_window.draw(m_camera.raycastForward.drawRay());
+	m_window.draw(m_camera.raycastBehind.drawRay());
+	m_window.draw(m_camera.raycastToLeft.drawRay());
+	m_window.draw(m_camera.raycastToRight.drawRay());
 
 	for (int i = 0; i < m_enemies.size(); i++)
 	{

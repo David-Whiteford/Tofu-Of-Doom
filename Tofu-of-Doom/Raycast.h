@@ -6,11 +6,12 @@
 
 class Raycast
 {
+
 public:
 	Raycast();
 	~Raycast();
 	void setRayValues(sf::Vector2f t_startPosition, sf::Vector2f t_direction, float t_length);
-	bool circleHit(sf::Vector2f t_targetPosition, float t_targetRadius);
+	bool hit(sf::Vector2f t_targetPosition, float t_targetRadius);
 
 	sf::VertexArray drawRay();  
 	void addToHitObjects(sf::CircleShape* t_enemy);
@@ -18,6 +19,8 @@ public:
 	void getClosest();
 
 	bool isInterpolating();
+
+	bool intersectsRectangle(sf::Vector2f p1, sf::Vector2f p2);
 
 private:
 	std::queue<sf::CircleShape*> hitObjects;
