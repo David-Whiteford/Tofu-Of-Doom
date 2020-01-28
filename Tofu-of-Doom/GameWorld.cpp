@@ -129,7 +129,9 @@ void GameWorld::enemyMove()
 	}
 	else
 	{
-
+	/*	int newEndPath = 590;
+		m_gamePath->setNewPath(newEndPath);
+		m_gamePath->setPath();*/
 	}
 
 }

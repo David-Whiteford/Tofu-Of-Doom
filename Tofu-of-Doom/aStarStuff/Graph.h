@@ -495,7 +495,7 @@ inline void Graph<NodeType, ArcType>::aStar(Node* start, Node* dest , std::vecto
 		{
 			Arc arc = (*iter);
 			
-			if (arc.node() != pq.top()->previous())
+			if (arc.node() != pq.top()->previous() && pq.top()->m_data.passable == true)
 			{
 				// distC is the cost so far to pq.top + weight of arc from pq.top to this child
 				int distC = pq.top()->m_data.pathCost + arc.weight();

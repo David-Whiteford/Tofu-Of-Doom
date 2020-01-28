@@ -80,34 +80,35 @@ void Path::initAStar(std::vector<sf::RectangleShape> t_walls)
 	{
 		for (int j = 0; j < COLS; j++)
 		{
-
-		
+			
+			m_nodeSquare.push_back(m_nodeShape[nodeIndex]);
+			nodeData.passable = true;
 			nodeData.m_name = std::to_string(nodeIndex);
 			nodeData.m_x = j * m_nodeSize;
 			nodeData.m_y = i * m_nodeSize;
 			nodeData.m_row = i;
 			nodeData.m_col = j;
-			//std::cout << "Row " << nodeData.m_row << "Col" << nodeData.m_col <<  std::endl;
-			//add node
-			graph->addNode(nodeData, nodeIndex);
 
+			m_nodeShape[nodeIndex].setFillColor(sf::Color(sf::Color::Yellow));
 			m_nodeShape[nodeIndex].setSize(sf::Vector2f(m_nodeSize, m_nodeSize));
 			m_nodeShape[nodeIndex].setPosition(nodeData.m_x, nodeData.m_y);
 			m_nodeShape[nodeIndex].setOrigin(25, 25);
-			//m_nodeShape[nodeIndex].setOutlineColor(sf::Color(sf::Color::Blue));
-			//m_nodeShape[nodeIndex].setOutlineThickness(1);
-			m_nodeShape[nodeIndex].setFillColor(sf::Color(sf::Color::Yellow));
 
 			for (auto wall : t_walls)
 			{
 				if (m_nodeShape[nodeIndex].getGlobalBounds().intersects(wall.getGlobalBounds()))
 				{
 					m_nodeShape[nodeIndex].setFillColor(sf::Color(sf::Color::Black));
-					graph->nodeIndex(nodeIndex)->m_data.passable = false;
-					
-				}
+					nodeData.passable = false;
 
+				}
 			}
+
+
+
+			std::cout << "Row " << nodeData.m_row << "Col" << nodeData.m_col << "Is Passable: " << nodeData.passable <<  std::endl;
+			//add node
+			graph->addNode(nodeData, nodeIndex);
 			m_nodeSquare.push_back(m_nodeShape[nodeIndex]);
 			nodeIndex++;
 
@@ -115,13 +116,23 @@ void Path::initAStar(std::vector<sf::RectangleShape> t_walls)
 	}
 	
 	neighbourAlgor();
-	graph->aStar(graph->nodeIndex(0), graph->nodeIndex(852), graphPath);
+	setPath();
 
 }
 
 void Path::update()
 {
 
+}
+
+void Path::setPath()
+{
+	graph->aStar(graph->nodeIndex(startNode), graph->nodeIndex(endNode), graphPath);
+}
+void Path::setNewPath(int t_endPath)
+{
+	startNode = endNode;
+	endNode = t_endPath;
 }
 
 std::vector<Node*> Path::getGraphPath()
