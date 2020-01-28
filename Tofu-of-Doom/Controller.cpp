@@ -2,10 +2,12 @@
 
 CXBOXController::CXBOXController()
 {
+
 }
 
 CXBOXController::~CXBOXController()
 {
+
 }
 
 CXBOXController::CXBOXController(int playerNumber)
@@ -61,92 +63,14 @@ void CXBOXController::Vibrate(int leftVal, int rightVal)
 	delete(Player);
 }
 
+
+
 void CXBOXController::Update(float t_deltaTime)
 {
-	// Declare a temp Transform
-
-
-	/*if (vibrationStarted + vibrationLength < t_deltaTime)
+	if (m_rumbleTimeLeft > 0)
 	{
-		vibrate = false;
-		Player1->Vibrate();
-	////*/
-
-	Player = new CXBOXController(m_playerID);
-
-	if (Player->IsConnected())
-	{
-		if (Player->GetState().Gamepad.wButtons & XINPUT_GAMEPAD_A)
-		{
-			//	Player1->Vibrate(65535, 0);
-		}
-
-		if (Player->GetState().Gamepad.wButtons & XINPUT_GAMEPAD_B)
-		{
-			//Player1->Vibrate(0, 65535);
-		}
-
-		if (Player->GetState().Gamepad.wButtons & XINPUT_GAMEPAD_X)
-		{
-			//if (!vibrate)
-			//{
-			//	vibrate = true;
-			//	Player1->Vibrate(65535, 65535);
-			//	//vibrationStarted = t_deltaTime.asMilliseconds();
-			//	//std::cout << vibrationStarted << std::endl;
-			//}
-
-		}
-
-		if (Player->GetState().Gamepad.wButtons & XINPUT_GAMEPAD_Y)
-		{
-			//	Player1->Vibrate();
-		}
-
-		if (Player->GetState().Gamepad.wButtons & XINPUT_GAMEPAD_BACK)
-		{
-
-		}
-
-		if (Player->GetState().Gamepad.sThumbLY > 7849)
-		{
-
-		}
-		else if (Player->GetState().Gamepad.sThumbLY < -7849)
-		{
-		}
-
-		// Strafe
-		if (Player->GetState().Gamepad.sThumbLX > 17849)
-		{
-
-		}
-		else if (Player->GetState().Gamepad.sThumbLX < -17849)
-		{
-		}
-		// End Strafe
-
-
-
-		if (Player->GetState().Gamepad.sThumbRX < -7849)
-		{
-		}
-		else if (Player->GetState().Gamepad.sThumbRX > 7849)
-		{
-			
-		}
-		if (Player->GetState().Gamepad.wButtons & XINPUT_GAMEPAD_Y)
-		{
-			
-
-		}
-		else if (Player->GetState().Gamepad.wButtons & XINPUT_GAMEPAD_A)
-		{
-			
-
-		}
-
-		delete(Player);
+		m_rumbleTimeLeft -= m_speedToRemoveRumbleTime * t_deltaTime;
+		Vibrate(m_leftRumble, m_rightRumble);
 	}
 }
 
@@ -471,4 +395,95 @@ bool CXBOXController::rightButtonRTS()
 	delete(Player);
 	std::cout << "No Controller connected for port 1 player 1" << std::endl;
 	return false;
+}
+
+// Return value of left trigger
+bool CXBOXController::leftTrigger()
+{
+	Player = new CXBOXController(m_playerID);
+
+	if (Player->IsConnected())
+	{
+		if (Player->GetState().Gamepad.bLeftTrigger > XINPUT_GAMEPAD_TRIGGER_THRESHOLD)
+		{
+
+				return true;
+
+		}
+		return false; // Trigger was not pressed
+	}
+	// not connected
+	return false;
+}
+
+// Return value of right trigger
+bool CXBOXController::rightTrigger()
+{
+	Player = new CXBOXController(m_playerID);
+
+	if (Player->IsConnected())
+	{
+		if (Player->GetState().Gamepad.bRightTrigger > XINPUT_GAMEPAD_TRIGGER_THRESHOLD)
+		{
+
+			return true;
+
+		}
+		return false; // Trigger was not pressed
+	}
+	// not connected
+	return false;
+}
+
+// Return value of left trigger
+bool CXBOXController::leftTriggerDown()
+{
+	if (leftTrigger() && !leftTriggerPressed)
+	{
+		leftTriggerPressed = true;
+		return true;
+	}
+	// holding up but button was already pressed down last frame
+	else if (leftTrigger() && leftTriggerPressed)
+	{
+		return false;
+	}
+	// is not pressing or holding down we reset the button going down to false
+	else
+	{
+		leftTriggerPressed = false;
+		return false;
+	}
+}
+
+// Return value of right trigger
+bool CXBOXController::rightTriggerDown()
+{
+	if (rightTrigger() && !rightTriggerPressed)
+	{
+		rightTriggerPressed = true;
+		return true;
+	}
+	// holding up but button was already pressed down last frame
+	else if (rightTrigger() && rightTriggerPressed)
+	{
+		return false;
+	}
+	// is not pressing or holding down we reset the button going down to false
+	else
+	{
+		rightTriggerPressed = false;
+		return false;
+	}
+}
+
+void CXBOXController::setRumbleTime(float t_rumbleTime)
+{
+	m_rumbleTimeLeft = t_rumbleTime;
+}
+
+void CXBOXController::setRumbleStrength(float t_left, float t_right)
+{
+	m_rightRumble = t_right;
+	m_leftRumble = t_left;
 }

@@ -33,6 +33,8 @@ public:
 
 	void setPublicTransformToCentre(std::vector<glm::vec3> vertices);
 
+	
+
 
 
 private:

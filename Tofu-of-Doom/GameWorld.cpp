@@ -68,8 +68,41 @@ void GameWorld::updateWorld()
 {
 	m_player.setPosition(m_camera.getEye().x * s_displayScale, m_camera.getEye().z * s_displayScale);
 	setGunPosition();
-
 	enemyMove();
+
+	for (int i = 0; i < 100; i++)
+	{
+		if (bullets[i].isActive())
+		{
+			bullets[i].update();
+
+			for (int x = 0; x < 2; x++)
+			{
+				if (bullets[i].checkCollision(m_enemies.at(x).getPosition(), m_enemies[x].getRadius()))
+				{
+					if (bullets[i].raycast.isInterpolating())
+					{
+						bullets[i].raycast.addToHitObjects(&m_enemies.at(x));
+					}
+					else
+					{
+						m_enemies.at(x).setPosition(10, 10);
+					}
+					bullets[i].setActive(false);
+				}
+			}
+			
+		}
+		if (bullets[i].canDrawBulletTracer())
+		{
+			bullets[i].update();
+			while (bullets[i].raycast.getHitObjects().size() > 0)
+			{
+				bullets[i].raycast.getClosest();
+
+			}
+		}
+	}
 }
 
 /// <summary>
@@ -99,6 +132,14 @@ void GameWorld::enemyMove()
 	{
 
 	}
+<<<<<<< HEAD
+=======
+
+	int xPos = m_enemies.back().getPosition().x;
+	//std::cout << "xPos" << xPos << std::endl;
+	sf::Vector2f direction = (m_player.getPosition() - m_enemies.back().getPosition());
+	//sf::Vector2f newDirection = Vector3.Normalize(direction);	
+>>>>>>> b5c36e741a4647803c7a228b789cf795f7c40938
 }
 
 /// <summary>
@@ -110,7 +151,6 @@ void GameWorld::drawWorld()
 	{
 		m_window.draw(m_walls[i]);
 	}
-
 	m_mapView.setCenter(m_player.getPosition());
 	m_window.setView(m_mapView);
 	m_window.draw(m_player);
@@ -120,7 +160,67 @@ void GameWorld::drawWorld()
 	{
 		m_window.draw(m_enemies[i]);
 	}	
+<<<<<<< HEAD
 	m_gamePath->draw();
+=======
+
+	for (int i = 0; i < 100; i++)
+	{
+		if (bullets[i].isActive())
+		{
+			m_window.draw(bullets[i].bulletSprite());
+		}
+		if (bullets[i].canDrawBulletTracer())
+		{
+			m_window.draw(bullets[i].raycast.drawRay());
+		}
+	}
+}
+
+void GameWorld::fireBullet(int t_gunType)
+{
+	if (t_gunType == 1 || t_gunType == 3)
+	{
+		for (int i = 0; i < 100; i++)
+		{
+			if (bullets[i].isActive() == false)
+			{
+				bullets[i].setTimeToLive(400);
+				glm::vec3 tempDirection(m_camera.getDirection().x, m_camera.getDirection().y, m_camera.getDirection().z);
+				glm::normalize(tempDirection);
+				bullets[i].bulletInit(sf::Vector2f(tempDirection.x, tempDirection.z), 0, m_playerGun.getPosition());
+				break;
+			}
+		}
+	}
+	else if (t_gunType == 2)
+	{
+		int bulletSpreadAmount = 0;
+		for (int i = 0; i < 100; i++)
+		{
+			if (bullets[i].isActive() == false)
+			{
+				glm::vec3 tempDirection(m_camera.getDirection().x, m_camera.getDirection().y, m_camera.getDirection().z);
+
+				float offsetX = ((float(rand()) / float(RAND_MAX)) * (0.2f - -0.2f)) + -0.2f;
+				float offsetZ = ((float(rand()) / float(RAND_MAX)) * (0.2f - -0.2f)) + -0.2f;
+
+				bullets[i].setTimeToLive(200);
+				//float randomSpread = rand() % 0 + (-0.32f);
+				glm::normalize(tempDirection);
+				//tempDirection += tempDirection * static_cast<float>(randomSpread);
+
+				bullets[i].bulletInit(sf::Vector2f(tempDirection.x + offsetX, tempDirection.z + offsetZ), 0, m_playerGun.getPosition());
+				bulletSpreadAmount++;
+
+				if (bulletSpreadAmount > 4)
+				{
+					break;
+				}
+			}
+		}
+	}
+>>>>>>> b5c36e741a4647803c7a228b789cf795f7c40938
 }
 
 /// <summary>
@@ -169,6 +269,14 @@ double GameWorld::getYaw()
 std::vector<std::pair<glm::vec3, WallType>> *GameWorld::getWallData()
 {
 	return m_map->getMap();
+}
+
+/// <summary>
+/// Gets the light positions from the GameWorld map
+/// </summary>
+std::vector<glm::vec3> *GameWorld::getLightPositions()
+{
+	return m_map->getLightPositions();
 }
 
 void GameWorld::setGunPosition()

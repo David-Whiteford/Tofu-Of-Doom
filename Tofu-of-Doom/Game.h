@@ -48,6 +48,7 @@ class Game
 public:
 	Game(sf::ContextSettings t_settings);
 	~Game();
+	double clockToMilliseconds(clock_t ticks);
 	void run();
 	std::vector< vec3df > positions;
 	ISoundEngine* soundEngine;
@@ -66,6 +67,7 @@ public:
 
 	// 1 is pistol, 2 is rifle, 3 is machine gun)
 	int gunNum = 1;
+
 
 	/// <summary>
 	/// Astar stuff with graph for storing nodes
@@ -223,9 +225,11 @@ private:
 	std::vector<glm::vec3> pistol_normals;
 
 	// Shader IDs
-	const static int LIGHT_AMOUNT = 5;
+	const static int LIGHT_AMOUNT = 25;
 	GLuint m_lightID;
 	GLuint m_lightPositionsID;
+	GLuint m_muzzleFlashIntensityID;
+	float m_muzzleFlashIntensity{ 0.0f };
 	std::vector<glm::vec3> m_lightPositions;
 	GLuint m_modelMatrixID;
 	GLuint m_viewMatrixID;

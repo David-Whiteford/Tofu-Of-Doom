@@ -12,8 +12,12 @@
 #include "Map.h"
 #include "DisplayScale.h"
 #include "Camera.h"
+<<<<<<< HEAD
 #include "Transform.h"
 #include "Vector2.h"
+=======
+#include "Bullet.h"
+>>>>>>> b5c36e741a4647803c7a228b789cf795f7c40938
 
 class GameWorld
 {
@@ -23,9 +27,17 @@ public:
 	void updateWorld();
 	void enemyMove();
 	void drawWorld();
+<<<<<<< HEAD
 	void drawBulletTrajectory();
 	float Pi = 3.14;
 	
+=======
+
+	void fireBullet(int t_gunType);
+	Bullet bullets[100];
+
+
+>>>>>>> b5c36e741a4647803c7a228b789cf795f7c40938
 	sf::Vector2f getPlayerPosition();
 	sf::Vector2f getEnemyPosition();
 	glm::vec3 getCameraPosition();
@@ -33,6 +45,7 @@ public:
 	double getPitch();
 	double getYaw();
 	std::vector<std::pair<glm::vec3, WallType>> *getWallData();
+	std::vector<glm::vec3> *getLightPositions();
 
 private:
 	MyVector2 vector2;
@@ -52,8 +65,11 @@ private:
 	sf::CircleShape m_player;
 	sf::CircleShape m_enemy;
 	sf::CircleShape m_playerGun;
+	
+
 
 	std::vector<sf::CircleShape> m_enemies;
+
 	std::vector<sf::RectangleShape> m_walls;
 
 	glm::vec3 m_eye; // Current camera position

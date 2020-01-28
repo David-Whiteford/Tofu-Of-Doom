@@ -21,16 +21,16 @@ bool Collider2D::isColliding(Bounds b1, Bounds b2)
 
 	if ((distX1 > 0.0f || distY1 > 0.0f)) 
 	{
-		std::cout << "false 1" << std::endl;
+		//std::cout << "false 1" << std::endl;
 		return false;
 	}
 	if (distX2 > 0.0f || distY2 > 0.0f)
 	{
-		std::cout << "false 2" << std::endl;
+		//std::cout << "false 2" << std::endl;
 		return false;
 	}
 
-	std::cout << "colliding" << std::endl;
+	//std::cout << "colliding" << std::endl;
 	return true;
 }
 

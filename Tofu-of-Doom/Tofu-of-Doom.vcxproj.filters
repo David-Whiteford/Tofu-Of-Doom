@@ -78,10 +78,17 @@
     <ClCompile Include="ShotTrajectory.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+<<<<<<< HEAD
     <ClCompile Include="Path.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Vector2.cpp">
+=======
+    <ClCompile Include="Bullet.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Raycast.cpp">
+>>>>>>> b5c36e741a4647803c7a228b789cf795f7c40938
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -227,10 +234,20 @@
     <ClInclude Include="ShotTrajectory.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+<<<<<<< HEAD
     <ClInclude Include="Path.h">
       <Filter>Header Files\AStar</Filter>
     </ClInclude>
     <ClInclude Include="Vector2.h">
+=======
+    <ClInclude Include="Bullet.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Raycast.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ECS.h">
+>>>>>>> b5c36e741a4647803c7a228b789cf795f7c40938
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -33,12 +33,23 @@ private:
 	bool leftButtonPressed = false;
 	bool rightButtonPressed = false;
 	bool backButtonPressed = false;
+	bool rightTriggerPressed = false;
+	bool leftTriggerPressed = false;
 	
 	//===============EndKEyPresses Hidden from player
 
 	float deadZone = 17000;
 
 	int m_playerID = 1;
+
+	float m_rumbleTimeLeft = 0;
+
+	float m_speedToRemoveRumbleTime = 80;
+
+	float m_rightRumble = 60000;
+	float m_leftRumble = 60000;
+
+	const float DEFAULT_RUMBLE_STRENGTH = 60000;
 
 public:
 	CXBOXController();
@@ -86,6 +97,15 @@ public:
 	// Right Thumbstick input 
 	bool rightButtonRTS();
 	bool leftButtonRTS();
+
+	bool leftTrigger();
+	bool rightTrigger();
+
+	bool leftTriggerDown();
+	bool rightTriggerDown();
+
+	void setRumbleTime(float t_rumbleTime);
+	void setRumbleStrength(float t_left, float t_right);
 
 
 };

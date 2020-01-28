@@ -25,6 +25,11 @@ Game::~Game()
 	delete m_mainShader;
 }
 
+double Game::clockToMilliseconds(clock_t ticks) {
+	// units/(units/time) => time (seconds) * 1000 = milliseconds
+	return (ticks / (double)CLOCKS_PER_SEC) * 1000.0;
+}
+
 /// <summary>
 /// Run
 /// </summary>
@@ -32,24 +37,31 @@ void Game::run()
 {
 	sf::Clock clock;
 	sf::Clock gunClock;
+	sf::Time oldTime = sf::Time::Zero;
 	sf::Time timeSinceLastUpdate = sf::Time::Zero;
-	sf::Time timePerFrame = sf::seconds(1.f / 60.f);
+	sf::Time timePerFrame = sf::seconds((1.f / 60.0f));
 
-	m_deltaTime = timePerFrame;
 
 	while (m_window.isOpen() && !m_exitGame)
 	{
-		processEvents();
-		timeSinceLastUpdate += clock.restart();
+		m_deltaTime = clock.getElapsedTime() - oldTime;
+		//timeSinceLastUpdate += clock.restart();
 
-		while (timeSinceLastUpdate > timePerFrame)
+		if(clock.getElapsedTime() < oldTime + timePerFrame)
+		{
+		}
+		else
 		{
 			m_time += gunClock.restart();
-			timeSinceLastUpdate -= timePerFrame;
 			processEvents();
-			update(timePerFrame);
+			update(m_deltaTime);
+			//timeSinceLastUpdate -= timePerFrame;
+			processEvents();
 			render();
+			oldTime = clock.getElapsedTime();
 		}
+
+		
 	}
 }
 
@@ -58,12 +70,12 @@ void Game::run()
 /// </summary>
 void Game::initialise()
 {
-	// Set light positions
-	m_lightPositions.push_back(glm::vec3(225.0f, 15.0f, 225.0f));
-	m_lightPositions.push_back(glm::vec3(25.0f, 15.0f, 25.0f));
-	m_lightPositions.push_back(glm::vec3(100.0f, 15.0f, 100.0f));
-	m_lightPositions.push_back(glm::vec3(150.0f, 15.0f, 150.0f));
-	m_lightPositions.push_back(glm::vec3(60.0f, 15.0f, 20.0f));
+	// Set light positions (this will be put into a level loader probably)
+	for (int i = 0; i < LIGHT_AMOUNT; ++i)
+	{
+		glm::vec3 f_temp = glm::vec3(m_gameWorld->getLightPositions()->at(i).x / s_displayScale, m_gameWorld->getLightPositions()->at(i).y / s_displayScale, m_gameWorld->getLightPositions()->at(i).z / s_displayScale);
+		m_lightPositions.push_back(f_temp);
+	}
 
 	graph = new Graph<NodeData, int>(25);
 	m_ShotDelay = sf::seconds(.7f); // .7f is the length for the reload sound to finish
@@ -76,14 +88,14 @@ void Game::initialise()
 	vec3df position(25, 0, 25);
 	positions.push_back(position);
 
-	shotgunSound = soundEngine->addSoundSourceFromFile("cg1.wav");
+	shotgunSound = soundEngine->addSoundSourceFromFile("shotgun.mp3");
 	machinegunSound = soundEngine->addSoundSourceFromFile("cg1.wav");
-	pistolSound = soundEngine->addSoundSourceFromFile("cg1.wav");
+	pistolSound = soundEngine->addSoundSourceFromFile("9mm.mp3");
 	zombie = soundEngine->addSoundSourceFromFile("Monster.mp3");
-	shotgunQueue.push(shotgunSound);
-	shotgunQueue.push(machinegunSound);
-	shotgunQueue.push(pistolSound);
-	shotgunQueue.push(shotgunSound);
+	shotgunQueue.push(shotgunSound); // 4
+	shotgunQueue.push(machinegunSound); // 3
+	shotgunQueue.push(pistolSound); // 2
+	shotgunQueue.push(shotgunSound); // 1
 
 	
 	zombiePosition = vec3df(m_gameWorld->getEnemyPosition().x, 0 , m_gameWorld->getEnemyPosition().y);
@@ -107,7 +119,7 @@ void Game::initialise()
 			//graph->addArc(1, 2, 10);
 			// Add an arc from cell id 24 to cell id arr[n_row][n_col] 
 			// A valid neighbor:
-			std::cout << "Neighbor: " << n_row << "," << n_col << ": " << arr[n_row][n_col] << std::endl;
+			//std::cout << "Neighbor: " << n_row << "," << n_col << ": " << arr[n_row][n_col] << std::endl;
 		}
 	}
 
@@ -194,8 +206,9 @@ void Game::initialise()
 
 	// Other uniforms
 	m_currentTextureID = glGetUniformLocation(m_mainShader->m_programID, "currentTexture");
-	// m_lightID = glGetUniformLocation(m_mainShader->m_programID, "LightPosition_worldspace");
+	m_lightID = glGetUniformLocation(m_mainShader->m_programID, "LightPosition_worldspace");
 	m_lightPositionsID = glGetUniformLocation(m_mainShader->m_programID, "lightPositionsWorldspace");
+	m_muzzleFlashIntensityID = glGetUniformLocation(m_mainShader->m_programID, "muzzleFlashIntensity");
 }
 
 /// <summary>
@@ -236,13 +249,12 @@ void Game::update(sf::Time t_deltaTime)
 		"y: " << cubeCollider.bounds.y1 << " x2: " << cubeCollider.bounds.x2 << " y2: " << cubeCollider.bounds.y2 << std::endl;*/
 	if (Collider2D::isColliding(camera.collider.bounds, cubeCollider.bounds))
 	{
-		std::cout << "Working" << std::endl;
+	//	std::cout << "Working" << std::endl;
 	}
 
 	//update the zombie sound position to follow test zombie
 	zombiePosition = vec3df(m_gameWorld->getEnemyPosition().x, 3.5f, m_gameWorld->getEnemyPosition().y); 
 	
-	m_gameWorld->updateWorld();
 
 	// Update game controls
 	camera.input(t_deltaTime);
@@ -250,12 +262,16 @@ void Game::update(sf::Time t_deltaTime)
 	camera.transform.position.y = camera.getEye().y;
 	camera.transform.position.z = camera.getEye().z;
 
+
 	fireGun();
 
 	// std::cout << m_time.asSeconds() << std::endl;
 
 	// This is currently only used to display the mini-map
 	gameControls(t_deltaTime);
+
+
+	m_gameWorld->updateWorld();
 
 	// Update view (camera)
 	camera.getView() = camera.camera(m_gameWorld->getCameraPosition(), m_gameWorld->getPitch(), m_gameWorld->getYaw());
@@ -282,8 +298,8 @@ void Game::update(sf::Time t_deltaTime)
 	glUniformMatrix4fv(m_viewMatrixID, 1, GL_FALSE, &camera.getView()[0][0]);
 	glUniformMatrix4fv(m_projectionMatrixID, 1, GL_FALSE, &projection[0][0]);
 
-	// glm::vec3 lightPos = glm::vec3(225, 8, 225);
-	// glUniform3f(m_lightID, lightPos.x, lightPos.y, lightPos.z);
+	glm::vec3 lightPos = camera.getEye();
+	glUniform3f(m_lightID, lightPos.x, lightPos.y, lightPos.z);
 
 	// Send array of light positions to shader
 	glUniform3fv(m_lightPositionsID, LIGHT_AMOUNT * sizeof(glm::vec3), &m_lightPositions[0][0]);
@@ -298,6 +314,7 @@ void Game::update(sf::Time t_deltaTime)
 /// </summary>
 void Game::render()
 {
+
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	switch (m_drawState)
@@ -655,54 +672,90 @@ void Game::fireGun()
 
 	if (gunNum == 1)
 	{
-		if (camera.controller.aButtonDown())
+		if (camera.controller.rightTriggerDown())
 		{
+			m_gameWorld->fireBullet(gunNum);
 
-			gunSoundEngine->play2D(shotgunQueue.front());
-			if (gunSoundEngine->isCurrentlyPlaying(shotgunSound) == false)
+			gunSoundEngine->play2D(pistolSound);
+			/*if (gunSoundEngine->isCurrentlyPlaying(shotgunSound) == false)
 			{
 
 				shotgunQueue.pop();
-			}
+			}*/
 
 			m_time = sf::Time::Zero;
 			m_time = m_time.Zero;
 
+			if (camera.isCameraShaking() == false)
+			{
+				camera.setCameraShake(true);
+			}
+
 			vibrate = true;
 			camera.controller.Vibrate(65535, 65535);
 
+			m_vibrateLength = m_ShotDelay/(float)10;
+			m_muzzleFlashIntensity = 300.0f;
 			gunRecoil = true; // If the gun is being shot, create some recoil
 		}
-
+		else
+		{
+			m_muzzleFlashIntensity = 0.0f;
+		}
 	}
 	else if (gunNum == 2 && m_time > m_ShotDelay) // Rifle
 	{
-		if (camera.controller.aButtonDown())
+		if (camera.controller.rightTriggerDown())
 		{
+
+			m_gameWorld->fireBullet(gunNum);
 
 			gunSoundEngine->play2D(shotgunQueue.front());
 			m_time = sf::Time::Zero;
 			m_time = m_time.Zero;
 
+			if (camera.isCameraShaking() == false)
+			{
+				camera.setCameraShake(true);
+			}
+
 			vibrate = true;
 			camera.controller.Vibrate(65535, 65535);
-
+			m_vibrateLength = m_ShotDelay *.8f;
+			m_muzzleFlashIntensity = 300.0f;
 			gunRecoil = true; // If the gun is being shot, create some recoil
+		}
+		else
+		{
+			m_muzzleFlashIntensity = 0.0f;
 		}
 	}
 	else if (gunNum == 3 && m_time > m_ShotDelay / (float)6) // Machine gun
 	{
 		// Fire a shot with chosen gun
-		if (camera.controller.aButton())
+		if (camera.controller.rightTrigger())
 		{
-			gunSoundEngine->play2D(shotgunQueue.front());
+
+			m_gameWorld->fireBullet(gunNum);
+
+			gunSoundEngine->play2D(machinegunSound);
 			m_time = sf::Time::Zero;
 			m_time = m_time.Zero;
 
+			if (camera.isCameraShaking() == false)
+			{
+				camera.setCameraShake(true);
+			}
 			vibrate = true;
 			camera.controller.Vibrate(65535, 65535);
 
+			m_vibrateLength = m_ShotDelay/(float)2;
+			m_muzzleFlashIntensity = 300.0f;
 			gunRecoil = true; // If the gun is being shot, create some recoil
+		}
+		else
+		{
+			m_muzzleFlashIntensity = 0.0f;
 		}
 	}
 
@@ -728,9 +781,23 @@ void Game::fireGun()
 				gunNum = 1;
 			}
 
+			if (gunNum % 2 == 0)
+			{
+				camera.setCameraShakeMax(8);
+				camera.setCameraShakeSpeed(2);
+			}
+			else
+			{
+				camera.setCameraShakeMax(4);
+				camera.setCameraShakeSpeed(2);
+			}
+
 			yButtonPressed = false;
 		}
 	}
+
+	glUniform1f(m_muzzleFlashIntensityID, m_muzzleFlashIntensity);
+	camera.cameraShake();
 }
 
 void Game::moveEnemy(glm::mat4& t_gunMatrix)
