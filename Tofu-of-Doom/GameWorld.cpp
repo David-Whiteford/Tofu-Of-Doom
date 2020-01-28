@@ -80,10 +80,11 @@ void GameWorld::updateWorld()
 			{
 				if(bullets[i].checkCollision(m_walls.at(x).getPosition(), m_walls.at(x).getSize().x/2))
 				{
-					std::cout << "hit" << std::endl;
-					break;
+					if (bullets[i].raycast.isInterpolating())
+					{
+						bullets[i].raycast.addToHitObjects(&m_walls.at(x));
+					}
 				}
-				std::cout << x << std::endl;
 			}
 			for (int x = 0; x < 2; x++)
 			{

@@ -88,12 +88,12 @@ sf::VertexArray Raycast::drawRay()
 	return ray;
 }
 
-void Raycast::addToHitObjects(sf::CircleShape* t_enemy)
+void Raycast::addToHitObjects(sf::Shape* t_enemy)
 {
 	hitObjects.push(t_enemy);
 }
 
-std::queue<sf::CircleShape*> Raycast::getHitObjects()
+std::queue<sf::Shape*> Raycast::getHitObjects()
 {
 	return hitObjects;
 }
@@ -120,8 +120,9 @@ void Raycast::getClosest()
 			hitObjects.pop();
 		}
 	}
-	sf::Vector2f newPos = sf::Vector2f(200, 200);
-	closest->setPosition(newPos);
+	//sf::Vector2f newPos = sf::Vector2f(200, 200);
+	//closest->setPosition(newPos);
+	std::cout << closest->getPosition().x << ", " << closest->getPosition().y << std::endl;
 }
 
 bool Raycast::isInterpolating()

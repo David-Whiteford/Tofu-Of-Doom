@@ -34,16 +34,16 @@ C:\Users\paulj\Desktop\tofu\Tofu-Of-Doom\Tofu-of-Doom\GameWorld.cpp(35,38): warn
 C:\Users\paulj\Desktop\tofu\Tofu-Of-Doom\Tofu-of-Doom\GameWorld.cpp(35,38): warning C4244:         ]
 C:\Users\paulj\Desktop\tofu\Tofu-Of-Doom\Tofu-of-Doom\GameWorld.cpp(38,20): warning C4018: '<': signed/unsigned mismatch
 C:\Users\paulj\Desktop\tofu\Tofu-Of-Doom\Tofu-of-Doom\GameWorld.cpp(79,22): warning C4018: '<': signed/unsigned mismatch
-C:\Users\paulj\Desktop\tofu\Tofu-Of-Doom\Tofu-of-Doom\GameWorld.cpp(126,98): warning C4244: 'argument': conversion from 'int' to 'T', possible loss of data
-C:\Users\paulj\Desktop\tofu\Tofu-Of-Doom\Tofu-of-Doom\GameWorld.cpp(126,98): warning C4244:         with
-C:\Users\paulj\Desktop\tofu\Tofu-Of-Doom\Tofu-of-Doom\GameWorld.cpp(126,98): warning C4244:         [
-C:\Users\paulj\Desktop\tofu\Tofu-Of-Doom\Tofu-of-Doom\GameWorld.cpp(126,98): warning C4244:             T=float
-C:\Users\paulj\Desktop\tofu\Tofu-Of-Doom\Tofu-of-Doom\GameWorld.cpp(126,98): warning C4244:         ]
-C:\Users\paulj\Desktop\tofu\Tofu-Of-Doom\Tofu-of-Doom\GameWorld.cpp(126,68): warning C4244: 'argument': conversion from 'int' to 'T', possible loss of data
-C:\Users\paulj\Desktop\tofu\Tofu-Of-Doom\Tofu-of-Doom\GameWorld.cpp(126,68): warning C4244:         with
-C:\Users\paulj\Desktop\tofu\Tofu-Of-Doom\Tofu-of-Doom\GameWorld.cpp(126,68): warning C4244:         [
-C:\Users\paulj\Desktop\tofu\Tofu-Of-Doom\Tofu-of-Doom\GameWorld.cpp(126,68): warning C4244:             T=float
-C:\Users\paulj\Desktop\tofu\Tofu-Of-Doom\Tofu-of-Doom\GameWorld.cpp(126,68): warning C4244:         ]
-C:\Users\paulj\Desktop\tofu\Tofu-Of-Doom\Tofu-of-Doom\GameWorld.cpp(152,20): warning C4018: '<': signed/unsigned mismatch
-C:\Users\paulj\Desktop\tofu\Tofu-Of-Doom\Tofu-of-Doom\GameWorld.cpp(166,20): warning C4018: '<': signed/unsigned mismatch
+C:\Users\paulj\Desktop\tofu\Tofu-Of-Doom\Tofu-of-Doom\GameWorld.cpp(127,98): warning C4244: 'argument': conversion from 'int' to 'T', possible loss of data
+C:\Users\paulj\Desktop\tofu\Tofu-Of-Doom\Tofu-of-Doom\GameWorld.cpp(127,98): warning C4244:         with
+C:\Users\paulj\Desktop\tofu\Tofu-Of-Doom\Tofu-of-Doom\GameWorld.cpp(127,98): warning C4244:         [
+C:\Users\paulj\Desktop\tofu\Tofu-Of-Doom\Tofu-of-Doom\GameWorld.cpp(127,98): warning C4244:             T=float
+C:\Users\paulj\Desktop\tofu\Tofu-Of-Doom\Tofu-of-Doom\GameWorld.cpp(127,98): warning C4244:         ]
+C:\Users\paulj\Desktop\tofu\Tofu-Of-Doom\Tofu-of-Doom\GameWorld.cpp(127,68): warning C4244: 'argument': conversion from 'int' to 'T', possible loss of data
+C:\Users\paulj\Desktop\tofu\Tofu-Of-Doom\Tofu-of-Doom\GameWorld.cpp(127,68): warning C4244:         with
+C:\Users\paulj\Desktop\tofu\Tofu-Of-Doom\Tofu-of-Doom\GameWorld.cpp(127,68): warning C4244:         [
+C:\Users\paulj\Desktop\tofu\Tofu-Of-Doom\Tofu-of-Doom\GameWorld.cpp(127,68): warning C4244:             T=float
+C:\Users\paulj\Desktop\tofu\Tofu-Of-Doom\Tofu-of-Doom\GameWorld.cpp(127,68): warning C4244:         ]
+C:\Users\paulj\Desktop\tofu\Tofu-Of-Doom\Tofu-of-Doom\GameWorld.cpp(153,20): warning C4018: '<': signed/unsigned mismatch
+C:\Users\paulj\Desktop\tofu\Tofu-Of-Doom\Tofu-of-Doom\GameWorld.cpp(167,20): warning C4018: '<': signed/unsigned mismatch
   Tofu-of-Doom.vcxproj -> C:\Users\paulj\Desktop\tofu\Tofu-Of-Doom\Debug\Tofu-of-Doom.exe
