@@ -26,17 +26,17 @@ void Path::neighbourAlgor()
 {
 
 	int nodeIndex = 0;
-	for (int i = 0; i < ROWS; i++)
+	for (int row = 0; row < ROWS; row++)
 	{
-		for (int j = 0; j < COLS; j++)
+		for (int col = 0; col < COLS; col++)
 		{
 			// L neighbors Algorithm:
-			for (int direction = 0; direction < 9; direction++)
+			for (int direction = 0; direction <= 8; direction++)
 			{
 				if (direction == 4) continue; // Skip 4, this is ourself.
 
-				int n_row = i + ((direction % 3) - 1); // Neighbor row
-				int n_col = j + ((direction / 3) - 1); // Neighbor column
+				int n_row = row + ((direction % 3) - 1); // Neighbor row
+				int n_col = col + ((direction / 3) - 1); // Neighbor column
 				
 				// Check the bounds:
 				if (n_row >= 0 && n_row < ROWS && n_col >= 0 && n_col < COLS)
@@ -51,11 +51,12 @@ void Path::neighbourAlgor()
 							if (graph->nodeIndex(index)->m_data.m_row == n_row 
 								&& graph->nodeIndex(index)->m_data.m_col == n_col)
 							{
+								// When moving on the diagonal, cost is sqrt(50*50+50*50)
 								graph->addArc(nodeIndex, index, m_nodeSize);
-								
+							
 								// Add an arc from cell id 24 to cell id arr[n_row][n_col] 
 								// A valid neighbor:
-								//std::cout << "Neighbor: " << n_row << "," << n_col << ": " <<arr[n_row][n_col]<< std::endl;
+								//std::cout << "Neighbor: " << n_row << "," << n_col << ": " <<nodeIndex<< std::endl;
 							}
 							index++;
 							
@@ -86,7 +87,7 @@ void Path::initAStar(std::vector<sf::RectangleShape> t_walls)
 			nodeData.m_y = i * m_nodeSize;
 			nodeData.m_row = i;
 			nodeData.m_col = j;
-			
+			//std::cout << "Row " << nodeData.m_row << "Col" << nodeData.m_col <<  std::endl;
 			//add node
 			graph->addNode(nodeData, nodeIndex);
 
@@ -114,7 +115,7 @@ void Path::initAStar(std::vector<sf::RectangleShape> t_walls)
 	}
 	
 	neighbourAlgor();
-	graph->aStar(graph->nodeIndex(0), graph->nodeIndex(96), graphPath);
+	graph->aStar(graph->nodeIndex(0), graph->nodeIndex(51), graphPath);
 
 }
 

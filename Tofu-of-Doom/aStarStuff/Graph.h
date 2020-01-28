@@ -472,8 +472,8 @@ inline void Graph<NodeType, ArcType>::aStar(Node* start, Node* dest , std::vecto
 		{
 			std::cout << "index of null node: " << index << std::endl;
 		}
-		node->m_data.CostReachGoalH = std::sqrt((node->m_data.m_x - dest->m_data.m_x , 2) * (node->m_data.m_x - dest->m_data.m_x, 2)
-			+ (node->m_data.m_y - dest->m_data.m_y, 2) * (node->m_data.m_y - dest->m_data.m_y, 2));
+		node->m_data.CostReachGoalH = std::sqrt((node->m_data.m_x - dest->m_data.m_x ) * (node->m_data.m_x - dest->m_data.m_x)
+			+ (node->m_data.m_y - dest->m_data.m_y) * (node->m_data.m_y - dest->m_data.m_y));
 		node->m_data.pathCost = std::numeric_limits<int>::max();	
 		index++;
 	}
@@ -485,7 +485,7 @@ inline void Graph<NodeType, ArcType>::aStar(Node* start, Node* dest , std::vecto
 
 	while (pq.size() != 0 && pq.top() != goalNode /**&& timer not expired*/)
 	{
-
+		
 		
 		//f_visit(pq.top());
 		auto iter = pq.top()->arcList().begin();
