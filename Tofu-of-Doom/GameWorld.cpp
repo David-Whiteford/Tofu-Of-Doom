@@ -65,6 +65,8 @@ GameWorld::~GameWorld()
 /// </summary>
 void GameWorld::updateWorld()
 {
+
+	
 	m_player.setPosition(m_camera.getEye().x * s_displayScale, m_camera.getEye().z * s_displayScale);
 	setGunPosition();
 	enemyMove();
@@ -214,9 +216,8 @@ void GameWorld::fireBullet(int t_gunType)
 				float offsetZ = ((float(rand()) / float(RAND_MAX)) * (0.2f - -0.2f)) + -0.2f;
 
 				bullets[i].setTimeToLive(200);
-				//float randomSpread = rand() % 0 + (-0.32f);
+
 				glm::normalize(tempDirection);
-				//tempDirection += tempDirection * static_cast<float>(randomSpread);
 
 				bullets[i].bulletInit(sf::Vector2f(tempDirection.x + offsetX, tempDirection.z + offsetZ), 0, m_playerGun.getPosition());
 				bulletSpreadAmount++;
@@ -229,6 +230,64 @@ void GameWorld::fireBullet(int t_gunType)
 		}
 	}
 
+}
+
+void GameWorld::checkPlayerRayCollsions()
+{
+	m_camera.setCanMoveUp(true);
+	m_camera.setCanMoveDown(true);
+	m_camera.setCanMoveLeft(true);
+	m_camera.setCanMoveRight(true);
+
+	for (int x = 0; x < m_walls.size(); x++)
+	{
+		if (m_camera.canGoUp())
+		{
+			if (m_camera.raycastForward.hit(m_walls.at(x).getPosition(), m_walls.at(x).getSize().x))
+			{
+				m_camera.setCanMoveUp(false);
+			}
+		}
+		if (m_camera.canGoDown())
+		{
+			if (m_camera.raycastBehind.hit(m_walls.at(x).getPosition(), m_walls.at(x).getSize().x))
+			{
+				m_camera.setCanMoveDown(false);
+			}
+		}
+		if (m_camera.canGoLeft())
+		{
+			if (m_camera.raycastToLeft.hit(m_walls.at(x).getPosition(), m_walls.at(x).getSize().x))
+			{
+				m_camera.setCanMoveLeft(false);
+			}
+		}
+		if (m_camera.canGoRight())
+		{
+			if (m_camera.raycastToRight.hit(m_walls.at(x).getPosition(), m_walls.at(x).getSize().x))
+			{
+				m_camera.setCanMoveRight(false);
+			}
+		}
+
+		if (m_camera.canGoLeft() == false && m_camera.canGoDown() == false)
+		{
+			break;
+		}
+		if (m_camera.canGoRight() == false && m_camera.canGoDown() == false)
+		{
+			break;
+		}
+		
+		if (m_camera.canGoLeft() == false && m_camera.canGoUp() == false)
+		{
+			break;
+		}
+		if (m_camera.canGoRight() == false && m_camera.canGoUp() == false)
+		{
+			break;
+		}
+	}
 }
 
 /// <summary>

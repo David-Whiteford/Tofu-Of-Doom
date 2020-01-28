@@ -255,7 +255,7 @@ void Game::update(sf::Time t_deltaTime)
 	//update the zombie sound position to follow test zombie
 	zombiePosition = vec3df(m_gameWorld->getEnemyPosition().x, 3.5f, m_gameWorld->getEnemyPosition().y); 
 	
-
+	m_gameWorld->checkPlayerRayCollsions();
 	// Update game controls
 	camera.input(t_deltaTime);
 	camera.transform.position.x = camera.getEye().x;

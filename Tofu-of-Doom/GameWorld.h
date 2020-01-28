@@ -28,6 +28,7 @@ public:
 	void drawBulletTrajectory();
 	float Pi = 3.14;
 	
+	void checkPlayerRayCollsions();
 
 	Bullet bullets[100];
 

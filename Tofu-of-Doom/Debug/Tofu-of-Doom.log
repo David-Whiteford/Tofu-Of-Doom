@@ -1,23 +1,4 @@
-﻿  Bullet.cpp
-C:\Users\paulj\Desktop\tofu\Tofu-Of-Doom\Tofu-of-Doom\Transform.h(17): warning C4091: 'typedef ': ignored on left of 'Transform::Position' when no variable is declared
-C:\Users\paulj\Desktop\tofu\Tofu-Of-Doom\Tofu-of-Doom\Bullet.cpp(48,14): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
-  Camera.cpp
-C:\Users\paulj\Desktop\tofu\Tofu-Of-Doom\Tofu-of-Doom\Bullet.cpp(73,9): warning C4244: 'return': conversion from 'float' to 'int', possible loss of data
-C:\Users\paulj\Desktop\tofu\Tofu-Of-Doom\Tofu-of-Doom\Transform.h(17): warning C4091: 'typedef ': ignored on left of 'Transform::Position' when no variable is declared
-  Game.cpp
-C:\Users\paulj\Desktop\tofu\Tofu-Of-Doom\Tofu-of-Doom\Collider2D.h(13): warning C4091: 'typedef ': ignored on left of 'Collider2D::Bounds' when no variable is declared
-C:\Users\paulj\Desktop\tofu\Tofu-Of-Doom\Tofu-of-Doom\Transform.h(17): warning C4091: 'typedef ': ignored on left of 'Transform::Position' when no variable is declared
-C:\Users\paulj\Desktop\tofu\Tofu-Of-Doom\Tofu-of-Doom\Collider2D.h(13): warning C4091: 'typedef ': ignored on left of 'Collider2D::Bounds' when no variable is declared
-C:\Users\paulj\Desktop\tofu\Tofu-Of-Doom\Tofu-of-Doom\GameWorld.h(29,17): warning C4305: 'initializing': truncation from 'double' to 'float'
-C:\Users\paulj\Desktop\tofu\Tofu-Of-Doom\Tofu-of-Doom\Game.cpp(345,21): warning C4018: '<': signed/unsigned mismatch
-  Main.cpp
-C:\Users\paulj\Desktop\tofu\Tofu-Of-Doom\Tofu-of-Doom\Game.cpp(365,21): warning C4018: '<': signed/unsigned mismatch
-C:\Users\paulj\Desktop\tofu\Tofu-Of-Doom\Tofu-of-Doom\Transform.h(17): warning C4091: 'typedef ': ignored on left of 'Transform::Position' when no variable is declared
-C:\Users\paulj\Desktop\tofu\Tofu-Of-Doom\Tofu-of-Doom\Collider2D.h(13): warning C4091: 'typedef ': ignored on left of 'Collider2D::Bounds' when no variable is declared
-  Raycast.cpp
-  Generating Code...
-C:\Users\paulj\Desktop\tofu\Tofu-Of-Doom\Tofu-of-Doom\GameWorld.h(29,17): warning C4305: 'initializing': truncation from 'double' to 'float'
-  GameWorld.cpp
+﻿  GameWorld.cpp
 C:\Users\paulj\Desktop\tofu\Tofu-Of-Doom\Tofu-of-Doom\Transform.h(17): warning C4091: 'typedef ': ignored on left of 'Transform::Position' when no variable is declared
 C:\Users\paulj\Desktop\tofu\Tofu-Of-Doom\Tofu-of-Doom\Collider2D.h(13): warning C4091: 'typedef ': ignored on left of 'Collider2D::Bounds' when no variable is declared
 C:\Users\paulj\Desktop\tofu\Tofu-Of-Doom\Tofu-of-Doom\GameWorld.h(29,17): warning C4305: 'initializing': truncation from 'double' to 'float'
@@ -33,17 +14,18 @@ C:\Users\paulj\Desktop\tofu\Tofu-Of-Doom\Tofu-of-Doom\GameWorld.cpp(35,38): warn
 C:\Users\paulj\Desktop\tofu\Tofu-Of-Doom\Tofu-of-Doom\GameWorld.cpp(35,38): warning C4244:             T=unsigned int
 C:\Users\paulj\Desktop\tofu\Tofu-Of-Doom\Tofu-of-Doom\GameWorld.cpp(35,38): warning C4244:         ]
 C:\Users\paulj\Desktop\tofu\Tofu-Of-Doom\Tofu-of-Doom\GameWorld.cpp(38,20): warning C4018: '<': signed/unsigned mismatch
-C:\Users\paulj\Desktop\tofu\Tofu-Of-Doom\Tofu-of-Doom\GameWorld.cpp(79,22): warning C4018: '<': signed/unsigned mismatch
-C:\Users\paulj\Desktop\tofu\Tofu-Of-Doom\Tofu-of-Doom\GameWorld.cpp(127,98): warning C4244: 'argument': conversion from 'int' to 'T', possible loss of data
-C:\Users\paulj\Desktop\tofu\Tofu-Of-Doom\Tofu-of-Doom\GameWorld.cpp(127,98): warning C4244:         with
-C:\Users\paulj\Desktop\tofu\Tofu-Of-Doom\Tofu-of-Doom\GameWorld.cpp(127,98): warning C4244:         [
-C:\Users\paulj\Desktop\tofu\Tofu-Of-Doom\Tofu-of-Doom\GameWorld.cpp(127,98): warning C4244:             T=float
-C:\Users\paulj\Desktop\tofu\Tofu-Of-Doom\Tofu-of-Doom\GameWorld.cpp(127,98): warning C4244:         ]
-C:\Users\paulj\Desktop\tofu\Tofu-Of-Doom\Tofu-of-Doom\GameWorld.cpp(127,68): warning C4244: 'argument': conversion from 'int' to 'T', possible loss of data
-C:\Users\paulj\Desktop\tofu\Tofu-Of-Doom\Tofu-of-Doom\GameWorld.cpp(127,68): warning C4244:         with
-C:\Users\paulj\Desktop\tofu\Tofu-Of-Doom\Tofu-of-Doom\GameWorld.cpp(127,68): warning C4244:         [
-C:\Users\paulj\Desktop\tofu\Tofu-Of-Doom\Tofu-of-Doom\GameWorld.cpp(127,68): warning C4244:             T=float
-C:\Users\paulj\Desktop\tofu\Tofu-Of-Doom\Tofu-of-Doom\GameWorld.cpp(127,68): warning C4244:         ]
-C:\Users\paulj\Desktop\tofu\Tofu-Of-Doom\Tofu-of-Doom\GameWorld.cpp(153,20): warning C4018: '<': signed/unsigned mismatch
-C:\Users\paulj\Desktop\tofu\Tofu-Of-Doom\Tofu-of-Doom\GameWorld.cpp(167,20): warning C4018: '<': signed/unsigned mismatch
+C:\Users\paulj\Desktop\tofu\Tofu-Of-Doom\Tofu-of-Doom\GameWorld.cpp(81,22): warning C4018: '<': signed/unsigned mismatch
+C:\Users\paulj\Desktop\tofu\Tofu-Of-Doom\Tofu-of-Doom\GameWorld.cpp(129,98): warning C4244: 'argument': conversion from 'int' to 'T', possible loss of data
+C:\Users\paulj\Desktop\tofu\Tofu-Of-Doom\Tofu-of-Doom\GameWorld.cpp(129,98): warning C4244:         with
+C:\Users\paulj\Desktop\tofu\Tofu-Of-Doom\Tofu-of-Doom\GameWorld.cpp(129,98): warning C4244:         [
+C:\Users\paulj\Desktop\tofu\Tofu-Of-Doom\Tofu-of-Doom\GameWorld.cpp(129,98): warning C4244:             T=float
+C:\Users\paulj\Desktop\tofu\Tofu-Of-Doom\Tofu-of-Doom\GameWorld.cpp(129,98): warning C4244:         ]
+C:\Users\paulj\Desktop\tofu\Tofu-Of-Doom\Tofu-of-Doom\GameWorld.cpp(129,68): warning C4244: 'argument': conversion from 'int' to 'T', possible loss of data
+C:\Users\paulj\Desktop\tofu\Tofu-Of-Doom\Tofu-of-Doom\GameWorld.cpp(129,68): warning C4244:         with
+C:\Users\paulj\Desktop\tofu\Tofu-Of-Doom\Tofu-of-Doom\GameWorld.cpp(129,68): warning C4244:         [
+C:\Users\paulj\Desktop\tofu\Tofu-Of-Doom\Tofu-of-Doom\GameWorld.cpp(129,68): warning C4244:             T=float
+C:\Users\paulj\Desktop\tofu\Tofu-Of-Doom\Tofu-of-Doom\GameWorld.cpp(129,68): warning C4244:         ]
+C:\Users\paulj\Desktop\tofu\Tofu-Of-Doom\Tofu-of-Doom\GameWorld.cpp(155,20): warning C4018: '<': signed/unsigned mismatch
+C:\Users\paulj\Desktop\tofu\Tofu-Of-Doom\Tofu-of-Doom\GameWorld.cpp(169,20): warning C4018: '<': signed/unsigned mismatch
+C:\Users\paulj\Desktop\tofu\Tofu-Of-Doom\Tofu-of-Doom\GameWorld.cpp(242,20): warning C4018: '<': signed/unsigned mismatch
   Tofu-of-Doom.vcxproj -> C:\Users\paulj\Desktop\tofu\Tofu-Of-Doom\Debug\Tofu-of-Doom.exe

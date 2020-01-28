@@ -3,6 +3,8 @@
 Raycast::Raycast()
 {
 	interpolate = true;
+	m_raycastLine[0].color = sf::Color::Blue;
+	m_raycastLine[1].color = sf::Color::Blue;
 }
 
 Raycast::~Raycast()

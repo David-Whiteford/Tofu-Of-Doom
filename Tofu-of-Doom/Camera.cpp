@@ -131,37 +131,49 @@ void Camera::input(sf::Time t_deltaTime)
 
 	if (controller.upButton())
 	{
-		glm::vec3 tempDirection(m_direction.x, m_direction.y, m_direction.z);
-		glm::normalize(tempDirection);
+		if (canGoUp())
+		{
+			glm::vec3 tempDirection(m_direction.x, m_direction.y, m_direction.z);
+			glm::normalize(tempDirection);
 
 
 
-		transformPos -= tempDirection * static_cast<float>(t_deltaTime.asMilliseconds())* m_speed;
+			transformPos -= tempDirection * static_cast<float>(t_deltaTime.asMilliseconds())* m_speed;
+		}
 
 	}
 	else if (controller.downButton())
 	{
-		glm::vec3 tempDirection(m_direction.x, m_direction.y, m_direction.z);
-		glm::normalize(tempDirection);
-		transformPos += tempDirection * static_cast<float>(t_deltaTime.asMilliseconds())* m_speed;
+		if (canGoDown())
+		{
+			glm::vec3 tempDirection(m_direction.x, m_direction.y, m_direction.z);
+			glm::normalize(tempDirection);
+			transformPos += tempDirection * static_cast<float>(t_deltaTime.asMilliseconds())* m_speed;
+		}
 	}
 
 	// Strafe
 	if (controller.rightButton())
 	{
-		glm::vec3 tempDirection(m_directionStrafe.x, m_directionStrafe.y, m_directionStrafe.z);
-		glm::normalize(tempDirection);
+		if (canGoRight())
+		{
+			glm::vec3 tempDirection(m_directionStrafe.x, m_directionStrafe.y, m_directionStrafe.z);
+			glm::normalize(tempDirection);
 
 
 
-		transformPos += tempDirection * static_cast<float>(t_deltaTime.asMilliseconds())* m_speed;
+			transformPos += tempDirection * static_cast<float>(t_deltaTime.asMilliseconds())* m_speed;
+		}
 
 	}
 	else if (controller.leftButton())
 	{
-		glm::vec3 tempDirection(m_directionStrafe.x, m_directionStrafe.y, m_directionStrafe.z);
-		glm::normalize(tempDirection);
-		transformPos -= tempDirection * static_cast<float>(t_deltaTime.asMilliseconds()) * m_speed;
+		if (canGoLeft())
+		{
+			glm::vec3 tempDirection(m_directionStrafe.x, m_directionStrafe.y, m_directionStrafe.z);
+			glm::normalize(tempDirection);
+			transformPos -= tempDirection * static_cast<float>(t_deltaTime.asMilliseconds())* m_speed;
+		}
 	}
 	// End Strafe
 
@@ -230,4 +242,44 @@ void Camera::input(sf::Time t_deltaTime)
 
 	// END DEBUG TESTS
 
+}
+
+void Camera::setCanMoveUp(bool t_bool)
+{
+	canMoveUp = t_bool;
+}
+
+void Camera::setCanMoveDown(bool t_bool)
+{
+	canMoveDown = t_bool;
+}
+
+void Camera::setCanMoveLeft(bool t_bool)
+{
+	canMoveLeft = t_bool;
+}
+
+void Camera::setCanMoveRight(bool t_bool)
+{
+	canMoveRight = t_bool;
+}
+
+bool Camera::canGoUp()
+{
+	return canMoveUp;
+}
+
+bool Camera::canGoDown()
+{
+	return canMoveDown;
+}
+
+bool Camera::canGoLeft()
+{
+	return canMoveLeft;
+}
+
+bool Camera::canGoRight()
+{
+	return canMoveRight;
 }
