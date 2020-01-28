@@ -66,13 +66,13 @@ void Transform::setPublicTransformToCentre(std::vector<glm::vec3> vertices)
 
 }
 
-float Transform::distance(Position& pos_1, Position& pos_2)
+float Transform::distance(sf::Vector2f pos_1, sf::Vector2f pos_2)
 {
 	float x = pos_2.x - pos_1.x;
 	float y = pos_2.y - pos_1.y;
-	float z = pos_2.z - pos_1.z;
+	
 
-	return std::sqrt(((x * x) + (y * y) + (z * z)));
+	return std::sqrt(((x * x) + (y * y)));
 
 }
 
@@ -85,7 +85,33 @@ float Transform::dotProduct(Position& pos_1, Position& pos_2)
 	return x + y + z;
 }
 
-float Transform::angleBetween(Position& pos_1, Position& pos_2)
+//float Transform::angleBetween(Position& pos_1, Position& pos_2)
+//{
+//	return std::acos(dotProduct(pos_1, pos_2) / distance(pos_1, pos_2));
+//}
+
+sf::Vector2f Transform::moveTowards(sf::Vector2f t_position, sf::Vector2f t_targetPosition , float maxDistance)
 {
-	return std::acos(dotProduct(pos_1, pos_2) / distance(pos_1, pos_2));
+	
+	float toVecX = t_targetPosition.x - t_position.x;
+	float toVecY = t_targetPosition.y - t_position.y;
+
+	float squaredDistance = toVecX * toVecX + toVecY * toVecY;
+
+	if (squaredDistance == 0 || maxDistance >= 0
+		&& squaredDistance <= maxDistance * maxDistance)
+	{
+		return t_targetPosition;
+
+	}
+
+	
+	float dist = std::sqrt(squaredDistance);
+	sf::Vector2f pos;
+	pos.x = t_position.x + toVecX / dist * maxDistance;
+	pos.y = t_position.y + toVecY / dist * maxDistance;
+
+
+	return pos;
 }
+

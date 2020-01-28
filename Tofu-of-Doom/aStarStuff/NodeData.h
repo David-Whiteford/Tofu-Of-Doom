@@ -11,6 +11,9 @@ struct NodeData
 	std::string m_name;
 	int pathCost;
 	int CostReachGoalH;
-	int x, y;
+	int m_row, m_col;
+	int m_x, m_y;
+	bool passable;
+
 
 };
