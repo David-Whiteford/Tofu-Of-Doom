@@ -4,6 +4,7 @@
 #include <SFML/Graphics.hpp>
 #include "aStarStuff/Graph.h"
 #include "aStarStuff/NodeData.h"
+#include "Transform.h"
 typedef GraphNode<NodeData, int> Node;
 class Path
 {
@@ -17,12 +18,12 @@ public:
 	void setPath();
 	void setNewPath(int t_endPath);
 	std::vector<Node*> getGraphPath();
-
+	Transform m_transform;
 private:
 	sf::RenderWindow& m_window;
 	std::map<std::string, int> nodeMap;
 	Graph<NodeData, int>* graph;
-	int endNode = 852;
+	int endNode = 2483;
 	int startNode = 103;
 	std::vector<Node*> graphPath;
 

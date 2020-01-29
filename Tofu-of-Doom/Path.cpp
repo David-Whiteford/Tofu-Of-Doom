@@ -31,7 +31,7 @@ void Path::neighbourAlgor()
 		for (int col = 0; col < COLS; col++)
 		{
 			// L neighbors Algorithm:
-			for (int direction = 0; direction <= 8; direction++)
+			for (int direction = 0; direction < 9; direction++)
 			{
 				if (direction == 4) continue; // Skip 4, this is ourself.
 
@@ -51,8 +51,18 @@ void Path::neighbourAlgor()
 							if (graph->nodeIndex(index)->m_data.m_row == n_row 
 								&& graph->nodeIndex(index)->m_data.m_col == n_col)
 							{
+
+								sf::Vector2f currentNode = sf::Vector2f(graph->nodeIndex(nodeIndex)->m_data.m_x,
+									graph->nodeIndex(nodeIndex)->m_data.m_y);
+
+								sf::Vector2f neighborsNodes = sf::Vector2f( graph->nodeIndex(index)->m_data.m_x ,
+									graph->nodeIndex(index)->m_data.m_y );
+
+								float dist = m_transform.distance(currentNode, neighborsNodes);
+
+								std::cout << "distance" << dist << std::endl;
 								// When moving on the diagonal, cost is sqrt(50*50+50*50)
-								graph->addArc(nodeIndex, index, m_nodeSize);
+								graph->addArc(nodeIndex, index, dist);
 							
 								// Add an arc from cell id 24 to cell id arr[n_row][n_col] 
 								// A valid neighbor:
