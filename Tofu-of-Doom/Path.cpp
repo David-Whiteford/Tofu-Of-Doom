@@ -132,7 +132,10 @@ void Path::initAStar(std::vector<sf::RectangleShape> t_walls)
 
 void Path::update()
 {
-
+	if (graphPath.size() < 1)
+	{
+		setPath();
+	}
 }
 
 void Path::setPath()
