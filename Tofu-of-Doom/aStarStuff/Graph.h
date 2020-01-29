@@ -465,7 +465,9 @@ inline void Graph<NodeType, ArcType>::aStar(Node* start, Node* dest , std::vecto
 	Node* goalNode = dest;
 	std::priority_queue<Node*, std::vector<Node*>, NodeSearchCostComparer<NodeType, ArcType>> pq;
 	
-	startingNode->setPrevious(NULL);
+	startingNode->setPrevious(0);
+	goalNode->setPrevious(0);
+
 	int index = 0;
 	for (auto node : m_nodes)
 	{		

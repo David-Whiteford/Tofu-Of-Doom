@@ -98,9 +98,11 @@ void Path::initAStar(std::vector<sf::RectangleShape> t_walls)
 			nodeData.m_y = i * m_nodeSize;
 			nodeData.m_row = i;
 			nodeData.m_col = j;
-
+		
 			m_nodeShape[nodeIndex].setFillColor(sf::Color(sf::Color::Yellow));
 			m_nodeShape[nodeIndex].setSize(sf::Vector2f(m_nodeSize, m_nodeSize));
+			m_nodeShape[nodeIndex].setOutlineThickness(1);
+			m_nodeShape[nodeIndex].setOutlineColor(sf::Color(sf::Color::Black));
 			m_nodeShape[nodeIndex].setPosition(nodeData.m_x, nodeData.m_y);
 			m_nodeShape[nodeIndex].setOrigin(25, 25);
 
@@ -126,14 +128,17 @@ void Path::initAStar(std::vector<sf::RectangleShape> t_walls)
 	}
 	
 	neighbourAlgor();
-	setPath();
+
 
 }
 
-void Path::update()
+void Path::update(std::vector<Node*> t_graphPath)
 {
-	if (graphPath.size() < 1)
+	graphPath = t_graphPath;
+	if (graphPath.empty() == true )
 	{
+		setNewPath();
+		std::cout << "Start Node" << startNode << "End Node" << endNode << std::endl;
 		setPath();
 	}
 }
@@ -142,13 +147,15 @@ void Path::setPath()
 {
 	graph->aStar(graph->nodeIndex(startNode), graph->nodeIndex(endNode), graphPath);
 }
-void Path::setNewPath(int t_endPath)
+void Path::setNewPath()
 {
+	int startingNode = startNode;
 	startNode = endNode;
-	endNode = t_endPath;
+	endNode = startingNode;
 }
 
 std::vector<Node*> Path::getGraphPath()
 {
 	return graphPath;
 }
+

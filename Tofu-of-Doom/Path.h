@@ -14,16 +14,17 @@ public:
 	void draw();
 	void neighbourAlgor();
 	void initAStar(std::vector<sf::RectangleShape> t_walls);
-	void update();
+	void update(std::vector<Node*> t_graphPath);
 	void setPath();
-	void setNewPath(int t_endPath);
+	void setNewPath();
 	std::vector<Node*> getGraphPath();
 	Transform m_transform;
+
 private:
 	sf::RenderWindow& m_window;
 	std::map<std::string, int> nodeMap;
 	Graph<NodeData, int>* graph;
-	int endNode = 2483;
+	int endNode = 2237;
 	int startNode = 103;
 	std::vector<Node*> graphPath;
 
