@@ -25,7 +25,6 @@ public:
 
 	void fireBullet(int t_gunType);
 
-	void drawBulletTrajectory();
 	float Pi = 3.14;
 	
 	void checkPlayerRayCollsions();
