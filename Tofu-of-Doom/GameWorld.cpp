@@ -49,6 +49,7 @@ GameWorld::GameWorld(sf::RenderWindow &t_window, sf::Time &t_deltaTime, Camera *
 	}
 	//Astar
 	m_gamePath->initAStar(m_walls);
+	m_gamePath->setPath();
 	graphPath = m_gamePath->getGraphPath();
 }
 
@@ -69,6 +70,7 @@ void GameWorld::updateWorld()
 	
 	m_player.setPosition(m_camera.getEye().x * s_displayScale, m_camera.getEye().z * s_displayScale);
 	setGunPosition();
+	m_playerNode = m_gamePath->nodePos(m_player.getPosition());
 	enemyMove();
 
 	
@@ -122,7 +124,7 @@ void GameWorld::updateWorld()
 /// </summary>
 void GameWorld::enemyMove()
 {
-	
+	//graphPath = m_gamePath->getGraphPath();
 	if (graphPath.empty() == false)
 	{
 		std::cout << "Node" << graphPath.back()->m_data.m_name << std::endl;
@@ -135,15 +137,18 @@ void GameWorld::enemyMove()
 		if (m_enemies.front().getPosition().x == graphPath.back()->m_data.m_x &&
 			m_enemies.front().getPosition().y == graphPath.back()->m_data.m_y)
 		{
-			std::cout << "Pop graph vec" << graphPath.size();
+			
 			graphPath.pop_back();
 
 		}
 	}
 	else
 	{
-
+		m_gamePath->update();
+		graphPath = m_gamePath->getGraphPath();
 	}
+	
+	
 
 }
 

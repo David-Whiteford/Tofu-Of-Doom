@@ -31,7 +31,7 @@ void Path::neighbourAlgor()
 		for (int col = 0; col < COLS; col++)
 		{
 			// L neighbors Algorithm:
-			for (int direction = 0; direction <= 8; direction++)
+			for (int direction = 0; direction < 9; direction++)
 			{
 				if (direction == 4) continue; // Skip 4, this is ourself.
 
@@ -51,8 +51,18 @@ void Path::neighbourAlgor()
 							if (graph->nodeIndex(index)->m_data.m_row == n_row 
 								&& graph->nodeIndex(index)->m_data.m_col == n_col)
 							{
+
+								sf::Vector2f currentNode = sf::Vector2f(graph->nodeIndex(nodeIndex)->m_data.m_x,
+									graph->nodeIndex(nodeIndex)->m_data.m_y);
+
+								sf::Vector2f neighborsNodes = sf::Vector2f( graph->nodeIndex(index)->m_data.m_x ,
+									graph->nodeIndex(index)->m_data.m_y );
+
+								float dist = m_transform.distance(currentNode, neighborsNodes);
+
+								//std::cout << "distance" << dist << std::endl;
 								// When moving on the diagonal, cost is sqrt(50*50+50*50)
-								graph->addArc(nodeIndex, index, m_nodeSize);
+								graph->addArc(nodeIndex, index, dist);
 							
 								// Add an arc from cell id 24 to cell id arr[n_row][n_col] 
 								// A valid neighbor:
@@ -80,34 +90,37 @@ void Path::initAStar(std::vector<sf::RectangleShape> t_walls)
 	{
 		for (int j = 0; j < COLS; j++)
 		{
-
-		
+			
+			m_nodeSquare.push_back(m_nodeShape[nodeIndex]);
+			nodeData.passable = true;
 			nodeData.m_name = std::to_string(nodeIndex);
 			nodeData.m_x = j * m_nodeSize;
 			nodeData.m_y = i * m_nodeSize;
 			nodeData.m_row = i;
 			nodeData.m_col = j;
-			//std::cout << "Row " << nodeData.m_row << "Col" << nodeData.m_col <<  std::endl;
-			//add node
-			graph->addNode(nodeData, nodeIndex);
-
+		
+			m_nodeShape[nodeIndex].setFillColor(sf::Color(sf::Color::Yellow));
 			m_nodeShape[nodeIndex].setSize(sf::Vector2f(m_nodeSize, m_nodeSize));
+			m_nodeShape[nodeIndex].setOutlineThickness(1);
+			m_nodeShape[nodeIndex].setOutlineColor(sf::Color(sf::Color::Black));
 			m_nodeShape[nodeIndex].setPosition(nodeData.m_x, nodeData.m_y);
 			m_nodeShape[nodeIndex].setOrigin(25, 25);
-			//m_nodeShape[nodeIndex].setOutlineColor(sf::Color(sf::Color::Blue));
-			//m_nodeShape[nodeIndex].setOutlineThickness(1);
-			m_nodeShape[nodeIndex].setFillColor(sf::Color(sf::Color::Yellow));
 
 			for (auto wall : t_walls)
 			{
 				if (m_nodeShape[nodeIndex].getGlobalBounds().intersects(wall.getGlobalBounds()))
 				{
 					m_nodeShape[nodeIndex].setFillColor(sf::Color(sf::Color::Black));
-					graph->nodeIndex(nodeIndex)->m_data.passable = false;
-					
-				}
+					nodeData.passable = false;
 
+				}
 			}
+
+
+
+			//std::cout << "Row " << nodeData.m_row << "Col" << nodeData.m_col << "Is Passable: " << nodeData.passable <<  std::endl;
+			//add node
+			graph->addNode(nodeData, nodeIndex);
 			m_nodeSquare.push_back(m_nodeShape[nodeIndex]);
 			nodeIndex++;
 
@@ -115,16 +128,46 @@ void Path::initAStar(std::vector<sf::RectangleShape> t_walls)
 	}
 	
 	neighbourAlgor();
-	graph->aStar(graph->nodeIndex(0), graph->nodeIndex(852), graphPath);
+
 
 }
 
 void Path::update()
 {
-
+	//std::cout << "First Start Node" << startNode << "First End Node" << endNode << std::endl;
+	
+	
+	setNewPath();
+	setPath();
+	std::cout << "Start Node" << startNode << "End Node" << endNode << std::endl;
+	
+	
 }
 
-std::vector<Node*> Path::getGraphPath()
+void Path::setPath()
+{
+
+	graph->clearMarks();
+	graph->aStar(graph->nodeIndex(startNode), graph->nodeIndex(endNode), graphPath);
+}
+void Path::setNewPath()
+{
+	int startingNode = startNode;
+	startNode = endNode;
+	endNode = startingNode;
+}
+
+std::vector<Node*> &Path::getGraphPath()
 {
 	return graphPath;
 }
+
+int Path::nodePos(sf::Vector2f playerPos)
+{
+	int nodeNumber = floor(playerPos.x / m_nodeSize) + (floor(playerPos.y / m_nodeSize) * 50);
+	std::cout << "Player in Node:  " << nodeNumber << std::endl;
+	return nodeNumber;
+}
+
+
+

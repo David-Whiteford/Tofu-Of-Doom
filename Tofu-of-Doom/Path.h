@@ -4,6 +4,7 @@
 #include <SFML/Graphics.hpp>
 #include "aStarStuff/Graph.h"
 #include "aStarStuff/NodeData.h"
+#include "Transform.h"
 typedef GraphNode<NodeData, int> Node;
 class Path
 {
@@ -14,13 +15,18 @@ public:
 	void neighbourAlgor();
 	void initAStar(std::vector<sf::RectangleShape> t_walls);
 	void update();
-	std::vector<Node*> getGraphPath();
+	void setPath();
+	void setNewPath();
+	std::vector<Node*> &getGraphPath();
+	Transform m_transform;
+	int nodePos(sf::Vector2f playerPos);
 
 private:
 	sf::RenderWindow& m_window;
 	std::map<std::string, int> nodeMap;
 	Graph<NodeData, int>* graph;
-
+	int endNode = 2237;
+	int startNode = 103;
 	std::vector<Node*> graphPath;
 
 	NodeData nodeData;

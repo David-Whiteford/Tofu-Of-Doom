@@ -25,10 +25,6 @@ Game::~Game()
 	delete m_mainShader;
 }
 
-double Game::clockToMilliseconds(clock_t ticks) {
-	// units/(units/time) => time (seconds) * 1000 = milliseconds
-	return (ticks / (double)CLOCKS_PER_SEC) * 1000.0;
-}
 
 /// <summary>
 /// Run

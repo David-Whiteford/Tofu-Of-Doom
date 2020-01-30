@@ -42,7 +42,7 @@ public:
 	std::vector<glm::vec3> *getLightPositions();
 
 private:
-
+	int m_playerNode = 0;
 	Transform m_transform;
 	Transform::Position enemyPos;
 	Transform::Position graphPos;
@@ -74,7 +74,7 @@ private:
 	glm::mat4 m_rotationMatrix;
 	sf::Time &m_deltaTime;
 	float m_speed{ 20.0f };
-	float m_speedEn{ 1.1f };
+	float m_speedEn{ 5.0f };
 	int m_radius = 5;
 	float m_wallCubeSize{ 5.0f }; // This is the value of the wall cube's x, y, and z.
 

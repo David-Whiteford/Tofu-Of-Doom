@@ -461,13 +461,16 @@ inline void Graph<NodeType, ArcType>::ucs(Node* start, Node* dest, std::function
 template<class NodeType, class ArcType>
 inline void Graph<NodeType, ArcType>::aStar(Node* start, Node* dest , std::vector<Node*>& path)
 {
+	path.resize(0);
 	Node* startingNode = start;
 	Node* goalNode = dest;
 	std::priority_queue<Node*, std::vector<Node*>, NodeSearchCostComparer<NodeType, ArcType>> pq;
 	
 	int index = 0;
 	for (auto node : m_nodes)
-	{		
+	{	
+
+		node->setPrevious(nullptr);
 		if (node == nullptr)
 		{
 			std::cout << "index of null node: " << index << std::endl;
@@ -495,7 +498,7 @@ inline void Graph<NodeType, ArcType>::aStar(Node* start, Node* dest , std::vecto
 		{
 			Arc arc = (*iter);
 			
-			if (arc.node() != pq.top()->previous())
+			if (arc.node() != pq.top()->previous() && pq.top()->m_data.passable == true)
 			{
 				// distC is the cost so far to pq.top + weight of arc from pq.top to this child
 				int distC = pq.top()->m_data.pathCost + arc.weight();
