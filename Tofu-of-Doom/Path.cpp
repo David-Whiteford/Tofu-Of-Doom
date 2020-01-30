@@ -3,6 +3,9 @@
 Path::Path(sf::RenderWindow& t_window) :
 	m_window(t_window)
 {
+	paths.push_back(graphPathLong);
+	paths.push_back(graphPathTop);
+	paths.push_back(graphPathMiddle);
 }
 
 Path::~Path()
@@ -63,10 +66,7 @@ void Path::neighbourAlgor()
 								//std::cout << "distance" << dist << std::endl;
 								// When moving on the diagonal, cost is sqrt(50*50+50*50)
 								graph->addArc(nodeIndex, index, dist);
-							
-								// Add an arc from cell id 24 to cell id arr[n_row][n_col] 
-								// A valid neighbor:
-								//std::cout << "Neighbor: " << n_row << "," << n_col << ": " <<nodeIndex<< std::endl;
+						
 							}
 							index++;
 							
@@ -134,18 +134,17 @@ void Path::initAStar(std::vector<sf::RectangleShape> t_walls)
 
 void Path::update()
 {
-	//std::cout << "First Start Node" << startNode << "First End Node" << endNode << std::endl;
-	
-	
-	setNewPath();
 	setPath();
-	std::cout << "Start Node" << startNode << "End Node" << endNode << std::endl;
-	
-	
 }
 
 void Path::setPath()
 {
+
+	/*for (auto path : paths)
+	{
+		
+		graph->aStar(graph->nodeIndex(startNode), graph->nodeIndex(endNode), path);
+	}*/
 
 	graph->clearMarks();
 	graph->aStar(graph->nodeIndex(startNode), graph->nodeIndex(endNode), graphPath);
@@ -157,15 +156,21 @@ void Path::setNewPath()
 	endNode = startingNode;
 }
 
+void Path::followPath(int t_start, int t_end )
+{
+	startNode = t_start;
+	endNode = t_end;
+}
+
 std::vector<Node*> &Path::getGraphPath()
 {
+
 	return graphPath;
 }
 
-int Path::nodePos(sf::Vector2f playerPos)
+int Path::nodePos(sf::Vector2f position)
 {
-	int nodeNumber = floor(playerPos.x / m_nodeSize) + (floor(playerPos.y / m_nodeSize) * 50);
-	std::cout << "Player in Node:  " << nodeNumber << std::endl;
+	int nodeNumber = floor(position.x / m_nodeSize) + (floor(position.y / m_nodeSize) * COLS);
 	return nodeNumber;
 }
 

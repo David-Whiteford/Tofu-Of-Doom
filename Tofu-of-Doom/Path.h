@@ -17,9 +17,10 @@ public:
 	void update();
 	void setPath();
 	void setNewPath();
+	void followPath(int t_start, int t_end );
 	std::vector<Node*> &getGraphPath();
 	Transform m_transform;
-	int nodePos(sf::Vector2f playerPos);
+	int nodePos(sf::Vector2f position);
 
 private:
 	sf::RenderWindow& m_window;
@@ -27,8 +28,14 @@ private:
 	Graph<NodeData, int>* graph;
 	int endNode = 2237;
 	int startNode = 103;
+	
+
+	std::vector<Node*> graphPathLong;
+	std::vector<Node*> graphPathTop;
+	std::vector<Node*> graphPathMiddle;
 	std::vector<Node*> graphPath;
 
+	std::vector<std::vector<Node*>> paths;
 	NodeData nodeData;
 	int nodeIndex{ 0 };
 

@@ -41,11 +41,20 @@ public:
 	std::vector<glm::vec3> *getLightPositions();
 
 private:
+
 	int m_playerNode = 0;
+	int m_enemyNode = 0;
 	Transform m_transform;
 	Transform::Position enemyPos;
 	Transform::Position graphPos;
+
+	std::vector<Node*> graphPathLong;
+	std::vector<Node*> graphPathTop;
+	std::vector<Node*> graphPathMiddle;
 	std::vector<Node*> graphPath;
+
+	std::vector<std::vector<Node*>> paths;
+
 	sf::RenderWindow &m_window;
 	Path* m_gamePath = new Path(m_window);
 	Camera &m_camera;
@@ -58,11 +67,13 @@ private:
 	sf::CircleShape m_player;
 	sf::CircleShape m_enemy;
 	sf::CircleShape m_playerGun;
-	
-
+	bool follow = false;
+	std::vector<int> m_startNodes;
+	std::vector<int> m_endNodes;
+	int startNode = 103;
+	int endNode = 2237;
 
 	std::vector<sf::CircleShape> m_enemies;
-
 	std::vector<sf::RectangleShape> m_walls;
 
 	glm::vec3 m_eye; // Current camera position
