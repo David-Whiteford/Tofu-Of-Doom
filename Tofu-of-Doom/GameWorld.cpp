@@ -68,6 +68,7 @@ void GameWorld::updateWorld()
 {
 	m_player.setPosition(m_camera.getEye().x * s_displayScale, m_camera.getEye().z * s_displayScale);
 	setGunPosition();
+	m_playerNode = m_gamePath->nodePos(m_player.getPosition());
 	enemyMove();
 
 	for (int i = 0; i < 100; i++)

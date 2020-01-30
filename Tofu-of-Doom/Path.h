@@ -19,6 +19,7 @@ public:
 	void setNewPath();
 	std::vector<Node*> &getGraphPath();
 	Transform m_transform;
+	int nodePos(sf::Vector2f playerPos);
 
 private:
 	sf::RenderWindow& m_window;

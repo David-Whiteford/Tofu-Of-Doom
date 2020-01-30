@@ -41,7 +41,7 @@ public:
 	std::vector<glm::vec3> *getLightPositions();
 
 private:
-
+	int m_playerNode = 0;
 	Transform m_transform;
 	Transform::Position enemyPos;
 	Transform::Position graphPos;

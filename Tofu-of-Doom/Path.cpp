@@ -162,4 +162,12 @@ std::vector<Node*> &Path::getGraphPath()
 	return graphPath;
 }
 
+int Path::nodePos(sf::Vector2f playerPos)
+{
+	int nodeNumber = floor(playerPos.x / m_nodeSize) + (floor(playerPos.y / m_nodeSize) * 50);
+	std::cout << "Player in Node:  " << nodeNumber << std::endl;
+	return nodeNumber;
+}
+
+
 
