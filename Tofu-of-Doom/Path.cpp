@@ -168,6 +168,13 @@ std::vector<Node*> &Path::getGraphPath()
 	return graphPath;
 }
 
+std::vector<std::vector<Node*>>& Path::getVecOfGraphPath()
+{
+	return paths;
+}
+
+
+
 int Path::nodePos(sf::Vector2f position)
 {
 	int nodeNumber = floor(position.x / m_nodeSize) + (floor(position.y / m_nodeSize) * COLS);
