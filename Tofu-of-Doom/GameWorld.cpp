@@ -128,8 +128,13 @@ void GameWorld::enemyMove()
 
 		}
 	}
+	else
+	{
+		m_gamePath->update();
+		graphPath = m_gamePath->getGraphPath();
+	}
 	
-	m_gamePath->update(graphPath);
+	
 
 }
 

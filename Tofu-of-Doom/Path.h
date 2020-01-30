@@ -14,10 +14,10 @@ public:
 	void draw();
 	void neighbourAlgor();
 	void initAStar(std::vector<sf::RectangleShape> t_walls);
-	void update(std::vector<Node*> t_graphPath);
+	void update();
 	void setPath();
 	void setNewPath();
-	std::vector<Node*> getGraphPath();
+	std::vector<Node*> &getGraphPath();
 	Transform m_transform;
 
 private:

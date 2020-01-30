@@ -60,7 +60,7 @@ void Path::neighbourAlgor()
 
 								float dist = m_transform.distance(currentNode, neighborsNodes);
 
-								std::cout << "distance" << dist << std::endl;
+								//std::cout << "distance" << dist << std::endl;
 								// When moving on the diagonal, cost is sqrt(50*50+50*50)
 								graph->addArc(nodeIndex, index, dist);
 							
@@ -118,7 +118,7 @@ void Path::initAStar(std::vector<sf::RectangleShape> t_walls)
 
 
 
-			std::cout << "Row " << nodeData.m_row << "Col" << nodeData.m_col << "Is Passable: " << nodeData.passable <<  std::endl;
+			//std::cout << "Row " << nodeData.m_row << "Col" << nodeData.m_col << "Is Passable: " << nodeData.passable <<  std::endl;
 			//add node
 			graph->addNode(nodeData, nodeIndex);
 			m_nodeSquare.push_back(m_nodeShape[nodeIndex]);
@@ -132,19 +132,22 @@ void Path::initAStar(std::vector<sf::RectangleShape> t_walls)
 
 }
 
-void Path::update(std::vector<Node*> t_graphPath)
+void Path::update()
 {
-	graphPath = t_graphPath;
-	if (graphPath.empty() == true )
-	{
-		setNewPath();
-		std::cout << "Start Node" << startNode << "End Node" << endNode << std::endl;
-		setPath();
-	}
+	//std::cout << "First Start Node" << startNode << "First End Node" << endNode << std::endl;
+	
+	
+	setNewPath();
+	setPath();
+	std::cout << "Start Node" << startNode << "End Node" << endNode << std::endl;
+	
+	
 }
 
 void Path::setPath()
 {
+
+	graph->clearMarks();
 	graph->aStar(graph->nodeIndex(startNode), graph->nodeIndex(endNode), graphPath);
 }
 void Path::setNewPath()
@@ -154,8 +157,9 @@ void Path::setNewPath()
 	endNode = startingNode;
 }
 
-std::vector<Node*> Path::getGraphPath()
+std::vector<Node*> &Path::getGraphPath()
 {
 	return graphPath;
 }
+
 

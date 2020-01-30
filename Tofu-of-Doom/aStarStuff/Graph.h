@@ -461,16 +461,16 @@ inline void Graph<NodeType, ArcType>::ucs(Node* start, Node* dest, std::function
 template<class NodeType, class ArcType>
 inline void Graph<NodeType, ArcType>::aStar(Node* start, Node* dest , std::vector<Node*>& path)
 {
+	path.resize(0);
 	Node* startingNode = start;
 	Node* goalNode = dest;
 	std::priority_queue<Node*, std::vector<Node*>, NodeSearchCostComparer<NodeType, ArcType>> pq;
 	
-	startingNode->setPrevious(0);
-	goalNode->setPrevious(0);
-
 	int index = 0;
 	for (auto node : m_nodes)
-	{		
+	{	
+
+		node->setPrevious(nullptr);
 		if (node == nullptr)
 		{
 			std::cout << "index of null node: " << index << std::endl;
