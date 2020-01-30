@@ -25,10 +25,6 @@ Game::~Game()
 	delete m_mainShader;
 }
 
-double Game::clockToMilliseconds(clock_t ticks) {
-	// units/(units/time) => time (seconds) * 1000 = milliseconds
-	return (ticks / (double)CLOCKS_PER_SEC) * 1000.0;
-}
 
 /// <summary>
 /// Run
@@ -255,7 +251,7 @@ void Game::update(sf::Time t_deltaTime)
 	//update the zombie sound position to follow test zombie
 	zombiePosition = vec3df(m_gameWorld->getEnemyPosition().x, 3.5f, m_gameWorld->getEnemyPosition().y); 
 	
-
+	m_gameWorld->checkPlayerRayCollsions();
 	// Update game controls
 	camera.input(t_deltaTime);
 	camera.transform.position.x = camera.getEye().x;
@@ -319,6 +315,7 @@ void Game::render()
 
 	switch (m_drawState)
 	{
+	
 	case DrawState::MAP:
 		m_window.pushGLStates();
 		m_gameWorld->drawWorld();
@@ -519,11 +516,14 @@ void Game::render()
 	}
 
 	// Check for OpenGL error code
-	error = glGetError();
-
-	if (error != GL_NO_ERROR)
+	if (m_drawState == DrawState::GAME)
 	{
-		DEBUG_MSG(error);
+		error = glGetError();
+
+		if (error != GL_NO_ERROR)
+		{
+			DEBUG_MSG(error);
+		}
 	}
 
 	m_window.display();

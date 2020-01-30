@@ -3,8 +3,8 @@
 /// <summary>
 /// Constructor for the GameWorld class
 /// </summary>
-GameWorld::GameWorld(sf::RenderWindow &t_window, sf::Time &t_deltaTime, Camera &t_camera) 
-	: m_window(t_window), m_deltaTime(t_deltaTime), m_camera(t_camera)
+GameWorld::GameWorld(sf::RenderWindow &t_window, sf::Time &t_deltaTime, Camera *t_camera) 
+	: m_window(t_window), m_deltaTime(t_deltaTime), m_camera(*t_camera)
 {
 	// Player
 	m_player.setRadius(25.0f);
@@ -66,17 +66,30 @@ GameWorld::~GameWorld()
 /// </summary>
 void GameWorld::updateWorld()
 {
+
+	
 	m_player.setPosition(m_camera.getEye().x * s_displayScale, m_camera.getEye().z * s_displayScale);
 	setGunPosition();
 	m_playerNode = m_gamePath->nodePos(m_player.getPosition());
 	enemyMove();
+
+	
 
 	for (int i = 0; i < 100; i++)
 	{
 		if (bullets[i].isActive())
 		{
 			bullets[i].update();
-
+			for (int x = 0; x < m_walls.size(); x++)
+			{
+				if(bullets[i].checkCollision(m_walls.at(x).getPosition(), m_walls.at(x).getSize().x/2))
+				{
+					if (bullets[i].raycast.isInterpolating())
+					{
+						bullets[i].raycast.addToHitObjects(&m_walls.at(x));
+					}
+				}
+			}
 			for (int x = 0; x < 2; x++)
 			{
 				if (bullets[i].checkCollision(m_enemies.at(x).getPosition(), m_enemies[x].getRadius()))
@@ -153,6 +166,11 @@ void GameWorld::drawWorld()
 	m_window.draw(m_player);
 	m_window.draw(m_playerGun);
 
+	m_window.draw(m_camera.raycastForward.drawRay());
+	m_window.draw(m_camera.raycastBehind.drawRay());
+	m_window.draw(m_camera.raycastToLeft.drawRay());
+	m_window.draw(m_camera.raycastToRight.drawRay());
+
 	for (int i = 0; i < m_enemies.size(); i++)
 	{
 		m_window.draw(m_enemies[i]);
@@ -203,9 +221,8 @@ void GameWorld::fireBullet(int t_gunType)
 				float offsetZ = ((float(rand()) / float(RAND_MAX)) * (0.2f - -0.2f)) + -0.2f;
 
 				bullets[i].setTimeToLive(200);
-				//float randomSpread = rand() % 0 + (-0.32f);
+
 				glm::normalize(tempDirection);
-				//tempDirection += tempDirection * static_cast<float>(randomSpread);
 
 				bullets[i].bulletInit(sf::Vector2f(tempDirection.x + offsetX, tempDirection.z + offsetZ), 0, m_playerGun.getPosition());
 				bulletSpreadAmount++;
@@ -218,6 +235,64 @@ void GameWorld::fireBullet(int t_gunType)
 		}
 	}
 
+}
+
+void GameWorld::checkPlayerRayCollsions()
+{
+	m_camera.setCanMoveUp(true);
+	m_camera.setCanMoveDown(true);
+	m_camera.setCanMoveLeft(true);
+	m_camera.setCanMoveRight(true);
+
+	for (int x = 0; x < m_walls.size(); x++)
+	{
+		if (m_camera.canGoUp())
+		{
+			if (m_camera.raycastForward.hit(m_walls.at(x).getPosition(), m_walls.at(x).getSize().x))
+			{
+				m_camera.setCanMoveUp(false);
+			}
+		}
+		if (m_camera.canGoDown())
+		{
+			if (m_camera.raycastBehind.hit(m_walls.at(x).getPosition(), m_walls.at(x).getSize().x))
+			{
+				m_camera.setCanMoveDown(false);
+			}
+		}
+		if (m_camera.canGoLeft())
+		{
+			if (m_camera.raycastToLeft.hit(m_walls.at(x).getPosition(), m_walls.at(x).getSize().x))
+			{
+				m_camera.setCanMoveLeft(false);
+			}
+		}
+		if (m_camera.canGoRight())
+		{
+			if (m_camera.raycastToRight.hit(m_walls.at(x).getPosition(), m_walls.at(x).getSize().x))
+			{
+				m_camera.setCanMoveRight(false);
+			}
+		}
+
+		if (m_camera.canGoLeft() == false && m_camera.canGoDown() == false)
+		{
+			break;
+		}
+		if (m_camera.canGoRight() == false && m_camera.canGoDown() == false)
+		{
+			break;
+		}
+		
+		if (m_camera.canGoLeft() == false && m_camera.canGoUp() == false)
+		{
+			break;
+		}
+		if (m_camera.canGoRight() == false && m_camera.canGoUp() == false)
+		{
+			break;
+		}
+	}
 }
 
 /// <summary>

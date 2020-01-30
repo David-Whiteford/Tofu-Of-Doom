@@ -3,6 +3,8 @@
 Raycast::Raycast()
 {
 	interpolate = true;
+	m_raycastLine[0].color = sf::Color::Blue;
+	m_raycastLine[1].color = sf::Color::Blue;
 }
 
 Raycast::~Raycast()
@@ -16,7 +18,7 @@ void Raycast::setRayValues(sf::Vector2f t_startPosition, sf::Vector2f t_directio
 	m_rayLength = t_length;
 }
 
-bool Raycast::circleHit(sf::Vector2f t_targetPosition, float t_targetRadius)
+bool Raycast::hit(sf::Vector2f t_targetPosition, float t_targetRadius)
 {
 
 
@@ -88,12 +90,12 @@ sf::VertexArray Raycast::drawRay()
 	return ray;
 }
 
-void Raycast::addToHitObjects(sf::CircleShape* t_enemy)
+void Raycast::addToHitObjects(sf::Shape* t_enemy)
 {
 	hitObjects.push(t_enemy);
 }
 
-std::queue<sf::CircleShape*> Raycast::getHitObjects()
+std::queue<sf::Shape*> Raycast::getHitObjects()
 {
 	return hitObjects;
 }
@@ -120,11 +122,34 @@ void Raycast::getClosest()
 			hitObjects.pop();
 		}
 	}
-	sf::Vector2f newPos = sf::Vector2f(200, 200);
-	closest->setPosition(newPos);
+	//sf::Vector2f newPos = sf::Vector2f(200, 200);
+	//closest->setPosition(newPos);
+	std::cout << closest->getPosition().x << ", " << closest->getPosition().y << std::endl;
 }
 
 bool Raycast::isInterpolating()
 {
 	return interpolate;
+}
+
+bool Raycast::intersectsRectangle(sf::Vector2f p1, sf::Vector2f p2) 
+{
+	sf::Vector2f endPoint = m_positon + (m_direction * m_rayLength);
+	float x3 = p1.x, y3 = p1.y, x4 = p2.x, y4 = p2.y, x1 = m_positon.x, y1 = m_positon.y;
+	float x2 = endPoint.x , y2 = endPoint.y;
+	// calculate the direction of the lines
+	float uA = ((x4 - x3) * (y1 - y3) - (y4 - y3) * (x1 - x3)) / ((y4 - y3) * (x2 - x1) - (x4 - x3) * (y2 - y1));
+	float uB = ((x2 - x1) * (y1 - y3) - (y2 - y1) * (x1 - x3)) / ((y4 - y3) * (x2 - x1) - (x4 - x3) * (y2 - y1));
+
+	// if uA and uB are between 0-1, lines are colliding
+	if (uA >= 0 && uA <= 1 && uB >= 0 && uB <= 1) {
+
+		// optionally, draw a circle where the lines meet
+		float intersectionX = x1 + (uA * (x2 - x1));
+		float intersectionY = y1 + (uA * (y2 - y1));
+
+		m_direction = sf::Vector2f(intersectionX, intersectionY);
+		return true;
+	}
+	return false;
 }

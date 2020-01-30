@@ -100,7 +100,7 @@ void Bullet::setFiredFromPosition(sf::Vector2f t_pos)
 
 bool Bullet::checkCollision(sf::Vector2f t_enemyPos, float t_radius)
 {
-	return raycast.circleHit(t_enemyPos, t_radius);
+	return raycast.hit(t_enemyPos, t_radius);
 }
 
 void Bullet::update()

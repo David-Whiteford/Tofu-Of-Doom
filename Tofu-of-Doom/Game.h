@@ -123,7 +123,7 @@ private:
 
 	sf::RenderWindow m_window; // Window
 	sf::Time m_deltaTime;
-	GameWorld *m_gameWorld = new GameWorld(m_window, m_deltaTime, camera); // Create a game world
+	GameWorld *m_gameWorld = new GameWorld(m_window, m_deltaTime, &camera); // Create a game world
 
 	bool m_exitGame{ false };
 

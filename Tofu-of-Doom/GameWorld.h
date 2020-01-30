@@ -17,7 +17,7 @@
 class GameWorld
 {
 public:
-	GameWorld(sf::RenderWindow &t_window, sf::Time &t_deltaTime, Camera &t_camera);
+	GameWorld(sf::RenderWindow &t_window, sf::Time &t_deltaTime, Camera *t_camera);
 	~GameWorld();
 	void updateWorld();
 	void enemyMove();
@@ -25,9 +25,9 @@ public:
 
 	void fireBullet(int t_gunType);
 
-	void drawBulletTrajectory();
 	float Pi = 3.14;
 	
+	void checkPlayerRayCollsions();
 
 	Bullet bullets[100];
 

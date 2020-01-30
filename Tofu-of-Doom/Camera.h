@@ -9,6 +9,7 @@
 #include <SFML/Graphics.hpp>
 #include "Controller.h"
 #include "Collider2D.h"
+#include "Raycast.h"
 
 class Camera
 {
@@ -43,11 +44,25 @@ public:
 
 	Collider2D collider;
 
+	Raycast raycastForward,raycastBehind,raycastToLeft,raycastToRight;
+
+	void setCanMoveUp(bool t_bool);
+	void setCanMoveDown(bool t_bool);
+	void setCanMoveLeft(bool t_bool);
+	void setCanMoveRight(bool t_bool);
+
+	bool canGoUp();
+	bool canGoDown();
+	bool canGoLeft();
+	bool canGoRight();
+
 private:
 	bool cameraShaking = false;
 	bool cameraShakeUp = true;
 	float cameraShakeSpeed = 2;
 	float cameraShakeMax = 4;
+
+	bool canMoveUp, canMoveDown, canMoveLeft, canMoveRight;
 
 
 
