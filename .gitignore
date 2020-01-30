@@ -20,6 +20,7 @@ x86/
 bld/
 [Bb]in/
 [Ll]og/
+Tofu-of-Doom\[Dd]ebug
 
 # Visual Studio 2015 cache/options directory
 .vs/
