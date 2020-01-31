@@ -1,56 +1,31 @@
-﻿  Path.cpp
-D:\Users\dave2\Desktop\Tofu-Of-Doom\Tofu-of-Doom\Transform.h(17): warning C4091: 'typedef ': ignored on left of 'Transform::Position' when no variable is declared
-D:\Users\dave2\Desktop\Tofu-Of-Doom\Tofu-of-Doom\Path.cpp(59,45): warning C4244: 'argument': conversion from 'int' to 'T', possible loss of data
-D:\Users\dave2\Desktop\Tofu-Of-Doom\Tofu-of-Doom\Path.cpp(59,45): warning C4244:         with
-D:\Users\dave2\Desktop\Tofu-Of-Doom\Tofu-of-Doom\Path.cpp(59,45): warning C4244:         [
-D:\Users\dave2\Desktop\Tofu-Of-Doom\Tofu-of-Doom\Path.cpp(59,45): warning C4244:             T=float
-D:\Users\dave2\Desktop\Tofu-Of-Doom\Tofu-of-Doom\Path.cpp(59,45): warning C4244:         ]
-D:\Users\dave2\Desktop\Tofu-Of-Doom\Tofu-of-Doom\Path.cpp(58,84): warning C4244: 'argument': conversion from 'int' to 'T', possible loss of data
-D:\Users\dave2\Desktop\Tofu-Of-Doom\Tofu-of-Doom\Path.cpp(58,84): warning C4244:         with
-D:\Users\dave2\Desktop\Tofu-Of-Doom\Tofu-of-Doom\Path.cpp(58,84): warning C4244:         [
-D:\Users\dave2\Desktop\Tofu-Of-Doom\Tofu-of-Doom\Path.cpp(58,84): warning C4244:             T=float
-D:\Users\dave2\Desktop\Tofu-Of-Doom\Tofu-of-Doom\Path.cpp(58,84): warning C4244:         ]
-D:\Users\dave2\Desktop\Tofu-Of-Doom\Tofu-of-Doom\Path.cpp(62,41): warning C4244: 'argument': conversion from 'int' to 'T', possible loss of data
-D:\Users\dave2\Desktop\Tofu-Of-Doom\Tofu-of-Doom\Path.cpp(62,41): warning C4244:         with
-D:\Users\dave2\Desktop\Tofu-Of-Doom\Tofu-of-Doom\Path.cpp(62,41): warning C4244:         [
-D:\Users\dave2\Desktop\Tofu-Of-Doom\Tofu-of-Doom\Path.cpp(62,41): warning C4244:             T=float
-D:\Users\dave2\Desktop\Tofu-Of-Doom\Tofu-of-Doom\Path.cpp(62,41): warning C4244:         ]
-D:\Users\dave2\Desktop\Tofu-Of-Doom\Tofu-of-Doom\Path.cpp(61,84): warning C4244: 'argument': conversion from 'int' to 'T', possible loss of data
-D:\Users\dave2\Desktop\Tofu-Of-Doom\Tofu-of-Doom\Path.cpp(61,84): warning C4244:         with
-D:\Users\dave2\Desktop\Tofu-Of-Doom\Tofu-of-Doom\Path.cpp(61,84): warning C4244:         [
-D:\Users\dave2\Desktop\Tofu-Of-Doom\Tofu-of-Doom\Path.cpp(61,84): warning C4244:             T=float
-D:\Users\dave2\Desktop\Tofu-Of-Doom\Tofu-of-Doom\Path.cpp(61,84): warning C4244:         ]
-D:\Users\dave2\Desktop\Tofu-Of-Doom\Tofu-of-Doom\Path.cpp(68,41): warning C4244: 'argument': conversion from 'float' to 'ArcType', possible loss of data
-D:\Users\dave2\Desktop\Tofu-Of-Doom\Tofu-of-Doom\Path.cpp(68,41): warning C4244:         with
-D:\Users\dave2\Desktop\Tofu-Of-Doom\Tofu-of-Doom\Path.cpp(68,41): warning C4244:         [
-D:\Users\dave2\Desktop\Tofu-Of-Doom\Tofu-of-Doom\Path.cpp(68,41): warning C4244:             ArcType=int
-D:\Users\dave2\Desktop\Tofu-Of-Doom\Tofu-of-Doom\Path.cpp(68,41): warning C4244:         ]
-D:\Users\dave2\Desktop\Tofu-Of-Doom\Tofu-of-Doom\Path.cpp(103,60): warning C4244: 'argument': conversion from 'int' to 'T', possible loss of data
-D:\Users\dave2\Desktop\Tofu-Of-Doom\Tofu-of-Doom\Path.cpp(103,60): warning C4244:         with
-D:\Users\dave2\Desktop\Tofu-Of-Doom\Tofu-of-Doom\Path.cpp(103,60): warning C4244:         [
-D:\Users\dave2\Desktop\Tofu-Of-Doom\Tofu-of-Doom\Path.cpp(103,60): warning C4244:             T=float
-D:\Users\dave2\Desktop\Tofu-Of-Doom\Tofu-of-Doom\Path.cpp(103,60): warning C4244:         ]
-D:\Users\dave2\Desktop\Tofu-Of-Doom\Tofu-of-Doom\Path.cpp(103,48): warning C4244: 'argument': conversion from 'int' to 'T', possible loss of data
-D:\Users\dave2\Desktop\Tofu-Of-Doom\Tofu-of-Doom\Path.cpp(103,48): warning C4244:         with
-D:\Users\dave2\Desktop\Tofu-Of-Doom\Tofu-of-Doom\Path.cpp(103,48): warning C4244:         [
-D:\Users\dave2\Desktop\Tofu-Of-Doom\Tofu-of-Doom\Path.cpp(103,48): warning C4244:             T=float
-D:\Users\dave2\Desktop\Tofu-Of-Doom\Tofu-of-Doom\Path.cpp(103,48): warning C4244:         ]
-D:\Users\dave2\Desktop\Tofu-Of-Doom\Tofu-of-Doom\Path.cpp(106,61): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-D:\Users\dave2\Desktop\Tofu-Of-Doom\Tofu-of-Doom\Path.cpp(106,47): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-D:\Users\dave2\Desktop\Tofu-Of-Doom\Tofu-of-Doom\Path.cpp(173,17): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
-D:\Users\dave2\Desktop\Tofu-Of-Doom\Tofu-of-Doom\aStarStuff\Graph.h(255,32): warning C4018: '<': signed/unsigned mismatch
-D:\Users\dave2\Desktop\Tofu-Of-Doom\Tofu-of-Doom\aStarStuff\Graph.h(254): message : while compiling class template member function 'void Graph<NodeData,int>::clearMarks(void)'
-D:\Users\dave2\Desktop\Tofu-Of-Doom\Tofu-of-Doom\Path.cpp(149): message : see reference to function template instantiation 'void Graph<NodeData,int>::clearMarks(void)' being compiled
-D:\Users\dave2\Desktop\Tofu-Of-Doom\Tofu-of-Doom\Path.cpp(54): message : see reference to class template instantiation 'Graph<NodeData,int>' being compiled
-D:\Users\dave2\Desktop\Tofu-Of-Doom\Tofu-of-Doom\aStarStuff\Graph.h(478,42): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
-D:\Users\dave2\Desktop\Tofu-Of-Doom\Tofu-of-Doom\aStarStuff\Graph.h(463): message : while compiling class template member function 'void Graph<NodeData,int>::aStar(GraphNode<NodeData,int> *,GraphNode<NodeData,int> *,std::vector<Node *,std::allocator<_Ty>> &)'
-D:\Users\dave2\Desktop\Tofu-Of-Doom\Tofu-of-Doom\aStarStuff\Graph.h(463): message :         with
-D:\Users\dave2\Desktop\Tofu-Of-Doom\Tofu-of-Doom\aStarStuff\Graph.h(463): message :         [
-D:\Users\dave2\Desktop\Tofu-Of-Doom\Tofu-of-Doom\aStarStuff\Graph.h(463): message :             _Ty=Node *
-D:\Users\dave2\Desktop\Tofu-Of-Doom\Tofu-of-Doom\aStarStuff\Graph.h(463): message :         ]
-D:\Users\dave2\Desktop\Tofu-Of-Doom\Tofu-of-Doom\Path.cpp(150): message : see reference to function template instantiation 'void Graph<NodeData,int>::aStar(GraphNode<NodeData,int> *,GraphNode<NodeData,int> *,std::vector<Node *,std::allocator<_Ty>> &)' being compiled
-D:\Users\dave2\Desktop\Tofu-Of-Doom\Tofu-of-Doom\Path.cpp(150): message :         with
-D:\Users\dave2\Desktop\Tofu-Of-Doom\Tofu-of-Doom\Path.cpp(150): message :         [
-D:\Users\dave2\Desktop\Tofu-Of-Doom\Tofu-of-Doom\Path.cpp(150): message :             _Ty=Node *
-D:\Users\dave2\Desktop\Tofu-Of-Doom\Tofu-of-Doom\Path.cpp(150): message :         ]
-  Tofu-of-Doom.vcxproj -> D:\Users\dave2\Desktop\Tofu-Of-Doom\Debug\Tofu-of-Doom.exe
+﻿  GameWorld.cpp
+C:\Users\gameuser\Desktop\Tofu-Of-Doom\Tofu-of-Doom\Transform.h(17): warning C4091:  'typedef ': ignored on left of 'Transform::Position' when no variable is declared
+C:\Users\gameuser\Desktop\Tofu-Of-Doom\Tofu-of-Doom\Collider2D.h(13): warning C4091:  'typedef ': ignored on left of 'Collider2D::Bounds' when no variable is declared
+C:\Users\gameuser\Desktop\Tofu-Of-Doom\Tofu-of-Doom\GameWorld.h(33,17): warning C4305:  'initializing': truncation from 'double' to 'float'
+C:\Users\gameuser\Desktop\Tofu-Of-Doom\Tofu-of-Doom\GameWorld.cpp(33,20): warning C4018:  '<': signed/unsigned mismatch
+C:\Users\gameuser\Desktop\Tofu-Of-Doom\Tofu-of-Doom\GameWorld.cpp(43,60): warning C4244:  'argument': conversion from 'T' to 'float', possible loss of data
+C:\Users\gameuser\Desktop\Tofu-Of-Doom\Tofu-of-Doom\GameWorld.cpp(43,60): warning C4244:         with
+C:\Users\gameuser\Desktop\Tofu-Of-Doom\Tofu-of-Doom\GameWorld.cpp(43,60): warning C4244:         [
+C:\Users\gameuser\Desktop\Tofu-Of-Doom\Tofu-of-Doom\GameWorld.cpp(43,60): warning C4244:             T=unsigned int
+C:\Users\gameuser\Desktop\Tofu-Of-Doom\Tofu-of-Doom\GameWorld.cpp(43,60): warning C4244:         ]
+C:\Users\gameuser\Desktop\Tofu-Of-Doom\Tofu-of-Doom\GameWorld.cpp(43,38): warning C4244:  'argument': conversion from 'T' to 'float', possible loss of data
+C:\Users\gameuser\Desktop\Tofu-Of-Doom\Tofu-of-Doom\GameWorld.cpp(43,38): warning C4244:         with
+C:\Users\gameuser\Desktop\Tofu-Of-Doom\Tofu-of-Doom\GameWorld.cpp(43,38): warning C4244:         [
+C:\Users\gameuser\Desktop\Tofu-Of-Doom\Tofu-of-Doom\GameWorld.cpp(43,38): warning C4244:             T=unsigned int
+C:\Users\gameuser\Desktop\Tofu-Of-Doom\Tofu-of-Doom\GameWorld.cpp(43,38): warning C4244:         ]
+C:\Users\gameuser\Desktop\Tofu-Of-Doom\Tofu-of-Doom\GameWorld.cpp(46,20): warning C4018:  '<': signed/unsigned mismatch
+C:\Users\gameuser\Desktop\Tofu-Of-Doom\Tofu-of-Doom\GameWorld.cpp(114,22): warning C4018:  '<': signed/unsigned mismatch
+C:\Users\gameuser\Desktop\Tofu-Of-Doom\Tofu-of-Doom\GameWorld.cpp(157,97): warning C4244:  'argument': conversion from 'int' to 'T', possible loss of data
+C:\Users\gameuser\Desktop\Tofu-Of-Doom\Tofu-of-Doom\GameWorld.cpp(157,97): warning C4244:         with
+C:\Users\gameuser\Desktop\Tofu-Of-Doom\Tofu-of-Doom\GameWorld.cpp(157,97): warning C4244:         [
+C:\Users\gameuser\Desktop\Tofu-Of-Doom\Tofu-of-Doom\GameWorld.cpp(157,97): warning C4244:             T=float
+C:\Users\gameuser\Desktop\Tofu-Of-Doom\Tofu-of-Doom\GameWorld.cpp(157,97): warning C4244:         ]
+C:\Users\gameuser\Desktop\Tofu-Of-Doom\Tofu-of-Doom\GameWorld.cpp(157,67): warning C4244:  'argument': conversion from 'int' to 'T', possible loss of data
+C:\Users\gameuser\Desktop\Tofu-Of-Doom\Tofu-of-Doom\GameWorld.cpp(157,67): warning C4244:         with
+C:\Users\gameuser\Desktop\Tofu-Of-Doom\Tofu-of-Doom\GameWorld.cpp(157,67): warning C4244:         [
+C:\Users\gameuser\Desktop\Tofu-Of-Doom\Tofu-of-Doom\GameWorld.cpp(157,67): warning C4244:             T=float
+C:\Users\gameuser\Desktop\Tofu-Of-Doom\Tofu-of-Doom\GameWorld.cpp(157,67): warning C4244:         ]
+C:\Users\gameuser\Desktop\Tofu-Of-Doom\Tofu-of-Doom\GameWorld.cpp(222,20): warning C4018:  '<': signed/unsigned mismatch
+C:\Users\gameuser\Desktop\Tofu-Of-Doom\Tofu-of-Doom\GameWorld.cpp(236,20): warning C4018:  '<': signed/unsigned mismatch
+C:\Users\gameuser\Desktop\Tofu-Of-Doom\Tofu-of-Doom\GameWorld.cpp(309,20): warning C4018:  '<': signed/unsigned mismatch
+  Tofu-of-Doom.vcxproj -> C:\Users\gameuser\Desktop\Tofu-Of-Doom\Debug\Tofu-of-Doom.exe

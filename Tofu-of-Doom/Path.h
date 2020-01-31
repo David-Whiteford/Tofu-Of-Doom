@@ -17,7 +17,7 @@ public:
 	void update();
 	void setPath();
 	void setNewPath();
-	void followPath(int t_start, int t_end );
+	void newPath(int t_start, int t_end );
 	std::vector<Node*> &getGraphPath();
 	Transform m_transform;
 	int nodePos(sf::Vector2f position);

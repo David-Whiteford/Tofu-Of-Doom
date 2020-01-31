@@ -151,12 +151,10 @@ void Path::setPath()
 }
 void Path::setNewPath()
 {
-	int startingNode = startNode;
-	startNode = endNode;
-	endNode = startingNode;
+	
 }
 
-void Path::followPath(int t_start, int t_end )
+void Path::newPath(int t_start, int t_end )
 {
 	startNode = t_start;
 	endNode = t_end;

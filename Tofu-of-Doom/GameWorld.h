@@ -13,6 +13,8 @@
 #include "Camera.h"
 #include "Bullet.h"
 #include "Transform.h"
+#include <stdlib.h>
+#include <ctime>
 
 class GameWorld
 {
@@ -20,7 +22,10 @@ public:
 	GameWorld(sf::RenderWindow &t_window, sf::Time &t_deltaTime, Camera *t_camera);
 	~GameWorld();
 	void updateWorld();
-	void enemyMove();
+	void enemyMovement();
+	void enemyFollowPlayer();
+	void moveEnemy();
+	
 	void drawWorld();
 
 	void fireBullet(int t_gunType);
@@ -41,7 +46,8 @@ public:
 	std::vector<glm::vec3> *getLightPositions();
 
 private:
-
+	int m_currentNode = 0;
+	int m_endNode = 0;
 	int m_playerNode = 0;
 	int m_enemyNode = 0;
 	Transform m_transform;
@@ -69,6 +75,8 @@ private:
 	sf::CircleShape m_playerGun;
 	bool follow = false;
 	std::vector<int> m_startNodes;
+	
+	
 	std::vector<int> m_endNodes;
 	int startNode = 103;
 	int endNode = 2237;
