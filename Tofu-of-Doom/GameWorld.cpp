@@ -154,16 +154,33 @@ void GameWorld::enemyFollowPlayer()
 }
 void GameWorld::moveEnemy()
 {
+
 	sf::Vector2f graphPathVec = sf::Vector2f(graphPath.back()->m_data.m_x, graphPath.back()->m_data.m_y);
 	sf::Vector2f moveTo = m_transform.moveTowards(m_enemies.front().getPosition(), graphPathVec, m_speedEn);
 	m_enemies.front().setPosition(moveTo);
 	if (m_enemies.front().getPosition().x == graphPath.back()->m_data.m_x &&
 		m_enemies.front().getPosition().y == graphPath.back()->m_data.m_y)
 	{
-
 		graphPath.pop_back();
-
 	}
+
+	/*for (int i = 0; i < m_enemies.size(); i++)
+	{
+
+		sf::Vector2f graphPathVec = sf::Vector2f(paths[i].front()->m_data.m_x, paths[i].front()->m_data.m_y);
+		sf::Vector2f moveTo = m_transform.moveTowards(m_enemies[i].getPosition(), graphPathVec, m_speedEn);
+		m_enemies[i].setPosition(moveTo);
+		if (m_enemies[i].getPosition().x == paths[i].back()->m_data.m_x &&
+			m_enemies[i].getPosition().y == paths[i].back()->m_data.m_y)
+		{
+
+			paths[i].pop_back();
+
+		}
+	}*/
+
+
+
 }
 /// <summary>
 /// Moves the enemy
@@ -179,14 +196,14 @@ void GameWorld::enemyMovement()
 		}
 		else
 		{
-			int currentNode = m_enemyNode;
+
 			int endNode = 1 + (rand() % m_endNodes.size());
 			int nodeEnd = m_endNodes[endNode];
-			if (currentNode == nodeEnd)
+			if (m_enemyNode == nodeEnd)
 			{
 				int endNode = 1 + (rand() % m_endNodes.size());
-				int nodeEnd = m_endNodes[endNode];
-				
+				nodeEnd = m_endNodes[endNode];
+
 			}
 			else
 			{
@@ -194,10 +211,10 @@ void GameWorld::enemyMovement()
 				m_gamePath->update();
 				graphPath = m_gamePath->getGraphPath();
 			}
-			
+
 		}
 	}
-	else 
+	else
 	{
 		if (graphPath.empty() == false)
 		{
@@ -210,6 +227,67 @@ void GameWorld::enemyMovement()
 			graphPath = m_gamePath->getGraphPath();
 		}
 	}
+
+	//if (follow == false)
+	//{
+	//	//graphPath = m_gamePath->getGraphPath();
+	//	if (graphPath.empty() == false)
+	//	{
+	//		moveEnemy();
+	//	}
+	//	else
+	//	{
+	//		std::vector<int> endNode;
+	//		for (int i = 0; i < endNode.size(); i++)
+	//		{
+	//			endNode[i] = 1 + (rand() % m_endNodes.size());
+	//		}
+	//
+	//		std::vector<int> nodeEnd;
+	//		for (int i = 0; i < nodeEnd.size(); i++)
+	//		{
+	//			endNode[i] = nodeEnd = m_endNodes[endNode[i]];;
+	//		}
+
+	//		if (m_enemyNode == nodeEnd)
+	//		{
+	//			for (int i = 0; i < endNode.size(); i++)
+	//			{
+	//				endNode[i] = 1 + (rand() % m_endNodes.size());
+	//			}
+	//		    for (int i = 0; i < nodeEnd.size(); i++)
+	//			{
+	//				endNode[i] = nodeEnd = m_endNodes[endNode[i]];;
+	//			}
+
+	//		}
+	//		else
+	//		{
+	//			for (int i = 0; i < nodeEnd.size(); i++)
+	//			{
+	//				m_gamePath->newPath(m_enemyNode, nodeEnd[i]);
+	//				m_gamePath->update();
+	//				paths[i] = m_gamePath->getGraphPath();
+	//			}
+	//		}
+	//	}
+	//}
+	//else
+	//{
+	//	if (graphPath.empty() == false)
+	//	{
+	//		moveEnemy();
+	//	}
+	//	else
+	//	{
+	//		m_gamePath->newPath(m_enemyNode, m_playerNode);
+	//		m_gamePath->update();
+	//		graphPath = m_gamePath->getGraphPath();
+	//	}
+	//}
+
+
+	
 }
 
 

@@ -59,6 +59,8 @@ private:
 	std::vector<Node*> graphPathMiddle;
 	std::vector<Node*> graphPath;
 
+	
+
 	std::vector<std::vector<Node*>> paths;
 
 	sf::RenderWindow &m_window;
