@@ -16,6 +16,7 @@ GameWorld::GameWorld(sf::RenderWindow &t_window, sf::Time &t_deltaTime, Camera *
 	m_playerGun.setFillColor(sf::Color::Red);
 	m_playerGun.setOrigin(sf::Vector2f(5, 5));
 	m_playerGun.setPosition(m_camera.getEye().x, m_camera.getEye().z + 5); // Test starting position
+
 	m_endNodes.push_back(252);
 	m_endNodes.push_back(491);
 	m_endNodes.push_back(855);
@@ -24,12 +25,10 @@ GameWorld::GameWorld(sf::RenderWindow &t_window, sf::Time &t_deltaTime, Camera *
 	m_endNodes.push_back(2353);
 	m_endNodes.push_back(681);
 	m_endNodes.push_back(2237);
-	
 
 	// m_eye = glm::vec3(m_player.getPosition().x, 2.0f, m_player.getPosition().y);
 	m_enemies.push_back(m_enemy);
 	m_enemies.push_back(m_enemy);	
-	
 	for (int i = 0; i < m_enemies.size(); i++)
 	{
 		m_enemies[i].setRadius(25.0f);
@@ -37,6 +36,10 @@ GameWorld::GameWorld(sf::RenderWindow &t_window, sf::Time &t_deltaTime, Camera *
 		m_enemies[i].setOrigin(sf::Vector2f(25.0f, 25.0f));
 		m_enemies[i].setPosition(100, 800); // Test starting position
 	}
+	//Astar
+	m_gamePath->initAStar(m_walls);
+	m_gamePath->setPath();
+	graphPath = m_gamePath->getGraphPath();
 
 	// View
 	// m_mapView.setViewport(sf::FloatRect(0.0, 0.0f, 0.25f, 0.25f));
@@ -55,10 +58,12 @@ GameWorld::GameWorld(sf::RenderWindow &t_window, sf::Time &t_deltaTime, Camera *
 			m_walls.push_back(f_tempWall);
 		}
 	}
+
 	//Astar
 	m_gamePath->initAStar(m_walls);
 	m_gamePath->setPath();
 	graphPath = m_gamePath->getGraphPath();
+
 }
 
 /// <summary>
@@ -74,14 +79,12 @@ GameWorld::~GameWorld()
 /// </summary>
 void GameWorld::updateWorld()
 {
-
-	
 	m_player.setPosition(m_camera.getEye().x * s_displayScale, m_camera.getEye().z * s_displayScale);
 	setGunPosition();
+
+	/**----------------------------------------------------------------------------------------------------------------*/
 	m_playerNode = m_gamePath->nodePos(m_player.getPosition());
 	m_enemyNode = m_gamePath->nodePos(m_enemies.front().getPosition());
-	std::cout << "Player in Node:  " << m_playerNode << std::endl;
-	//std::cout << "Enemy in Node:  " << m_enemyNode << std::endl;
 
 	sf::Vector2f offSet = sf::Vector2f(150, 150);
 	if (m_player.getPosition().x >= m_enemies.front().getPosition().x - offSet.x
@@ -90,7 +93,7 @@ void GameWorld::updateWorld()
 		&& m_player.getPosition().y <= m_enemies.front().getPosition().y + offSet.y)
 	{
 		std::cout << "In enemy Range" << std::endl;
-
+		
 		follow = true;
 		graphPath.resize(0);
 	}
@@ -98,13 +101,9 @@ void GameWorld::updateWorld()
 	{
 		follow = false;
 	}
-	
-
 	enemyMovement();
 	
-	
-
-	
+	/*---------------------------------------------------------------------------------------------------------------------*/
 
 	for (int i = 0; i < 100; i++)
 	{
@@ -164,20 +163,20 @@ void GameWorld::moveEnemy()
 		graphPath.pop_back();
 	}
 
-	/*for (int i = 0; i < m_enemies.size(); i++)
-	{
+	//for (int i = 0; i <  m_enemies.size(); i++)
+	//{
 
-		sf::Vector2f graphPathVec = sf::Vector2f(paths[i].front()->m_data.m_x, paths[i].front()->m_data.m_y);
-		sf::Vector2f moveTo = m_transform.moveTowards(m_enemies[i].getPosition(), graphPathVec, m_speedEn);
-		m_enemies[i].setPosition(moveTo);
-		if (m_enemies[i].getPosition().x == paths[i].back()->m_data.m_x &&
-			m_enemies[i].getPosition().y == paths[i].back()->m_data.m_y)
-		{
+	//	sf::Vector2f graphPathVec = sf::Vector2f(graphPath.back()->m_data.m_x, graphPath.back()->m_data.m_y);
+	//	sf::Vector2f moveTo = m_transform.moveTowards(m_enemies[i].getPosition(), graphPathVec, m_speedEn);
+	//	m_enemies[i].setPosition(moveTo);
+	//	if (m_enemies[i].getPosition().x == graphPath.back()->m_data.m_x &&
+	//		m_enemies[i].getPosition().y == graphPath.back()->m_data.m_y)
+	//	{
 
-			paths[i].pop_back();
+	//		graphPath.pop_back();
 
-		}
-	}*/
+	//	}
+	//}
 
 
 
@@ -189,21 +188,18 @@ void GameWorld::enemyMovement()
 {
 	if (follow == false)
 	{
-		//graphPath = m_gamePath->getGraphPath();
 		if (graphPath.empty() == false)
 		{
 			moveEnemy();
 		}
 		else
 		{
-
 			int endNode = 1 + (rand() % m_endNodes.size());
 			int nodeEnd = m_endNodes[endNode];
 			if (m_enemyNode == nodeEnd)
 			{
 				int endNode = 1 + (rand() % m_endNodes.size());
 				nodeEnd = m_endNodes[endNode];
-
 			}
 			else
 			{
@@ -228,63 +224,7 @@ void GameWorld::enemyMovement()
 		}
 	}
 
-	//if (follow == false)
-	//{
-	//	//graphPath = m_gamePath->getGraphPath();
-	//	if (graphPath.empty() == false)
-	//	{
-	//		moveEnemy();
-	//	}
-	//	else
-	//	{
-	//		std::vector<int> endNode;
-	//		for (int i = 0; i < endNode.size(); i++)
-	//		{
-	//			endNode[i] = 1 + (rand() % m_endNodes.size());
-	//		}
-	//
-	//		std::vector<int> nodeEnd;
-	//		for (int i = 0; i < nodeEnd.size(); i++)
-	//		{
-	//			endNode[i] = nodeEnd = m_endNodes[endNode[i]];;
-	//		}
-
-	//		if (m_enemyNode == nodeEnd)
-	//		{
-	//			for (int i = 0; i < endNode.size(); i++)
-	//			{
-	//				endNode[i] = 1 + (rand() % m_endNodes.size());
-	//			}
-	//		    for (int i = 0; i < nodeEnd.size(); i++)
-	//			{
-	//				endNode[i] = nodeEnd = m_endNodes[endNode[i]];;
-	//			}
-
-	//		}
-	//		else
-	//		{
-	//			for (int i = 0; i < nodeEnd.size(); i++)
-	//			{
-	//				m_gamePath->newPath(m_enemyNode, nodeEnd[i]);
-	//				m_gamePath->update();
-	//				paths[i] = m_gamePath->getGraphPath();
-	//			}
-	//		}
-	//	}
-	//}
-	//else
-	//{
-	//	if (graphPath.empty() == false)
-	//	{
-	//		moveEnemy();
-	//	}
-	//	else
-	//	{
-	//		m_gamePath->newPath(m_enemyNode, m_playerNode);
-	//		m_gamePath->update();
-	//		graphPath = m_gamePath->getGraphPath();
-	//	}
-	//}
+	
 
 
 	
@@ -311,10 +251,6 @@ void GameWorld::drawWorld()
 	m_window.draw(m_camera.raycastToLeft.drawRay());
 	m_window.draw(m_camera.raycastToRight.drawRay());
 
-	for (int i = 0; i < m_enemies.size(); i++)
-	{
-		m_window.draw(m_enemies[i]);
-	}	
 
 	m_gamePath->draw();
 
