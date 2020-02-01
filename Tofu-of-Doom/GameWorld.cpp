@@ -251,7 +251,10 @@ void GameWorld::drawWorld()
 	m_window.draw(m_camera.raycastToLeft.drawRay());
 	m_window.draw(m_camera.raycastToRight.drawRay());
 
-
+	for (int i = 0; i < m_enemies.size(); i++)
+	{
+		m_window.draw(m_enemies[i]);
+	}
 	m_gamePath->draw();
 
 

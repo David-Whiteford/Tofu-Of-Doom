@@ -48,7 +48,7 @@ private:
 	std::vector<int> m_endNodes;
 	int startNode = 103;
 	int endNode = 2237;
-	std::vector<sf::CircleShape> m_enemies;
+	sf::CircleShape m_enemies;
 	bool m_alive = false;
 	float m_radius = 3;
 	int m_aliveAt = 0;
