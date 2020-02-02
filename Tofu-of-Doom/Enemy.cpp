@@ -1,7 +1,7 @@
 #include "Enemy.h"
 
-Enemy::Enemy(sf::RenderWindow& t_window, sf::Time& t_deltaTime)
-	: m_window(t_window), m_deltaTime(t_deltaTime)
+Enemy::Enemy(sf::RenderWindow& t_window, sf::Time& t_deltaTime,sf::Vector2f t_position)
+	: m_window(t_window), m_deltaTime(t_deltaTime), m_position(t_position)
 {
 	m_endNodes.push_back(252);
 	m_endNodes.push_back(491);
@@ -28,7 +28,7 @@ void Enemy::enemyInit()
 	m_enemies.setPosition(100, 800); // Test starting position
 	
 	//Astar
-	m_gamePath->initAStar(m_walls);
+
 	m_gamePath->setPath();
 	graphPath = m_gamePath->getGraphPath();
 }
@@ -53,6 +53,7 @@ void Enemy::setDirection(sf::Vector2f t_dir)
 
 void Enemy::setPosition(sf::Vector2f t_pos)
 {
+	m_position = t_pos;
 }
 
 void Enemy::update(sf::CircleShape t_player)
@@ -60,8 +61,7 @@ void Enemy::update(sf::CircleShape t_player)
 	//sets the node the player and the enemy are in
 	m_playerNode = m_gamePath->nodePos(t_player.getPosition());
 	m_enemyNode = m_gamePath->nodePos(m_enemies.getPosition());
-	std::cout << "Player in Node:  " << m_playerNode << std::endl;
-	//std::cout << "Enemy in Node:  " << m_enemyNode << std::endl;
+
 
 	
 	sf::Vector2f offSet = sf::Vector2f(150, 150);
@@ -87,7 +87,6 @@ void Enemy::draw()
 }
 void Enemy::moveEnemy()
 {
-
 	sf::Vector2f graphPathVec = sf::Vector2f(graphPath.back()->m_data.m_x, graphPath.back()->m_data.m_y);
 	sf::Vector2f moveTo = m_transform.moveTowards(m_enemies.getPosition(), graphPathVec, m_speedEn);
 	m_enemies.setPosition(moveTo);
@@ -112,20 +111,10 @@ void Enemy::enemyMovement()
 		}
 		else
 		{
-			int endNode = 1 + (rand() % m_endNodes.size());
-			int nodeEnd = m_endNodes[endNode];
-			if (m_enemyNode == nodeEnd)
-			{
-				int endNode = 1 + (rand() % m_endNodes.size());
-				nodeEnd = m_endNodes[endNode];
-			}
-			else
-			{
-				m_gamePath->newPath(m_enemyNode, nodeEnd);
-				m_gamePath->update();
-				graphPath = m_gamePath->getGraphPath();
-			}
-
+			int nodeEnd = getRandNode();
+			m_gamePath->newPath(m_enemyNode, nodeEnd);
+			m_gamePath->update();
+			graphPath = m_gamePath->getGraphPath();
 		}
 	}
 	else
@@ -145,4 +134,15 @@ void Enemy::enemyMovement()
 
 void Enemy::enemyFollowPlayer()
 {
+}
+int Enemy::getRandNode()
+{
+	int endNode = 1 + (rand() % m_endNodes.size());
+	int nodeEnd = m_endNodes[endNode];
+	if (m_enemyNode == nodeEnd)
+	{
+		int endNode = 1 + (rand() % m_endNodes.size());
+		nodeEnd = m_endNodes[endNode];
+	}
+	return nodeEnd;
 }

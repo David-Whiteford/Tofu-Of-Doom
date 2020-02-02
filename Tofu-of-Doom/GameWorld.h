@@ -15,7 +15,7 @@
 #include "Transform.h"
 #include <stdlib.h>
 #include <ctime>
-
+#include "Enemy.h"
 class GameWorld
 {
 public:
@@ -25,17 +25,12 @@ public:
 	void enemyMovement();
 	void enemyFollowPlayer();
 	void moveEnemy();
-	
 	void drawWorld();
-
 	void fireBullet(int t_gunType);
-
 	float Pi = 3.14;
-	
 	void checkPlayerRayCollsions();
-
 	Bullet bullets[100];
-
+	int getRandNode();
 	sf::Vector2f getPlayerPosition();
 	sf::Vector2f getEnemyPosition();
 	glm::vec3 getCameraPosition();
@@ -66,7 +61,7 @@ private:
 	std::vector<sf::RectangleShape> m_walls;
 
 
-
+	Enemy *m_enemyObject;
 	Camera &m_camera;
 	Map *m_map = new Map();
 	sf::View m_mapView;
@@ -75,7 +70,7 @@ private:
 	void setGunPosition();
 	sf::CircleShape m_player;
 	sf::CircleShape m_playerGun;
-
+	std::vector<sf::Vector2f> m_startingPos;
 	glm::vec3 m_eye; // Current camera position
 	double m_yaw{ 0.0 }; // Look left and right (in degrees)
 	double m_pitch{ 0.0 }; // Look up and down (in degrees)

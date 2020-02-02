@@ -13,7 +13,7 @@
 class Enemy
 {
 public:
-	Enemy(sf::RenderWindow& t_window, sf::Time& t_deltaTime);
+	Enemy(sf::RenderWindow& t_window, sf::Time& t_deltaTime, sf::Vector2f t_position);
 	~Enemy();
 
 	void enemyInit();
@@ -27,7 +27,7 @@ public:
 	void enemyFollowPlayer();
 	void moveEnemy();
 	void draw();
-	
+	int getRandNode();
 
 private:
 	float m_speedEn{ 5.0f };
