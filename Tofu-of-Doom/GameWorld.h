@@ -59,9 +59,16 @@ private:
 	//int endNode = 2237;
 	std::vector<sf::CircleShape> m_enemies;
 	std::vector<sf::RectangleShape> m_walls;
-
-
+	
+	std::vector<Enemy*> m_enemyVec;
 	Enemy *m_enemyObject;
+	Enemy *m_enemyObject2;
+	Enemy *m_enemyObject3;
+	Enemy *m_enemyObject4;
+	Enemy *m_enemyObject5;
+	Enemy *m_enemyObject6;
+	Enemy *m_enemyObject7;
+	Enemy *m_enemyObject8;
 	Camera &m_camera;
 	Map *m_map = new Map();
 	sf::View m_mapView;

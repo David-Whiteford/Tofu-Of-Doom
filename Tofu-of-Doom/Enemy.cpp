@@ -144,3 +144,8 @@ int Enemy::getRandNode()
 	}
 	return nodeEnd;
 }
+
+sf::Vector2f Enemy::getPosition()
+{
+	return m_enemies.getPosition();
+}

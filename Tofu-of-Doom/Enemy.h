@@ -28,8 +28,10 @@ public:
 	void moveEnemy();
 	void draw();
 	int getRandNode();
+	sf::Vector2f getPosition();
 
 private:
+
 	float m_speedEn{ 5.0f };
 	sf::Time m_time;
 	int m_currentNode = 0;

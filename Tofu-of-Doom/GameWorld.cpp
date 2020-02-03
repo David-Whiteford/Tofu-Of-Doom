@@ -27,8 +27,6 @@ GameWorld::GameWorld(sf::RenderWindow &t_window, sf::Time &t_deltaTime, Camera *
 	m_endNodes.push_back(681);
 	m_endNodes.push_back(2237);
 
-
-	//8 starting points for the enemies
 	m_startingPos.push_back(sf::Vector2f(1557,260));
 	m_startingPos.push_back(sf::Vector2f(2364, 436));
 	m_startingPos.push_back(sf::Vector2f(375, 861));
@@ -75,7 +73,6 @@ GameWorld::GameWorld(sf::RenderWindow &t_window, sf::Time &t_deltaTime, Camera *
 	//Astar
 	
 	m_enemyObject = new Enemy(m_window, m_deltaTime, sf::Vector2f(1557, 260), m_walls);
-	
 
 
 
@@ -143,27 +140,6 @@ void GameWorld::updateWorld()
 
 	m_enemyObject->update(m_player);
 }
-void GameWorld::enemyFollowPlayer()
-{
-}
-void GameWorld::moveEnemy()
-{
-
-
-
-}
-/// <summary>
-/// Moves the enemy
-/// </summary>
-void GameWorld::enemyMovement()
-{
-	
-
-
-	
-}
-
-
 
 /// <summary>
 /// Draw the world
@@ -333,7 +309,7 @@ sf::Vector2f GameWorld::getPlayerPosition()
 /// </summary>
 sf::Vector2f GameWorld::getEnemyPosition()
 {
-	return m_enemies.front().getPosition() / s_displayScale;
+	return m_enemyObject->getPosition() / s_displayScale;
 }
 
 /// <summary>
