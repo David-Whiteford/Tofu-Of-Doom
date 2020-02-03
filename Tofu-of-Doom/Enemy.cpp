@@ -1,7 +1,7 @@
 #include "Enemy.h"
 
-Enemy::Enemy(sf::RenderWindow& t_window, sf::Time& t_deltaTime,sf::Vector2f t_position)
-	: m_window(t_window), m_deltaTime(t_deltaTime), m_position(t_position)
+Enemy::Enemy(sf::RenderWindow& t_window, sf::Time& t_deltaTime,sf::Vector2f t_position, std::vector<sf::RectangleShape> t_walls)
+	: m_window(t_window), m_deltaTime(t_deltaTime), m_position(t_position),m_walls(t_walls)
 {
 	m_endNodes.push_back(252);
 	m_endNodes.push_back(491);
@@ -26,11 +26,12 @@ void Enemy::enemyInit()
 	m_enemies.setFillColor(sf::Color::Red);
 	m_enemies.setOrigin(sf::Vector2f(25.0f, 25.0f));
 	m_enemies.setPosition(100, 800); // Test starting position
-	
+	//get initial enemy Position
+	m_enemyNode = m_gamePath->nodePos(m_enemies.getPosition());
 	//Astar
-
-	m_gamePath->setPath();
-	graphPath = m_gamePath->getGraphPath();
+	m_gamePath->initAStar(m_walls);
+	int nodeEnd = getRandNode();
+	m_gamePath->newPath(m_enemyNode, nodeEnd);
 }
 
 void Enemy::setDamageAmount(int t_damage)
@@ -62,8 +63,6 @@ void Enemy::update(sf::CircleShape t_player)
 	m_playerNode = m_gamePath->nodePos(t_player.getPosition());
 	m_enemyNode = m_gamePath->nodePos(m_enemies.getPosition());
 
-
-	
 	sf::Vector2f offSet = sf::Vector2f(150, 150);
 	if (t_player.getPosition().x >= m_enemies.getPosition().x - offSet.x
 		&& t_player.getPosition().x <= m_enemies.getPosition().x + offSet.x
@@ -104,7 +103,6 @@ void Enemy::enemyMovement()
 {
 	if (follow == false)
 	{
-		//graphPath = m_gamePath->getGraphPath();
 		if (graphPath.empty() == false)
 		{
 			moveEnemy();

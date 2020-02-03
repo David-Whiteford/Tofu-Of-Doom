@@ -13,7 +13,7 @@
 class Enemy
 {
 public:
-	Enemy(sf::RenderWindow& t_window, sf::Time& t_deltaTime, sf::Vector2f t_position);
+	Enemy(sf::RenderWindow& t_window, sf::Time& t_deltaTime, sf::Vector2f t_position , std::vector<sf::RectangleShape> t_walls);
 	~Enemy();
 
 	void enemyInit();

@@ -3,9 +3,7 @@
 Path::Path(sf::RenderWindow& t_window) :
 	m_window(t_window)
 {
-	paths.push_back(graphPathLong);
-	paths.push_back(graphPathTop);
-	paths.push_back(graphPathMiddle);
+	
 }
 
 Path::~Path()
@@ -139,13 +137,6 @@ void Path::update()
 
 void Path::setPath()
 {
-
-	/*for (auto path : paths)
-	{
-		
-		graph->aStar(graph->nodeIndex(startNode), graph->nodeIndex(endNode), path);
-	}*/
-
 	graph->clearMarks();
 	graph->aStar(graph->nodeIndex(startNode), graph->nodeIndex(endNode), graphPath);
 }
@@ -162,7 +153,6 @@ void Path::newPath(int t_start, int t_end )
 
 std::vector<Node*> &Path::getGraphPath()
 {
-
 	return graphPath;
 }
 

@@ -30,9 +30,7 @@ private:
 	int startNode = 103;
 	
 
-	std::vector<Node*> graphPathLong;
-	std::vector<Node*> graphPathTop;
-	std::vector<Node*> graphPathMiddle;
+
 	std::vector<Node*> graphPath;
 
 	std::vector<std::vector<Node*>> paths;
