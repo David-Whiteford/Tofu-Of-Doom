@@ -119,42 +119,6 @@ void Game::initialise()
 		}
 	}
 
-
-	//zombie = soundEngine->play3D("Monster.mp3", zombiePosition, true, true, true);
-	//
-	//if (zombie)
-	//{
-	//	zombie->setMinDistance(15.0f); // a loud sound
-	//	zombie->setIsPaused(false); // unpause the sound
-	//}
-	
-
-	//for (int i = 0; i < 11; i++)
-	//{
-	//	
-	///*	positionEnemies[i].X = anotherRoom[j].transform.position.x;
-	//	positionEnemies[i].Y = anotherRoom[j].transform.position.y;
-	//	positionEnemies[i].Z = anotherRoom[j].transform.position.z;*/
-	//	
-	//	zombieEnemies[i] = soundEngine->play3D("Mindless Zombie Awakening.mp3", position, true, true, true);
-
-	//	//if (zombieEnemies[i])
-	//	//{
-	//	//	zombieEnemies[i]->setMinDistance(5.0f); // a loud sound
-	//	//	zombieEnemies[i]->setIsPaused(false); // unpause the sound
-	//	//}
-
-	//}
-	//
-	//zombie = soundEngine->play3D("Mindless Zombie Awakening.mp3", position, true, true, true);
-	//if (zombie)
-	//{
-	//	zombie->setMinDistance(30.0f); // a loud sound
-	//	zombie->setIsPaused(false); // unpause the sound
-	//}
-	
-
-
 	// Load shader
 	m_mainShader = new tk::Shader("shaders/mainShader.vert", "shaders/mainShaderMultipleLights.frag");
 
@@ -189,8 +153,12 @@ void Game::initialise()
 	// Projection matrix 
 	projection = glm::perspective(45.0f, 4.0f / 3.0f, 1.0f, 1000.0f); // Enable depth test
 
-	// Enable depth test
+	// Enable depth test and face culling
 	glEnable(GL_DEPTH_TEST);
+	glEnable(GL_CULL_FACE);
+
+	// Uncomment this function to prove that culling faces is working by culling front faces instead of back (back is set by default)
+	// glCullFace(GL_FRONT);
 
 	// Accept fragment if it closer to the camera than the former one
 	glDepthFunc(GL_LESS);
