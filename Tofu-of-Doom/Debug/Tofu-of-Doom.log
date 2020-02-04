@@ -1,16 +1,4 @@
-﻿  Enemy.cpp
-D:\Users\dave2\Desktop\Tofu-Of-Doom\Tofu-of-Doom\Transform.h(17): warning C4091: 'typedef ': ignored on left of 'Transform::Position' when no variable is declared
-D:\Users\dave2\Desktop\Tofu-Of-Doom\Tofu-of-Doom\Enemy.cpp(95,97): warning C4244: 'argument': conversion from 'int' to 'T', possible loss of data
-D:\Users\dave2\Desktop\Tofu-Of-Doom\Tofu-of-Doom\Enemy.cpp(95,97): warning C4244:         with
-D:\Users\dave2\Desktop\Tofu-Of-Doom\Tofu-of-Doom\Enemy.cpp(95,97): warning C4244:         [
-D:\Users\dave2\Desktop\Tofu-Of-Doom\Tofu-of-Doom\Enemy.cpp(95,97): warning C4244:             T=float
-D:\Users\dave2\Desktop\Tofu-Of-Doom\Tofu-of-Doom\Enemy.cpp(95,97): warning C4244:         ]
-D:\Users\dave2\Desktop\Tofu-Of-Doom\Tofu-of-Doom\Enemy.cpp(95,67): warning C4244: 'argument': conversion from 'int' to 'T', possible loss of data
-D:\Users\dave2\Desktop\Tofu-Of-Doom\Tofu-of-Doom\Enemy.cpp(95,67): warning C4244:         with
-D:\Users\dave2\Desktop\Tofu-Of-Doom\Tofu-of-Doom\Enemy.cpp(95,67): warning C4244:         [
-D:\Users\dave2\Desktop\Tofu-Of-Doom\Tofu-of-Doom\Enemy.cpp(95,67): warning C4244:             T=float
-D:\Users\dave2\Desktop\Tofu-Of-Doom\Tofu-of-Doom\Enemy.cpp(95,67): warning C4244:         ]
-  GameWorld.cpp
+﻿  GameWorld.cpp
 D:\Users\dave2\Desktop\Tofu-Of-Doom\Tofu-of-Doom\Transform.h(17): warning C4091: 'typedef ': ignored on left of 'Transform::Position' when no variable is declared
 D:\Users\dave2\Desktop\Tofu-Of-Doom\Tofu-of-Doom\Collider2D.h(13): warning C4091: 'typedef ': ignored on left of 'Collider2D::Bounds' when no variable is declared
 D:\Users\dave2\Desktop\Tofu-Of-Doom\Tofu-of-Doom\GameWorld.h(30,17): warning C4305: 'initializing': truncation from 'double' to 'float'

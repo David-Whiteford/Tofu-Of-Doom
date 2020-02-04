@@ -300,19 +300,6 @@ void GameWorld::checkPlayerRayCollsions()
 		}
 	}
 }
-
-int GameWorld::getRandNode()
-{
-	int endNode = 1 + (rand() % m_endNodes.size());
-	int nodeEnd = m_endNodes[endNode];
-	if (m_enemyNode == nodeEnd)
-	{
-		int endNode = 1 + (rand() % m_endNodes.size());
-		nodeEnd = m_endNodes[endNode];
-	}
-	return nodeEnd;
-}
-
 /// <summary>
 /// Returns the position of the player's origin
 /// </summary>

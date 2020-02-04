@@ -5,7 +5,7 @@
 #include <SFML/OpenGL.hpp>
 #include "DisplayScale.h"
 #include "Transform.h"
-
+#include "Raycast.h"
 #include "Path.h"
 #include <stdlib.h>
 #include <ctime>
@@ -31,7 +31,7 @@ public:
 	sf::Vector2f getPosition();
 
 private:
-
+	Raycast m_rayCast;
 	float m_speedEn{ 5.0f };
 	sf::Time m_time;
 	int m_currentNode = 0;
@@ -49,6 +49,7 @@ private:
 	std::vector<int> m_startNodes;
 	std::vector<int> m_endNodes;
 	int m_doOnce = 0;
+	int m_do = 0;
 	int startNode = 103;
 	int endNode = 2237;
 	sf::CircleShape m_enemies;

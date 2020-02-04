@@ -30,6 +30,7 @@ void Enemy::enemyInit()
 	m_enemyNode = m_gamePath->nodePos(m_enemies.getPosition());
 	//Astar
 	m_gamePath->initAStar(m_walls);
+	
 	int nodeEnd = getRandNode();
 	m_gamePath->newPath(m_enemyNode, nodeEnd);
 }
@@ -62,17 +63,21 @@ void Enemy::update(sf::CircleShape t_player)
 	//sets the node the player and the enemy are in
 	m_playerNode = m_gamePath->nodePos(t_player.getPosition());
 	m_enemyNode = m_gamePath->nodePos(m_enemies.getPosition());
-
-	sf::Vector2f offSet = sf::Vector2f(150, 150);
+	//m_rayCast.setRayValues(m_enemies.getPosition(), , 1000);
+	sf::Vector2f offSet = sf::Vector2f(300, 300);
 	if (t_player.getPosition().x >= m_enemies.getPosition().x - offSet.x
 		&& t_player.getPosition().x <= m_enemies.getPosition().x + offSet.x
 		&& t_player.getPosition().y >= m_enemies.getPosition().y - offSet.y
 		&& t_player.getPosition().y <= m_enemies.getPosition().y + offSet.y)
 	{
 		std::cout << "In enemy Range" << std::endl;
-		follow = true;
-		graphPath.resize(0);
-		m_doOnce = 0;
+		if (m_do != 1)
+		{
+			follow = true;
+			m_do++;
+			graphPath.resize(0);
+			m_doOnce = 0;
+		}
 	}
 	else
 	{
@@ -81,6 +86,7 @@ void Enemy::update(sf::CircleShape t_player)
 			follow = false;
 			m_doOnce++;
 			graphPath.resize(0);
+			m_do = 0;
 		}
 	}
 	enemyMovement();
@@ -121,7 +127,7 @@ void Enemy::enemyMovement()
 			graphPath = m_gamePath->getGraphPath();
 		}
 	}
-	else
+	else if(follow == true)
 	{
 		if (graphPath.empty() == false)
 		{

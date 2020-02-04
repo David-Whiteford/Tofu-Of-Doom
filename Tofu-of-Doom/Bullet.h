@@ -1,22 +1,14 @@
 #pragma once
 
-
-
 #include "libs/glew/glew.h"
 #include "libs/glew/wglew.h"
 #include "libs/glm/glm.hpp"
 #include "libs/glm/gtc/matrix_transform.hpp"
-
 #include <SFML/Graphics.hpp>
 #include <SFML/OpenGL.hpp>
-
 #include "Map.h"
 #include "DisplayScale.h"
-
-
-
 #include "Transform.h"
-
 #include "Raycast.h"
 
 class Bullet

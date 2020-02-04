@@ -486,10 +486,13 @@ inline void Graph<NodeType, ArcType>::aStar(Node* start, Node* dest , std::vecto
 	pq.push(startingNode);
 	startingNode->setMarked(true);
 
-	while (pq.size() != 0 && pq.top() != goalNode /**&& timer not expired*/ /**&& m_timer !=10*/)
+	while (pq.size() != 0 && pq.top() != goalNode /**&& timer not expired*/&& m_timer !=10)
 	{
 		m_timer++;
-		
+		if (m_timer == 10)
+		{
+			m_timer = 0;
+		}
 		//f_visit(pq.top());
 		auto iter = pq.top()->arcList().begin();
 		auto endIter = pq.top()->arcList().end();
