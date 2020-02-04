@@ -74,8 +74,18 @@ GameWorld::GameWorld(sf::RenderWindow &t_window, sf::Time &t_deltaTime, Camera *
 	
 	m_enemyObject = new Enemy(m_window, m_deltaTime, sf::Vector2f(1557, 260), m_walls);
 
+	m_enemyVec.push_back(m_enemyObject2);
+	m_enemyVec.push_back(m_enemyObject3);
+	m_enemyVec.push_back(m_enemyObject4);
+	m_enemyVec.push_back(m_enemyObject5);
+	m_enemyVec.push_back(m_enemyObject6);
+	m_enemyVec.push_back(m_enemyObject7);
+	m_enemyVec.push_back(m_enemyObject8);
 
-
+	for (int i = 0; i < m_enemyVec.size(); i++)
+	{
+		m_enemyVec[i] = new Enemy(m_window, m_deltaTime, m_startingPos[i], m_walls);
+	}
 
 }
 
@@ -136,8 +146,10 @@ void GameWorld::updateWorld()
 			}
 		}
 	}
-
-
+	for (int i = 0; i < m_enemyVec.size(); i++)
+	{
+		m_enemyVec[i]->update(m_player);
+	}
 	m_enemyObject->update(m_player);
 }
 
@@ -163,6 +175,11 @@ void GameWorld::drawWorld()
 	for (int i = 0; i < m_enemies.size(); i++)
 	{
 		m_window.draw(m_enemies[i]);
+	}
+
+	for (int i = 0; i < m_enemyVec.size(); i++)
+	{
+		m_enemyVec[i]->draw();
 	}
 	m_enemyObject->draw();
 	m_gamePath->draw();
