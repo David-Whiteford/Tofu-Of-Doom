@@ -48,6 +48,7 @@ private:
 	bool follow = false;
 	std::vector<int> m_startNodes;
 	std::vector<int> m_endNodes;
+	int m_doOnce = 0;
 	int startNode = 103;
 	int endNode = 2237;
 	sf::CircleShape m_enemies;

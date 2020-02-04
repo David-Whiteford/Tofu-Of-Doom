@@ -72,10 +72,16 @@ void Enemy::update(sf::CircleShape t_player)
 		std::cout << "In enemy Range" << std::endl;
 		follow = true;
 		graphPath.resize(0);
+		m_doOnce = 0;
 	}
 	else
 	{
-		follow = false;
+		if (m_doOnce != 1)
+		{
+			follow = false;
+			m_doOnce++;
+			graphPath.resize(0);
+		}
 	}
 	enemyMovement();
 }
@@ -135,11 +141,11 @@ void Enemy::enemyFollowPlayer()
 }
 int Enemy::getRandNode()
 {
-	int endNode = 1 + (rand() % m_endNodes.size());
+	int endNode = rand() % 7;
 	int nodeEnd = m_endNodes[endNode];
 	if (m_enemyNode == nodeEnd)
 	{
-		int endNode = 1 + (rand() % m_endNodes.size());
+		int endNode = rand() %7;
 		nodeEnd = m_endNodes[endNode];
 	}
 	return nodeEnd;
