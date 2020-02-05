@@ -15,7 +15,7 @@ class Enemy
 public:
 	Enemy(sf::RenderWindow& t_window, sf::Time& t_deltaTime, sf::Vector2f t_position , std::vector<sf::RectangleShape> t_walls);
 	~Enemy();
-
+	
 	void enemyInit();
 	void setDamageAmount(int t_damage);
 	int getDamageAmount();
@@ -31,6 +31,8 @@ public:
 	sf::Vector2f getPosition();
 
 private:
+
+
 	Raycast m_rayCast;
 	float m_speedEn{ 5.0f };
 	sf::Time m_time;
@@ -48,8 +50,8 @@ private:
 	bool follow = false;
 	std::vector<int> m_startNodes;
 	std::vector<int> m_endNodes;
-	int m_doOnce = 0;
-	int m_do = 0;
+	int m_doOncePatrol = 0;
+	int m_doOnceSeek = 0;
 	int startNode = 103;
 	int endNode = 2237;
 	sf::CircleShape m_enemies;
@@ -61,7 +63,14 @@ private:
 	sf::Vector2f m_position = sf::Vector2f(0, 0);
 	sf::Vector2f m_firedFrom = sf::Vector2f(0, 0);
 	std::vector<sf::RectangleShape> m_walls;
-	
+	enum class EnemyBehaviour
+	{
+		PATROL_MAP,
+		SEEK_PLAYER,
+		STOP,
+		RETREAT
+	}
+	m_enemyBehaviour;
 	sf::Time& m_deltaTime;
 };
 #endif // !ENEMY_H

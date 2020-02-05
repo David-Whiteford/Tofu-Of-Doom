@@ -1,7 +1,7 @@
 #include "Enemy.h"
 
 Enemy::Enemy(sf::RenderWindow& t_window, sf::Time& t_deltaTime,sf::Vector2f t_position, std::vector<sf::RectangleShape> t_walls)
-	: m_window(t_window), m_deltaTime(t_deltaTime), m_position(t_position),m_walls(t_walls)
+	: m_window(t_window), m_deltaTime(t_deltaTime), m_position(t_position),m_walls(t_walls),m_enemyBehaviour(EnemyBehaviour::PATROL_MAP)
 {
 	m_endNodes.push_back(252);
 	m_endNodes.push_back(491);
@@ -12,7 +12,8 @@ Enemy::Enemy(sf::RenderWindow& t_window, sf::Time& t_deltaTime,sf::Vector2f t_po
 	m_endNodes.push_back(681);
 	m_endNodes.push_back(2237);
 	enemyInit();
-
+	
+	
 }
 
 Enemy::~Enemy()
@@ -71,22 +72,22 @@ void Enemy::update(sf::CircleShape t_player)
 		&& t_player.getPosition().y <= m_enemies.getPosition().y + offSet.y)
 	{
 		std::cout << "In enemy Range" << std::endl;
-		if (m_do != 1)
+		if (m_doOnceSeek != 1)
 		{
-			follow = true;
-			m_do++;
+			m_enemyBehaviour = EnemyBehaviour::SEEK_PLAYER;
+			m_doOnceSeek++;
 			graphPath.resize(0);
-			m_doOnce = 0;
+			m_doOncePatrol = 0;
 		}
 	}
 	else
 	{
-		if (m_doOnce != 1)
+		if (m_doOncePatrol != 1)
 		{
-			follow = false;
-			m_doOnce++;
+			m_enemyBehaviour = EnemyBehaviour::PATROL_MAP;
+			m_doOncePatrol++;
 			graphPath.resize(0);
-			m_do = 0;
+			m_doOnceSeek = 0;
 		}
 	}
 	enemyMovement();
@@ -102,6 +103,8 @@ void Enemy::draw(sf::View t_mapView)
 void Enemy::moveEnemy()
 {
 	sf::Vector2f graphPathVec = sf::Vector2f(graphPath.back()->m_data.m_x, graphPath.back()->m_data.m_y);
+
+	m_rayCast.setRayValues(m_enemies.getPosition(), graphPathVec, graphPath.back()->m_data.pathCost);
 	sf::Vector2f moveTo = m_transform.moveTowards(m_enemies.getPosition(), graphPathVec, m_speedEn);
 	m_enemies.setPosition(moveTo);
 	if (m_enemies.getPosition().x == graphPath.back()->m_data.m_x &&
@@ -116,32 +119,37 @@ void Enemy::moveEnemy()
 /// </summary>
 void Enemy::enemyMovement()
 {
-	if (follow == false)
+	switch (m_enemyBehaviour)
 	{
-		if (graphPath.empty() == false)
-		{
-			moveEnemy();
-		}
-		else
-		{
-			int nodeEnd = getRandNode();
-			m_gamePath->newPath(m_enemyNode, nodeEnd);
-			m_gamePath->update();
-			graphPath = m_gamePath->getGraphPath();
-		}
-	}
-	else if(follow == true)
-	{
-		if (graphPath.empty() == false)
-		{
-			moveEnemy();
-		}
-		else
-		{
-			m_gamePath->newPath(m_enemyNode, m_playerNode);
-			m_gamePath->update();
-			graphPath = m_gamePath->getGraphPath();
-		}
+		case EnemyBehaviour::SEEK_PLAYER:
+			if (graphPath.empty() == false)
+			{
+				moveEnemy();
+			}
+			else
+			{
+				m_gamePath->newPath(m_enemyNode, m_playerNode);
+				m_gamePath->update();
+				graphPath = m_gamePath->getGraphPath();
+			}
+			break;
+		case EnemyBehaviour::STOP:
+			break;
+		case EnemyBehaviour::PATROL_MAP:
+			if (graphPath.empty() == false)
+			{
+				moveEnemy();
+			}
+			else
+			{
+				int nodeEnd = getRandNode();
+				m_gamePath->newPath(m_enemyNode, nodeEnd);
+				m_gamePath->update();
+				graphPath = m_gamePath->getGraphPath();
+			}
+			break;
+		default:
+			break;
 	}
 }
 

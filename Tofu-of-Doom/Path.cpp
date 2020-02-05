@@ -119,10 +119,6 @@ void Path::initAStar(std::vector<sf::RectangleShape> t_walls)
 
 				}
 			}
-
-
-
-			//std::cout << "Row " << nodeData.m_row << "Col" << nodeData.m_col << "Is Passable: " << nodeData.passable <<  std::endl;
 			//add node
 			graph->addNode(nodeData, nodeIndex);
 			m_nodeSquare.push_back(m_nodeShape[nodeIndex]);
