@@ -13,7 +13,7 @@
 class Enemy
 {
 public:
-	Enemy(sf::RenderWindow& t_window, sf::Time& t_deltaTime, sf::Vector2f t_position , std::vector<sf::RectangleShape> t_walls);
+	Enemy(sf::RenderWindow& t_window, sf::Time& t_deltaTime, sf::Vector2f t_position , Path* t_gamePath);
 	~Enemy();
 	
 	void enemyInit();
@@ -26,7 +26,7 @@ public:
 	void enemyMovement();
 	void enemyFollowPlayer();
 	void moveEnemy();
-	void draw(sf::View t_mapView);
+	void draw();
 	int getRandNode();
 	sf::Vector2f getPosition();
 
@@ -46,7 +46,7 @@ private:
 	sf::CircleShape m_enemy;
 	std::vector<Node*> graphPath;
 	sf::RenderWindow& m_window;
-	Path* m_gamePath = new Path(m_window);
+	Path *m_gamePath;
 	bool follow = false;
 	std::vector<int> m_startNodes;
 	std::vector<int> m_endNodes;

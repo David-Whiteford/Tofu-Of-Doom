@@ -23,6 +23,7 @@ void Path::draw(sf::View t_view)
 			{
 				m_window.draw(node);
 			}
+			
 		}
 	}
 }
@@ -110,6 +111,9 @@ void Path::initAStar(std::vector<sf::RectangleShape> t_walls)
 			m_nodeShape[nodeIndex].setPosition(nodeData.m_x, nodeData.m_y);
 			m_nodeShape[nodeIndex].setOrigin(25, 25);
 
+
+
+
 			for (auto wall : t_walls)
 			{
 				if (m_nodeShape[nodeIndex].getGlobalBounds().intersects(wall.getGlobalBounds()))
@@ -119,6 +123,9 @@ void Path::initAStar(std::vector<sf::RectangleShape> t_walls)
 
 				}
 			}
+
+			std::cout << "The Node at: " << nodeData.m_name << "Is Passable: " << nodeData.passable << std::endl;
+
 			//add node
 			graph->addNode(nodeData, nodeIndex);
 			m_nodeSquare.push_back(m_nodeShape[nodeIndex]);

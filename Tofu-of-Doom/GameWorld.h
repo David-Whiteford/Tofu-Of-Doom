@@ -41,6 +41,7 @@ public:
 	std::vector<glm::vec3> *getLightPositions();
 
 private:
+	
 	int m_currentNode = 0;
 	int m_endNode = 0;
 	int m_playerNode = 0;

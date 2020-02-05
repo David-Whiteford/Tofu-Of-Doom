@@ -1,7 +1,9 @@
 #include "Enemy.h"
 
-Enemy::Enemy(sf::RenderWindow& t_window, sf::Time& t_deltaTime,sf::Vector2f t_position, std::vector<sf::RectangleShape> t_walls)
-	: m_window(t_window), m_deltaTime(t_deltaTime), m_position(t_position),m_walls(t_walls),m_enemyBehaviour(EnemyBehaviour::PATROL_MAP)
+Enemy::Enemy(sf::RenderWindow& t_window, sf::Time& t_deltaTime,sf::Vector2f t_position, Path* t_gamePath)
+	: m_window(t_window), m_deltaTime(t_deltaTime), 
+	m_position(t_position),m_enemyBehaviour(EnemyBehaviour::PATROL_MAP), 
+	m_gamePath(t_gamePath)
 {
 	m_endNodes.push_back(252);
 	m_endNodes.push_back(491);
@@ -30,8 +32,6 @@ void Enemy::enemyInit()
 	//get initial enemy Position
 	m_enemyNode = m_gamePath->nodePos(m_enemies.getPosition());
 	//Astar
-	m_gamePath->initAStar(m_walls);
-	
 	int nodeEnd = getRandNode();
 	m_gamePath->newPath(m_enemyNode, nodeEnd);
 }
@@ -93,12 +93,9 @@ void Enemy::update(sf::CircleShape t_player)
 	enemyMovement();
 }
 
-void Enemy::draw(sf::View t_mapView)
+void Enemy::draw()
 {
-	
-	m_gamePath->draw(t_mapView);
 	m_window.draw(m_enemies);
-
 }
 void Enemy::moveEnemy()
 {

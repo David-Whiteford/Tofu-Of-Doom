@@ -6,6 +6,9 @@
 GameWorld::GameWorld(sf::RenderWindow &t_window, sf::Time &t_deltaTime, Camera *t_camera) 
 	: m_window(t_window), m_deltaTime(t_deltaTime), m_camera(*t_camera)
 {
+
+	
+
 	// Player
 	m_player.setRadius(25.0f);
 	m_player.setFillColor(sf::Color::Blue);
@@ -50,8 +53,6 @@ GameWorld::GameWorld(sf::RenderWindow &t_window, sf::Time &t_deltaTime, Camera *
 		m_enemies[i].setPosition(100, 800); // Test starting position
 	}
 
-
-
 	// View
 	// m_mapView.setViewport(sf::FloatRect(0.0, 0.0f, 0.25f, 0.25f));
 	m_mapView.setSize(m_window.getSize().x, m_window.getSize().y);
@@ -69,10 +70,11 @@ GameWorld::GameWorld(sf::RenderWindow &t_window, sf::Time &t_deltaTime, Camera *
 			m_walls.push_back(f_tempWall);
 		}
 	}
-
-	//Astar
 	
-	m_enemyObject = new Enemy(m_window, m_deltaTime, sf::Vector2f(1557, 260), m_walls);
+	//Astar
+	m_gamePath->initAStar(m_walls);
+
+	m_enemyObject = new Enemy(m_window, m_deltaTime, sf::Vector2f(1557, 260), m_gamePath);
 
 	m_enemyVec.push_back(m_enemyObject2);
 	m_enemyVec.push_back(m_enemyObject3);
@@ -84,9 +86,9 @@ GameWorld::GameWorld(sf::RenderWindow &t_window, sf::Time &t_deltaTime, Camera *
 
 	for (int i = 0; i < m_enemyVec.size(); i++)
 	{
-		m_enemyVec[i] = new Enemy(m_window, m_deltaTime, m_startingPos[i], m_walls);
+		m_enemyVec[i] = new Enemy(m_window, m_deltaTime, m_startingPos[i], m_gamePath);
 	}
-
+	
 }
 
 /// <summary>
@@ -164,18 +166,17 @@ void GameWorld::drawWorld()
 	{
 		m_window.draw(m_enemies[i]);
 	}
-	
 	for (int i = 0; i < m_enemyVec.size(); i++)
 	{
-		m_enemyVec[i]->draw(m_mapView);
+		m_enemyVec[i]->draw();
 	}
-	m_enemyObject->draw(m_mapView);
-
+	m_enemyObject->draw();
 	for (int i = 0; i < m_walls.size(); ++i)
 	{
 		m_window.draw(m_walls[i]);
 	}
-
+	m_gamePath->draw(m_mapView);
+	
 	m_window.draw(m_player);
 	m_window.draw(m_playerGun);
 
