@@ -166,16 +166,18 @@ void GameWorld::drawWorld()
 	{
 		m_window.draw(m_enemies[i]);
 	}
-	for (int i = 0; i < m_enemyVec.size(); i++)
-	{
-		m_enemyVec[i]->draw();
-	}
-	m_enemyObject->draw();
+	
 	for (int i = 0; i < m_walls.size(); ++i)
 	{
 		m_window.draw(m_walls[i]);
 	}
 	m_gamePath->draw(m_mapView);
+
+	for (int i = 0; i < m_enemyVec.size(); i++)
+	{
+		m_enemyVec[i]->draw();
+	}
+	m_enemyObject->draw();
 	
 	m_window.draw(m_player);
 	m_window.draw(m_playerGun);

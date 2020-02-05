@@ -15,7 +15,6 @@ Enemy::Enemy(sf::RenderWindow& t_window, sf::Time& t_deltaTime,sf::Vector2f t_po
 	m_endNodes.push_back(2237);
 	enemyInit();
 	
-	
 }
 
 Enemy::~Enemy()
@@ -64,14 +63,14 @@ void Enemy::update(sf::CircleShape t_player)
 	//sets the node the player and the enemy are in
 	m_playerNode = m_gamePath->nodePos(t_player.getPosition());
 	m_enemyNode = m_gamePath->nodePos(m_enemies.getPosition());
-	//m_rayCast.setRayValues(m_enemies.getPosition(), , 1000);
+	std::cout << "PLAyer NOde " << m_playerNode << std::endl;
 	sf::Vector2f offSet = sf::Vector2f(300, 300);
 	if (t_player.getPosition().x >= m_enemies.getPosition().x - offSet.x
 		&& t_player.getPosition().x <= m_enemies.getPosition().x + offSet.x
 		&& t_player.getPosition().y >= m_enemies.getPosition().y - offSet.y
 		&& t_player.getPosition().y <= m_enemies.getPosition().y + offSet.y)
 	{
-		std::cout << "In enemy Range" << std::endl;
+		
 		if (m_doOnceSeek != 1)
 		{
 			m_enemyBehaviour = EnemyBehaviour::SEEK_PLAYER;
@@ -96,12 +95,17 @@ void Enemy::update(sf::CircleShape t_player)
 void Enemy::draw()
 {
 	m_window.draw(m_enemies);
+	sf::Vertex line[] =
+	{
+		sf::Vertex(graphPathVec),
+		sf::Vertex(m_enemies.getPosition())
+	};
+	m_window.draw(line, 2, sf::Lines);
 }
 void Enemy::moveEnemy()
 {
-	sf::Vector2f graphPathVec = sf::Vector2f(graphPath.back()->m_data.m_x, graphPath.back()->m_data.m_y);
+	graphPathVec = sf::Vector2f(graphPath.back()->m_data.m_x, graphPath.back()->m_data.m_y);
 
-	m_rayCast.setRayValues(m_enemies.getPosition(), graphPathVec, graphPath.back()->m_data.pathCost);
 	sf::Vector2f moveTo = m_transform.moveTowards(m_enemies.getPosition(), graphPathVec, m_speedEn);
 	m_enemies.setPosition(moveTo);
 	if (m_enemies.getPosition().x == graphPath.back()->m_data.m_x &&

@@ -32,7 +32,6 @@ public:
 
 private:
 
-
 	Raycast m_rayCast;
 	float m_speedEn{ 5.0f };
 	sf::Time m_time;
@@ -47,6 +46,7 @@ private:
 	std::vector<Node*> graphPath;
 	sf::RenderWindow& m_window;
 	Path *m_gamePath;
+	sf::Vector2f graphPathVec;
 	bool follow = false;
 	std::vector<int> m_startNodes;
 	std::vector<int> m_endNodes;
