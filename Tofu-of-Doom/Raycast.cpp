@@ -15,7 +15,7 @@ void Raycast::setRayValues(sf::Vector2f t_startPosition, sf::Vector2f t_directio
 {
 	m_positon = t_startPosition;
 	m_direction = -t_direction;
-	m_rayLength = t_length;
+	m_rayLength = t_length; 
 }
 
 bool Raycast::hit(sf::Vector2f t_targetPosition, float t_targetRadius)

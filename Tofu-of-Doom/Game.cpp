@@ -98,9 +98,6 @@ void Game::initialise()
 
 	soundEngine->play3D(zombie, zombiePosition, true, false, false, false);
 
-	
-
-	//Astar stuff
 	// List all neighbors:
 	for (int direction = 0; direction < 9; direction++)
 	{

@@ -465,7 +465,8 @@ inline void Graph<NodeType, ArcType>::aStar(Node* start, Node* dest , std::vecto
 	Node* startingNode = start;
 	Node* goalNode = dest;
 	std::priority_queue<Node*, std::vector<Node*>, NodeSearchCostComparer<NodeType, ArcType>> pq;
-	
+	sf::Clock m_timer;
+	 
 	int index = 0;
 	for (auto node : m_nodes)
 	{	
@@ -485,15 +486,15 @@ inline void Graph<NodeType, ArcType>::aStar(Node* start, Node* dest , std::vecto
 
 	pq.push(startingNode);
 	startingNode->setMarked(true);
-
-	while (pq.size() != 0 && pq.top() != goalNode /**&& timer not expired*/)
+	int nodesProcessed = 0;
+	while (pq.size() != 0 && pq.top() != goalNode /**&& timer not expired*/&& m_timer.getElapsedTime().asMilliseconds() <= 25)
 	{
 		
 		
 		//f_visit(pq.top());
 		auto iter = pq.top()->arcList().begin();
 		auto endIter = pq.top()->arcList().end();
-
+		nodesProcessed++;
 		for (; iter != endIter; iter++)
 		{
 			Arc arc = (*iter);
@@ -525,7 +526,7 @@ inline void Graph<NodeType, ArcType>::aStar(Node* start, Node* dest , std::vecto
 		std::cout << "Node In Astar " << currentNode->m_data.m_name << std::endl;
 		currentNode = currentNode->previous();
 	}
-
+	std::cout << "Nodes expanded: " << nodesProcessed << std::endl;
 
 }
 

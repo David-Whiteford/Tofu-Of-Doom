@@ -3,22 +3,26 @@
 Path::Path(sf::RenderWindow& t_window) :
 	m_window(t_window)
 {
-	paths.push_back(graphPathLong);
-	paths.push_back(graphPathTop);
-	paths.push_back(graphPathMiddle);
+	
 }
 
 Path::~Path()
 {
 }
 
-void Path::draw()
+void Path::draw(sf::View t_view)
 {
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q))
 	{
 		for (auto node : m_nodeSquare)
 		{
-			m_window.draw(node);
+			if (node.getPosition().x <= t_view.getCenter().x + t_view.getSize().x / 2
+				&& node.getPosition().x >= t_view.getCenter().x - t_view.getSize().x / 2
+				&& node.getPosition().y <= t_view.getCenter().y + t_view.getSize().y / 2
+				&& node.getPosition().y >= t_view.getCenter().y - t_view.getSize().y / 2)
+			{
+				m_window.draw(node);
+			}
 		}
 	}
 }
@@ -139,13 +143,6 @@ void Path::update()
 
 void Path::setPath()
 {
-
-	/*for (auto path : paths)
-	{
-		
-		graph->aStar(graph->nodeIndex(startNode), graph->nodeIndex(endNode), path);
-	}*/
-
 	graph->clearMarks();
 	graph->aStar(graph->nodeIndex(startNode), graph->nodeIndex(endNode), graphPath);
 }
@@ -162,7 +159,6 @@ void Path::newPath(int t_start, int t_end )
 
 std::vector<Node*> &Path::getGraphPath()
 {
-
 	return graphPath;
 }
 

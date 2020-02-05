@@ -16,6 +16,8 @@ GameWorld::GameWorld(sf::RenderWindow &t_window, sf::Time &t_deltaTime, Camera *
 	m_playerGun.setFillColor(sf::Color::Red);
 	m_playerGun.setOrigin(sf::Vector2f(5, 5));
 	m_playerGun.setPosition(m_camera.getEye().x, m_camera.getEye().z + 5); // Test starting position
+
+	//vector of endNodes
 	m_endNodes.push_back(252);
 	m_endNodes.push_back(491);
 	m_endNodes.push_back(855);
@@ -24,12 +26,22 @@ GameWorld::GameWorld(sf::RenderWindow &t_window, sf::Time &t_deltaTime, Camera *
 	m_endNodes.push_back(2353);
 	m_endNodes.push_back(681);
 	m_endNodes.push_back(2237);
+
+	m_startingPos.push_back(sf::Vector2f(1557,260));
+	m_startingPos.push_back(sf::Vector2f(2364, 436));
+	m_startingPos.push_back(sf::Vector2f(375, 861));
+	m_startingPos.push_back(sf::Vector2f(71, 439));
+	m_startingPos.push_back(sf::Vector2f(72, 2121));
+	m_startingPos.push_back(sf::Vector2f(1577, 824));
+	m_startingPos.push_back(sf::Vector2f(1518, 1365));
+	m_startingPos.push_back(sf::Vector2f(2313, 2356));
+	
+
 	
 
 	// m_eye = glm::vec3(m_player.getPosition().x, 2.0f, m_player.getPosition().y);
 	m_enemies.push_back(m_enemy);
 	m_enemies.push_back(m_enemy);	
-	
 	for (int i = 0; i < m_enemies.size(); i++)
 	{
 		m_enemies[i].setRadius(25.0f);
@@ -37,6 +49,8 @@ GameWorld::GameWorld(sf::RenderWindow &t_window, sf::Time &t_deltaTime, Camera *
 		m_enemies[i].setOrigin(sf::Vector2f(25.0f, 25.0f));
 		m_enemies[i].setPosition(100, 800); // Test starting position
 	}
+
+
 
 	// View
 	// m_mapView.setViewport(sf::FloatRect(0.0, 0.0f, 0.25f, 0.25f));
@@ -55,10 +69,24 @@ GameWorld::GameWorld(sf::RenderWindow &t_window, sf::Time &t_deltaTime, Camera *
 			m_walls.push_back(f_tempWall);
 		}
 	}
+
 	//Astar
-	m_gamePath->initAStar(m_walls);
-	m_gamePath->setPath();
-	graphPath = m_gamePath->getGraphPath();
+	
+	m_enemyObject = new Enemy(m_window, m_deltaTime, sf::Vector2f(1557, 260), m_walls);
+
+	m_enemyVec.push_back(m_enemyObject2);
+	m_enemyVec.push_back(m_enemyObject3);
+	m_enemyVec.push_back(m_enemyObject4);
+	m_enemyVec.push_back(m_enemyObject5);
+	m_enemyVec.push_back(m_enemyObject6);
+	m_enemyVec.push_back(m_enemyObject7);
+	m_enemyVec.push_back(m_enemyObject8);
+
+	for (int i = 0; i < m_enemyVec.size(); i++)
+	{
+		m_enemyVec[i] = new Enemy(m_window, m_deltaTime, m_startingPos[i], m_walls);
+	}
+
 }
 
 /// <summary>
@@ -74,38 +102,8 @@ GameWorld::~GameWorld()
 /// </summary>
 void GameWorld::updateWorld()
 {
-
-	
 	m_player.setPosition(m_camera.getEye().x * s_displayScale, m_camera.getEye().z * s_displayScale);
 	setGunPosition();
-	m_playerNode = m_gamePath->nodePos(m_player.getPosition());
-	m_enemyNode = m_gamePath->nodePos(m_enemies.front().getPosition());
-	std::cout << "Player in Node:  " << m_playerNode << std::endl;
-	//std::cout << "Enemy in Node:  " << m_enemyNode << std::endl;
-
-	sf::Vector2f offSet = sf::Vector2f(150, 150);
-	if (m_player.getPosition().x >= m_enemies.front().getPosition().x - offSet.x
-		&& m_player.getPosition().x <= m_enemies.front().getPosition().x + offSet.x
-		&& m_player.getPosition().y >= m_enemies.front().getPosition().y - offSet.y
-		&& m_player.getPosition().y <= m_enemies.front().getPosition().y + offSet.y)
-	{
-		std::cout << "In enemy Range" << std::endl;
-
-		follow = true;
-		graphPath.resize(0);
-	}
-	else
-	{
-		follow = false;
-	}
-	
-
-	enemyMovement();
-	
-	
-
-	
-
 	for (int i = 0; i < 100; i++)
 	{
 		if (bullets[i].isActive())
@@ -148,83 +146,36 @@ void GameWorld::updateWorld()
 			}
 		}
 	}
-}
-void GameWorld::enemyFollowPlayer()
-{
-}
-void GameWorld::moveEnemy()
-{
-	sf::Vector2f graphPathVec = sf::Vector2f(graphPath.back()->m_data.m_x, graphPath.back()->m_data.m_y);
-	sf::Vector2f moveTo = m_transform.moveTowards(m_enemies.front().getPosition(), graphPathVec, m_speedEn);
-	m_enemies.front().setPosition(moveTo);
-	if (m_enemies.front().getPosition().x == graphPath.back()->m_data.m_x &&
-		m_enemies.front().getPosition().y == graphPath.back()->m_data.m_y)
+	for (int i = 0; i < m_enemyVec.size(); i++)
 	{
-
-		graphPath.pop_back();
-
+		m_enemyVec[i]->update(m_player);
 	}
+	m_enemyObject->update(m_player);
 }
-/// <summary>
-/// Moves the enemy
-/// </summary>
-void GameWorld::enemyMovement()
-{
-	if (follow == false)
-	{
-		//graphPath = m_gamePath->getGraphPath();
-		if (graphPath.empty() == false)
-		{
-			moveEnemy();
-		}
-		else
-		{
-			int currentNode = m_enemyNode;
-			int endNode = 1 + (rand() % m_endNodes.size());
-			int nodeEnd = m_endNodes[endNode];
-			if (currentNode == nodeEnd)
-			{
-				int endNode = 1 + (rand() % m_endNodes.size());
-				int nodeEnd = m_endNodes[endNode];
-				
-			}
-			else
-			{
-				m_gamePath->newPath(m_enemyNode, nodeEnd);
-				m_gamePath->update();
-				graphPath = m_gamePath->getGraphPath();
-			}
-			
-		}
-	}
-	else 
-	{
-		if (graphPath.empty() == false)
-		{
-			moveEnemy();
-		}
-		else
-		{
-			m_gamePath->newPath(m_enemyNode, m_playerNode);
-			m_gamePath->update();
-			graphPath = m_gamePath->getGraphPath();
-		}
-	}
-}
-
-
 
 /// <summary>
 /// Draw the world
 /// </summary>
 void GameWorld::drawWorld()
 {
+	m_mapView.setCenter(m_player.getPosition());
+	m_window.setView(m_mapView);
+	for (int i = 0; i < m_enemies.size(); i++)
+	{
+		m_window.draw(m_enemies[i]);
+	}
+	
+	for (int i = 0; i < m_enemyVec.size(); i++)
+	{
+		m_enemyVec[i]->draw(m_mapView);
+	}
+	m_enemyObject->draw(m_mapView);
+
 	for (int i = 0; i < m_walls.size(); ++i)
 	{
 		m_window.draw(m_walls[i]);
 	}
-	m_mapView.setCenter(m_player.getPosition());
-	m_window.setView(m_mapView);
+
 	m_window.draw(m_player);
 	m_window.draw(m_playerGun);
 
@@ -232,14 +183,6 @@ void GameWorld::drawWorld()
 	m_window.draw(m_camera.raycastBehind.drawRay());
 	m_window.draw(m_camera.raycastToLeft.drawRay());
 	m_window.draw(m_camera.raycastToRight.drawRay());
-
-	for (int i = 0; i < m_enemies.size(); i++)
-	{
-		m_window.draw(m_enemies[i]);
-	}	
-
-	m_gamePath->draw();
-
 
 	for (int i = 0; i < 100; i++)
 	{
@@ -267,6 +210,7 @@ void GameWorld::fireBullet(int t_gunType)
 				glm::normalize(tempDirection);
 				bullets[i].bulletInit(sf::Vector2f(tempDirection.x, tempDirection.z), 0, m_playerGun.getPosition());
 				break;
+				
 			}
 		}
 	}
@@ -356,7 +300,6 @@ void GameWorld::checkPlayerRayCollsions()
 		}
 	}
 }
-
 /// <summary>
 /// Returns the position of the player's origin
 /// </summary>
@@ -370,7 +313,7 @@ sf::Vector2f GameWorld::getPlayerPosition()
 /// </summary>
 sf::Vector2f GameWorld::getEnemyPosition()
 {
-	return m_enemies.front().getPosition() / s_displayScale;
+	return m_enemyObject->getPosition() / s_displayScale;
 }
 
 /// <summary>

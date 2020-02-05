@@ -11,7 +11,7 @@ class Path
 public:
 	Path(sf::RenderWindow& t_window);
 	~Path();
-	void draw();
+	void draw(sf::View t_view);
 	void neighbourAlgor();
 	void initAStar(std::vector<sf::RectangleShape> t_walls);
 	void update();
@@ -30,9 +30,7 @@ private:
 	int startNode = 103;
 	
 
-	std::vector<Node*> graphPathLong;
-	std::vector<Node*> graphPathTop;
-	std::vector<Node*> graphPathMiddle;
+
 	std::vector<Node*> graphPath;
 
 	std::vector<std::vector<Node*>> paths;

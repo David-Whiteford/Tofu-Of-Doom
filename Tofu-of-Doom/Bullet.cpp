@@ -26,11 +26,6 @@ void Bullet::bulletInit(sf::Vector2f t_dir, float t_aliveAt, sf::Vector2f t_star
 	m_aliveAt = 0;
 	m_canDrawRayLine = true;
 	setActive(true);
-
-
-
-
-
 }
 
 void Bullet::setDamageAmount(int t_damage)
