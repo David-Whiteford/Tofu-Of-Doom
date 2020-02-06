@@ -1,13 +1,7 @@
-﻿  Enemy.cpp
-D:\Users\dave2\Desktop\Tofu-Of-Doom\Tofu-of-Doom\Transform.h(17): warning C4091: 'typedef ': ignored on left of 'Transform::Position' when no variable is declared
-D:\Users\dave2\Desktop\Tofu-Of-Doom\Tofu-of-Doom\Enemy.cpp(107,84): warning C4244: 'argument': conversion from 'int' to 'T', possible loss of data
-D:\Users\dave2\Desktop\Tofu-Of-Doom\Tofu-of-Doom\Enemy.cpp(107,84): warning C4244:         with
-D:\Users\dave2\Desktop\Tofu-Of-Doom\Tofu-of-Doom\Enemy.cpp(107,84): warning C4244:         [
-D:\Users\dave2\Desktop\Tofu-Of-Doom\Tofu-of-Doom\Enemy.cpp(107,84): warning C4244:             T=float
-D:\Users\dave2\Desktop\Tofu-Of-Doom\Tofu-of-Doom\Enemy.cpp(107,84): warning C4244:         ]
-D:\Users\dave2\Desktop\Tofu-Of-Doom\Tofu-of-Doom\Enemy.cpp(107,54): warning C4244: 'argument': conversion from 'int' to 'T', possible loss of data
-D:\Users\dave2\Desktop\Tofu-Of-Doom\Tofu-of-Doom\Enemy.cpp(107,54): warning C4244:         with
-D:\Users\dave2\Desktop\Tofu-Of-Doom\Tofu-of-Doom\Enemy.cpp(107,54): warning C4244:         [
-D:\Users\dave2\Desktop\Tofu-Of-Doom\Tofu-of-Doom\Enemy.cpp(107,54): warning C4244:             T=float
-D:\Users\dave2\Desktop\Tofu-Of-Doom\Tofu-of-Doom\Enemy.cpp(107,54): warning C4244:         ]
-  Tofu-of-Doom.vcxproj -> D:\Users\dave2\Desktop\Tofu-Of-Doom\Debug\Tofu-of-Doom.exe
+﻿  Game.cpp
+C:\Users\gameuser\Desktop\Tofu-Of-Doom\Tofu-of-Doom\Transform.h(17): warning C4091:  'typedef ': ignored on left of 'Transform::Position' when no variable is declared
+C:\Users\gameuser\Desktop\Tofu-Of-Doom\Tofu-of-Doom\Collider2D.h(13): warning C4091:  'typedef ': ignored on left of 'Collider2D::Bounds' when no variable is declared
+C:\Users\gameuser\Desktop\Tofu-Of-Doom\Tofu-of-Doom\GameWorld.h(30,17): warning C4305:  'initializing': truncation from 'double' to 'float'
+C:\Users\gameuser\Desktop\Tofu-Of-Doom\Tofu-of-Doom\Game.cpp(305,21): warning C4018:  '<': signed/unsigned mismatch
+C:\Users\gameuser\Desktop\Tofu-Of-Doom\Tofu-of-Doom\Game.cpp(324,21): warning C4018:  '<': signed/unsigned mismatch
+  Tofu-of-Doom.vcxproj -> C:\Users\gameuser\Desktop\Tofu-Of-Doom\Debug\Tofu-of-Doom.exe
