@@ -55,9 +55,7 @@ void Game::run()
 			processEvents();
 			render();
 			oldTime = clock.getElapsedTime();
-		}
-
-		
+		}		
 	}
 }
 
@@ -117,7 +115,8 @@ void Game::initialise()
 	}
 
 	// Load shader
-	m_mainShader = new tk::Shader("shaders/mainShader.vert", "shaders/mainShaderMultipleLights.frag");
+	m_mainShader = new tk::Shader("shaders/mainShader.vert", "shaders/mainShader.frag");
+	m_particleShader = new tk::Shader("shaders/particleShader.vert", "shaders/particleShader.frag");
 
 	GLint isCompiled = 0;
 	GLint isLinked = 0;
@@ -318,7 +317,6 @@ void Game::render()
 				model_1 = glm::translate(glm::mat4(1.0f), (m_gameWorld->getWallData()->at(i).first + (f_offset * 2.0f)) / s_displayScale);
 				glUniformMatrix4fv(m_modelMatrixID, 1, GL_FALSE, &model_1[0][0]);
 				glDrawArrays(GL_TRIANGLES, 0, wallType1_vertices.size());
-
 			}
 		}	
 
@@ -458,6 +456,7 @@ void Game::render()
 		}
 
 		// ---------------------------------------------------------------------------------------------------------------------
+
 		// Bind our texture in Texture Unit7
 		glActiveTexture(GL_TEXTURE7);
 		glBindTexture(GL_TEXTURE_2D, enemyTest_texture);
@@ -469,6 +468,13 @@ void Game::render()
 		glUniformMatrix4fv(m_modelMatrixID, 1, GL_FALSE, &model_8[0][0]);
 		glDrawArrays(GL_TRIANGLES, 0, enemyTest_vertices.size());
 		glBindVertexArray(0);
+
+		// ---------------------------------------------------------------------------------------------------------------------
+		
+		// Particles! Particles! Particles!
+		//glUseProgram(m_particleShader->m_programID);
+		m_particleEffect.generateParticles(m_eye);
+		m_particleEffect.drawParticles();
 
 		// ---------------------------------------------------------------------------------------------------------------------
 		

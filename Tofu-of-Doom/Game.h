@@ -20,6 +20,7 @@
 #include "ModelLoader.h"
 #include "GameWorld.h"
 #include "irrKlang.h"
+#include "ParticleEffect.h"
 
 /// A star Algorithm 
 
@@ -251,6 +252,7 @@ private:
 	glm::mat4 projection;	
 
 	tk::Shader *m_mainShader; // Shader object
+	tk::Shader *m_particleShader;
 	glm::vec3 m_eye{ 0.f, 4.0f, 0.f }; // Current camera position
 	
 	glm::mat4 m_rotationMatrix;
@@ -260,6 +262,9 @@ private:
 	double m_yaw{ 0.0 }; // Look left and right (in degrees)
 	double m_pitch{ 0.0 }; // Look up and down (in degrees)
 	bool gunRecoil{ false };
+
+	// Create particle object
+	ParticleEffect m_particleEffect = ParticleEffect(m_deltaTime);
 
 	void initialise();
 	void processEvents();

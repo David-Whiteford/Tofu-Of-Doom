@@ -90,6 +90,9 @@
     <ClCompile Include="Enemy.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="ParticleEffect.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -248,15 +251,21 @@
     <ClInclude Include="Enemy.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="ParticleEffect.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="shaders\mainShader.frag">
-      <Filter>Source Files</Filter>
-    </None>
     <None Include="shaders\mainShader.vert">
       <Filter>Source Files</Filter>
     </None>
-    <None Include="shaders\mainShaderMultipleLights.frag">
+    <None Include="shaders\mainShader.frag">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="shaders\particleShader.frag">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="shaders\particleShader.vert">
       <Filter>Source Files</Filter>
     </None>
   </ItemGroup>

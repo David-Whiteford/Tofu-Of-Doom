@@ -37,6 +37,7 @@
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Map.cpp" />
     <ClCompile Include="ModelLoader.cpp" />
+    <ClCompile Include="ParticleEffect.cpp" />
     <ClCompile Include="Path.cpp" />
     <ClCompile Include="Raycast.cpp" />
     <ClCompile Include="Shader.cpp" />
@@ -88,6 +89,7 @@
     <ClInclude Include="Map.h" />
     <ClInclude Include="ModelLoader.h" />
     <ClInclude Include="Game.h" />
+    <ClInclude Include="ParticleEffect.h" />
     <ClInclude Include="Path.h" />
     <ClInclude Include="Raycast.h" />
     <ClInclude Include="ShotTrajectory.h" />
@@ -100,7 +102,8 @@
   <ItemGroup>
     <None Include="shaders\mainShader.frag" />
     <None Include="shaders\mainShader.vert" />
-    <None Include="shaders\mainShaderMultipleLights.frag" />
+    <None Include="shaders\particleShader.frag" />
+    <None Include="shaders\particleShader.vert" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
