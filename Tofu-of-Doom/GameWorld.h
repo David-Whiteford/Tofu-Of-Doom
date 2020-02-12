@@ -16,29 +16,31 @@
 #include <stdlib.h>
 #include <ctime>
 #include "Enemy.h"
+#include "GameObject.h"
+
+
 class GameWorld
 {
 public:
 	GameWorld(sf::RenderWindow &t_window, sf::Time &t_deltaTime, Camera *t_camera);
 	~GameWorld();
 	void updateWorld();
-	void enemyMovement();
-	void enemyFollowPlayer();
-	void moveEnemy();
+
 	void drawWorld();
 	void fireBullet(int t_gunType);
 	float Pi = 3.14;
 	void checkPlayerRayCollsions();
 	Bullet bullets[100];
-	int getRandNode();
+
 	sf::Vector2f getPlayerPosition();
-	sf::Vector2f getEnemyPosition();
 	glm::vec3 getCameraPosition();
 
 	double getPitch();
 	double getYaw();
 	std::vector<std::pair<glm::vec3, WallType>> *getWallData();
 	std::vector<glm::vec3> *getLightPositions();
+
+	void checkEnemyInQueueAlive();
 
 private:
 	
@@ -56,20 +58,19 @@ private:
 	bool follow = false;
 	std::vector<int> m_startNodes;
 	std::vector<int> m_endNodes;
+
+
 	//int startNode = 103;
 	//int endNode = 2237;
 	std::vector<sf::CircleShape> m_enemies;
 	std::vector<sf::RectangleShape> m_walls;
-	
-	std::vector<Enemy*> m_enemyVec;
-	Enemy *m_enemyObject;
-	Enemy *m_enemyObject2;
-	Enemy *m_enemyObject3;
-	Enemy *m_enemyObject4;
-	Enemy *m_enemyObject5;
-	Enemy *m_enemyObject6;
-	Enemy *m_enemyObject7;
-	Enemy *m_enemyObject8;
+
+	Enemy* m_enemyVec[8];
+
+	// We will use the q to push and pop checking collisions
+	std::vector<Enemy*> m_enemyActive;
+
+
 	Camera &m_camera;
 	Map *m_map = new Map();
 	sf::View m_mapView;

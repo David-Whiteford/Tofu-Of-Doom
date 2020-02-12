@@ -24,15 +24,18 @@ Enemy::~Enemy()
 void Enemy::enemyInit()
 {
 	
-	m_enemies.setRadius(25.0f);
-	m_enemies.setFillColor(sf::Color::Red);
-	m_enemies.setOrigin(sf::Vector2f(25.0f, 25.0f));
-	m_enemies.setPosition(100, 800); // Test starting position
+	m_enemy.setRadius(m_radius);
+	m_enemy.setFillColor(sf::Color::Red);
+	m_enemy.setOrigin(sf::Vector2f(25.0f, 25.0f));
+	m_enemy.setPosition(100, 800); // Test starting position
 	//get initial enemy Position
-	m_enemyNode = m_gamePath->nodePos(m_enemies.getPosition());
+	m_enemyNode = m_gamePath->nodePos(m_enemy.getPosition());
 	//Astar
 	int nodeEnd = getRandNode();
 	m_gamePath->newPath(m_enemyNode, nodeEnd);
+
+
+	dynamic_cast<GameObject*>(this)->setTag("Enemy");
 }
 
 void Enemy::setDamageAmount(int t_damage)
@@ -62,13 +65,13 @@ void Enemy::update(sf::CircleShape t_player)
 {
 	//sets the node the player and the enemy are in
 	m_playerNode = m_gamePath->nodePos(t_player.getPosition());
-	m_enemyNode = m_gamePath->nodePos(m_enemies.getPosition());
+	m_enemyNode = m_gamePath->nodePos(m_enemy.getPosition());
 	std::cout << "PLAyer NOde " << m_playerNode << std::endl;
 	sf::Vector2f offSet = sf::Vector2f(300, 300);
-	if (t_player.getPosition().x >= m_enemies.getPosition().x - offSet.x
-		&& t_player.getPosition().x <= m_enemies.getPosition().x + offSet.x
-		&& t_player.getPosition().y >= m_enemies.getPosition().y - offSet.y
-		&& t_player.getPosition().y <= m_enemies.getPosition().y + offSet.y)
+	if (t_player.getPosition().x >= m_enemy.getPosition().x - offSet.x
+		&& t_player.getPosition().x <= m_enemy.getPosition().x + offSet.x
+		&& t_player.getPosition().y >= m_enemy.getPosition().y - offSet.y
+		&& t_player.getPosition().y <= m_enemy.getPosition().y + offSet.y)
 	{
 		
 		if (m_doOnceSeek != 1)
@@ -94,11 +97,11 @@ void Enemy::update(sf::CircleShape t_player)
 
 void Enemy::draw()
 {
-	m_window.draw(m_enemies);
+	m_window.draw(m_enemy);
 	sf::Vertex line[] =
 	{
 		sf::Vertex(graphPathVec),
-		sf::Vertex(m_enemies.getPosition())
+		sf::Vertex(m_enemy.getPosition())
 	};
 	m_window.draw(line, 2, sf::Lines);
 }
@@ -106,10 +109,10 @@ void Enemy::moveEnemy()
 {
 	graphPathVec = sf::Vector2f(graphPath.back()->m_data.m_x, graphPath.back()->m_data.m_y);
 
-	sf::Vector2f moveTo = m_transform.moveTowards(m_enemies.getPosition(), graphPathVec, m_speedEn);
-	m_enemies.setPosition(moveTo);
-	if (m_enemies.getPosition().x == graphPath.back()->m_data.m_x &&
-		m_enemies.getPosition().y == graphPath.back()->m_data.m_y)
+	sf::Vector2f moveTo = m_transform.moveTowards(m_enemy.getPosition(), graphPathVec, m_speedEn);
+	m_enemy.setPosition(moveTo);
+	if (m_enemy.getPosition().x == graphPath.back()->m_data.m_x &&
+		m_enemy.getPosition().y == graphPath.back()->m_data.m_y)
 	{
 		graphPath.pop_back();
 	}
@@ -157,6 +160,14 @@ void Enemy::enemyMovement()
 void Enemy::enemyFollowPlayer()
 {
 }
+float Enemy::getRadius()
+{
+	return m_radius;
+}
+sf::CircleShape Enemy::getSprite()
+{
+	return m_enemy;
+}
 int Enemy::getRandNode()
 {
 	int endNode = rand() % 7;
@@ -171,5 +182,20 @@ int Enemy::getRandNode()
 
 sf::Vector2f Enemy::getPosition()
 {
-	return m_enemies.getPosition();
+	return m_enemy.getPosition();
+}
+
+void Enemy::setAlive(bool t_alive)
+{
+	m_alive = t_alive;
+}
+
+void Enemy::setDead()
+{
+	this->m_alive = false;
+}
+
+bool Enemy::isAlive()
+{
+	return m_alive;
 }

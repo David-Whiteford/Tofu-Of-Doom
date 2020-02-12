@@ -1,4 +1,5 @@
 #include "Raycast.h"
+#include "Enemy.h"
 
 Raycast::Raycast()
 {
@@ -90,17 +91,17 @@ sf::VertexArray Raycast::drawRay()
 	return ray;
 }
 
-void Raycast::addToHitObjects(sf::Shape* t_enemy)
+void Raycast::addToHitObjects(GameObject* t_enemy)
 {
 	hitObjects.push(t_enemy);
 }
 
-std::queue<sf::Shape*> Raycast::getHitObjects()
+std::queue<GameObject*> Raycast::getHitObjects()
 {
 	return hitObjects;
 }
 
-void Raycast::getClosest()
+GameObject* Raycast::getClosest()
 {
 	bool first = true;
 	while (hitObjects.size() > 0)
@@ -112,9 +113,29 @@ void Raycast::getClosest()
 		}
 		else
 		{
-			float dist1 = std::sqrt((std::pow((m_positon.x - closest->getPosition().x), 2) + (std::pow((m_positon.y - closest->getPosition().y), 2))));
-			float dist2 = std::sqrt((std::pow((m_positon.x - hitObjects.front()->getPosition().x), 2) + (std::pow((m_positon.y - hitObjects.front()->getPosition().y), 2))));
+			//dynamic_cast<GameObject*>(this)->setTag("Enemy");
+			// check tags
+			float dist1;
+			float dist2;
 
+			if (closest->getTag() == "Enemy")
+			{
+
+				GameObject* en = closest;
+				Enemy* sen = dynamic_cast<Enemy*>(en);
+				dist1 = std::sqrt((std::pow((m_positon.x - sen->getPosition().x), 2) + (std::pow((m_positon.y - sen->getPosition().y), 2))));
+
+			}
+			else
+			{
+
+			}
+			if (hitObjects.front()->getTag() == "Enemy")
+			{
+				GameObject *en = hitObjects.front();
+				Enemy *sen = dynamic_cast<Enemy*>(en);
+				dist2 = std::sqrt((std::pow((m_positon.x - sen->getPosition().x), 2) + (std::pow((m_positon.y - sen->getPosition().y), 2))));
+			}
 			if (dist2 < dist1)
 			{
 				closest = hitObjects.front();
@@ -124,7 +145,7 @@ void Raycast::getClosest()
 	}
 	//sf::Vector2f newPos = sf::Vector2f(200, 200);
 	//closest->setPosition(newPos);
-	std::cout << closest->getPosition().x << ", " << closest->getPosition().y << std::endl;
+	return closest;
 }
 
 bool Raycast::isInterpolating()

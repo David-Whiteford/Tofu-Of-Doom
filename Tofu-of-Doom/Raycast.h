@@ -2,6 +2,7 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include <queue>
+#include "GameObject.h"
 
 
 class Raycast
@@ -14,17 +15,17 @@ public:
 	bool hit(sf::Vector2f t_targetPosition, float t_targetRadius);
 
 	sf::VertexArray drawRay();  
-	void addToHitObjects(sf::Shape* t_enemy);
-	std::queue<sf::Shape *> getHitObjects();
-	void getClosest();
+	void addToHitObjects(GameObject* t_enemy);
+	std::queue<GameObject *> getHitObjects();
+	GameObject* getClosest();
 
 	bool isInterpolating();
 
 	bool intersectsRectangle(sf::Vector2f p1, sf::Vector2f p2);
 
 private:
-	std::queue<sf::Shape*> hitObjects;
-	sf::Shape* closest;
+	std::queue<GameObject*> hitObjects;
+	GameObject *closest;
 
 	float m_rayLength = 1000;
 	sf::Vector2f m_direction;

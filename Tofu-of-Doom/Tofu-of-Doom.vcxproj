@@ -61,6 +61,7 @@
     <ClInclude Include="EnemyPatrolState.h" />
     <ClInclude Include="EnemyState.h" />
     <ClInclude Include="Events.h" />
+    <ClInclude Include="GameObject.h" />
     <ClInclude Include="GameWorld.h" />
     <ClInclude Include="Globals.h" />
     <ClInclude Include="IdleEnemyState.h" />

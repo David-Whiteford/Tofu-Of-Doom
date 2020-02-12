@@ -1,6 +1,4 @@
-#ifndef ENEMY_H
-#define ENEMY_H
-
+#pragma once
 #include <SFML/Graphics.hpp>
 #include <SFML/OpenGL.hpp>
 #include "DisplayScale.h"
@@ -9,8 +7,9 @@
 #include "Path.h"
 #include <stdlib.h>
 #include <ctime>
+#include "Globals.h"
 
-class Enemy
+class Enemy : public GameObject
 {
 public:
 	Enemy(sf::RenderWindow& t_window, sf::Time& t_deltaTime, sf::Vector2f t_position , Path* t_gamePath);
@@ -27,12 +26,20 @@ public:
 	void enemyFollowPlayer();
 	void moveEnemy();
 	void draw();
+
+	float getRadius();
+	sf::CircleShape getSprite();
 	int getRandNode();
 	sf::Vector2f getPosition();
+
+	void setAlive(bool t_alive);
+	void setDead();
+	bool isAlive();
 
 private:
 
 	Raycast m_rayCast;
+	bool m_alive;
 	float m_speedEn{ 5.0f };
 	sf::Time m_time;
 	int m_currentNode = 0;
@@ -54,9 +61,8 @@ private:
 	int m_doOnceSeek = 0;
 	int startNode = 103;
 	int endNode = 2237;
-	sf::CircleShape m_enemies;
-	bool m_alive = false;
-	float m_radius = 3;
+	//sf::CircleShape m_enemies;
+	float m_radius = 25;
 	int m_aliveAt = 0;
 	float m_timeToLive = 2;
 	sf::Vector2f m_direction = sf::Vector2f(0, 0);
@@ -72,5 +78,6 @@ private:
 	}
 	m_enemyBehaviour;
 	sf::Time& m_deltaTime;
+
+
 };
-#endif // !ENEMY_H
