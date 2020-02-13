@@ -5,7 +5,7 @@
 #include "libs/glew/wglew.h"
 #include "libs/glm/glm.hpp"
 #include "libs/glm/gtc/matrix_transform.hpp"
-#include <SFML/Graphics.hpp>
+
 #include <SFML/OpenGL.hpp>
 #include "Path.h"
 #include "Map.h"
@@ -16,7 +16,8 @@
 #include <stdlib.h>
 #include <ctime>
 #include "Enemy.h"
-#include "GameObject.h"
+#include "Wall.h"
+#include "Quadtree.h"
 
 
 class GameWorld
@@ -30,7 +31,9 @@ public:
 	void fireBullet(int t_gunType);
 	float Pi = 3.14;
 	void checkPlayerRayCollsions();
+
 	Bullet bullets[100];
+	std::vector<Bullet> activeBullets; // for a smaller loop
 
 	sf::Vector2f getPlayerPosition();
 	glm::vec3 getCameraPosition();
@@ -41,8 +44,11 @@ public:
 	std::vector<glm::vec3> *getLightPositions();
 
 	void checkEnemyInQueueAlive();
-
+	void populateQuadtree();
 private:
+
+
+	Quadtree *quadtree = new Quadtree(-50, -50, 4000, 4000, 0, 2);
 	
 	int m_currentNode = 0;
 	int m_endNode = 0;
@@ -63,7 +69,6 @@ private:
 	//int startNode = 103;
 	//int endNode = 2237;
 	std::vector<sf::CircleShape> m_enemies;
-	std::vector<sf::RectangleShape> m_walls;
 
 	Enemy* m_enemyVec[8];
 
@@ -71,10 +76,16 @@ private:
 	std::vector<Enemy*> m_enemyActive;
 
 
+	// Walls
+
+	std::vector<Wall*> m_wallVec;
+	//std::vector<std::pair<glm::vec3, WallType>> m_wallPositions;
+	float m_wallCubeSize{ 5.0f }; // This is the value of the wall cube's x, y, and z.
+
+
 	Camera &m_camera;
 	Map *m_map = new Map();
 	sf::View m_mapView;
-	std::vector<std::pair<glm::vec3, WallType>> m_wallPositions;
 	sf::Vector2f m_newPosition;
 	void setGunPosition();
 	sf::CircleShape m_player;
@@ -90,7 +101,7 @@ private:
 	float m_speed{ 20.0f };
 	float m_speedEn{ 5.0f };
 	int m_radius = 5;
-	float m_wallCubeSize{ 5.0f }; // This is the value of the wall cube's x, y, and z.
+
 	bool m_moveRight{ true };
 	bool m_down{ false };
 	bool m_moveLeft{ true };

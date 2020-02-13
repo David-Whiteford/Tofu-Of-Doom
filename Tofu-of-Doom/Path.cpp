@@ -1,4 +1,5 @@
 #include "Path.h"
+#include "Wall.h"
 
 Path::Path(sf::RenderWindow& t_window) :
 	m_window(t_window)
@@ -86,7 +87,7 @@ void Path::neighbourAlgor()
 	}
 }
 
-void Path::initAStar(std::vector<sf::RectangleShape> t_walls)
+void Path::initAStar(std::vector<Wall*> t_walls)
 {
 	graph = new Graph<NodeData, int>(2500);
 
@@ -116,7 +117,7 @@ void Path::initAStar(std::vector<sf::RectangleShape> t_walls)
 
 			for (auto wall : t_walls)
 			{
-				if (m_nodeShape[nodeIndex].getGlobalBounds().intersects(wall.getGlobalBounds()))
+				if (m_nodeShape[nodeIndex].getGlobalBounds().intersects(wall->getShape().getGlobalBounds()))
 				{
 					m_nodeShape[nodeIndex].setFillColor(sf::Color(sf::Color::Black));
 					nodeData.passable = false;

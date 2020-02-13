@@ -48,7 +48,7 @@ class Game
 public:
 	Game(sf::ContextSettings t_settings);
 	~Game();
-	double clockToMilliseconds(clock_t ticks);
+
 	void run();
 	std::vector< vec3df > positions;
 	ISoundEngine* soundEngine;

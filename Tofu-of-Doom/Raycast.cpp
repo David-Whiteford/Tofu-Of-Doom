@@ -118,7 +118,7 @@ GameObject* Raycast::getClosest()
 			float dist1;
 			float dist2;
 
-			if (closest->getTag() == "Enemy")
+			if (closest->getTag() == ENEMY_TAG)
 			{
 
 				GameObject* en = closest;
@@ -130,7 +130,7 @@ GameObject* Raycast::getClosest()
 			{
 
 			}
-			if (hitObjects.front()->getTag() == "Enemy")
+			if (hitObjects.front()->getTag() == ENEMY_TAG)
 			{
 				GameObject *en = hitObjects.front();
 				Enemy *sen = dynamic_cast<Enemy*>(en);

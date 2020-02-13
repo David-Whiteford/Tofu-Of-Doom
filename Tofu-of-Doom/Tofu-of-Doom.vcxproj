@@ -38,6 +38,7 @@
     <ClCompile Include="Map.cpp" />
     <ClCompile Include="ModelLoader.cpp" />
     <ClCompile Include="Path.cpp" />
+    <ClCompile Include="Quadtree.cpp" />
     <ClCompile Include="Raycast.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="ShotTrajectory.cpp" />
@@ -90,9 +91,11 @@
     <ClInclude Include="ModelLoader.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="Path.h" />
+    <ClInclude Include="Quadtree.h" />
     <ClInclude Include="Raycast.h" />
     <ClInclude Include="ShotTrajectory.h" />
     <ClInclude Include="Transform.h" />
+    <ClInclude Include="Wall.h" />
     <ClInclude Include="WallType.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="stb_image.h" />
