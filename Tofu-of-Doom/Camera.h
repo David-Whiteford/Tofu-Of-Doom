@@ -39,6 +39,7 @@ public:
 
 	void setCameraShakeSpeed(float t_speed);
 	void setCameraShakeMax(float t_max);
+	void getOutOfWall();
 
 	CXBOXController controller;
 
@@ -62,7 +63,7 @@ private:
 	float cameraShakeSpeed = 2;
 	float cameraShakeMax = 4;
 
-	bool canMoveUp, canMoveDown, canMoveLeft, canMoveRight;
+	bool canMoveUp, canMoveDown, canMoveLeft, canMoveRight, canTurn;
 
 
 
@@ -72,8 +73,8 @@ private:
 	glm::mat4 m_rotationMatrix;
 	glm::vec4 m_direction{ 0.f, 0.f, 1.f, 0.f }; // You move in this direction(z)
 	glm::vec4 m_directionStrafe{ 1.0f, 0.f, 0.f, 0.f }; // You move in this direction(z)
-	float m_speed = 0.3f;
-	float m_turnSpeed = 1.0;
+	float m_speed = 0.18f;
+	float m_turnSpeed = 3.0;
 
 	double m_yaw{ 0.0 }; // In degrees
 	double m_pitch{ 0.0 }; // This isn't really used anymore

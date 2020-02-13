@@ -48,7 +48,7 @@ public:
 private:
 
 
-	Quadtree *quadtree = new Quadtree(-50, -50, 4000, 4000, 0, 2);
+	Quadtree *quadtree = new Quadtree(-50, -50, 2550, 2550, 0, 3);
 	
 	int m_currentNode = 0;
 	int m_endNode = 0;

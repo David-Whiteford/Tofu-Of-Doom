@@ -174,3 +174,8 @@ bool Raycast::intersectsRectangle(sf::Vector2f p1, sf::Vector2f p2)
 	}
 	return false;
 }
+
+sf::Vector2f Raycast::getEndPoint()
+{
+	return m_direction * m_rayLength;
+}

@@ -23,6 +23,8 @@ public:
 
 	bool intersectsRectangle(sf::Vector2f p1, sf::Vector2f p2);
 
+	sf::Vector2f getEndPoint();
+
 private:
 	std::queue<GameObject*> hitObjects;
 	GameObject *closest;

@@ -292,33 +292,68 @@ void GameWorld::checkPlayerRayCollsions()
 
 	for (int x = 0; x < returnObjects.size(); x++)
 	{
-		Wall* wall = dynamic_cast<Wall*>(returnObjects[x]);
+		//Wall* wall = dynamic_cast<Wall*>(returnObjects[x]);
 		if (m_camera.canGoUp())
 		{
-			if (m_camera.raycastForward.hit(wall->getShape().getPosition(), wall->getShape().getSize().x))
+			if (m_camera.raycastForward.hit(returnObjects[x]->position, returnObjects[x]->size))
 			{
 				m_camera.setCanMoveUp(false);
 			}
 		}
 		if (m_camera.canGoDown())
 		{
-			if (m_camera.raycastBehind.hit(wall->getShape().getPosition(), wall->getShape().getSize().x))
+			if (m_camera.raycastBehind.hit(returnObjects[x]->position, returnObjects[x]->size))
 			{
 				m_camera.setCanMoveDown(false);
 			}
 		}
 		if (m_camera.canGoLeft())
 		{
-			if (m_camera.raycastToLeft.hit(wall->getShape().getPosition(), wall->getShape().getSize().x))
+			if (m_camera.raycastToLeft.hit(returnObjects[x]->position, returnObjects[x]->size))
 			{
 				m_camera.setCanMoveLeft(false);
 			}
 		}
 		if (m_camera.canGoRight())
 		{
-			if (m_camera.raycastToRight.hit(wall->getShape().getPosition(), wall->getShape().getSize().x))
+			if (m_camera.raycastToRight.hit(returnObjects[x]->position, returnObjects[x]->size))
 			{
 				m_camera.setCanMoveRight(false);
+			}
+		}
+
+
+		if ((!m_camera.canGoRight() || !m_camera.canGoLeft()) || ( !m_camera.canGoUp() || !m_camera.canGoDown()))
+		{
+			m_camera.getOutOfWall();
+
+			if (!m_camera.canGoUp())
+			{
+				if (!m_camera.raycastForward.hit(returnObjects[x]->position, returnObjects[x]->size))
+				{
+					m_camera.setCanMoveUp(true);
+				}
+			}
+			if (!m_camera.canGoDown())
+			{
+				if (!m_camera.raycastBehind.hit(returnObjects[x]->position, returnObjects[x]->size))
+				{
+					m_camera.setCanMoveDown(true);
+				}
+			}
+			if (!m_camera.canGoLeft())
+			{
+				if (!m_camera.raycastToLeft.hit(returnObjects[x]->position, returnObjects[x]->size))
+				{
+					m_camera.setCanMoveLeft(true);
+				}
+			}
+			if (!m_camera.canGoRight())
+			{
+				if (!m_camera.raycastToRight.hit(returnObjects[x]->position, returnObjects[x]->size))
+				{
+					m_camera.setCanMoveRight(true);
+				}
 			}
 		}
 

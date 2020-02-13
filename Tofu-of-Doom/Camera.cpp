@@ -177,6 +177,8 @@ void Camera::input(sf::Time t_deltaTime)
 	}
 	// End Strafe
 
+	//
+
 
 	// Turn Camera
 	if (controller.leftButtonRTS())
@@ -231,13 +233,77 @@ void Camera::input(sf::Time t_deltaTime)
 
 	glm::vec3 tempDirection(m_directionStrafe.x, m_directionStrafe.y, m_directionStrafe.z);
 	glm::normalize(tempDirection);
-	raycastToLeft.setRayValues(pos, sf::Vector2f(tempDirection.x, tempDirection.z), 30);
-	raycastToRight.setRayValues(pos, sf::Vector2f(-tempDirection.x, -tempDirection.z), 30);
+	raycastToLeft.setRayValues(pos, sf::Vector2f(tempDirection.x, tempDirection.z), 50);
+	raycastToRight.setRayValues(pos, sf::Vector2f(-tempDirection.x, -tempDirection.z), 50);
 
 	glm::vec3 tempDirection2(m_direction.x, m_direction.y, m_direction.z);
 	glm::normalize(tempDirection2);
-	raycastForward.setRayValues(pos, sf::Vector2f(tempDirection2.x, tempDirection2.z), 30);
-	raycastBehind.setRayValues(pos, sf::Vector2f(-tempDirection2.x, -tempDirection2.z), 30);
+	raycastForward.setRayValues(pos, sf::Vector2f(tempDirection2.x, tempDirection2.z), 50);
+	raycastBehind.setRayValues(pos, sf::Vector2f(-tempDirection2.x, -tempDirection2.z), 50);
+
+
+	// END DEBUG TESTS
+
+}
+
+
+void Camera::getOutOfWall()
+{
+	float escapeAmount = 1.0f;
+	glm::vec3 transformPos = { transform.position.x, transform.position.y,transform.position.z };
+	// escape from being stuck
+	if (!canGoLeft())
+	{
+
+		glm::vec3 tempDirection(m_directionStrafe.x, m_directionStrafe.y, m_directionStrafe.z);
+		glm::normalize(tempDirection);
+		transformPos += tempDirection * static_cast<float>(m_speed * escapeAmount);
+	}
+	else if (!canGoRight())
+	{
+
+			glm::vec3 tempDirection(m_directionStrafe.x, m_directionStrafe.y, m_directionStrafe.z);
+			glm::normalize(tempDirection);
+			transformPos -= tempDirection * static_cast<float>(m_speed * escapeAmount);
+		
+	}
+	if (!canGoUp())
+	{
+
+		glm::vec3 tempDirection(m_direction.x, m_direction.y, m_direction.z);
+		glm::normalize(tempDirection);
+
+
+
+		transformPos += tempDirection * static_cast<float>(m_speed * escapeAmount);
+	}
+	else if (!canGoDown())
+	{
+
+		glm::vec3 tempDirection(m_direction.x, m_direction.y, m_direction.z);
+		glm::normalize(tempDirection);
+
+		transformPos -= tempDirection * static_cast<float>(m_speed* escapeAmount);
+	}
+
+
+	m_eye = transformPos;
+	transform.position.x = m_eye.x;
+	transform.position.y = m_eye.y;
+	transform.position.z = m_eye.z;
+
+	// RAYCAST DEBUG TESTS
+	sf::Vector2f pos = sf::Vector2f(transformPos.x * 10, transformPos.z * 10);
+
+	glm::vec3 tempDirection(m_directionStrafe.x, m_directionStrafe.y, m_directionStrafe.z);
+	glm::normalize(tempDirection);
+	raycastToLeft.setRayValues(pos, sf::Vector2f(tempDirection.x, tempDirection.z), 50);
+	raycastToRight.setRayValues(pos, sf::Vector2f(-tempDirection.x, -tempDirection.z), 50);
+
+	glm::vec3 tempDirection2(m_direction.x, m_direction.y, m_direction.z);
+	glm::normalize(tempDirection2);
+	raycastForward.setRayValues(pos, sf::Vector2f(tempDirection2.x, tempDirection2.z), 50);
+	raycastBehind.setRayValues(pos, sf::Vector2f(-tempDirection2.x, -tempDirection2.z), 50);
 
 
 	// END DEBUG TESTS
