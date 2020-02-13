@@ -12,9 +12,18 @@ Game::Game(sf::ContextSettings t_settings)
 {
 	// Initialise GLEW
 	GLuint m_error = glewInit();
-
+	m_splashScreen = new SplashScreen{ *this , m_font };
+	//loads the sfml texture and the background music
+	if (!m_sfmlTexture.loadFromFile("sfml.png"))
+	{
+		std::cout << "Cant load sfml image " << std::endl;
+	}
+	m_sfmlSprite.setTexture(m_sfmlTexture);
+	m_sfmlScreen = new SFML{ *this , m_font, m_sfmlSprite };
+	m_mainMenu = new MainMenu{ *this , m_font };
 	// Initialise everything else
 	initialise();
+
 }
 
 /// <summary>
@@ -200,73 +209,108 @@ void Game::processEvents()
 /// </summary>
 void Game::update(sf::Time t_deltaTime)
 {
-
-	//======DEBUG COLLISION ====//
+	
+	switch (m_currentGameState)
+	{
+	case GameState::None:
+		break;
+	case GameState::Exit:
+		m_window.close();
+		break;
+		//case for  licence splash and main
+	case GameState::Licence:
+		break;
+	case GameState::Splash:
+		m_splashScreen->update(m_deltaTime);
+		break;
+	case GameState::Main:
+		
+		m_mainMenu->update(m_deltaTime , sound);
+		break;
+		//case for options ,highscore gameover and level1 
+	case GameState::Options:
+		break;
+	case GameState::GameOver:
+		break;
+	case GameState::HighScore:
+		break;
+	case GameState::Credits:
+		break;
+	case GameState::MAP:
+		break;
+	case GameState::GAME:
+		//======DEBUG COLLISION ====//
 	// system("cls");
 	/*std::cout << "Player: " << "x: " << camera.collider.bounds.x1 <<
 		"y: " << camera.collider.bounds.y1 << " x2: " << camera.collider.bounds.x2 << " y2: " << camera.collider.bounds.y2 << std::endl;
 	std::cout << "cube: " << "x: " << cubeCollider.bounds.x1 <<
 		"y: " << cubeCollider.bounds.y1 << " x2: " << cubeCollider.bounds.x2 << " y2: " << cubeCollider.bounds.y2 << std::endl;*/
-	if (Collider2D::isColliding(camera.collider.bounds, cubeCollider.bounds))
-	{
-	//	std::cout << "Working" << std::endl;
+		if (Collider2D::isColliding(camera.collider.bounds, cubeCollider.bounds))
+		{
+			//	std::cout << "Working" << std::endl;
+		}
+
+		//update the zombie sound position to follow test zombie
+		zombiePosition = vec3df(m_gameWorld->getEnemyPosition().x, 3.5f, m_gameWorld->getEnemyPosition().y);
+
+		m_gameWorld->checkPlayerRayCollsions();
+		// Update game controls
+		camera.input(t_deltaTime);
+		camera.transform.position.x = camera.getEye().x;
+		camera.transform.position.y = camera.getEye().y;
+		camera.transform.position.z = camera.getEye().z;
+
+
+		fireGun();
+
+		// std::cout << m_time.asSeconds() << std::endl;
+
+		// This is currently only used to display the mini-map
+		gameControls(t_deltaTime);
+
+
+		m_gameWorld->updateWorld();
+
+		// Update view (camera)
+		camera.getView() = camera.camera(m_gameWorld->getCameraPosition(), m_gameWorld->getPitch(), m_gameWorld->getYaw());
+
+		// Sound stuff
+		irrklang::vec3df position(m_gameWorld->getCameraPosition().x, m_gameWorld->getCameraPosition().y, m_gameWorld->getCameraPosition().z);        // position of the listener
+		irrklang::vec3df lookDirection(10, 0, 10); // the direction the listener looks into
+		irrklang::vec3df velPerSecond(0, 0, 0);    // only relevant for doppler effects
+		irrklang::vec3df upVector(0, 1, 0);        // where 'up' is in your 3D scene
+
+		soundEngine->setListenerPosition(position, lookDirection, velPerSecond, upVector);
+
+		// Test cube
+		model_2 = glm::translate(glm::mat4(1.0f), glm::vec3(15.0f, 0.0f, 15.0f));
+		cubeCollider.bounds.x1 = 10;
+		cubeCollider.bounds.x2 = 20;
+		cubeCollider.bounds.y1 = 10;
+		cubeCollider.bounds.y2 = 20;
+		//============================================================================== DEBUG ONLY 
+
+
+		// Send our transformation to the currently bound shader, in the "MVP" uniform
+		// This is done in the update loop since each model will have a different MVP matrix (At least for the M part)
+		glUniformMatrix4fv(m_viewMatrixID, 1, GL_FALSE, &camera.getView()[0][0]);
+		glUniformMatrix4fv(m_projectionMatrixID, 1, GL_FALSE, &projection[0][0]);
+
+		glm::vec3 lightPos = camera.getEye();
+		glUniform3f(m_lightID, lightPos.x, lightPos.y, lightPos.z);
+
+		// Send array of light positions to shader
+		glUniform3fv(m_lightPositionsID, LIGHT_AMOUNT * sizeof(glm::vec3), &m_lightPositions[0][0]);
+
+		// Update test enemy matrix
+		model_8 = glm::translate(glm::mat4(1.0f), glm::vec3(m_gameWorld->getEnemyPosition().x, 3.5f, m_gameWorld->getEnemyPosition().y));
+		model_8 = glm::scale(model_8, glm::vec3(0.5f, 0.5f, 0.5f));
+		break;
+	
 	}
 
-	//update the zombie sound position to follow test zombie
-	zombiePosition = vec3df(m_gameWorld->getEnemyPosition().x, 3.5f, m_gameWorld->getEnemyPosition().y); 
-	
-	m_gameWorld->checkPlayerRayCollsions();
-	// Update game controls
-	camera.input(t_deltaTime);
-	camera.transform.position.x = camera.getEye().x;
-	camera.transform.position.y = camera.getEye().y;
-	camera.transform.position.z = camera.getEye().z;
 
 
-	fireGun();
-
-	// std::cout << m_time.asSeconds() << std::endl;
-
-	// This is currently only used to display the mini-map
-	gameControls(t_deltaTime);
-
-
-	m_gameWorld->updateWorld();
-
-	// Update view (camera)
-	camera.getView() = camera.camera(m_gameWorld->getCameraPosition(), m_gameWorld->getPitch(), m_gameWorld->getYaw());
-
-	// Sound stuff
-	irrklang::vec3df position(m_gameWorld->getCameraPosition().x , m_gameWorld->getCameraPosition().y, m_gameWorld->getCameraPosition().z);        // position of the listener
-	irrklang::vec3df lookDirection(10, 0, 10); // the direction the listener looks into
-	irrklang::vec3df velPerSecond(0, 0, 0);    // only relevant for doppler effects
-	irrklang::vec3df upVector(0, 1, 0);        // where 'up' is in your 3D scene
-
-	soundEngine->setListenerPosition(position, lookDirection, velPerSecond, upVector);
-
-	// Test cube
-	model_2 = glm::translate(glm::mat4(1.0f), glm::vec3(15.0f, 0.0f, 15.0f));
-	cubeCollider.bounds.x1 = 10;
-	cubeCollider.bounds.x2 = 20;
-	cubeCollider.bounds.y1 = 10;
-	cubeCollider.bounds.y2 = 20;
-	//============================================================================== DEBUG ONLY 
-
-
-	// Send our transformation to the currently bound shader, in the "MVP" uniform
-	// This is done in the update loop since each model will have a different MVP matrix (At least for the M part)
-	glUniformMatrix4fv(m_viewMatrixID, 1, GL_FALSE, &camera.getView()[0][0]);
-	glUniformMatrix4fv(m_projectionMatrixID, 1, GL_FALSE, &projection[0][0]);
-
-	glm::vec3 lightPos = camera.getEye();
-	glUniform3f(m_lightID, lightPos.x, lightPos.y, lightPos.z);
-
-	// Send array of light positions to shader
-	glUniform3fv(m_lightPositionsID, LIGHT_AMOUNT * sizeof(glm::vec3), &m_lightPositions[0][0]);
-
-	// Update test enemy matrix
-	model_8 = glm::translate(glm::mat4(1.0f), glm::vec3(m_gameWorld->getEnemyPosition().x, 3.5f, m_gameWorld->getEnemyPosition().y));
-	model_8 = glm::scale(model_8, glm::vec3(0.5f, 0.5f, 0.5f));
 }
 
 /// <summary>
@@ -275,19 +319,39 @@ void Game::update(sf::Time t_deltaTime)
 void Game::render()
 {
 
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	switch (m_drawState)
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	switch (m_currentGameState)
 	{
-	
-	case DrawState::MAP:
+	case GameState::None:
+		break;
+	case GameState::Exit:
+		m_window.close();
+		break;
+		//case for  licence splash and main
+	case GameState::Licence:
+		break;
+	case GameState::Splash:
+		m_splashScreen->render(m_window);
+		break;
+	case GameState::Main:
+		m_mainMenu->render(m_window);
+		break;
+		//case for options ,highscore gameover and level1 
+	case GameState::Options:
+		break;
+	case GameState::GameOver:
+		break;
+	case GameState::HighScore:
+		break;	
+	case GameState::Credits:
+		break;
+	case GameState::MAP:
 		m_window.pushGLStates();
 		m_gameWorld->drawWorld();
 		m_window.popGLStates();
-
 		break;
-
-	case DrawState::GAME:
+	case GameState::GAME:
 		// Use shader
 		glUseProgram(m_mainShader->m_programID);
 
@@ -298,7 +362,7 @@ void Game::render()
 		// Set shader to use Texture Unit 0
 		glUniform1i(m_currentTextureID, 0);
 
-		glBindVertexArray(wallType1_VAO_ID);		
+		glBindVertexArray(wallType1_VAO_ID);
 
 		glm::vec3 f_offset(0.0f, 50.0f, 0.0f);
 
@@ -318,7 +382,7 @@ void Game::render()
 				glUniformMatrix4fv(m_modelMatrixID, 1, GL_FALSE, &model_1[0][0]);
 				glDrawArrays(GL_TRIANGLES, 0, wallType1_vertices.size());
 			}
-		}	
+		}
 
 		// Draw floors and ceilings
 		for (int i = 0; i < m_gameWorld->getWallData()->size(); ++i)
@@ -351,7 +415,7 @@ void Game::render()
 		glBindVertexArray(0);
 
 		// ---------------------------------------------------------------------------------------------------------------------
-		
+
 		// This section contains the machine gun draw data
 		if (gunNum == 3)
 		{
@@ -463,28 +527,37 @@ void Game::render()
 
 		// Set shader to use Texture Unit 7
 		glUniform1i(m_currentTextureID, 7);
-		glBindVertexArray(enemyTest_VAO_ID);		
+		glBindVertexArray(enemyTest_VAO_ID);
 
 		glUniformMatrix4fv(m_modelMatrixID, 1, GL_FALSE, &model_8[0][0]);
 		glDrawArrays(GL_TRIANGLES, 0, enemyTest_vertices.size());
 		glBindVertexArray(0);
 
 		// ---------------------------------------------------------------------------------------------------------------------
-		
+
 		// Particles! Particles! Particles!
 		//glUseProgram(m_particleShader->m_programID);
 		m_particleEffect.generateParticles(m_eye);
 		m_particleEffect.drawParticles();
 
 		// ---------------------------------------------------------------------------------------------------------------------
-		
+
 		// Reset OpenGL
 		glBindVertexArray(GL_NONE);
 		glBindTexture(GL_TEXTURE_2D, 0);
 		glActiveTexture(GL_TEXTURE0);
-
+		break;
+	default:
 		break;
 	}
+	
+	
+
+
+
+		
+
+	
 
 	// Check for OpenGL error code
 	if (m_drawState == DrawState::GAME)
@@ -514,13 +587,13 @@ void Game::gameControls(sf::Time t_deltaTime)
 	}
 	else if (!camera.controller.backButtonDown() && backButtonPressed)
 	{
-		if (m_drawState == DrawState::GAME)
+		if (m_currentGameState == GameState::GAME)
 		{
-			m_drawState = DrawState::MAP;
+			m_currentGameState = GameState::MAP;
 		}
 		else
 		{
-			m_drawState = DrawState::GAME;
+			m_currentGameState = GameState::GAME;
 		}
 
 		backButtonPressed = false;

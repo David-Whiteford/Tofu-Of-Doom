@@ -13,17 +13,18 @@
 #include <queue>
 #include <map>
 #include <string>
-
-
+#include "Enum.h"
+#include "sfml.h"
 #include "Debug.h"
 #include "Shader.h"
 #include "ModelLoader.h"
 #include "GameWorld.h"
 #include "irrKlang.h"
 #include "ParticleEffect.h"
-
+#include "SplashScreen.h"
+#include "SFML.h"
 /// A star Algorithm 
-
+#include "MainMenu.h"
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -40,13 +41,17 @@
 
 using namespace irrklang;
 #pragma comment(lib, "irrKlang.lib") // link with irrKlang.dll
-
+class SplashScreen;
+class SFML;
+class MainMenu;
 
 typedef GraphNode<NodeData, int> Node;
 
 class Game
 {
 public:
+
+	
 	Game(sf::ContextSettings t_settings);
 	~Game();
 	double clockToMilliseconds(clock_t ticks);
@@ -56,7 +61,7 @@ public:
 	ISoundEngine* gunSoundEngine;
 	ISound* music;
 	ISound* background;
-
+	sf::Font m_font; // font used by message
 	irrklang::ISoundSource* zombie;
 	irrklang::ISoundSource* shotgunSound;
 	irrklang::ISoundSource* machinegunSound;
@@ -65,22 +70,25 @@ public:
 	vec3df zombiePosition;
 	ISound* zombieEnemies[11];
 	//vec3df positionEnemies[11];
-
+	sf::Sprite m_sfmlSprite;
+	sf::Texture m_sfmlTexture;
 	// 1 is pistol, 2 is rifle, 3 is machine gun)
 	int gunNum = 1;
-
-
+	//menu screens
+	SplashScreen* m_splashScreen; // the splash screen
+	SFML* m_sfmlScreen;
+	MainMenu* m_mainMenu;
 	/// <summary>
 	/// Astar stuff with graph for storing nodes
 	/// settng up the astar algorithm
 	/// </summary>
-
+	GameState m_currentGameState{ GameState::Main }; // used for whatever mode game starts
 	Graph<NodeData, int>* graph;
 	std::vector<Node*> graphPath;
 	std::map<std::string, int> nodeMap;
 	NodeData nodeData;
 	int nodeIndex{ 0 };
-
+	bool sound =false;
 	std::ifstream myfile;
 
 	int static const ROWS = 5;
