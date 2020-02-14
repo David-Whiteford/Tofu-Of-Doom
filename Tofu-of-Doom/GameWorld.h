@@ -37,7 +37,7 @@ public:
 
 	sf::Vector2f getPlayerPosition();
 	glm::vec3 getCameraPosition();
-
+	sf::Vector2f getEnemyPosition(int index);
 	double getPitch();
 	double getYaw();
 	std::vector<std::pair<glm::vec3, WallType>> *getWallData();
@@ -71,7 +71,6 @@ private:
 
 	//int startNode = 103;
 	//int endNode = 2237;
-	std::vector<sf::CircleShape> m_enemies;
 
 	Enemy* m_enemyVec[8];
 

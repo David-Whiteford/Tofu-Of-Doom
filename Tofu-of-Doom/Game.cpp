@@ -103,7 +103,6 @@ void Game::initialise()
 	shotgunQueue.push(shotgunSound); // 1
 
 	
-	zombiePosition = vec3df(m_gameWorld->getEnemyPosition().x, 0 , m_gameWorld->getEnemyPosition().y);
 
 	soundEngine->play3D(zombie, zombiePosition, true, false, false, false);
 
@@ -231,9 +230,8 @@ void Game::updateWorld(sf::Time t_deltaTime)
 	}
 
 	//update the zombie sound position to follow test zombie
-	zombiePosition = vec3df(m_gameWorld->getEnemyPosition().x, 3.5f, m_gameWorld->getEnemyPosition().y);
 
-	m_gameWorld->checkPlayerRayCollsions();
+	m_gameWorld->checkPlayerRayCollsions(t_deltaTime);
 	// Update game controls
 	camera.input(t_deltaTime);
 	camera.transform.position.x = camera.getEye().x;
@@ -283,7 +281,7 @@ void Game::updateWorld(sf::Time t_deltaTime)
 	glUniform3fv(m_lightPositionsID, LIGHT_AMOUNT * sizeof(glm::vec3), &m_lightPositions[0][0]);
 
 	// Update test enemy matrix
-	model_8 = glm::translate(glm::mat4(1.0f), glm::vec3(m_gameWorld->getEnemyPosition().x, 3.5f, m_gameWorld->getEnemyPosition().y));
+	model_8 = glm::translate(glm::mat4(1.0f), glm::vec3(m_gameWorld->getEnemyPosition(0).x, 3.5f, m_gameWorld->getEnemyPosition(0).y));
 	model_8 = glm::scale(model_8, glm::vec3(0.5f, 0.5f, 0.5f));
 }
 
