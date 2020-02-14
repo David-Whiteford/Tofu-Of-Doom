@@ -304,7 +304,9 @@ void Game::render()
 
 		break;
 	case DrawState::MAIN:
+		m_window.pushGLStates();
 		m_mainMenu->render(m_window);
+		m_window.popGLStates();
 
 		break;
 	case DrawState::OPTIONS:
