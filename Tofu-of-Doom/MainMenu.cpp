@@ -205,15 +205,15 @@ void MainMenu::changeGameState(bool t_soundFX)
 		//depending on the position of the outline rect set the gamemode
 		if (m_selectPos == 0)
 		{
-			m_game.m_currentGameState = GameState::GAME;
+			m_game.m_drawState = m_game.DrawState::GAME;
 		}
 		if (m_selectPos == 1)
 		{
-			m_game.m_currentGameState = GameState::Options;
+		
 		}
 		if (m_selectPos == 2)
 		{
-			m_game.m_currentGameState = GameState::Exit;
+		
 		}
 
 	}

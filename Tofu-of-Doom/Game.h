@@ -110,16 +110,19 @@ public:
 
 	std::queue <ISoundSource*> shotgunQueue;
 
-private:
-
-
 	enum DrawState
 	{
 		MAP,
-		GAME
+		GAME,
+		MAIN,
+		OPTIONS
 	};
 
-	DrawState m_drawState = DrawState::GAME;
+	DrawState m_drawState = DrawState::MAIN;
+
+private:
+
+
 
 	sf::RenderWindow m_window; // Window
 	sf::Time m_deltaTime;
@@ -268,6 +271,7 @@ private:
 	void initialise();
 	void processEvents();
 	void update(sf::Time t_deltaTime);
+	void updateWorld(sf::Time t_deltaTime);
 	void render();
 	void gameControls(sf::Time t_deltaTime);
 	void loadVAO(std::string t_textureFilename, const char *t_modelFilename, GLuint &t_vaoID,
