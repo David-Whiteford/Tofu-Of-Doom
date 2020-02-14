@@ -391,7 +391,6 @@ void Graph<NodeType, ArcType>::adaptedBreadthFirst( Node* current, Node *goal)
 	Node* temp = goal;
 	while (temp != nullptr)
 	{
-		std::cout << "Node Visted: " << temp->m_data.m_name << std::endl;
 		temp = temp->previous();
 	}
 
@@ -523,10 +522,9 @@ inline void Graph<NodeType, ArcType>::aStar(Node* start, Node* dest , std::vecto
 	while (currentNode != nullptr)
 	{
 		path.push_back(currentNode);
-		std::cout << "Node In Astar " << currentNode->m_data.m_name << std::endl;
 		currentNode = currentNode->previous();
 	}
-	std::cout << "Nodes expanded: " << nodesProcessed << std::endl;
+
 
 }
 

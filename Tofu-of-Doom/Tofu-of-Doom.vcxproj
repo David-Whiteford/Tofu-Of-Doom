@@ -41,6 +41,7 @@
     <ClCompile Include="Options.cpp" />
     <ClCompile Include="ParticleEffect.cpp" />
     <ClCompile Include="Path.cpp" />
+    <ClCompile Include="Quadtree.cpp" />
     <ClCompile Include="Raycast.cpp" />
     <ClCompile Include="sfml.cpp" />
     <ClCompile Include="Shader.cpp" />
@@ -66,6 +67,7 @@
     <ClInclude Include="EnemyPatrolState.h" />
     <ClInclude Include="EnemyState.h" />
     <ClInclude Include="Events.h" />
+    <ClInclude Include="GameObject.h" />
     <ClInclude Include="GameWorld.h" />
     <ClInclude Include="Globals.h" />
     <ClInclude Include="IdleEnemyState.h" />
@@ -97,11 +99,13 @@
     <ClInclude Include="Options.h" />
     <ClInclude Include="ParticleEffect.h" />
     <ClInclude Include="Path.h" />
+    <ClInclude Include="Quadtree.h" />
     <ClInclude Include="Raycast.h" />
     <ClInclude Include="sfml.h" />
     <ClInclude Include="ShotTrajectory.h" />
     <ClInclude Include="SplashScreen.h" />
     <ClInclude Include="Transform.h" />
+    <ClInclude Include="Wall.h" />
     <ClInclude Include="WallType.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="stb_image.h" />

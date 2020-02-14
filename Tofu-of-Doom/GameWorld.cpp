@@ -3,11 +3,11 @@
 /// <summary>
 /// Constructor for the GameWorld class
 /// </summary>
-GameWorld::GameWorld(sf::RenderWindow &t_window, sf::Time &t_deltaTime, Camera *t_camera) 
+GameWorld::GameWorld(sf::RenderWindow& t_window, sf::Time& t_deltaTime, Camera* t_camera)
 	: m_window(t_window), m_deltaTime(t_deltaTime), m_camera(*t_camera)
 {
 
-	
+	//quadtree = new Quadtree(-50, -50, 400, 400, 0, 8);
 
 	// Player
 	m_player.setRadius(25.0f);
@@ -30,7 +30,8 @@ GameWorld::GameWorld(sf::RenderWindow &t_window, sf::Time &t_deltaTime, Camera *
 	m_endNodes.push_back(681);
 	m_endNodes.push_back(2237);
 
-	m_startingPos.push_back(sf::Vector2f(1557,260));
+	// Enemy position start
+	m_startingPos.push_back(sf::Vector2f(1557, 260));
 	m_startingPos.push_back(sf::Vector2f(2364, 436));
 	m_startingPos.push_back(sf::Vector2f(375, 861));
 	m_startingPos.push_back(sf::Vector2f(71, 439));
@@ -38,57 +39,67 @@ GameWorld::GameWorld(sf::RenderWindow &t_window, sf::Time &t_deltaTime, Camera *
 	m_startingPos.push_back(sf::Vector2f(1577, 824));
 	m_startingPos.push_back(sf::Vector2f(1518, 1365));
 	m_startingPos.push_back(sf::Vector2f(2313, 2356));
-	
 
-	
 
-	// m_eye = glm::vec3(m_player.getPosition().x, 2.0f, m_player.getPosition().y);
-	m_enemies.push_back(m_enemy);
-	m_enemies.push_back(m_enemy);	
-	for (int i = 0; i < m_enemies.size(); i++)
+	for (int i = 0; i < 8; i++)
 	{
-		m_enemies[i].setRadius(25.0f);
-		m_enemies[i].setFillColor(sf::Color::Red);
-		m_enemies[i].setOrigin(sf::Vector2f(25.0f, 25.0f));
-		m_enemies[i].setPosition(100, 800); // Test starting position
+		m_enemyVec[i] = new Enemy(m_window, m_deltaTime, m_startingPos[i], m_gamePath);
+		m_enemyVec[i]->setAlive(true);
+
+		// add enemy to the active vector
+		m_enemyActive.push_back(m_enemyVec[i]);
+
 	}
+
+
+
 
 	// View
 	// m_mapView.setViewport(sf::FloatRect(0.0, 0.0f, 0.25f, 0.25f));
 	m_mapView.setSize(m_window.getSize().x, m_window.getSize().y);
 
+	int wallIndex = 0;
+	quadtree->clear();
 	// Create an array to store the walls in (for the pause screen map)
 	for (int i = 0; i < m_map->getMap()->size(); ++i)
 	{
 		if (m_map->getMap()->at(i).second == WallType::WALLTYPE_1)
 		{
-			sf::RectangleShape f_tempWall;
-			f_tempWall.setSize(sf::Vector2f(s_wallWidth, s_wallWidth));
-			f_tempWall.setOrigin(s_wallWidth / 2.0f, s_wallWidth / 2.0f);
-			f_tempWall.setFillColor(sf::Color::Green);
-			f_tempWall.setPosition(m_map->getMap()->at(i).first.x, m_map->getMap()->at(i).first.z);
-			m_walls.push_back(f_tempWall);
+
+			m_wallVec.push_back(new Wall(m_window, s_wallWidth, sf::Vector2f(m_map->getMap()->at(i).first.x, m_map->getMap()->at(i).first.z)));
+			//sf::RectangleShape f_tempWall;
+
+			GameObject* wall = dynamic_cast<GameObject*>(m_wallVec.back());
+			wall->size = s_wallWidth;
+			wall->position = m_wallVec.back()->getShape().getPosition();
+
+			quadtree->addObject(wall);
+
+
 		}
 	}
-	
-	//Astar
-	m_gamePath->initAStar(m_walls);
 
-	m_enemyObject = new Enemy(m_window, m_deltaTime, sf::Vector2f(1557, 260), m_gamePath);
+	// Astar
+	m_gamePath->initAStar(m_wallVec);
 
-	m_enemyVec.push_back(m_enemyObject2);
-	m_enemyVec.push_back(m_enemyObject3);
-	m_enemyVec.push_back(m_enemyObject4);
-	m_enemyVec.push_back(m_enemyObject5);
-	m_enemyVec.push_back(m_enemyObject6);
-	m_enemyVec.push_back(m_enemyObject7);
-	m_enemyVec.push_back(m_enemyObject8);
 
-	for (int i = 0; i < m_enemyVec.size(); i++)
+
+
+	for (int i = 0; i < 8; i++)
 	{
+
 		m_enemyVec[i] = new Enemy(m_window, m_deltaTime, m_startingPos[i], m_gamePath);
+		m_enemyVec[i]->setAlive(true);
+
+		// add enemy to the active vector
+		m_enemyActive.push_back(m_enemyVec[i]);
 	}
-	
+
+	for (int i = 0; i < 100; i++)
+	{
+		bullets[i] = new Bullet();
+	}
+
 }
 
 /// <summary>
@@ -104,55 +115,77 @@ GameWorld::~GameWorld()
 /// </summary>
 void GameWorld::updateWorld()
 {
+
+
+
+
 	m_player.setPosition(m_camera.getEye().x * s_displayScale, m_camera.getEye().z * s_displayScale);
 	setGunPosition();
-	for (int i = 0; i < 100; i++)
+	for (int i = 0; i < activeBullets.size(); i++)
 	{
-		if (bullets[i].isActive())
+
+		activeBullets[i]->update();
+		/*for (int x = 0; x < m_walls.size(); x++)
 		{
-			bullets[i].update();
-			for (int x = 0; x < m_walls.size(); x++)
+			if(bullets[i].checkCollision(m_walls.at(x).getPosition(), m_walls.at(x).getSize().x/2))
 			{
-				if(bullets[i].checkCollision(m_walls.at(x).getPosition(), m_walls.at(x).getSize().x/2))
+				if (bullets[i].raycast.isInterpolating())
 				{
-					if (bullets[i].raycast.isInterpolating())
-					{
-						bullets[i].raycast.addToHitObjects(&m_walls.at(x));
-					}
+					bullets[i].raycast.addToHitObjects(m_walls.at(x));
 				}
 			}
-			for (int x = 0; x < 2; x++)
+		}*/
+		for (int x = 0; x < m_enemyActive.size(); x++)
+		{
+			if (activeBullets[i]->checkCollision(m_enemyActive[x]->getPosition(), m_enemyActive[x]->getRadius()))
 			{
-				if (bullets[i].checkCollision(m_enemies.at(x).getPosition(), m_enemies[x].getRadius()))
+				if (activeBullets[i]->raycast.isInterpolating())
 				{
-					if (bullets[i].raycast.isInterpolating())
-					{
-						bullets[i].raycast.addToHitObjects(&m_enemies.at(x));
-					}
-					else
-					{
-						m_enemies.at(x).setPosition(10, 10);
-					}
-					bullets[i].setActive(false);
+
+					activeBullets[i]->raycast.addToHitObjects(m_enemyActive.at(x));
 				}
+				else
+				{
+					m_enemyActive.at(x)->setAlive(false);
+				}
+				activeBullets[i]->setActive(false);
 			}
-			
 		}
-		if (bullets[i].canDrawBulletTracer())
+
+
+		// Tis is the debug line we check for collsion
+		if (activeBullets[i]->canDrawBulletTracer())
 		{
-			bullets[i].update();
-			while (bullets[i].raycast.getHitObjects().size() > 0)
+			activeBullets[i]->update();
+			while (activeBullets[i]->raycast.getHitObjects().size() > 0)
 			{
-				bullets[i].raycast.getClosest();
+				dynamic_cast<Enemy*>(activeBullets[i]->raycast.getClosest())->setDead();
 
 			}
 		}
 	}
-	for (int i = 0; i < m_enemyVec.size(); i++)
+
+	for (int i = activeBullets.size() - 1; i > -1; i--)
 	{
-		m_enemyVec[i]->update(m_player);
+		if (activeBullets[i]->canDrawBulletTracer() == false)
+		{
+			activeBullets[i]->setActive(false);
+			activeBullets.pop_back();
+			
+		}
 	}
-	m_enemyObject->update(m_player);
+
+	// only update the active enemies
+	for (int i = 0; i < m_enemyActive.size(); i++)
+	{
+		m_enemyActive[i]->update(m_player);
+	}
+
+	// check and remove objects
+	checkEnemyInQueueAlive();
+	//m_enemyObject->update(m_player);
+
+	//quadtree->clear();
 }
 
 /// <summary>
@@ -160,43 +193,46 @@ void GameWorld::updateWorld()
 /// </summary>
 void GameWorld::drawWorld()
 {
-	m_window.clear();
+
 	m_mapView.setCenter(m_player.getPosition());
 	m_window.setView(m_mapView);
-	for (int i = 0; i < m_enemies.size(); i++)
+
+	for (int i = 0; i < m_enemyActive.size(); i++)
 	{
-		m_window.draw(m_enemies[i]);
+		m_window.draw(m_enemyActive[i]->getSprite());
 	}
-	
-	for (int i = 0; i < m_walls.size(); ++i)
+
+	for (int i = 0; i < m_wallVec.size(); ++i)
 	{
-		m_window.draw(m_walls[i]);
+		m_wallVec[i]->draw();
 	}
 	m_gamePath->draw(m_mapView);
 
-	for (int i = 0; i < m_enemyVec.size(); i++)
+	for (int i = 0; i < m_enemyActive.size(); i++)
 	{
-		m_enemyVec[i]->draw();
+		m_enemyActive[i]->draw();
 	}
-	m_enemyObject->draw();
-	
+
+
 	m_window.draw(m_player);
 	m_window.draw(m_playerGun);
 
+	std::vector<GameObject*> returnObjects = quadtree->getObjectsAt(getPlayerPosition().x, getPlayerPosition().y, m_player.getRadius());
+	quadtree->draw(m_window, returnObjects);
+
 	m_window.draw(m_camera.raycastForward.drawRay());
+
 	m_window.draw(m_camera.raycastBehind.drawRay());
 	m_window.draw(m_camera.raycastToLeft.drawRay());
 	m_window.draw(m_camera.raycastToRight.drawRay());
 
-	for (int i = 0; i < 100; i++)
+
+	for (int i = 0; i < activeBullets.size(); i++)
 	{
-		if (bullets[i].isActive())
+
+		if (activeBullets[i]->canDrawBulletTracer())
 		{
-			m_window.draw(bullets[i].bulletSprite());
-		}
-		if (bullets[i].canDrawBulletTracer())
-		{
-			m_window.draw(bullets[i].raycast.drawRay());
+			m_window.draw(activeBullets[i]->raycast.drawRay());
 		}
 	}
 }
@@ -207,14 +243,15 @@ void GameWorld::fireBullet(int t_gunType)
 	{
 		for (int i = 0; i < 100; i++)
 		{
-			if (bullets[i].isActive() == false)
+			if (bullets[i]->isActive() == false)
 			{
-				bullets[i].setTimeToLive(400);
+				bullets[i]->setTimeToLive(400);
 				glm::vec3 tempDirection(m_camera.getDirection().x, m_camera.getDirection().y, m_camera.getDirection().z);
 				glm::normalize(tempDirection);
-				bullets[i].bulletInit(sf::Vector2f(tempDirection.x, tempDirection.z), 0, m_playerGun.getPosition());
+				bullets[i]->bulletInit(sf::Vector2f(tempDirection.x, tempDirection.z), 0, m_playerGun.getPosition());
+				activeBullets.push_back(bullets[i]);
 				break;
-				
+
 			}
 		}
 	}
@@ -223,19 +260,21 @@ void GameWorld::fireBullet(int t_gunType)
 		int bulletSpreadAmount = 0;
 		for (int i = 0; i < 100; i++)
 		{
-			if (bullets[i].isActive() == false)
+			if (bullets[i]->isActive() == false)
 			{
 				glm::vec3 tempDirection(m_camera.getDirection().x, m_camera.getDirection().y, m_camera.getDirection().z);
 
 				float offsetX = ((float(rand()) / float(RAND_MAX)) * (0.2f - -0.2f)) + -0.2f;
 				float offsetZ = ((float(rand()) / float(RAND_MAX)) * (0.2f - -0.2f)) + -0.2f;
 
-				bullets[i].setTimeToLive(200);
+				bullets[i]->setTimeToLive(200);
 
 				glm::normalize(tempDirection);
 
-				bullets[i].bulletInit(sf::Vector2f(tempDirection.x + offsetX, tempDirection.z + offsetZ), 0, m_playerGun.getPosition());
+				bullets[i]->bulletInit(sf::Vector2f(tempDirection.x + offsetX, tempDirection.z + offsetZ), 0, m_playerGun.getPosition());
 				bulletSpreadAmount++;
+				activeBullets.push_back(bullets[i]);
+
 
 				if (bulletSpreadAmount > 4)
 				{
@@ -247,61 +286,79 @@ void GameWorld::fireBullet(int t_gunType)
 
 }
 
-void GameWorld::checkPlayerRayCollsions()
+void GameWorld::checkPlayerRayCollsions(sf::Time t_deltaTime)
 {
+
 	m_camera.setCanMoveUp(true);
 	m_camera.setCanMoveDown(true);
 	m_camera.setCanMoveLeft(true);
 	m_camera.setCanMoveRight(true);
 
-	for (int x = 0; x < m_walls.size(); x++)
+	std::vector<GameObject*> returnObjects = quadtree->getObjectsAt(getPlayerPosition().x, getPlayerPosition().y, m_player.getRadius());
+	std::cout << "number of objects: " << returnObjects.size() << std::endl;
+	std::cout << "number of objects vec: " << m_wallVec.size() << std::endl;
+
+
+	for (int x = 0; x < returnObjects.size(); x++)
 	{
+		//Wall* wall = dynamic_cast<Wall*>(returnObjects[x]);
 		if (m_camera.canGoUp())
 		{
-			if (m_camera.raycastForward.hit(m_walls.at(x).getPosition(), m_walls.at(x).getSize().x))
+			if (m_camera.raycastForward.hit(returnObjects[x]->position, returnObjects[x]->size))
 			{
 				m_camera.setCanMoveUp(false);
 			}
 		}
 		if (m_camera.canGoDown())
 		{
-			if (m_camera.raycastBehind.hit(m_walls.at(x).getPosition(), m_walls.at(x).getSize().x))
+			if (m_camera.raycastBehind.hit(returnObjects[x]->position, returnObjects[x]->size))
 			{
 				m_camera.setCanMoveDown(false);
 			}
 		}
 		if (m_camera.canGoLeft())
 		{
-			if (m_camera.raycastToLeft.hit(m_walls.at(x).getPosition(), m_walls.at(x).getSize().x))
+			if (m_camera.raycastToLeft.hit(returnObjects[x]->position, returnObjects[x]->size))
 			{
 				m_camera.setCanMoveLeft(false);
 			}
 		}
 		if (m_camera.canGoRight())
 		{
-			if (m_camera.raycastToRight.hit(m_walls.at(x).getPosition(), m_walls.at(x).getSize().x))
+			if (m_camera.raycastToRight.hit(returnObjects[x]->position, returnObjects[x]->size))
 			{
 				m_camera.setCanMoveRight(false);
 			}
 		}
+		if ((m_camera.canGoRight() && m_camera.canGoLeft()) && m_camera.canGoUp() && m_camera.canGoDown())
+		{
+			previousPos = getPlayerPosition();
+		}
 
-		if (m_camera.canGoLeft() == false && m_camera.canGoDown() == false)
+
+
+		if (m_camera.canGoLeft() == false && m_camera.canGoDown() == false && m_camera.canGoRight() == false)
 		{
 			break;
 		}
-		if (m_camera.canGoRight() == false && m_camera.canGoDown() == false)
+		if (m_camera.canGoLeft() == false && m_camera.canGoUp() == false && m_camera.canGoRight() == false)
 		{
 			break;
 		}
-		
-		if (m_camera.canGoLeft() == false && m_camera.canGoUp() == false)
-		{
-			break;
-		}
-		if (m_camera.canGoRight() == false && m_camera.canGoUp() == false)
-		{
-			break;
-		}
+
+	} // end 
+	if ((!m_camera.canGoUp()) && (m_camera.canGoLeft() || m_camera.canGoRight()))
+	{
+		m_player.setPosition(previousPos);
+		std::cout << "o: " + std::to_string(m_camera.canGoLeft()) << std::endl;
+		m_camera.getOutOfWall(t_deltaTime);
+
+
+	}
+
+	if (!m_camera.canGoUp() && !m_camera.canGoRight() && !m_camera.canGoLeft() && !m_camera.canGoDown())
+	{
+		m_camera.popOutFromWall();
 	}
 }
 /// <summary>
@@ -312,13 +369,7 @@ sf::Vector2f GameWorld::getPlayerPosition()
 	return m_player.getPosition();
 }
 
-/// <summary>
-/// Returns the position of enemies
-/// </summary>
-sf::Vector2f GameWorld::getEnemyPosition()
-{
-	return m_enemyObject->getPosition() / s_displayScale;
-}
+
 
 /// <summary>
 /// Returns the position of the camera
@@ -326,6 +377,15 @@ sf::Vector2f GameWorld::getEnemyPosition()
 glm::vec3 GameWorld::getCameraPosition()
 {
 	return m_eye;
+}
+
+sf::Vector2f GameWorld::getEnemyPosition(int index)
+{
+	if (m_enemyActive.size() > 0)
+	{
+		return m_enemyActive.at(index)->getSprite().getPosition();
+	}
+	return sf::Vector2f(0, 0);
 }
 
 /// <summary>
@@ -347,7 +407,7 @@ double GameWorld::getYaw()
 /// <summary>
 /// Returns the wall data from the Map class
 /// </summary>
-std::vector<std::pair<glm::vec3, WallType>> *GameWorld::getWallData()
+std::vector<std::pair<glm::vec3, WallType>>* GameWorld::getWallData()
 {
 	return m_map->getMap();
 }
@@ -355,9 +415,44 @@ std::vector<std::pair<glm::vec3, WallType>> *GameWorld::getWallData()
 /// <summary>
 /// Gets the light positions from the GameWorld map
 /// </summary>
-std::vector<glm::vec3> *GameWorld::getLightPositions()
+std::vector<glm::vec3>* GameWorld::getLightPositions()
 {
 	return m_map->getLightPositions();
+}
+
+void GameWorld::checkEnemyInQueueAlive()
+{
+
+	bool reachedEnd = false;
+	while (!reachedEnd)
+	{
+		bool removedEnemy = false;
+		for (int i = 0; i < m_enemyActive.size(); i++)
+		{
+			if (m_enemyActive[i]->isAlive() == false)
+			{
+				m_enemyActive.erase(m_enemyActive.begin() + i);
+				removedEnemy = true;
+				break;
+			}
+		}
+
+		// we made it to the end so lets get out of this loop 
+		if (!removedEnemy)
+		{
+			reachedEnd = true;
+		}
+	}
+
+}
+
+void GameWorld::populateQuadtree()
+{
+	for (int i = 0; i < m_wallVec.size(); i++)
+	{
+
+		quadtree->addObject(m_wallVec.at(i)->myGameObject);
+	}
 }
 
 void GameWorld::setGunPosition()
@@ -373,4 +468,3 @@ void GameWorld::setGunPosition()
 
 	m_playerGun.setPosition(sf::Vector2f(position.x, position.y));
 }
-

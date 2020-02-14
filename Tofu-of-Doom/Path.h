@@ -5,6 +5,7 @@
 #include "aStarStuff/Graph.h"
 #include "aStarStuff/NodeData.h"
 #include "Transform.h"
+#include "Wall.h"
 typedef GraphNode<NodeData, int> Node;
 class Path
 {
@@ -13,7 +14,9 @@ public:
 	~Path();
 	void draw(sf::View t_view);
 	void neighbourAlgor();
-	void initAStar(std::vector<sf::RectangleShape> t_walls);
+	void initAStar(std::vector<Wall *> t_walls);
+
+
 	void update();
 	void setPath();
 	void setNewPath();

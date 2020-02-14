@@ -1,9 +1,10 @@
 #include "Raycast.h"
+#include "Enemy.h"
 
 Raycast::Raycast()
 {
 	interpolate = true;
-	m_raycastLine[0].color = sf::Color::Blue;
+	m_raycastLine[0].color = sf::Color::Red;
 	m_raycastLine[1].color = sf::Color::Blue;
 }
 
@@ -20,7 +21,6 @@ void Raycast::setRayValues(sf::Vector2f t_startPosition, sf::Vector2f t_directio
 
 bool Raycast::hit(sf::Vector2f t_targetPosition, float t_targetRadius)
 {
-
 
 	float leftSide = t_targetPosition.x - t_targetRadius;
 	float rightSide = t_targetPosition.x + t_targetRadius;
@@ -84,23 +84,23 @@ sf::VertexArray Raycast::drawRay()
 	sf::VertexArray ray(sf::LinesStrip, 2);
 	ray[0].position = m_positon;
 
-	ray[1].position = m_positon + (m_direction * m_rayLength);
+	ray[1].position = m_positon + (m_direction * (m_rayLength));
 	
 
 	return ray;
 }
 
-void Raycast::addToHitObjects(sf::Shape* t_enemy)
+void Raycast::addToHitObjects(GameObject* t_enemy)
 {
 	hitObjects.push(t_enemy);
 }
 
-std::queue<sf::Shape*> Raycast::getHitObjects()
+std::queue<GameObject*> Raycast::getHitObjects()
 {
 	return hitObjects;
 }
 
-void Raycast::getClosest()
+GameObject* Raycast::getClosest()
 {
 	bool first = true;
 	while (hitObjects.size() > 0)
@@ -112,9 +112,29 @@ void Raycast::getClosest()
 		}
 		else
 		{
-			float dist1 = std::sqrt((std::pow((m_positon.x - closest->getPosition().x), 2) + (std::pow((m_positon.y - closest->getPosition().y), 2))));
-			float dist2 = std::sqrt((std::pow((m_positon.x - hitObjects.front()->getPosition().x), 2) + (std::pow((m_positon.y - hitObjects.front()->getPosition().y), 2))));
+			//dynamic_cast<GameObject*>(this)->setTag("Enemy");
+			// check tags
+			float dist1;
+			float dist2;
 
+			if (closest->getTag() == ENEMY_TAG)
+			{
+
+				GameObject* en = closest;
+				Enemy* sen = dynamic_cast<Enemy*>(en);
+				dist1 = std::sqrt((std::pow((m_positon.x - sen->getPosition().x), 2) + (std::pow((m_positon.y - sen->getPosition().y), 2))));
+
+			}
+			else
+			{
+
+			}
+			if (hitObjects.front()->getTag() == ENEMY_TAG)
+			{
+				GameObject *en = hitObjects.front();
+				Enemy *sen = dynamic_cast<Enemy*>(en);
+				dist2 = std::sqrt((std::pow((m_positon.x - sen->getPosition().x), 2) + (std::pow((m_positon.y - sen->getPosition().y), 2))));
+			}
 			if (dist2 < dist1)
 			{
 				closest = hitObjects.front();
@@ -124,7 +144,7 @@ void Raycast::getClosest()
 	}
 	//sf::Vector2f newPos = sf::Vector2f(200, 200);
 	//closest->setPosition(newPos);
-	std::cout << closest->getPosition().x << ", " << closest->getPosition().y << std::endl;
+	return closest;
 }
 
 bool Raycast::isInterpolating()
@@ -152,4 +172,9 @@ bool Raycast::intersectsRectangle(sf::Vector2f p1, sf::Vector2f p2)
 		return true;
 	}
 	return false;
+}
+
+sf::Vector2f Raycast::getEndPoint()
+{
+	return m_direction * m_rayLength;
 }
