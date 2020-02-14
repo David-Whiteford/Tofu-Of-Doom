@@ -45,7 +45,7 @@ public:
 
 	Collider2D collider;
 	// raycasts pointing in 8 directions
-	Raycast raycastForward,raycastBehind,raycastToLeft,raycastToRight, raycastTopLeft,raycastTopRight,raycastBottomLeft,raycastBottomRight;
+	Raycast raycastForward, raycastBehind, raycastToLeft, raycastToRight;
 
 	void setCanMoveUp(bool t_bool);
 	void setCanMoveDown(bool t_bool);
@@ -59,6 +59,7 @@ public:
 
 	void turnToRight(sf::Time t_deltaTime);
 	void turnToLeft(sf::Time t_deltaTime);
+	void popOutFromWall();
 
 private:
 	void setUpRays();

@@ -198,9 +198,9 @@ void Camera::input(sf::Time t_deltaTime)
 	// End turn player
 
 
-	
 
-	
+
+
 
 
 	m_eye = transformPos;
@@ -224,10 +224,187 @@ void Camera::getOutOfWall(sf::Time t_deltaTime)
 	float escapeAmount = 1.5f;
 	glm::vec3 transformPos = { transform.position.x, transform.position.y,transform.position.z };
 	// escape from being stuck
-	if (!canGoUp() && !canGoRight())
+	if (!canGoUp())
 	{
+
 		if (controller.upButton())
-			turnToLeft(t_deltaTime);
+		{
+			if (canGoLeft())
+			{
+				if (((m_yaw >= -350 && m_yaw <= -280) || m_yaw >= 10 && m_yaw <= 80)) /*||
+					((m_yaw >= -170 && m_yaw <= -80) || m_yaw >= 190 && m_yaw <= 260)) ||
+					((m_yaw >= -170 && m_yaw <= -80) || m_yaw >= 180 && m_yaw <= 350))*/
+				{
+
+					glm::vec4 right = glm::vec4(1, 0, 0, 0);
+
+
+					glm::vec3 tempDirection(right.x, right.y, right.z);
+					glm::normalize(tempDirection);
+
+
+
+					transformPos -= tempDirection * static_cast<float>(t_deltaTime.asMilliseconds())* (m_speed / 3);
+
+
+					m_eye = transformPos;
+					transform.position.x = m_eye.x;
+					transform.position.y = m_eye.y;
+					transform.position.z = m_eye.z;
+
+				} // end m_yaw >= -350 && m_yaw <= -280) || m_yaw >= 10 && m_yaw <= 80
+				else if (((m_yaw >= -170 && m_yaw <= -80) || m_yaw >= 190 && m_yaw <= 260))
+				{
+
+					glm::vec4 right = glm::vec4(1, 0, 0, 0);
+
+
+					glm::vec3 tempDirection(right.x, right.y, right.z);
+					glm::normalize(tempDirection);
+
+
+
+					transformPos += tempDirection * static_cast<float>(t_deltaTime.asMilliseconds())* (m_speed / 3);
+
+
+					m_eye = transformPos;
+					transform.position.x = m_eye.x;
+					transform.position.y = m_eye.y;
+					transform.position.z = m_eye.z;
+
+				}
+
+				else if (((m_yaw >= -260 && m_yaw <= -190) || m_yaw >= 100 && m_yaw <= 170))
+				{
+
+					glm::vec4 down = glm::vec4(0, 0, 1, 0);
+
+
+					glm::vec3 tempDirection(down.x, down.y, down.z);
+					glm::normalize(tempDirection);
+
+
+
+					transformPos += tempDirection * static_cast<float>(t_deltaTime.asMilliseconds())* (m_speed / 3);
+
+
+					m_eye = transformPos;
+					transform.position.x = m_eye.x;
+					transform.position.y = m_eye.y;
+					transform.position.z = m_eye.z;
+				}
+				else if (((m_yaw >= -80 && m_yaw <= -10) || m_yaw >= 180 && m_yaw <= 350))
+				{
+
+					glm::vec4 down = glm::vec4(0, 0, 1, 0);
+
+
+					glm::vec3 tempDirection(down.x, down.y, down.z);
+					glm::normalize(tempDirection);
+
+
+
+					transformPos -= tempDirection * static_cast<float>(t_deltaTime.asMilliseconds())* (m_speed / 3);
+
+
+					m_eye = transformPos;
+					transform.position.x = m_eye.x;
+					transform.position.y = m_eye.y;
+					transform.position.z = m_eye.z;
+
+				}
+
+
+
+
+				//turnToLeft(t_deltaTime);
+			} // end left
+			else if (canGoRight())
+			{
+				if (((m_yaw >= -350 && m_yaw <= -280) || m_yaw >= 10 && m_yaw <= 80)) /*||
+					((m_yaw >= -170 && m_yaw <= -80) || m_yaw >= 190 && m_yaw <= 260)) ||
+					((m_yaw >= -170 && m_yaw <= -80) || m_yaw >= 180 && m_yaw <= 350))*/
+				{
+
+					glm::vec4 down = glm::vec4(0, 0, 1, 0);
+
+
+					glm::vec3 tempDirection(down.x, down.y, down.z);
+					glm::normalize(tempDirection);
+
+
+
+					transformPos -= tempDirection * static_cast<float>(t_deltaTime.asMilliseconds())* (m_speed / 3);
+
+
+					m_eye = transformPos;
+					transform.position.x = m_eye.x;
+					transform.position.y = m_eye.y;
+					transform.position.z = m_eye.z;
+
+				} // end m_yaw >= -350 && m_yaw <= -280) || m_yaw >= 10 && m_yaw <= 80
+				else if (((m_yaw >= -170 && m_yaw <= -80) || m_yaw >= 190 && m_yaw <= 260))
+				{
+
+					glm::vec4 down = glm::vec4(0, 0, 1, 0);
+
+
+					glm::vec3 tempDirection(down.x, down.y, down.z);
+					glm::normalize(tempDirection);
+
+
+
+					transformPos += tempDirection * static_cast<float>(t_deltaTime.asMilliseconds())* (m_speed / 3);
+
+
+					m_eye = transformPos;
+					transform.position.x = m_eye.x;
+					transform.position.y = m_eye.y;
+					transform.position.z = m_eye.z;
+
+				}
+
+				else if (((m_yaw >= -260 && m_yaw <= -190) || m_yaw >= 100 && m_yaw <= 170))
+				{
+
+					glm::vec4 right = glm::vec4(1, 0, 0, 0);
+
+
+					glm::vec3 tempDirection(right.x, right.y, right.z);
+					glm::normalize(tempDirection);
+
+
+
+					transformPos -= tempDirection * static_cast<float>(t_deltaTime.asMilliseconds())* (m_speed / 3);
+
+
+					m_eye = transformPos;
+					transform.position.x = m_eye.x;
+					transform.position.y = m_eye.y;
+					transform.position.z = m_eye.z;
+				}
+				else if (((m_yaw >= -80 && m_yaw <= -10) || m_yaw >= 180 && m_yaw <= 350))
+				{
+
+					glm::vec4 right = glm::vec4(1, 0, 0, 0);
+
+
+					glm::vec3 tempDirection(right.x, right.y, right.z);
+					glm::normalize(tempDirection);
+
+
+
+					transformPos += tempDirection * static_cast<float>(t_deltaTime.asMilliseconds())* (m_speed / 3);
+
+
+					m_eye = transformPos;
+					transform.position.x = m_eye.x;
+					transform.position.y = m_eye.y;
+					transform.position.z = m_eye.z;
+
+				}
+			}
+		}
 	}
 	else if (!canGoLeft	())
 	{
@@ -245,6 +422,23 @@ void Camera::getOutOfWall(sf::Time t_deltaTime)
 
 
 
+}
+
+void Camera::popOutFromWall()
+{
+	glm::vec3 transformPos = { transform.position.x, transform.position.y,transform.position.z };
+
+	glm::vec3 tempDirection(m_direction.x, m_direction.y, m_direction.z);
+	glm::normalize(tempDirection);
+	transformPos += tempDirection * (m_speed* 10);
+
+
+
+
+	m_eye = transformPos;
+	transform.position.x = m_eye.x;
+	transform.position.y = m_eye.y;
+	transform.position.z = m_eye.z;
 }
 
 void Camera::setCanMoveUp(bool t_bool)
@@ -321,13 +515,13 @@ void Camera::turnToLeft(sf::Time t_deltaTime)
 
 void Camera::setUpRays()
 {
-
+	std::cout << "my rotation: " + std::to_string(m_yaw) << std::endl;;
 	/// Non Diagonal
 	/////// offset front and back
 	glm::vec3 tempDirectionF(m_direction.x, m_direction.y, m_direction.z);
 	glm::normalize(tempDirectionF);
-	glm::vec3 offsetPosF = tempDirectionF * -4.0f;
-	glm::vec3 offsetPosB = tempDirectionF * 4.0f;
+	glm::vec3 offsetPosF = tempDirectionF * -2.0f;
+	glm::vec3 offsetPosB = tempDirectionF * 2.0f;
 
 
 	sf::Vector2f posF = sf::Vector2f((offsetPosF.x + transform.position.x) * 10,
@@ -338,8 +532,8 @@ void Camera::setUpRays()
 	//////// offset right and left
 	glm::vec3 tempDirectionR(m_directionStrafe.x, m_directionStrafe.y, m_directionStrafe.z);
 	glm::normalize(tempDirectionR);
-	glm::vec3 offsetPosR = tempDirectionR * 4.0f;
-	glm::vec3 offsetPosL = tempDirectionR * -4.0f;
+	glm::vec3 offsetPosR = tempDirectionR * 2.0f;
+	glm::vec3 offsetPosL = tempDirectionR * -2.0f;
 
 	// set up positions with offset
 	sf::Vector2f posR = sf::Vector2f((offsetPosR.x + transform.position.x) * 10,
@@ -350,58 +544,13 @@ void Camera::setUpRays()
 
 	glm::vec3 tempDirection(m_directionStrafe.x, m_directionStrafe.y, m_directionStrafe.z);
 	glm::normalize(tempDirection);
-	raycastToLeft.setRayValues(posL, sf::Vector2f(tempDirection.x, tempDirection.z), raycastLength);
-	raycastToRight.setRayValues(posR, sf::Vector2f(-tempDirection.x, -tempDirection.z), raycastLength);
+	raycastToLeft.setRayValues(posL, sf::Vector2f(tempDirection.x, tempDirection.z), raycastLength * 1.3f);
+	raycastToRight.setRayValues(posR, sf::Vector2f(-tempDirection.x, -tempDirection.z), raycastLength * 1.3f);
 
 	glm::vec3 tempDirection2(m_direction.x, m_direction.y, m_direction.z);
 	glm::normalize(tempDirection2);
 	raycastForward.setRayValues(posF, sf::Vector2f(tempDirection2.x, tempDirection2.z), raycastLength);
 	raycastBehind.setRayValues(posB, sf::Vector2f(-tempDirection2.x, -tempDirection2.z), raycastLength);
 
-
-
-
-	/// Diagonal
-	/////// offset topleft topright and bottom left and bottom right
-	glm::vec3 tempDirectionTopLeft(-m_directionStrafe.x + m_direction.x, m_direction.y, -m_direction.z + m_directionStrafe.z);
-	glm::normalize(tempDirectionTopLeft);
-
-	glm::vec3 tempDirectionBottomLeft(-m_directionStrafe.x + m_direction.x, m_direction.y, m_direction.z + m_directionStrafe.z);
-	glm::normalize(tempDirectionBottomLeft);
-
-	glm::vec3 tempDirectionTopRight((m_directionStrafe.x + m_direction.x), m_direction.y, -(m_direction.z + m_directionStrafe.z));
-	glm::normalize(tempDirectionTopRight);
-
-	glm::vec3 tempDirectionBottomRight(m_directionStrafe.x + m_direction.x, m_direction.y, m_direction.z + m_directionStrafe.z);
-	glm::normalize(tempDirectionBottomRight);
-
-
-
-	glm::vec3 offsetPosTL = tempDirectionTopLeft * 4.0f;
-	glm::vec3 offsetPosBL = tempDirectionBottomLeft * 4.0f;
-	glm::vec3 offsetPosTR = tempDirectionTopRight * 4.0f;
-	glm::vec3 offsetPosBR = tempDirectionBottomRight * 4.0f;
-
-
-	sf::Vector2f posTL = sf::Vector2f((offsetPosTL.x + transform.position.x) * 10,
-		(offsetPosTL.z + transform.position.z) * 10);
-
-	sf::Vector2f posBL = sf::Vector2f((offsetPosBL.x + transform.position.x) * 10,
-		(offsetPosBL.z + transform.position.z) * 10);
-
-	sf::Vector2f posTR = sf::Vector2f((offsetPosTR.x + transform.position.x) * 10,
-		(offsetPosTR.z + transform.position.z) * 10);
-
-	sf::Vector2f posBR = sf::Vector2f((offsetPosBR.x + transform.position.x) * 10,
-		(offsetPosBR.z + transform.position.z) * 10);
-
-
-
-
-	raycastTopLeft.setRayValues(posTL, sf::Vector2f(tempDirectionTopLeft.x, -tempDirectionTopLeft.z), raycastLength);
-	raycastTopRight.setRayValues(posTR, sf::Vector2f(tempDirectionTopRight.x, tempDirectionTopRight.z), raycastLength);
-
-	raycastBottomLeft.setRayValues(posBL, sf::Vector2f(tempDirectionBottomLeft.x, tempDirectionBottomLeft.z), raycastLength);
-	raycastBottomRight.setRayValues(posBR, sf::Vector2f(tempDirectionBottomRight.x, tempDirectionBottomRight.z), raycastLength);
 
 }

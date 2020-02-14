@@ -211,18 +211,15 @@ void GameWorld::drawWorld()
 	m_window.draw(m_player);
 	m_window.draw(m_playerGun);
 
-	std::vector<GameObject*> returnObjects = quadtree->getObjectsAt(getPlayerPosition().x, getPlayerPosition().y);
+	std::vector<GameObject*> returnObjects = quadtree->getObjectsAt(getPlayerPosition().x, getPlayerPosition().y,m_player.getRadius());
 	quadtree->draw(m_window, returnObjects);
 
 	m_window.draw(m_camera.raycastForward.drawRay());
+
 	m_window.draw(m_camera.raycastBehind.drawRay());
 	m_window.draw(m_camera.raycastToLeft.drawRay());
 	m_window.draw(m_camera.raycastToRight.drawRay());
 
-	//m_window.draw(m_camera.raycastBottomLeft.drawRay());
-//	m_window.draw(m_camera.raycastBottomRight.drawRay());
-	//m_window.draw(m_camera.raycastTopLeft.drawRay());
-	m_window.draw(m_camera.raycastTopRight.drawRay());
 
 	for (int i = 0; i < activeBullets.size(); i++)
 	{
@@ -291,7 +288,7 @@ void GameWorld::checkPlayerRayCollsions(sf::Time t_deltaTime)
 	m_camera.setCanMoveLeft(true);
 	m_camera.setCanMoveRight(true);
 
-	std::vector<GameObject*> returnObjects = quadtree->getObjectsAt(getPlayerPosition().x, getPlayerPosition().y);
+	std::vector<GameObject*> returnObjects = quadtree->getObjectsAt(getPlayerPosition().x, getPlayerPosition().y,m_player.getRadius());
 	std::cout << "number of objects: " << returnObjects.size() << std::endl;
 	std::cout << "number of objects vec: " << m_wallVec.size() << std::endl;
 
@@ -332,51 +329,30 @@ void GameWorld::checkPlayerRayCollsions(sf::Time t_deltaTime)
 			previousPos = getPlayerPosition();
 		}
 
-		if ((!m_camera.canGoUp()))
-		{
-			m_player.setPosition(previousPos);
-			m_camera.getOutOfWall(t_deltaTime);
+	
 
-			/*if (!m_camera.canGoUp())
-			{
-				if (!m_camera.raycastForward.hit(returnObjects[x]->position, returnObjects[x]->size))
-				{
-					m_camera.setCanMoveUp(true);
-				}
-			}*/
-			/*if (!m_camera.canGoLeft())
-			{
-				if (!m_camera.raycastToLeft.hit(returnObjects[x]->position, returnObjects[x]->size))
-				{
-					m_camera.setCanMoveLeft(true);
-				}
-			}
-			if (!m_camera.canGoRight())
-			{
-				if (!m_camera.raycastToRight.hit(returnObjects[x]->position, returnObjects[x]->size))
-				{
-					m_camera.setCanMoveRight(true);
-				}
-			}*/
-		}
-
-		if (m_camera.canGoLeft() == false && m_camera.canGoDown() == false)
+		if (m_camera.canGoLeft() == false && m_camera.canGoDown() == false && m_camera.canGoRight() == false)
 		{
 			break;
 		}
-		if (m_camera.canGoRight() == false && m_camera.canGoDown() == false)
+		if (m_camera.canGoLeft() == false && m_camera.canGoUp() == false && m_camera.canGoRight() == false)
 		{
 			break;
 		}
 		
-		if (m_camera.canGoLeft() == false && m_camera.canGoUp() == false)
-		{
-			break;
-		}
-		if (m_camera.canGoRight() == false && m_camera.canGoUp() == false)
-		{
-			break;
-		}
+	} // end 
+	if ((!m_camera.canGoUp()) && (m_camera.canGoLeft() || m_camera.canGoRight()))
+	{
+		m_player.setPosition(previousPos);
+		std::cout << "o: " + std::to_string(m_camera.canGoLeft()) << std::endl;
+		m_camera.getOutOfWall(t_deltaTime);
+
+
+	}
+
+	if (!m_camera.canGoUp() && !m_camera.canGoRight() && !m_camera.canGoLeft() && !m_camera.canGoDown())
+	{
+		m_camera.popOutFromWall();
 	}
 }
 /// <summary>

@@ -87,7 +87,7 @@ void Quadtree::addObject(GameObject* gameObject)
 	}
 }
 
-std::vector<GameObject*> Quadtree::getObjectsAt(float x, float y)
+std::vector<GameObject*> Quadtree::getObjectsAt(float x, float y,float _size)
 {
 
 	if (m_currentLevel == m_maxLevel) 
@@ -102,33 +102,33 @@ std::vector<GameObject*> Quadtree::getObjectsAt(float x, float y)
 	}
 
 	// right
-	if (x > m_posX + m_width / 2.0f && x < m_posX + m_width) 
+	if (x + _size > m_posX + m_width / 2.0f && x + _size < m_posX + m_width) 
 	{
-		if (y > m_posY + m_height / 2.0f && y < m_posY + m_height) 
+		if (y + _size > m_posY + m_height / 2.0f && y + _size < m_posY + m_height) 
 		{
-			childReturnObjects = m_bottomRight->getObjectsAt(x, y);
+			childReturnObjects = m_bottomRight->getObjectsAt(x, y, _size);
 			returnObjects.insert(returnObjects.end(), childReturnObjects.begin(), childReturnObjects.end());
 			return returnObjects;
 		}
-		else if (y > m_posY&& y <= m_posY + m_height / 2.0f) 
+		else if (y + _size > m_posY && y + _size <= m_posY + m_height / 2.0f)
 		{
-			childReturnObjects = m_topRight->getObjectsAt(x, y);
+			childReturnObjects = m_topRight->getObjectsAt(x, y, _size);
 			returnObjects.insert(returnObjects.end(), childReturnObjects.begin(), childReturnObjects.end());
 			return returnObjects;
 		}
 	}
 	// left
-	else if (x > m_posX&& x <= m_posX + m_width / 2.0f) 
+	else if (x - _size > m_posX && x - _size <= m_posX + m_width / 2.0f)
 	{
-		if (y > m_posY + m_height / 2.0f && y < m_posY + m_height) 
+		if (y - _size > m_posY + m_height / 2.0f && y - _size < m_posY + m_height)
 		{
-			childReturnObjects = m_bottomLeft->getObjectsAt(x, y);
+			childReturnObjects = m_bottomLeft->getObjectsAt(x, y, _size);
 			returnObjects.insert(returnObjects.end(), childReturnObjects.begin(), childReturnObjects.end());
 			return returnObjects;
 		}
-		else if (y > m_posY&& y <= m_posY + m_height / 2.0f) 
+		else if (y - _size > m_posY&& y - _size <= m_posY + m_height / 2.0f)
 		{
-			childReturnObjects = m_topLeft->getObjectsAt(x, y);
+			childReturnObjects = m_topLeft->getObjectsAt(x, y, _size);
 			returnObjects.insert(returnObjects.end(), childReturnObjects.begin(), childReturnObjects.end());
 			return returnObjects;
 		}
@@ -171,8 +171,8 @@ void Quadtree::clear()
 
 bool Quadtree::containsObject(Quadtree *quad, GameObject *gameObject)
 {
-	//if (gameObject != nullptr && quad != nullptr && m_currentLevel < m_maxLevel + 1)
-	//{
+	/*if (gameObject != nullptr && quad != nullptr && m_currentLevel < m_maxLevel + 1)
+	{*/
 
 	//	if ((gameObject->position.x + gameObject->size >= quad->m_posX - quad->shape.getSize().x) &&
 	//		(gameObject->position.x - gameObject->size <= quad->m_posX + quad->shape.getSize().x) &&
