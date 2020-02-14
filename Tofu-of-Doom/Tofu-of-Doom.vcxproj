@@ -35,13 +35,18 @@
     </ClCompile>
     <ClCompile Include="IdleEnemyState.cpp" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="MainMenu.cpp" />
     <ClCompile Include="Map.cpp" />
     <ClCompile Include="ModelLoader.cpp" />
+    <ClCompile Include="Options.cpp" />
+    <ClCompile Include="ParticleEffect.cpp" />
     <ClCompile Include="Path.cpp" />
     <ClCompile Include="Quadtree.cpp" />
     <ClCompile Include="Raycast.cpp" />
+    <ClCompile Include="sfml.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="ShotTrajectory.cpp" />
+    <ClCompile Include="SplashScreen.cpp" />
     <ClCompile Include="Transform.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -87,13 +92,18 @@
     <ClInclude Include="ik_SAudioStreamFormat.h" />
     <ClInclude Include="ik_vec3d.h" />
     <ClInclude Include="irrKlang.h" />
+    <ClInclude Include="MainMenu.h" />
     <ClInclude Include="Map.h" />
     <ClInclude Include="ModelLoader.h" />
     <ClInclude Include="Game.h" />
+    <ClInclude Include="Options.h" />
+    <ClInclude Include="ParticleEffect.h" />
     <ClInclude Include="Path.h" />
     <ClInclude Include="Quadtree.h" />
     <ClInclude Include="Raycast.h" />
+    <ClInclude Include="sfml.h" />
     <ClInclude Include="ShotTrajectory.h" />
+    <ClInclude Include="SplashScreen.h" />
     <ClInclude Include="Transform.h" />
     <ClInclude Include="Wall.h" />
     <ClInclude Include="WallType.h" />
@@ -104,7 +114,11 @@
   <ItemGroup>
     <None Include="shaders\mainShader.frag" />
     <None Include="shaders\mainShader.vert" />
-    <None Include="shaders\mainShaderMultipleLights.frag" />
+    <None Include="shaders\particleShader.frag" />
+    <None Include="shaders\particleShader.vert" />
+  </ItemGroup>
+  <ItemGroup>
+    <Media Include="cg1.wav" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>

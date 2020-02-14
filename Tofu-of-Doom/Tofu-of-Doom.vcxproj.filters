@@ -90,7 +90,19 @@
     <ClCompile Include="Enemy.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Quadtree.cpp">
+    <ClCompile Include="ParticleEffect.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SplashScreen.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sfml.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MainMenu.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Options.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -251,25 +263,39 @@
     <ClInclude Include="Enemy.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="GameObject.h">
+    <ClInclude Include="ParticleEffect.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Wall.h">
+    <ClInclude Include="SplashScreen.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Quadtree.h">
+    <ClInclude Include="sfml.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MainMenu.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Options.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="shaders\mainShader.frag">
-      <Filter>Source Files</Filter>
-    </None>
     <None Include="shaders\mainShader.vert">
       <Filter>Source Files</Filter>
     </None>
-    <None Include="shaders\mainShaderMultipleLights.frag">
+    <None Include="shaders\mainShader.frag">
       <Filter>Source Files</Filter>
     </None>
+    <None Include="shaders\particleShader.frag">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="shaders\particleShader.vert">
+      <Filter>Source Files</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Media Include="cg1.wav">
+      <Filter>Header Files</Filter>
+    </Media>
   </ItemGroup>
 </Project>

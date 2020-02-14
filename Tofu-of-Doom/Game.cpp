@@ -15,6 +15,17 @@ Game::Game(sf::ContextSettings t_settings)
 
 	// Initialise everything else
 	initialise();
+	m_splashScreen = new SplashScreen{ *this , m_font };
+	//loads the sfml texture and the background music
+	if (!m_sfmlTexture.loadFromFile("sfml.png"))
+	{
+		std::cout << "Cant load sfml image " << std::endl;
+	}
+	m_sfmlSprite.setTexture(m_sfmlTexture);
+	m_sfmlScreen = new SFML{ *this , m_font, m_sfmlSprite };
+	m_mainMenu = new MainMenu{ *this , m_font };
+
+
 }
 
 /// <summary>
@@ -35,7 +46,7 @@ void Game::run()
 	sf::Clock gunClock;
 	sf::Time oldTime = sf::Time::Zero;
 	sf::Time timeSinceLastUpdate = sf::Time::Zero;
-	sf::Time timePerFrame = sf::seconds((1.f / 35.0f));
+	sf::Time timePerFrame = sf::seconds((1.f / 60.0f));
 
 
 	while (m_window.isOpen() && !m_exitGame)
@@ -55,9 +66,7 @@ void Game::run()
 			processEvents();
 			render();
 			oldTime = clock.getElapsedTime();
-		}
-
-		
+		}		
 	}
 }
 
@@ -94,29 +103,14 @@ void Game::initialise()
 	shotgunQueue.push(shotgunSound); // 1
 
 	
+	zombiePosition = vec3df(m_gameWorld->getEnemyPosition().x, 0 , m_gameWorld->getEnemyPosition().y);
 
 	soundEngine->play3D(zombie, zombiePosition, true, false, false, false);
 
-	// List all neighbors:
-	for (int direction = 0; direction < 9; direction++)
-	{
-		if (direction == 4) continue; // Skip 4, this is ourself.
-
-		int n_row = row + ((direction % 3) - 1); // Neighbor row
-		int n_col = col + ((direction / 3) - 1); // Neighbor column
-
-		// Check the bounds:
-		if (n_row >= 0 && n_row < ROWS && n_col >= 0 && n_col < COLS) 
-		{
-			//graph->addArc(1, 2, 10);
-			// Add an arc from cell id 24 to cell id arr[n_row][n_col] 
-			// A valid neighbor:
-			//std::cout << "Neighbor: " << n_row << "," << n_col << ": " << arr[n_row][n_col] << std::endl;
-		}
-	}
-
+	
 	// Load shader
-	m_mainShader = new tk::Shader("shaders/mainShader.vert", "shaders/mainShaderMultipleLights.frag");
+	m_mainShader = new tk::Shader("shaders/mainShader.vert", "shaders/mainShader.frag");
+	m_particleShader = new tk::Shader("shaders/particleShader.vert", "shaders/particleShader.frag");
 
 	GLint isCompiled = 0;
 	GLint isLinked = 0;
@@ -201,6 +195,30 @@ void Game::processEvents()
 void Game::update(sf::Time t_deltaTime)
 {
 
+	switch (m_drawState)
+	{
+
+	case DrawState::MAP:
+		updateWorld(t_deltaTime);
+
+		break;
+	case DrawState::MAIN:
+		m_mainMenu->update(t_deltaTime, sound);
+
+		break;
+	case DrawState::OPTIONS:
+
+
+		break;
+
+	case DrawState::GAME:
+		updateWorld(t_deltaTime);
+		break;
+	}
+}
+
+void Game::updateWorld(sf::Time t_deltaTime)
+{
 	//======DEBUG COLLISION ====//
 	// system("cls");
 	/*std::cout << "Player: " << "x: " << camera.collider.bounds.x1 <<
@@ -209,16 +227,18 @@ void Game::update(sf::Time t_deltaTime)
 		"y: " << cubeCollider.bounds.y1 << " x2: " << cubeCollider.bounds.x2 << " y2: " << cubeCollider.bounds.y2 << std::endl;*/
 	if (Collider2D::isColliding(camera.collider.bounds, cubeCollider.bounds))
 	{
-	//	std::cout << "Working" << std::endl;
+		//	std::cout << "Working" << std::endl;
 	}
 
+	//update the zombie sound position to follow test zombie
+	zombiePosition = vec3df(m_gameWorld->getEnemyPosition().x, 3.5f, m_gameWorld->getEnemyPosition().y);
 
-	//m_gameWorld->populateQuadtree();
-	m_gameWorld->checkPlayerRayCollsions(t_deltaTime);
-
+	m_gameWorld->checkPlayerRayCollsions();
 	// Update game controls
 	camera.input(t_deltaTime);
-
+	camera.transform.position.x = camera.getEye().x;
+	camera.transform.position.y = camera.getEye().y;
+	camera.transform.position.z = camera.getEye().z;
 
 
 	fireGun();
@@ -235,7 +255,7 @@ void Game::update(sf::Time t_deltaTime)
 	camera.getView() = camera.camera(m_gameWorld->getCameraPosition(), m_gameWorld->getPitch(), m_gameWorld->getYaw());
 
 	// Sound stuff
-	irrklang::vec3df position(m_gameWorld->getCameraPosition().x , m_gameWorld->getCameraPosition().y, m_gameWorld->getCameraPosition().z);        // position of the listener
+	irrklang::vec3df position(m_gameWorld->getCameraPosition().x, m_gameWorld->getCameraPosition().y, m_gameWorld->getCameraPosition().z);        // position of the listener
 	irrklang::vec3df lookDirection(10, 0, 10); // the direction the listener looks into
 	irrklang::vec3df velPerSecond(0, 0, 0);    // only relevant for doppler effects
 	irrklang::vec3df upVector(0, 1, 0);        // where 'up' is in your 3D scene
@@ -263,25 +283,34 @@ void Game::update(sf::Time t_deltaTime)
 	glUniform3fv(m_lightPositionsID, LIGHT_AMOUNT * sizeof(glm::vec3), &m_lightPositions[0][0]);
 
 	// Update test enemy matrix
-	//model_8 = glm::translate(glm::mat4(1.0f), glm::vec3(m_gameWorld->getEnemyPosition().x, 3.5f, m_gameWorld->getEnemyPosition().y));
+	model_8 = glm::translate(glm::mat4(1.0f), glm::vec3(m_gameWorld->getEnemyPosition().x, 3.5f, m_gameWorld->getEnemyPosition().y));
 	model_8 = glm::scale(model_8, glm::vec3(0.5f, 0.5f, 0.5f));
 }
 
-/// <summary>
+	/// <summary>
 /// Render
 /// </summary>
 void Game::render()
 {
-
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	switch (m_drawState)
 	{
-	
+
 	case DrawState::MAP:
 		m_window.pushGLStates();
 		m_gameWorld->drawWorld();
 		m_window.popGLStates();
+
+		break;
+	case DrawState::MAIN:
+		m_window.pushGLStates();
+		m_mainMenu->render(m_window);
+		m_window.popGLStates();
+
+		break;
+	case DrawState::OPTIONS:
+
 
 		break;
 
@@ -296,7 +325,7 @@ void Game::render()
 		// Set shader to use Texture Unit 0
 		glUniform1i(m_currentTextureID, 0);
 
-		glBindVertexArray(wallType1_VAO_ID);		
+		glBindVertexArray(wallType1_VAO_ID);
 
 		glm::vec3 f_offset(0.0f, 50.0f, 0.0f);
 
@@ -315,9 +344,8 @@ void Game::render()
 				model_1 = glm::translate(glm::mat4(1.0f), (m_gameWorld->getWallData()->at(i).first + (f_offset * 2.0f)) / s_displayScale);
 				glUniformMatrix4fv(m_modelMatrixID, 1, GL_FALSE, &model_1[0][0]);
 				glDrawArrays(GL_TRIANGLES, 0, wallType1_vertices.size());
-
 			}
-		}	
+		}
 
 		// Draw floors and ceilings
 		for (int i = 0; i < m_gameWorld->getWallData()->size(); ++i)
@@ -350,7 +378,7 @@ void Game::render()
 		glBindVertexArray(0);
 
 		// ---------------------------------------------------------------------------------------------------------------------
-		
+
 		// This section contains the machine gun draw data
 		if (gunNum == 3)
 		{
@@ -455,20 +483,28 @@ void Game::render()
 		}
 
 		// ---------------------------------------------------------------------------------------------------------------------
+
 		// Bind our texture in Texture Unit7
 		glActiveTexture(GL_TEXTURE7);
 		glBindTexture(GL_TEXTURE_2D, enemyTest_texture);
 
 		// Set shader to use Texture Unit 7
 		glUniform1i(m_currentTextureID, 7);
-		glBindVertexArray(enemyTest_VAO_ID);		
+		glBindVertexArray(enemyTest_VAO_ID);
 
 		glUniformMatrix4fv(m_modelMatrixID, 1, GL_FALSE, &model_8[0][0]);
 		glDrawArrays(GL_TRIANGLES, 0, enemyTest_vertices.size());
 		glBindVertexArray(0);
 
 		// ---------------------------------------------------------------------------------------------------------------------
-		
+
+		// Particles! Particles! Particles!
+		//glUseProgram(m_particleShader->m_programID);
+		m_particleEffect.generateParticles(m_eye);
+		m_particleEffect.drawParticles();
+
+		// ---------------------------------------------------------------------------------------------------------------------
+
 		// Reset OpenGL
 		glBindVertexArray(GL_NONE);
 		glBindTexture(GL_TEXTURE_2D, 0);
@@ -509,7 +545,7 @@ void Game::gameControls(sf::Time t_deltaTime)
 		{
 			m_drawState = DrawState::MAP;
 		}
-		else
+		else 
 		{
 			m_drawState = DrawState::GAME;
 		}

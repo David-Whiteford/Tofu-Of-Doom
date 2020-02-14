@@ -13,16 +13,18 @@
 #include <queue>
 #include <map>
 #include <string>
-
-
+#include "Enum.h"
+#include "sfml.h"
 #include "Debug.h"
 #include "Shader.h"
 #include "ModelLoader.h"
 #include "GameWorld.h"
 #include "irrKlang.h"
-
+#include "ParticleEffect.h"
+#include "SplashScreen.h"
+#include "SFML.h"
 /// A star Algorithm 
-
+#include "MainMenu.h"
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -39,13 +41,17 @@
 
 using namespace irrklang;
 #pragma comment(lib, "irrKlang.lib") // link with irrKlang.dll
-
+class SplashScreen;
+class SFML;
+class MainMenu;
 
 typedef GraphNode<NodeData, int> Node;
 
 class Game
 {
 public:
+
+	
 	Game(sf::ContextSettings t_settings);
 	~Game();
 
@@ -55,7 +61,7 @@ public:
 	ISoundEngine* gunSoundEngine;
 	ISound* music;
 	ISound* background;
-
+	sf::Font m_font; // font used by message
 	irrklang::ISoundSource* zombie;
 	irrklang::ISoundSource* shotgunSound;
 	irrklang::ISoundSource* machinegunSound;
@@ -64,34 +70,28 @@ public:
 	vec3df zombiePosition;
 	ISound* zombieEnemies[11];
 	//vec3df positionEnemies[11];
-
+	sf::Sprite m_sfmlSprite;
+	sf::Texture m_sfmlTexture;
 	// 1 is pistol, 2 is rifle, 3 is machine gun)
 	int gunNum = 1;
-
-
+	//menu screens
+	SplashScreen* m_splashScreen; // the splash screen
+	SFML* m_sfmlScreen;
+	MainMenu* m_mainMenu;
 	/// <summary>
 	/// Astar stuff with graph for storing nodes
 	/// settng up the astar algorithm
 	/// </summary>
-
+	GameState m_currentGameState{ GameState::Main }; // used for whatever mode game starts
 	Graph<NodeData, int>* graph;
 	std::vector<Node*> graphPath;
 	std::map<std::string, int> nodeMap;
 	NodeData nodeData;
 	int nodeIndex{ 0 };
-
+	bool sound =false;
 	std::ifstream myfile;
 
-	int static const ROWS = 5;
-	int static const COLS = 5;
-	int arr[ROWS][COLS] =
-	{
-		{ 0, 1, 2, 3, 4 },
-		{ 5, 6, 7, 8, 9 },
-		{ 10, 11, 12, 13, 14 },
-		{ 15, 16, 17, 18, 19 },
-		{ 20, 21, 22, 23, 24 }
-	};
+	
 
 	//find the neighbours of row 4 and column 4(temp Test
 	int row = 0;
@@ -110,16 +110,19 @@ public:
 
 	std::queue <ISoundSource*> shotgunQueue;
 
-private:
-
-
 	enum DrawState
 	{
 		MAP,
-		GAME
+		GAME,
+		MAIN,
+		OPTIONS
 	};
 
-	DrawState m_drawState = DrawState::GAME;
+	DrawState m_drawState = DrawState::MAIN;
+
+private:
+
+
 
 	sf::RenderWindow m_window; // Window
 	sf::Time m_deltaTime;
@@ -251,6 +254,7 @@ private:
 	glm::mat4 projection;	
 
 	tk::Shader *m_mainShader; // Shader object
+	tk::Shader *m_particleShader;
 	glm::vec3 m_eye{ 0.f, 4.0f, 0.f }; // Current camera position
 	
 	glm::mat4 m_rotationMatrix;
@@ -261,9 +265,13 @@ private:
 	double m_pitch{ 0.0 }; // Look up and down (in degrees)
 	bool gunRecoil{ false };
 
+	// Create particle object
+	ParticleEffect m_particleEffect = ParticleEffect(m_deltaTime);
+
 	void initialise();
 	void processEvents();
 	void update(sf::Time t_deltaTime);
+	void updateWorld(sf::Time t_deltaTime);
 	void render();
 	void gameControls(sf::Time t_deltaTime);
 	void loadVAO(std::string t_textureFilename, const char *t_modelFilename, GLuint &t_vaoID,
