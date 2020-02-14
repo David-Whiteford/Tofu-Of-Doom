@@ -219,12 +219,17 @@ void GameWorld::drawWorld()
 	m_window.draw(m_camera.raycastToLeft.drawRay());
 	m_window.draw(m_camera.raycastToRight.drawRay());
 
+	//m_window.draw(m_camera.raycastBottomLeft.drawRay());
+//	m_window.draw(m_camera.raycastBottomRight.drawRay());
+	//m_window.draw(m_camera.raycastTopLeft.drawRay());
+	m_window.draw(m_camera.raycastTopRight.drawRay());
+
 	for (int i = 0; i < activeBullets.size(); i++)
 	{
 		
 		if (activeBullets[i].canDrawBulletTracer())
 		{
-			m_window.draw(activeBullets[i].raycast.drawRay());
+		m_window.draw(activeBullets[i].raycast.drawRay());
 		}
 	}
 }
@@ -243,7 +248,7 @@ void GameWorld::fireBullet(int t_gunType)
 				bullets[i].bulletInit(sf::Vector2f(tempDirection.x, tempDirection.z), 0, m_playerGun.getPosition());
 				activeBullets.push_back(bullets[i]);
 				break;
-				
+
 			}
 		}
 	}
@@ -278,17 +283,18 @@ void GameWorld::fireBullet(int t_gunType)
 
 }
 
-void GameWorld::checkPlayerRayCollsions()
+void GameWorld::checkPlayerRayCollsions(sf::Time t_deltaTime)
 {
+
 	m_camera.setCanMoveUp(true);
 	m_camera.setCanMoveDown(true);
 	m_camera.setCanMoveLeft(true);
 	m_camera.setCanMoveRight(true);
 
 	std::vector<GameObject*> returnObjects = quadtree->getObjectsAt(getPlayerPosition().x, getPlayerPosition().y);
-	std::cout << "number of objects: " << returnObjects.size() << std::endl; 
+	std::cout << "number of objects: " << returnObjects.size() << std::endl;
 	std::cout << "number of objects vec: " << m_wallVec.size() << std::endl;
-	
+
 
 	for (int x = 0; x < returnObjects.size(); x++)
 	{
@@ -321,27 +327,24 @@ void GameWorld::checkPlayerRayCollsions()
 				m_camera.setCanMoveRight(false);
 			}
 		}
+		if ((m_camera.canGoRight() && m_camera.canGoLeft()) && m_camera.canGoUp() && m_camera.canGoDown())
+		{			
+			previousPos = getPlayerPosition();
+		}
 
-
-		if ((!m_camera.canGoRight() || !m_camera.canGoLeft()) || ( !m_camera.canGoUp() || !m_camera.canGoDown()))
+		if ((!m_camera.canGoUp()))
 		{
-			m_camera.getOutOfWall();
+			m_player.setPosition(previousPos);
+			m_camera.getOutOfWall(t_deltaTime);
 
-			if (!m_camera.canGoUp())
+			/*if (!m_camera.canGoUp())
 			{
 				if (!m_camera.raycastForward.hit(returnObjects[x]->position, returnObjects[x]->size))
 				{
 					m_camera.setCanMoveUp(true);
 				}
-			}
-			if (!m_camera.canGoDown())
-			{
-				if (!m_camera.raycastBehind.hit(returnObjects[x]->position, returnObjects[x]->size))
-				{
-					m_camera.setCanMoveDown(true);
-				}
-			}
-			if (!m_camera.canGoLeft())
+			}*/
+			/*if (!m_camera.canGoLeft())
 			{
 				if (!m_camera.raycastToLeft.hit(returnObjects[x]->position, returnObjects[x]->size))
 				{
@@ -354,7 +357,7 @@ void GameWorld::checkPlayerRayCollsions()
 				{
 					m_camera.setCanMoveRight(true);
 				}
-			}
+			}*/
 		}
 
 		if (m_camera.canGoLeft() == false && m_camera.canGoDown() == false)

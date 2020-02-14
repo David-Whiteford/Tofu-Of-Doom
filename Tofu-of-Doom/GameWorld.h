@@ -30,7 +30,7 @@ public:
 	void drawWorld();
 	void fireBullet(int t_gunType);
 	float Pi = 3.14;
-	void checkPlayerRayCollsions();
+	void checkPlayerRayCollsions(sf::Time t_deltaTime);
 
 	Bullet bullets[100];
 	std::vector<Bullet> activeBullets; // for a smaller loop
@@ -52,7 +52,10 @@ private:
 	
 	int m_currentNode = 0;
 	int m_endNode = 0;
+
 	int m_playerNode = 0;
+	sf::Vector2f previousPos;
+
 	int m_enemyNode = 0;
 	Transform m_transform;
 	Transform::Position enemyPos;

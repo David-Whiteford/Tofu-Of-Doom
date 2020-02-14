@@ -125,8 +125,13 @@ void Camera::input(sf::Time t_deltaTime)
 
 	glm::vec3 transformPos = { transform.position.x, transform.position.y,transform.position.z };
 
+	float temp_speed = m_speed;
 
 
+	if ((controller.upButton() || controller.downButton()) && (controller.leftButton() || controller.rightButton()))
+	{
+		temp_speed = temp_speed / 2;
+	}
 
 
 	if (controller.upButton())
@@ -138,7 +143,7 @@ void Camera::input(sf::Time t_deltaTime)
 
 
 
-			transformPos -= tempDirection * static_cast<float>(t_deltaTime.asMilliseconds())* m_speed;
+			transformPos -= tempDirection * static_cast<float>(t_deltaTime.asMilliseconds())* temp_speed;
 		}
 
 	}
@@ -148,7 +153,7 @@ void Camera::input(sf::Time t_deltaTime)
 		{
 			glm::vec3 tempDirection(m_direction.x, m_direction.y, m_direction.z);
 			glm::normalize(tempDirection);
-			transformPos += tempDirection * static_cast<float>(t_deltaTime.asMilliseconds())* m_speed;
+			transformPos += tempDirection * static_cast<float>(t_deltaTime.asMilliseconds())* temp_speed;
 		}
 	}
 
@@ -162,7 +167,7 @@ void Camera::input(sf::Time t_deltaTime)
 
 
 
-			transformPos += tempDirection * static_cast<float>(t_deltaTime.asMilliseconds())* m_speed;
+			transformPos += tempDirection * static_cast<float>(t_deltaTime.asMilliseconds())* temp_speed;
 		}
 
 	}
@@ -172,7 +177,7 @@ void Camera::input(sf::Time t_deltaTime)
 		{
 			glm::vec3 tempDirection(m_directionStrafe.x, m_directionStrafe.y, m_directionStrafe.z);
 			glm::normalize(tempDirection);
-			transformPos -= tempDirection * static_cast<float>(t_deltaTime.asMilliseconds())* m_speed;
+			transformPos -= tempDirection * static_cast<float>(t_deltaTime.asMilliseconds())* temp_speed;
 		}
 	}
 	// End Strafe
@@ -183,36 +188,17 @@ void Camera::input(sf::Time t_deltaTime)
 	// Turn Camera
 	if (controller.leftButtonRTS())
 	{
-		m_yaw += m_turnSpeed;
-		m_rotationMatrix = glm::rotate(glm::mat4(1.0f), glm::radians(-m_turnSpeed), glm::vec3(0.f, 1.f, 0.f));
-		m_direction = m_direction * m_rotationMatrix;
-		m_directionStrafe = m_directionStrafe * m_rotationMatrix;
-
-		if (m_yaw >= 360.0)
-		{
-			m_yaw = 0.0;
-			m_direction = glm::vec4(0.f, 0.f, 1.f, 0.f);
-			m_directionStrafe = glm::vec4(1.0f, 0.0f, 0.0f, 0.0f);
-		}
+		turnToLeft(t_deltaTime);
 	}
 	else if (controller.rightButtonRTS())
 	{
-		m_yaw -= m_turnSpeed;
-		m_rotationMatrix = glm::rotate(glm::mat4(1.0f), glm::radians(m_turnSpeed), glm::vec3(0.f, 1.f, 0.f));
-		m_direction = m_direction * m_rotationMatrix;
-		m_directionStrafe = m_directionStrafe * m_rotationMatrix;
-
+		turnToRight(t_deltaTime);
 
 	}
 	// End turn player
 
 
-		if (m_yaw <= -360.0 || m_yaw >= 360.0)
-		{
-			m_yaw = 0.0;
-			m_direction = glm::vec4(0.f, 0.f, 1.f, 0.f);
-			m_directionStrafe = glm::vec4(1.0f, 0.0f, 0.0f, 0.0f);
-		}
+	
 
 	
 
@@ -228,85 +214,36 @@ void Camera::input(sf::Time t_deltaTime)
 	collider.bounds.y1 = m_eye.z - 0.1f;
 	collider.bounds.y2 = m_eye.z + 0.1f;
 
-	// RAYCAST DEBUG TESTS
-	sf::Vector2f pos = sf::Vector2f(transformPos.x * 10, transformPos.z * 10);
-
-	glm::vec3 tempDirection(m_directionStrafe.x, m_directionStrafe.y, m_directionStrafe.z);
-	glm::normalize(tempDirection);
-	raycastToLeft.setRayValues(pos, sf::Vector2f(tempDirection.x, tempDirection.z), 50);
-	raycastToRight.setRayValues(pos, sf::Vector2f(-tempDirection.x, -tempDirection.z), 50);
-
-	glm::vec3 tempDirection2(m_direction.x, m_direction.y, m_direction.z);
-	glm::normalize(tempDirection2);
-	raycastForward.setRayValues(pos, sf::Vector2f(tempDirection2.x, tempDirection2.z), 50);
-	raycastBehind.setRayValues(pos, sf::Vector2f(-tempDirection2.x, -tempDirection2.z), 50);
-
-
-	// END DEBUG TESTS
+	setUpRays();
 
 }
 
 
-void Camera::getOutOfWall()
+void Camera::getOutOfWall(sf::Time t_deltaTime)
 {
-	float escapeAmount = 1.0f;
+	float escapeAmount = 1.5f;
 	glm::vec3 transformPos = { transform.position.x, transform.position.y,transform.position.z };
 	// escape from being stuck
-	if (!canGoLeft())
+	if (!canGoUp() && !canGoRight())
 	{
-
-		glm::vec3 tempDirection(m_directionStrafe.x, m_directionStrafe.y, m_directionStrafe.z);
-		glm::normalize(tempDirection);
-		transformPos += tempDirection * static_cast<float>(m_speed * escapeAmount);
+		if (controller.upButton())
+			turnToLeft(t_deltaTime);
 	}
-	else if (!canGoRight())
+	else if (!canGoLeft	())
 	{
 
-			glm::vec3 tempDirection(m_directionStrafe.x, m_directionStrafe.y, m_directionStrafe.z);
-			glm::normalize(tempDirection);
-			transformPos -= tempDirection * static_cast<float>(m_speed * escapeAmount);
+		if (controller.upButton())
+			turnToRight(t_deltaTime);
 		
 	}
-	if (!canGoUp())
+	else if (!canGoUp())
 	{
-
-		glm::vec3 tempDirection(m_direction.x, m_direction.y, m_direction.z);
-		glm::normalize(tempDirection);
-
-
-
-		transformPos += tempDirection * static_cast<float>(m_speed * escapeAmount);
-	}
-	else if (!canGoDown())
-	{
-
-		glm::vec3 tempDirection(m_direction.x, m_direction.y, m_direction.z);
-		glm::normalize(tempDirection);
-
-		transformPos -= tempDirection * static_cast<float>(m_speed* escapeAmount);
+		// do nothing
 	}
 
 
-	m_eye = transformPos;
-	transform.position.x = m_eye.x;
-	transform.position.y = m_eye.y;
-	transform.position.z = m_eye.z;
-
-	// RAYCAST DEBUG TESTS
-	sf::Vector2f pos = sf::Vector2f(transformPos.x * 10, transformPos.z * 10);
-
-	glm::vec3 tempDirection(m_directionStrafe.x, m_directionStrafe.y, m_directionStrafe.z);
-	glm::normalize(tempDirection);
-	raycastToLeft.setRayValues(pos, sf::Vector2f(tempDirection.x, tempDirection.z), 50);
-	raycastToRight.setRayValues(pos, sf::Vector2f(-tempDirection.x, -tempDirection.z), 50);
-
-	glm::vec3 tempDirection2(m_direction.x, m_direction.y, m_direction.z);
-	glm::normalize(tempDirection2);
-	raycastForward.setRayValues(pos, sf::Vector2f(tempDirection2.x, tempDirection2.z), 50);
-	raycastBehind.setRayValues(pos, sf::Vector2f(-tempDirection2.x, -tempDirection2.z), 50);
 
 
-	// END DEBUG TESTS
 
 }
 
@@ -348,4 +285,123 @@ bool Camera::canGoLeft()
 bool Camera::canGoRight()
 {
 	return canMoveRight;
+}
+
+void Camera::turnToRight(sf::Time t_deltaTime)
+{
+	m_yaw -= m_turnSpeed * static_cast<float>(t_deltaTime.asMilliseconds());
+	m_rotationMatrix = glm::rotate(glm::mat4(1.0f), glm::radians(m_turnSpeed * static_cast<float>(t_deltaTime.asMilliseconds())), glm::vec3(0.f, 1.f, 0.f));
+	m_direction = m_direction * m_rotationMatrix;
+	m_directionStrafe = m_directionStrafe * m_rotationMatrix;
+
+	if (m_yaw <= -360.0 || m_yaw >= 360.0)
+	{
+		m_yaw = 0.0;
+		m_direction = glm::vec4(0.f, 0.f, 1.f, 0.f);
+		m_directionStrafe = glm::vec4(1.0f, 0.0f, 0.0f, 0.0f);
+	}
+}
+
+void Camera::turnToLeft(sf::Time t_deltaTime)
+{
+	m_yaw += m_turnSpeed * static_cast<float>(t_deltaTime.asMilliseconds());
+	m_rotationMatrix = glm::rotate(glm::mat4(1.0f), glm::radians(-m_turnSpeed * static_cast<float>(t_deltaTime.asMilliseconds())), glm::vec3(0.f, 1.f, 0.f));
+	m_direction = m_direction * m_rotationMatrix;
+	m_directionStrafe = m_directionStrafe * m_rotationMatrix;
+
+	if (m_yaw <= -360.0 || m_yaw >= 360.0)
+	{
+		m_yaw = 0.0;
+		m_direction = glm::vec4(0.f, 0.f, 1.f, 0.f);
+		m_directionStrafe = glm::vec4(1.0f, 0.0f, 0.0f, 0.0f);
+	}
+
+
+}
+
+void Camera::setUpRays()
+{
+
+	/// Non Diagonal
+	/////// offset front and back
+	glm::vec3 tempDirectionF(m_direction.x, m_direction.y, m_direction.z);
+	glm::normalize(tempDirectionF);
+	glm::vec3 offsetPosF = tempDirectionF * -4.0f;
+	glm::vec3 offsetPosB = tempDirectionF * 4.0f;
+
+
+	sf::Vector2f posF = sf::Vector2f((offsetPosF.x + transform.position.x) * 10,
+		(offsetPosF.z + transform.position.z) * 10);
+	sf::Vector2f posB = sf::Vector2f((offsetPosB.x + transform.position.x) * 10,
+		(offsetPosB.z + transform.position.z) * 10);
+
+	//////// offset right and left
+	glm::vec3 tempDirectionR(m_directionStrafe.x, m_directionStrafe.y, m_directionStrafe.z);
+	glm::normalize(tempDirectionR);
+	glm::vec3 offsetPosR = tempDirectionR * 4.0f;
+	glm::vec3 offsetPosL = tempDirectionR * -4.0f;
+
+	// set up positions with offset
+	sf::Vector2f posR = sf::Vector2f((offsetPosR.x + transform.position.x) * 10,
+		(offsetPosR.z + transform.position.z) * 10);
+	sf::Vector2f posL = sf::Vector2f((offsetPosL.x + transform.position.x) * 10,
+		(offsetPosL.z + transform.position.z) * 10);
+
+
+	glm::vec3 tempDirection(m_directionStrafe.x, m_directionStrafe.y, m_directionStrafe.z);
+	glm::normalize(tempDirection);
+	raycastToLeft.setRayValues(posL, sf::Vector2f(tempDirection.x, tempDirection.z), raycastLength);
+	raycastToRight.setRayValues(posR, sf::Vector2f(-tempDirection.x, -tempDirection.z), raycastLength);
+
+	glm::vec3 tempDirection2(m_direction.x, m_direction.y, m_direction.z);
+	glm::normalize(tempDirection2);
+	raycastForward.setRayValues(posF, sf::Vector2f(tempDirection2.x, tempDirection2.z), raycastLength);
+	raycastBehind.setRayValues(posB, sf::Vector2f(-tempDirection2.x, -tempDirection2.z), raycastLength);
+
+
+
+
+	/// Diagonal
+	/////// offset topleft topright and bottom left and bottom right
+	glm::vec3 tempDirectionTopLeft(-m_directionStrafe.x + m_direction.x, m_direction.y, -m_direction.z + m_directionStrafe.z);
+	glm::normalize(tempDirectionTopLeft);
+
+	glm::vec3 tempDirectionBottomLeft(-m_directionStrafe.x + m_direction.x, m_direction.y, m_direction.z + m_directionStrafe.z);
+	glm::normalize(tempDirectionBottomLeft);
+
+	glm::vec3 tempDirectionTopRight((m_directionStrafe.x + m_direction.x), m_direction.y, -(m_direction.z + m_directionStrafe.z));
+	glm::normalize(tempDirectionTopRight);
+
+	glm::vec3 tempDirectionBottomRight(m_directionStrafe.x + m_direction.x, m_direction.y, m_direction.z + m_directionStrafe.z);
+	glm::normalize(tempDirectionBottomRight);
+
+
+
+	glm::vec3 offsetPosTL = tempDirectionTopLeft * 4.0f;
+	glm::vec3 offsetPosBL = tempDirectionBottomLeft * 4.0f;
+	glm::vec3 offsetPosTR = tempDirectionTopRight * 4.0f;
+	glm::vec3 offsetPosBR = tempDirectionBottomRight * 4.0f;
+
+
+	sf::Vector2f posTL = sf::Vector2f((offsetPosTL.x + transform.position.x) * 10,
+		(offsetPosTL.z + transform.position.z) * 10);
+
+	sf::Vector2f posBL = sf::Vector2f((offsetPosBL.x + transform.position.x) * 10,
+		(offsetPosBL.z + transform.position.z) * 10);
+
+	sf::Vector2f posTR = sf::Vector2f((offsetPosTR.x + transform.position.x) * 10,
+		(offsetPosTR.z + transform.position.z) * 10);
+
+	sf::Vector2f posBR = sf::Vector2f((offsetPosBR.x + transform.position.x) * 10,
+		(offsetPosBR.z + transform.position.z) * 10);
+
+
+
+
+	raycastTopLeft.setRayValues(posTL, sf::Vector2f(tempDirectionTopLeft.x, -tempDirectionTopLeft.z), raycastLength);
+	raycastTopRight.setRayValues(posTR, sf::Vector2f(tempDirectionTopRight.x, tempDirectionTopRight.z), raycastLength);
+
+	raycastBottomLeft.setRayValues(posBL, sf::Vector2f(tempDirectionBottomLeft.x, tempDirectionBottomLeft.z), raycastLength);
+	raycastBottomRight.setRayValues(posBR, sf::Vector2f(tempDirectionBottomRight.x, tempDirectionBottomRight.z), raycastLength);
+
 }

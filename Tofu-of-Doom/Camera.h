@@ -39,13 +39,13 @@ public:
 
 	void setCameraShakeSpeed(float t_speed);
 	void setCameraShakeMax(float t_max);
-	void getOutOfWall();
+	void getOutOfWall(sf::Time t_deltaTime);
 
 	CXBOXController controller;
 
 	Collider2D collider;
-
-	Raycast raycastForward,raycastBehind,raycastToLeft,raycastToRight;
+	// raycasts pointing in 8 directions
+	Raycast raycastForward,raycastBehind,raycastToLeft,raycastToRight, raycastTopLeft,raycastTopRight,raycastBottomLeft,raycastBottomRight;
 
 	void setCanMoveUp(bool t_bool);
 	void setCanMoveDown(bool t_bool);
@@ -57,11 +57,17 @@ public:
 	bool canGoLeft();
 	bool canGoRight();
 
+	void turnToRight(sf::Time t_deltaTime);
+	void turnToLeft(sf::Time t_deltaTime);
+
 private:
+	void setUpRays();
 	bool cameraShaking = false;
 	bool cameraShakeUp = true;
 	float cameraShakeSpeed = 2;
 	float cameraShakeMax = 4;
+
+	float raycastLength = 40;
 
 	bool canMoveUp, canMoveDown, canMoveLeft, canMoveRight, canTurn;
 
@@ -73,8 +79,9 @@ private:
 	glm::mat4 m_rotationMatrix;
 	glm::vec4 m_direction{ 0.f, 0.f, 1.f, 0.f }; // You move in this direction(z)
 	glm::vec4 m_directionStrafe{ 1.0f, 0.f, 0.f, 0.f }; // You move in this direction(z)
-	float m_speed = 0.18f;
-	float m_turnSpeed = 3.0;
+	float m_speed = 0.08f;
+	float m_turnSpeed = 0.23;
+	float m_turnSpeedWall = 0.53;
 
 	double m_yaw{ 0.0 }; // In degrees
 	double m_pitch{ 0.0 }; // This isn't really used anymore

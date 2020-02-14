@@ -22,7 +22,6 @@ void Raycast::setRayValues(sf::Vector2f t_startPosition, sf::Vector2f t_directio
 bool Raycast::hit(sf::Vector2f t_targetPosition, float t_targetRadius)
 {
 
-
 	float leftSide = t_targetPosition.x - t_targetRadius;
 	float rightSide = t_targetPosition.x + t_targetRadius;
 	float topSide = t_targetPosition.y - t_targetRadius;
@@ -85,7 +84,7 @@ sf::VertexArray Raycast::drawRay()
 	sf::VertexArray ray(sf::LinesStrip, 2);
 	ray[0].position = m_positon;
 
-	ray[1].position = m_positon + (m_direction * m_rayLength);
+	ray[1].position = m_positon + (m_direction * (m_rayLength));
 	
 
 	return ray;

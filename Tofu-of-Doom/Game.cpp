@@ -35,7 +35,7 @@ void Game::run()
 	sf::Clock gunClock;
 	sf::Time oldTime = sf::Time::Zero;
 	sf::Time timeSinceLastUpdate = sf::Time::Zero;
-	sf::Time timePerFrame = sf::seconds((1.f / 120.0f));
+	sf::Time timePerFrame = sf::seconds((1.f / 35.0f));
 
 
 	while (m_window.isOpen() && !m_exitGame)
@@ -214,13 +214,11 @@ void Game::update(sf::Time t_deltaTime)
 
 
 	//m_gameWorld->populateQuadtree();
-	m_gameWorld->checkPlayerRayCollsions();
+	m_gameWorld->checkPlayerRayCollsions(t_deltaTime);
 
 	// Update game controls
 	camera.input(t_deltaTime);
-	camera.transform.position.x = camera.getEye().x;
-	camera.transform.position.y = camera.getEye().y;
-	camera.transform.position.z = camera.getEye().z;
+
 
 
 	fireGun();
