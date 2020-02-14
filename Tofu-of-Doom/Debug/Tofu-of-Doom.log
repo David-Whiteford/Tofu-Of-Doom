@@ -15,15 +15,14 @@ C:\Users\paulj\Desktop\main\Tofu-Of-Doom\Tofu-of-Doom\GameWorld.cpp(59,38): warn
 C:\Users\paulj\Desktop\main\Tofu-Of-Doom\Tofu-of-Doom\GameWorld.cpp(59,38): warning C4244:             T=unsigned int
 C:\Users\paulj\Desktop\main\Tofu-Of-Doom\Tofu-of-Doom\GameWorld.cpp(59,38): warning C4244:         ]
 C:\Users\paulj\Desktop\main\Tofu-Of-Doom\Tofu-of-Doom\GameWorld.cpp(64,20): warning C4018: '<': signed/unsigned mismatch
-C:\Users\paulj\Desktop\main\Tofu-Of-Doom\Tofu-of-Doom\GameWorld.cpp(119,20): warning C4018: '<': signed/unsigned mismatch
-C:\Users\paulj\Desktop\main\Tofu-Of-Doom\Tofu-of-Doom\GameWorld.cpp(133,21): warning C4018: '<': signed/unsigned mismatch
-C:\Users\paulj\Desktop\main\Tofu-Of-Doom\Tofu-of-Doom\GameWorld.cpp(163,20): warning C4018: '<': signed/unsigned mismatch
-C:\Users\paulj\Desktop\main\Tofu-Of-Doom\Tofu-of-Doom\GameWorld.cpp(173,20): warning C4018: '<': signed/unsigned mismatch
-C:\Users\paulj\Desktop\main\Tofu-Of-Doom\Tofu-of-Doom\GameWorld.cpp(194,20): warning C4018: '<': signed/unsigned mismatch
-C:\Users\paulj\Desktop\main\Tofu-Of-Doom\Tofu-of-Doom\GameWorld.cpp(199,20): warning C4018: '<': signed/unsigned mismatch
+C:\Users\paulj\Desktop\main\Tofu-Of-Doom\Tofu-of-Doom\GameWorld.cpp(124,20): warning C4018: '<': signed/unsigned mismatch
+C:\Users\paulj\Desktop\main\Tofu-Of-Doom\Tofu-of-Doom\GameWorld.cpp(138,21): warning C4018: '<': signed/unsigned mismatch
+C:\Users\paulj\Desktop\main\Tofu-Of-Doom\Tofu-of-Doom\GameWorld.cpp(179,20): warning C4018: '<': signed/unsigned mismatch
+C:\Users\paulj\Desktop\main\Tofu-Of-Doom\Tofu-of-Doom\GameWorld.cpp(200,20): warning C4018: '<': signed/unsigned mismatch
 C:\Users\paulj\Desktop\main\Tofu-Of-Doom\Tofu-of-Doom\GameWorld.cpp(205,20): warning C4018: '<': signed/unsigned mismatch
-C:\Users\paulj\Desktop\main\Tofu-Of-Doom\Tofu-of-Doom\GameWorld.cpp(224,20): warning C4018: '<': signed/unsigned mismatch
-C:\Users\paulj\Desktop\main\Tofu-Of-Doom\Tofu-of-Doom\GameWorld.cpp(296,20): warning C4018: '<': signed/unsigned mismatch
-C:\Users\paulj\Desktop\main\Tofu-Of-Doom\Tofu-of-Doom\GameWorld.cpp(420,21): warning C4018: '<': signed/unsigned mismatch
-C:\Users\paulj\Desktop\main\Tofu-Of-Doom\Tofu-of-Doom\GameWorld.cpp(441,20): warning C4018: '<': signed/unsigned mismatch
+C:\Users\paulj\Desktop\main\Tofu-Of-Doom\Tofu-of-Doom\GameWorld.cpp(211,20): warning C4018: '<': signed/unsigned mismatch
+C:\Users\paulj\Desktop\main\Tofu-Of-Doom\Tofu-of-Doom\GameWorld.cpp(230,20): warning C4018: '<': signed/unsigned mismatch
+C:\Users\paulj\Desktop\main\Tofu-Of-Doom\Tofu-of-Doom\GameWorld.cpp(302,20): warning C4018: '<': signed/unsigned mismatch
+C:\Users\paulj\Desktop\main\Tofu-Of-Doom\Tofu-of-Doom\GameWorld.cpp(430,21): warning C4018: '<': signed/unsigned mismatch
+C:\Users\paulj\Desktop\main\Tofu-Of-Doom\Tofu-of-Doom\GameWorld.cpp(451,20): warning C4018: '<': signed/unsigned mismatch
   Tofu-of-Doom.vcxproj -> C:\Users\paulj\Desktop\main\Tofu-Of-Doom\Debug\Tofu-of-Doom.exe

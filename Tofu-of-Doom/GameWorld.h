@@ -32,8 +32,8 @@ public:
 	float Pi = 3.14;
 	void checkPlayerRayCollsions(sf::Time t_deltaTime);
 
-	Bullet bullets[100];
-	std::vector<Bullet> activeBullets; // for a smaller loop
+	Bullet *bullets[100];
+	std::vector<Bullet*> activeBullets; // for a smaller loop
 
 	sf::Vector2f getPlayerPosition();
 	glm::vec3 getCameraPosition();

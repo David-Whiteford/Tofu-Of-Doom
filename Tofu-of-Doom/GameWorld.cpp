@@ -95,6 +95,11 @@ GameWorld::GameWorld(sf::RenderWindow& t_window, sf::Time& t_deltaTime, Camera* 
 		m_enemyActive.push_back(m_enemyVec[i]);
 	}
 
+	for (int i = 0; i < 100; i++)
+	{
+		bullets[i] = new Bullet();
+	}
+
 }
 
 /// <summary>
@@ -119,7 +124,7 @@ void GameWorld::updateWorld()
 	for (int i = 0; i < activeBullets.size(); i++)
 	{
 
-		activeBullets[i].update();
+		activeBullets[i]->update();
 		/*for (int x = 0; x < m_walls.size(); x++)
 		{
 			if(bullets[i].checkCollision(m_walls.at(x).getPosition(), m_walls.at(x).getSize().x/2))
@@ -132,40 +137,41 @@ void GameWorld::updateWorld()
 		}*/
 		for (int x = 0; x < m_enemyActive.size(); x++)
 		{
-			if (activeBullets[i].checkCollision(m_enemyActive[x]->getPosition(), m_enemyActive[x]->getRadius()))
+			if (activeBullets[i]->checkCollision(m_enemyActive[x]->getPosition(), m_enemyActive[x]->getRadius()))
 			{
-				if (activeBullets[i].raycast.isInterpolating())
+				if (activeBullets[i]->raycast.isInterpolating())
 				{
 
-					activeBullets[i].raycast.addToHitObjects(m_enemyActive.at(x));
+					activeBullets[i]->raycast.addToHitObjects(m_enemyActive.at(x));
 				}
 				else
 				{
 					m_enemyActive.at(x)->setAlive(false);
 				}
-				activeBullets[i].setActive(false);
+				activeBullets[i]->setActive(false);
 			}
 		}
 
 
 		// Tis is the debug line we check for collsion
-		if (activeBullets[i].canDrawBulletTracer())
+		if (activeBullets[i]->canDrawBulletTracer())
 		{
-			activeBullets[i].update();
-			while (activeBullets[i].raycast.getHitObjects().size() > 0)
+			activeBullets[i]->update();
+			while (activeBullets[i]->raycast.getHitObjects().size() > 0)
 			{
-				dynamic_cast<Enemy*>(activeBullets[i].raycast.getClosest())->setDead();
+				dynamic_cast<Enemy*>(activeBullets[i]->raycast.getClosest())->setDead();
 
 			}
 		}
 	}
 
-	for (int i = 0; i < activeBullets.size(); i++)
+	for (int i = activeBullets.size() - 1; i > -1; i--)
 	{
-		if (activeBullets[i].canDrawBulletTracer() == false)
+		if (activeBullets[i]->canDrawBulletTracer() == false)
 		{
-			activeBullets.erase(activeBullets.begin() + i);
-			--i;
+			activeBullets[i]->setActive(false);
+			activeBullets.pop_back();
+			
 		}
 	}
 
@@ -224,9 +230,9 @@ void GameWorld::drawWorld()
 	for (int i = 0; i < activeBullets.size(); i++)
 	{
 
-		if (activeBullets[i].canDrawBulletTracer())
+		if (activeBullets[i]->canDrawBulletTracer())
 		{
-			m_window.draw(activeBullets[i].raycast.drawRay());
+			m_window.draw(activeBullets[i]->raycast.drawRay());
 		}
 	}
 }
@@ -237,12 +243,12 @@ void GameWorld::fireBullet(int t_gunType)
 	{
 		for (int i = 0; i < 100; i++)
 		{
-			if (bullets[i].isActive() == false)
+			if (bullets[i]->isActive() == false)
 			{
-				bullets[i].setTimeToLive(400);
+				bullets[i]->setTimeToLive(400);
 				glm::vec3 tempDirection(m_camera.getDirection().x, m_camera.getDirection().y, m_camera.getDirection().z);
 				glm::normalize(tempDirection);
-				bullets[i].bulletInit(sf::Vector2f(tempDirection.x, tempDirection.z), 0, m_playerGun.getPosition());
+				bullets[i]->bulletInit(sf::Vector2f(tempDirection.x, tempDirection.z), 0, m_playerGun.getPosition());
 				activeBullets.push_back(bullets[i]);
 				break;
 
@@ -254,18 +260,18 @@ void GameWorld::fireBullet(int t_gunType)
 		int bulletSpreadAmount = 0;
 		for (int i = 0; i < 100; i++)
 		{
-			if (bullets[i].isActive() == false)
+			if (bullets[i]->isActive() == false)
 			{
 				glm::vec3 tempDirection(m_camera.getDirection().x, m_camera.getDirection().y, m_camera.getDirection().z);
 
 				float offsetX = ((float(rand()) / float(RAND_MAX)) * (0.2f - -0.2f)) + -0.2f;
 				float offsetZ = ((float(rand()) / float(RAND_MAX)) * (0.2f - -0.2f)) + -0.2f;
 
-				bullets[i].setTimeToLive(200);
+				bullets[i]->setTimeToLive(200);
 
 				glm::normalize(tempDirection);
 
-				bullets[i].bulletInit(sf::Vector2f(tempDirection.x + offsetX, tempDirection.z + offsetZ), 0, m_playerGun.getPosition());
+				bullets[i]->bulletInit(sf::Vector2f(tempDirection.x + offsetX, tempDirection.z + offsetZ), 0, m_playerGun.getPosition());
 				bulletSpreadAmount++;
 				activeBullets.push_back(bullets[i]);
 
@@ -375,7 +381,11 @@ glm::vec3 GameWorld::getCameraPosition()
 
 sf::Vector2f GameWorld::getEnemyPosition(int index)
 {
-	return m_enemyActive.at(index)->getSprite().getPosition();
+	if (m_enemyActive.size() > 0)
+	{
+		return m_enemyActive.at(index)->getSprite().getPosition();
+	}
+	return sf::Vector2f(0, 0);
 }
 
 /// <summary>
