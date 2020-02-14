@@ -23,7 +23,8 @@ public:
 	
 	void screenTransitionOn(sf::Time t_deltaTime);
 	void screenTransitionOff(sf::Time t_deltaTime);
-	void lightningAnimation(sf::Time t_deltaTime, bool t_soundFX);
+	void checkPosition();
+	void changeGameState(bool t_soundFX);
 	void setUpText();
 private:
 	Game & m_game; // refrence to game object used to set game state
@@ -36,13 +37,12 @@ private:
 	sf::Time m_timerAnimation = sf::seconds(0.0);
 	sf::Time transition_timer = sf::seconds(0.0);
 	bool m_startUp = true;
-	bool m_movedOption = false;
+	bool m_moved = false;
 	int space = 0;
-	//Button m_button[4];
 	sf::Sprite m_button[5];
 	//textures , sound buffers rectangles
 	sf::Texture m_buttonTexture;
-	sf::RectangleShape outline;
+	sf::RectangleShape m_outlineRect;
 	//sf::SoundBuffer buff;
 	//sf::Sound m_moveOptionSound;
 	//sf::SoundBuffer buff2;

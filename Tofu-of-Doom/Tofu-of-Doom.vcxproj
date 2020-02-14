@@ -38,6 +38,7 @@
     <ClCompile Include="MainMenu.cpp" />
     <ClCompile Include="Map.cpp" />
     <ClCompile Include="ModelLoader.cpp" />
+    <ClCompile Include="Options.cpp" />
     <ClCompile Include="ParticleEffect.cpp" />
     <ClCompile Include="Path.cpp" />
     <ClCompile Include="Raycast.cpp" />
@@ -94,6 +95,7 @@
     <ClInclude Include="Map.h" />
     <ClInclude Include="ModelLoader.h" />
     <ClInclude Include="Game.h" />
+    <ClInclude Include="Options.h" />
     <ClInclude Include="ParticleEffect.h" />
     <ClInclude Include="Path.h" />
     <ClInclude Include="Raycast.h" />

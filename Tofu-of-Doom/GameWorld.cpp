@@ -160,6 +160,7 @@ void GameWorld::updateWorld()
 /// </summary>
 void GameWorld::drawWorld()
 {
+	m_window.clear();
 	m_mapView.setCenter(m_player.getPosition());
 	m_window.setView(m_mapView);
 	for (int i = 0; i < m_enemies.size(); i++)
