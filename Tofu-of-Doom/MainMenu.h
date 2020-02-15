@@ -42,12 +42,7 @@ private:
 	//textures , sound buffers rectangles
 	sf::Texture m_buttonTexture;
 	sf::RectangleShape m_outlineRect;
-	//sf::SoundBuffer buff;
-	//sf::Sound m_moveOptionSound;
-	//sf::SoundBuffer buff2;
-	//sf::Sound m_selectSound;
-	//sf::SoundBuffer buff3;
-	//sf::Sound m_thunder;
+
 	int m_spaceOutline = 20;
 	int m_selectPos = 0;
 	//all text used

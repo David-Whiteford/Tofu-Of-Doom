@@ -34,21 +34,20 @@ void SplashScreen::update(sf::Time t_deltaTime)
 			m_pressstartMessage.setFillColor(sf::Color::White);
 		}
 		//if the timer is between the numbers below then its yellow
-		else if (m_timer >= 100 && m_timer <= 200 || m_timer >= 300 && m_timer <= 400 || m_timer >= 500 && m_timer <= 600
-			|| m_timer >= 700 && m_timer <= 800)
+		else
 		{
 			m_pressstartMessage.setFillColor(sf::Color::Yellow);
 		}
 	}
 	// if the start is preed then continue set transition to false
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
+	if (m_controller.yButton() == true)
 	{
 		m_continue = true;
 		
 	}
 	if (m_continue == true)
 	{
-		screenTransitionOff();
+		screenTransitionOn();
 	}
 }
 /// <summary>
@@ -73,7 +72,7 @@ void SplashScreen::setUpContent()
 	//sets up the message for the press start message
 	m_pressstartMessage.setFont(m_font);
 	m_pressstartMessage.setPosition(165.0f, 500.0f);
-	m_pressstartMessage.setString("Press Enter to continue");
+	m_pressstartMessage.setString("Press Start to continue");
 	m_pressstartMessage.setCharacterSize(55);
 
 	//sets up the message for the first title message
@@ -88,9 +87,9 @@ void SplashScreen::setUpContent()
 	m_titlemessageSecond.setString(SECOND_TITLE_MESSAGE);
 	m_titlemessageSecond.setCharacterSize(85);
 
-	if (!m_backgroundTexture.loadFromFile("Splash.jpg"))
+	if (!m_backgroundTexture.loadFromFile("models/Splash.jpg"))
 	{
-		std::cout << "Cant load image " << std::endl;
+		std::cout << "Cant Splash load image " << std::endl;
 	}
 	m_backgroundSprite.setTexture(m_backgroundTexture);
 	m_backgroundSprite.setPosition(0.0f, 0.0f);
@@ -98,69 +97,22 @@ void SplashScreen::setUpContent()
 	
 }
 
-void SplashScreen::screenTransitionOff()
+void SplashScreen::screenTransitionOn()
 {
-	//if timer is less than 60 then increment
-	if (transition_timer >= 0.0 && transition_timer <= 60.0f)
-	{
-		transition_timer++;
-		//if timer is 5 then set the color of the sprite , and messages
-		if (transition_timer == 5)
-		{
-			m_backgroundSprite.setColor(sf::Color(255, 255, 255, 255));
-			m_titlemessageSecond.setFillColor(sf::Color(255, 255, 255, 255));
-			m_titleMessage.setFillColor(sf::Color(255, 255, 255, 255));
-			m_pressstartMessage.setFillColor(sf::Color(255, 255, 255, 255));
-		}
-		//if timer is 10 then set the color of the sprite , and messages
-		else if (transition_timer == 10)
-		{
-			m_backgroundSprite.setColor(sf::Color(255, 255, 255, 200));
-			m_titlemessageSecond.setFillColor(sf::Color(255, 255, 255, 200));
-			m_titleMessage.setFillColor(sf::Color(255, 255, 255, 200));
-			m_pressstartMessage.setFillColor(sf::Color(255, 255, 255, 200));
-		}
-		//if timer is 15 then set the color of the sprite , and messages
-		else if (transition_timer == 15)
-		{
-			m_backgroundSprite.setColor(sf::Color(255, 255, 255, 150));
-			m_titlemessageSecond.setFillColor(sf::Color(255, 255, 255, 150));
-			m_titleMessage.setFillColor(sf::Color(255, 255, 255, 150));
-			m_pressstartMessage.setFillColor(sf::Color(255, 255, 255, 150));
-		}
-		//if timer is 20 then set the color of the sprite , and messages
-		else if (transition_timer == 20)
-		{
-			m_backgroundSprite.setColor(sf::Color(255, 255, 255, 100));
-			m_titlemessageSecond.setFillColor(sf::Color(255, 255, 255, 100));
-			m_titleMessage.setFillColor(sf::Color(255, 255, 255, 100));
-			m_pressstartMessage.setFillColor(sf::Color(255, 255, 255, 100));
-		}
-		//if timer is 25 then set the color of the sprite , and messages
-		else if (transition_timer == 25)
-		{
-			m_backgroundSprite.setColor(sf::Color(255, 255, 255, 50));
-			m_titlemessageSecond.setFillColor(sf::Color(255, 255, 255, 50));
-			m_titleMessage.setFillColor(sf::Color(255, 255, 255, 50));
-			m_pressstartMessage.setFillColor(sf::Color(255, 255, 255, 50));
-		}
-		//if timer is 30 then set the color of the sprite , and messages
-		else if (transition_timer == 30)
-		{
-			m_backgroundSprite.setColor(sf::Color(255, 255, 255, 0));
-			m_titlemessageSecond.setFillColor(sf::Color(255, 255, 255, 0));
-			m_titleMessage.setFillColor(sf::Color(255, 255, 255, 0));
-			m_pressstartMessage.setFillColor(sf::Color(255, 255, 255, 0));
-	
-		}
-		//changing the color above will cause a fade to black effect
-		//if timer is 60 then set gamestate to licence
-		else if (transition_timer == 60)
-		{
-			//m_game.m_currentGameState = GameState::Licence;
-		}
-	}
-	
-	
 
+	sf::Time elapsed1 = clock.getElapsedTime();
+	std::cout << elapsed1.asSeconds() << std::endl;
+	// if the timer is less than 255
+	if (elapsed1.asSeconds() <= 10.0f)
+	{
+		//fase in the background image and the text and buttons
+		m_backgroundSprite.setColor(sf::Color(255, 255, 255, m_backgroundSprite.getColor().a + 1));
+		m_titlemessageSecond.setColor(sf::Color(255, 255, 255, m_backgroundSprite.getColor().a + 1));
+		m_titleMessage.setColor(sf::Color(255, 255, 255, m_backgroundSprite.getColor().a + 1));
+		m_pressstartMessage.setColor(sf::Color(255, 255, 255, m_backgroundSprite.getColor().a + 1));
+	}
+	else if (transition_timer >= 10.0f)
+	{
+		m_game.m_drawState = m_game.DrawState::MAIN;
+	}
 }

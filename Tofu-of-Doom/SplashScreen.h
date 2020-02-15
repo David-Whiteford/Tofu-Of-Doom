@@ -6,6 +6,7 @@
 #include<SFML\Graphics.hpp>
 #include <string.h>
 #include <iostream>
+#include "Controller.h"
 
 
 class Game;
@@ -14,7 +15,7 @@ class Game;
 class SplashScreen
 {
 public:
-
+	CXBOXController m_controller;
 	SplashScreen(Game& t_game, sf::Font t_font);
 	~SplashScreen();
 	//class functions
@@ -22,7 +23,7 @@ public:
 	void render(sf::RenderWindow& t_window);
 	void setUpContent();
 	int timer{ 0 };
-	void screenTransitionOff();
+	void screenTransitionOn();
 
 private:
 	Game& m_game; // refrence to game object 
@@ -41,6 +42,7 @@ private:
 	float transition_timer = 0.0f;
 	float scaleFactor = 1.0f;
 	bool m_continue = false;
+	sf::Clock clock; // starts the clock
 	
 };
 

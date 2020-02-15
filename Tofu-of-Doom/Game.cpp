@@ -202,10 +202,11 @@ void Game::update(sf::Time t_deltaTime)
 
 	switch (m_drawState)
 	{
-
+	case DrawState::SPLASH:
+		m_splashScreen->update(t_deltaTime);
+		break;
 	case DrawState::MAP:
 		updateWorld(t_deltaTime);
-
 		break;
 	case DrawState::MAIN:
 		m_mainMenu->update(t_deltaTime, sound);
@@ -284,12 +285,13 @@ void Game::render()
 
 	switch (m_drawState)
 	{
-
+	case DrawState::SPLASH:
+		m_splashScreen->render(m_window);
+		break;
 	case DrawState::MAP:
 		m_window.pushGLStates();
 		m_gameWorld->drawWorld();
 		m_window.popGLStates();
-
 		break;
 	case DrawState::MAIN:
 		m_window.pushGLStates();

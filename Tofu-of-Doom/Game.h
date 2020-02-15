@@ -117,7 +117,8 @@ public:
 		MAP,
 		GAME,
 		MAIN,
-		OPTIONS
+		OPTIONS,
+		SPLASH
 	};
 
 	DrawState m_drawState = DrawState::MAIN;
