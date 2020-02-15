@@ -30,7 +30,8 @@ public:
 	void drawWorld();
 	void fireBullet(int t_gunType);
 	float Pi = 3.14;
-	void checkPlayerRayCollsions(sf::Time t_deltaTime);
+	void checkPlayerRayCollsions(sf::Time t_deltaTime); 
+	void updateBulletPhysics();
 
 	Bullet *bullets[100];
 	std::vector<Bullet*> activeBullets; // for a smaller loop
@@ -48,7 +49,8 @@ public:
 private:
 
 
-	Quadtree *quadtree = new Quadtree(-50, -50, 2550, 2550, 0, 2);
+	Quadtree* quadtree = new Quadtree(-50, -50, 2550, 2550, 0, 2);
+	Quadtree* quadtreeBullet = new Quadtree(-50, -50, 2550, 2550, 0, 4);
 	
 	int m_currentNode = 0;
 	int m_endNode = 0;
@@ -72,7 +74,7 @@ private:
 	//int startNode = 103;
 	//int endNode = 2237;
 
-	Enemy* m_enemyVec[8];
+	Enemy* m_enemyVec[18];
 
 	// We will use the q to push and pop checking collisions
 	std::vector<Enemy*> m_enemyActive;

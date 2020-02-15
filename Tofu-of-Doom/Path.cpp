@@ -87,7 +87,7 @@ void Path::neighbourAlgor()
 	}
 }
 
-void Path::initAStar(std::vector<Wall*> t_walls)
+void Path::initAStar(std::vector<Wall*> &t_walls)
 {
 	graph = new Graph<NodeData, int>(2500);
 

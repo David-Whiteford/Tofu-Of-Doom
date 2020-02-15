@@ -19,7 +19,7 @@ public:
 
 	void addObject(GameObject* gameObject);
 	std::vector<GameObject*> getObjectsAt(float x, float y,float _size);
-	std::vector<GameObject*> getObjectsBetweenPoints(float start_x, float startY, float endX, float endY);
+	std::vector<GameObject*> getObjectsBetweenPoints(float start_x, float startY, float endX, float endY, int _maxLevel);
 	bool Quadtree::intersects(Quadtree otherQuad);
 	void clear();
 	
