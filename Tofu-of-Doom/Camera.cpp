@@ -515,7 +515,7 @@ void Camera::turnToLeft(sf::Time t_deltaTime)
 
 void Camera::setUpRays()
 {
-	std::cout << "my rotation: " + std::to_string(m_yaw) << std::endl;;
+
 	/// Non Diagonal
 	/////// offset front and back
 	glm::vec3 tempDirectionF(m_direction.x, m_direction.y, m_direction.z);

@@ -23,16 +23,15 @@ public:
 	void setDamageAmount(int t_damage);
 
 	void setActive(bool t_alive);
-	void setTimeAliveAt(float t_time);
+	void setStepCount(int _setStepCounter);
 
 	bool isActive();
 	int getDamageAmount();
 	int getAliveForTime();
 
 	bool canDrawBulletTracer();
-	void setSpeed(float t_speed);
+	void setDistanceBetweenSteps(float _distanceBetweenSteps);
 
-	float getSpeed();
 
 
 	void setDirection(sf::Vector2f t_dir);
@@ -51,10 +50,14 @@ public:
 
 	sf::Vector2f getPosition();
 	int getStepAccuruacy();
+	int getSteps() { return m_stepsTaken; }
+	float getDistanceBetweenSteps() { return distanceBetweenSteps; }
+
+	int getMaxStepCount() { return maximumStepCount; }
 private:
 
-	int collisionAccuaracyCount = 35; // amount of checks between steps
-	float speed = 25; // distance between checks to big a number could mean we overshoot
+	int maximumStepCount = 5; // amount of checks between steps
+	float distanceBetweenSteps = 399; // distance between checks to big a number could mean we overshoot
 
 	int m_damage = 1;
 	bool m_alive = false;
@@ -66,7 +69,9 @@ private:
 
 	sf::CircleShape m_bulletShape;
 
-	int m_aliveAt = 0;
+
+	int m_stepsTaken = 0;
+	
 
 
 	sf::Vector2f m_direction = sf::Vector2f(0, 0);

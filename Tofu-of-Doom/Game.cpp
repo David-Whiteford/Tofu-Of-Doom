@@ -14,7 +14,7 @@ Game::Game(sf::ContextSettings t_settings)
 	GLuint m_error = glewInit();
 
 	// Initialise everything else
-	initialise();
+
 	m_splashScreen = new SplashScreen{ *this , m_font };
 	//loads the sfml texture and the background music
 	if (!m_sfmlTexture.loadFromFile("sfml.png"))
@@ -216,6 +216,11 @@ void Game::update(sf::Time t_deltaTime)
 		break;
 	case DrawState::GAME:
 		updateWorld(t_deltaTime);
+		if (m_gameWorld->getActiveEnemyCount() == 0)
+		{
+			m_drawState = DrawState::MAIN;
+			camera.controller.Vibrate(0, 0);
+		}
 		break;
 	}
 }
@@ -271,9 +276,6 @@ void Game::updateWorld(sf::Time t_deltaTime)
 	// Send array of light positions to shader
 	glUniform3fv(m_lightPositionsID, LIGHT_AMOUNT * sizeof(glm::vec3), &m_lightPositions[0][0]);
 
-	// Update test enemy matrix
-	model_8 = glm::translate(glm::mat4(1.0f), glm::vec3(m_gameWorld->getEnemyPosition(0).x, 3.5f, m_gameWorld->getEnemyPosition(0).y));
-	model_8 = glm::scale(model_8, glm::vec3(0.5f, 0.5f, 0.5f));
 }
 
 	/// <summary>

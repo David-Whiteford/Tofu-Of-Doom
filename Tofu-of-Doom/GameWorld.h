@@ -49,8 +49,10 @@ public:
 private:
 
 
-	Quadtree* quadtree = new Quadtree(-50, -50, 2550, 2550, 0, 2);
-	Quadtree* quadtreeBullet = new Quadtree(-50, -50, 2550, 2550, 0, 4);
+	Quadtree quadtree = Quadtree(-50, -50, 2550, 2550, 0, 6);
+	Quadtree quadtreeBullet = Quadtree(-500, -500, 3550, 3550, 0, 4);
+	std::vector<GameObject*> previousReturn;
+	std::vector<GameObject*> returnWall;
 	
 	int m_currentNode = 0;
 	int m_endNode = 0;

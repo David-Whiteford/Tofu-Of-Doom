@@ -22,7 +22,7 @@ void Bullet::bulletInit(sf::Vector2f t_dir, float t_aliveAt, sf::Vector2f t_star
 	m_bulletShape.setFillColor(sf::Color::Red);
 	m_bulletShape.setRadius(5);
 
-	m_aliveAt = 0;
+	m_stepsTaken = 0;
 	m_canDrawRayLine = true;
 	setActive(true);
 }
@@ -37,9 +37,9 @@ void Bullet::setActive(bool t_alive)
 	m_alive = t_alive;
 }
 
-void Bullet::setTimeAliveAt(float t_time)
+void Bullet::setStepCount(int _setStepCounter)
 {
-	m_aliveAt = t_time;
+	m_stepsTaken = _setStepCounter;
 }
 
 
@@ -66,15 +66,11 @@ bool Bullet::canDrawBulletTracer()
 	return m_canDrawRayLine;
 }
 
-void Bullet::setSpeed(float t_speed)
+void Bullet::setDistanceBetweenSteps(float _distanceBetweenSteps)
 {
-	speed = t_speed;
+	distanceBetweenSteps = _distanceBetweenSteps;
 }
 
-float Bullet::getSpeed()
-{
-	return speed;
-}
 
 void Bullet::setDirection(sf::Vector2f t_dir)
 {
@@ -107,18 +103,26 @@ void Bullet::update()
 {
 	if (m_alive)
 	{
-		m_position -= m_direction * speed;
+		m_position -= m_direction * (distanceBetweenSteps * m_stepsTaken);
 		m_bulletShape.setPosition(m_position);
+
+		raycast.setRayValues(m_firedFrom, m_direction, distanceBetweenSteps * m_stepsTaken);
 	}
 
 
 
-	if (m_aliveAt > collisionAccuaracyCount)
+	if (m_stepsTaken >= maximumStepCount)
 	{
 		m_alive = false;
+
+		if (m_stepsTaken > maximumStepCount)
+		{
+			m_canDrawRayLine = false;
+		}
 	}
 
-	m_aliveAt+=1;
+
+	m_stepsTaken +=1;
 
 }
 
@@ -137,10 +141,12 @@ void Bullet::setCanDrawBulletTracer(bool t_draw)
 
 sf::Vector2f Bullet::getPosition()
 {
-	return m_position;
+	return raycast.getEndPoint();
 }
 
 int Bullet::getStepAccuruacy()
 {
-	return collisionAccuaracyCount;
+	return maximumStepCount;
 }
+
+
