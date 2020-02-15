@@ -78,6 +78,8 @@ public:
 	SplashScreen* m_splashScreen; // the splash screen
 	SFML* m_sfmlScreen;
 	MainMenu* m_mainMenu;
+
+	void initialise();
 	/// <summary>
 	/// Astar stuff with graph for storing nodes
 	/// settng up the astar algorithm
@@ -268,7 +270,6 @@ private:
 	// Create particle object
 	ParticleEffect m_particleEffect = ParticleEffect(m_deltaTime);
 
-	void initialise();
 	void processEvents();
 	void update(sf::Time t_deltaTime);
 	void updateWorld(sf::Time t_deltaTime);

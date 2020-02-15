@@ -14,7 +14,7 @@ Game::Game(sf::ContextSettings t_settings)
 	GLuint m_error = glewInit();
 
 	// Initialise everything else
-	initialise();
+
 	m_splashScreen = new SplashScreen{ *this , m_font };
 	//loads the sfml texture and the background music
 	if (!m_sfmlTexture.loadFromFile("sfml.png"))
@@ -215,6 +215,7 @@ void Game::update(sf::Time t_deltaTime)
 		if (m_gameWorld->getActiveEnemyCount() == 0)
 		{
 			m_drawState = DrawState::MAIN;
+			camera.controller.Vibrate(0, 0);
 		}
 		break;
 	}

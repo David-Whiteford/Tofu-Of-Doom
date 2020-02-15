@@ -206,6 +206,7 @@ void MainMenu::changeGameState(bool t_soundFX)
 		if (m_selectPos == 0)
 		{
 			m_game.m_drawState = m_game.DrawState::GAME;
+			m_game.initialise();
 		}
 		if (m_selectPos == 1)
 		{
