@@ -135,6 +135,53 @@ std::vector<GameObject*> Quadtree::getObjectsAt(float x, float y,float _size)
 	}
 	return returnObjects;
 }
+std::vector<GameObject*> Quadtree::getObjectsBetweenPoints(float start_x, float startY, float endX, float endY, int _maxLevel)
+{
+	if (m_currentLevel == _maxLevel)
+	{
+		return gameObjectsVec;
+	}
+
+	std::vector<GameObject*> returnObjects, childReturnObjects;
+	if (!gameObjectsVec.empty())
+	{
+		returnObjects = gameObjectsVec;
+	}
+
+	// right
+	if (start_x - endX > m_posX + m_width / 2.0f && start_x - endX < m_posX + m_width)
+	{
+		if (startY - endY > m_posY + m_height / 2.0f && startY - endY < m_posY + m_height)
+		{
+			childReturnObjects = m_topRight->getObjectsBetweenPoints(start_x, startY, endX, endY,_maxLevel);
+			returnObjects.insert(returnObjects.end(), childReturnObjects.begin(), childReturnObjects.end());
+			return returnObjects;
+		}
+		else if (startY - endY > m_posY && startY - endY <= m_posY + m_height / 2.0f)
+		{
+			childReturnObjects = m_topRight->getObjectsBetweenPoints(start_x, startY, endX,endY, _maxLevel);
+			returnObjects.insert(returnObjects.end(), childReturnObjects.begin(), childReturnObjects.end());
+			return returnObjects;
+		}
+	}
+	// left
+	else if (start_x + endX > m_posX&& start_x + endX <= m_posX + m_width / 2.0f)
+	{
+		if (startY + endY > m_posY + m_height / 2.0f && startY + endY < m_posY + m_height)
+		{
+			childReturnObjects = m_topRight->getObjectsBetweenPoints(start_x, startY, endX, endY, _maxLevel);
+			returnObjects.insert(returnObjects.end(), childReturnObjects.begin(), childReturnObjects.end());
+			return returnObjects;
+		}
+		else if (startY + endY > m_posY && startY + endY <= m_posY + m_height / 2.0f)
+		{
+			childReturnObjects = m_topRight->getObjectsBetweenPoints(start_x, startY, endX, endY, _maxLevel);
+			returnObjects.insert(returnObjects.end(), childReturnObjects.begin(), childReturnObjects.end());
+			return returnObjects;
+		}
+	}
+	return returnObjects;
+}
 bool Quadtree::intersects(Quadtree otherQuad)
 {
 

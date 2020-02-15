@@ -16,13 +16,12 @@ void Bullet::bulletInit(sf::Vector2f t_dir, float t_aliveAt, sf::Vector2f t_star
 
 	setPosition(t_startPos);
 	setFiredFromPosition(t_startPos);
-	setTimeToLive(1);
 
-	raycast.setRayValues(m_firedFrom, m_direction, 1000);
+
+	raycast.setRayValues(m_firedFrom, m_direction, 0);
 	m_bulletShape.setFillColor(sf::Color::Red);
 	m_bulletShape.setRadius(5);
 
-	m_time = m_time.Zero;
 	m_aliveAt = 0;
 	m_canDrawRayLine = true;
 	setActive(true);
@@ -43,10 +42,7 @@ void Bullet::setTimeAliveAt(float t_time)
 	m_aliveAt = t_time;
 }
 
-void Bullet::setTimeToLive(float t_time)
-{
-	m_timeToLive = t_time;
-}
+
 
 bool Bullet::isActive()
 {
@@ -63,10 +59,7 @@ int Bullet::getAliveForTime()
 	return m_alive;
 }
 
-int Bullet::getTimeToLive()
-{
-	return m_timeToLive;
-}
+
 
 bool Bullet::canDrawBulletTracer()
 {
@@ -76,6 +69,11 @@ bool Bullet::canDrawBulletTracer()
 void Bullet::setSpeed(float t_speed)
 {
 	speed = t_speed;
+}
+
+float Bullet::getSpeed()
+{
+	return speed;
 }
 
 void Bullet::setDirection(sf::Vector2f t_dir)
@@ -93,6 +91,13 @@ void Bullet::setFiredFromPosition(sf::Vector2f t_pos)
 	m_firedFrom = t_pos;
 }
 
+sf::Vector2f Bullet::getDirection()
+{
+	return m_direction;
+}
+
+
+
 bool Bullet::checkCollision(sf::Vector2f t_enemyPos, float t_radius)
 {
 	return raycast.hit(t_enemyPos, t_radius);
@@ -108,10 +113,9 @@ void Bullet::update()
 
 
 
-	if (m_aliveAt > 1)
+	if (m_aliveAt > collisionAccuaracyCount)
 	{
 		m_alive = false;
-		m_canDrawRayLine = false;
 	}
 
 	m_aliveAt+=1;
@@ -123,10 +127,20 @@ sf::CircleShape Bullet::bulletSprite()
 	return m_bulletShape;
 }
 
-bool Bullet::interpolateCollision(sf::Vector2f t_enemyPos, float t_enemyRadius)
+
+
+void Bullet::setCanDrawBulletTracer(bool t_draw)
 {
-	return false;
+	m_canDrawRayLine = t_draw;
+}
 
 
+sf::Vector2f Bullet::getPosition()
+{
+	return m_position;
+}
 
+int Bullet::getStepAccuruacy()
+{
+	return collisionAccuaracyCount;
 }

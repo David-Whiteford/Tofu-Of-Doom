@@ -8,7 +8,7 @@
 #include <SFML/OpenGL.hpp>
 #include "Map.h"
 #include "DisplayScale.h"
-#include "Transform.h"
+
 #include "Raycast.h"
 
 class Bullet
@@ -21,18 +21,25 @@ public:
 
 	void bulletInit(sf::Vector2f t__dir, float t_aliveAt, sf::Vector2f t_startPos);
 	void setDamageAmount(int t_damage);
+
 	void setActive(bool t_alive);
 	void setTimeAliveAt(float t_time);
-	void setTimeToLive(float t_time);
+
 	bool isActive();
 	int getDamageAmount();
 	int getAliveForTime();
-	int getTimeToLive();
+
 	bool canDrawBulletTracer();
 	void setSpeed(float t_speed);
+
+	float getSpeed();
+
+
 	void setDirection(sf::Vector2f t_dir);
 	void setPosition(sf::Vector2f t_pos);
 	void setFiredFromPosition(sf::Vector2f t_pos);
+
+	sf::Vector2f getDirection();
 
 	bool checkCollision(sf::Vector2f t_enemyPos, float t_radius);
 	void update();
@@ -40,34 +47,31 @@ public:
 	sf::CircleShape bulletSprite(); 
 
 
+	void setCanDrawBulletTracer(bool t_draw);
 
-	//
-
-	bool interpolateCollision(sf::Vector2f t_enemyPos, float t_enemyRadius);
-
-
+	sf::Vector2f getPosition();
+	int getStepAccuruacy();
 private:
-	sf::Time m_time;
+
+	int collisionAccuaracyCount = 15; // amount of checks between steps
+	float speed = 45; // distance between checks to big a number could mean we overshoot
 
 	int m_damage = 1;
 	bool m_alive = false;
 	bool m_canDrawRayLine = false;
 
-	Transform m_transform;
+
 
 	float m_radius = 3;
 
 	sf::CircleShape m_bulletShape;
 
 	int m_aliveAt = 0;
-	float m_timeToLive = 2;
 
-	float speed = 1000;
 
 	sf::Vector2f m_direction = sf::Vector2f(0, 0);
 	sf::Vector2f m_position = sf::Vector2f(0, 0);
 	sf::Vector2f m_firedFrom = sf::Vector2f(0, 0);
 
-	// direction will need glm and sf vector for game and game world respectively
 
 };
