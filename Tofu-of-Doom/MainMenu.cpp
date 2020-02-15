@@ -17,6 +17,12 @@ MainMenu::~MainMenu()
 
 void MainMenu::update(sf::Time t_deltaTime, bool t_soundFX)
 {
+	if (m_doOnce < 1)
+	{
+		m_doOnce++;
+		m_startUp = true;
+	}
+	std::cout << "start" << m_startUp << std::endl;
 	//when start up is true then screen tran is on 
 	if (m_startUp == true)
 	{
@@ -132,11 +138,11 @@ void MainMenu::setUpContent()
 
 void MainMenu::screenTransitionOff(sf::Time t_deltaTime)
 {
-
-	sf::Time elapsed1 = clock.getElapsedTime();
-	// if the timer is less than 4.5 
-	if (elapsed1.asSeconds() <= 4.5f)
+	if (transitionTimerOff >= sf::seconds(0.0) && transitionTimerOff <= sf::seconds(4.0f))
 	{
+		//increment timer
+		transitionTimerOff += t_deltaTime;
+		std::cout << "TIMER: " << transitionTimerOff.asSeconds() << std::endl;
 		//fase the background
 		m_bg.setColor(sf::Color(255, 255, 255, m_bg.getColor().a - 1));
 		for (int i = 0; i < 4; i++)
@@ -146,11 +152,12 @@ void MainMenu::screenTransitionOff(sf::Time t_deltaTime)
 		m_playText.setColor(sf::Color(255, 255, 255, m_bg.getColor().a - 1));
 		m_optionsText.setColor(sf::Color(255, 255, 255, m_bg.getColor().a - 1));
 		m_exitText.setColor(sf::Color(255, 255, 255, m_bg.getColor().a - 1));
+
 	}
 	else
 	{
 		m_continue = false;
-		clock.restart();
+
 	}
 }
 
@@ -202,7 +209,6 @@ void MainMenu::changeGameState(bool t_soundFX)
 		if (m_selectPos == 0)
 		{
 			m_game.m_drawState = m_game.DrawState::GAME;
-
 			m_game.initialise();
 
 		}
@@ -244,12 +250,11 @@ void MainMenu::setUpText()
 
 void MainMenu::screenTransitionOn(sf::Time t_deltaTime)
 {
-
-	sf::Time elapsed1 = clock.getElapsedTime();
-	std::cout << elapsed1.asSeconds() << std::endl;
-	// if the timer is less than 255
-	if (elapsed1.asSeconds() <= 4.5f)
+	if (transitionTimer >= sf::seconds(0.0) && transitionTimer <= sf::seconds(4.0f))
 	{
+		//increment timer
+		transitionTimer += t_deltaTime;
+		std::cout << "TIMER: " << transitionTimer.asSeconds() << std::endl;
 		//fase in the background image and the text and buttons
 		m_bg.setColor(sf::Color(255, 255, 255, m_bg.getColor().a + 1));
 		for (int i = 0; i < 4; i++)
@@ -259,11 +264,12 @@ void MainMenu::screenTransitionOn(sf::Time t_deltaTime)
 		m_playText.setColor(sf::Color(255, 255, 255, m_bg.getColor().a + 1));
 		m_optionsText.setColor(sf::Color(255, 255, 255, m_bg.getColor().a + 1));
 		m_exitText.setColor(sf::Color(255, 255, 255, m_bg.getColor().a + 1));
+
 	}
 	else
 	{
 		m_startUp = false;
-		clock.restart();
+
 	}
 
 }

@@ -60,7 +60,7 @@ void Options::update(sf::Time t_deltaTime)
 	//back button is pressed to go back to main menu
 	if (sf::Joystick::isButtonPressed(0, 6) || sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
 	{
-		m_game.m_currentGameState = GameState::Main;
+		m_game.m_drawState = m_game.DrawState::MAIN;
 	}
 	//when at pos 2
 	//check if A is pressed
@@ -78,7 +78,7 @@ void Options::update(sf::Time t_deltaTime)
 		}
 		if (m_optionsPos == 0)
 		{
-			m_game.m_currentGameState = GameState::Main;
+			m_game.m_drawState = m_game.DrawState::MAIN;
 		}
 		else if (m_optionsPos == 1)
 		{

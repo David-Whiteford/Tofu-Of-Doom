@@ -22,8 +22,9 @@ public:
 	void update(sf::Time t_deltaTime);
 	void render(sf::RenderWindow& t_window);
 	void setUpContent();
-	int timer{ 0 };
-	void screenTransitionOn();
+	//int timer{ 0 };
+	sf::Time transitionTimer{ sf::seconds(0.0f) };
+	void screenTransitionOn(sf::Time t_deltaTime);
 
 private:
 	Game& m_game; // refrence to game object 
@@ -40,10 +41,12 @@ private:
 	//size of the message and transition timer
 	float msg_size = 55.0f;
 	float transition_timer = 0.0f;
+	bool m_transition = false;
 	float scaleFactor = 1.0f;
 	bool m_continue = false;
-	sf::Clock clock; // starts the clock
-	
+	int m_do_once = 0;
+	float elapsed1{ 0.0f };
+
 };
 
 #endif // Splashscreen_SCREEN

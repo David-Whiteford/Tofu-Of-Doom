@@ -10,9 +10,11 @@ Game::Game(sf::ContextSettings t_settings)
 	:
 	m_window{ sf::VideoMode{ 1280, 720, 32 }, "Tofu of Doom", sf::Style::Default, t_settings }
 {
+
 	// Initialise GLEW
 	GLuint m_error = glewInit();
-
+	//starte
+	initialise();
 	// Initialise everything else
 
 	m_splashScreen = new SplashScreen{ *this , m_font };
@@ -61,7 +63,7 @@ void Game::run()
 		{
 			m_time += gunClock.restart();
 			processEvents();
-			update(m_deltaTime);
+			update(timePerFrame);
 			//timeSinceLastUpdate -= timePerFrame;
 			processEvents();
 			render();
@@ -288,7 +290,9 @@ void Game::render()
 	switch (m_drawState)
 	{
 	case DrawState::SPLASH:
+		m_window.pushGLStates();
 		m_splashScreen->render(m_window);
+		m_window.popGLStates();
 		break;
 	case DrawState::MAP:
 		m_window.pushGLStates();
