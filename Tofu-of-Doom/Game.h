@@ -32,7 +32,7 @@
 #include "aStarStuff/NodeData.h"
 #include <map>
 /// </summary>
-
+#include "Options.h"
 #include "Camera.h"
 #include "DisplayScale.h"
 
@@ -44,6 +44,7 @@ using namespace irrklang;
 class SplashScreen;
 class SFML;
 class MainMenu;
+class Options;
 
 typedef GraphNode<NodeData, int> Node;
 
@@ -78,6 +79,7 @@ public:
 	SplashScreen* m_splashScreen; // the splash screen
 	SFML* m_sfmlScreen;
 	MainMenu* m_mainMenu;
+	Options* m_optionsMenu;
 	/// <summary>
 	/// Astar stuff with graph for storing nodes
 	/// settng up the astar algorithm

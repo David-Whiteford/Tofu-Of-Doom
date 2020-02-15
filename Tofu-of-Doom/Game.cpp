@@ -75,6 +75,12 @@ void Game::run()
 /// </summary>
 void Game::initialise()
 {
+	//loads font
+	if (!m_font.loadFromFile("models/AmazDooMRight.ttf"))
+	{
+		std::cout << "problem loading font" << std::endl;
+	}
+
 	// Set light positions (this will be put into a level loader probably)
 	for (int i = 0; i < LIGHT_AMOUNT; ++i)
 	{
@@ -203,13 +209,10 @@ void Game::update(sf::Time t_deltaTime)
 		break;
 	case DrawState::MAIN:
 		m_mainMenu->update(t_deltaTime, sound);
-
 		break;
 	case DrawState::OPTIONS:
-
-
+		m_optionsMenu->update(m_deltaTime);
 		break;
-
 	case DrawState::GAME:
 		updateWorld(t_deltaTime);
 		break;
@@ -292,13 +295,10 @@ void Game::render()
 		m_window.pushGLStates();
 		m_mainMenu->render(m_window);
 		m_window.popGLStates();
-
 		break;
 	case DrawState::OPTIONS:
-
-
+		m_optionsMenu->render(m_window);
 		break;
-
 	case DrawState::GAME:
 		// Use shader
 		glUseProgram(m_mainShader->m_programID);
