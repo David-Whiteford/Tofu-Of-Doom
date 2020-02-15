@@ -440,7 +440,6 @@ sf::Vector2f GameWorld::getEnemyPosition(int index)
 	{
 		return m_enemyActive.at(index)->getSprite().getPosition();
 	}
-	return sf::Vector2f(0, 0);
 }
 
 /// <summary>
@@ -473,6 +472,11 @@ std::vector<std::pair<glm::vec3, WallType>>* GameWorld::getWallData()
 std::vector<glm::vec3>* GameWorld::getLightPositions()
 {
 	return m_map->getLightPositions();
+}
+
+int GameWorld::getActiveEnemyCount()
+{
+	return m_enemyActive.size();
 }
 
 void GameWorld::checkEnemyInQueueAlive()
