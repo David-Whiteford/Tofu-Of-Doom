@@ -53,8 +53,8 @@ public:
 	int getStepAccuruacy();
 private:
 
-	int collisionAccuaracyCount = 15; // amount of checks between steps
-	float speed = 45; // distance between checks to big a number could mean we overshoot
+	int collisionAccuaracyCount = 35; // amount of checks between steps
+	float speed = 25; // distance between checks to big a number could mean we overshoot
 
 	int m_damage = 1;
 	bool m_alive = false;

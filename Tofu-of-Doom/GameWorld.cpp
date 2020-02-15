@@ -267,7 +267,6 @@ void GameWorld::updateBulletPhysics()
 		{
 
 			activeBullets[i]->update();
-			step++;
 
 			// used to check over step number of intervals intervals
 			activeBullets[i]->raycast.setRayValues(getPlayerPosition(), activeBullets[i]->getDirection(),
@@ -311,32 +310,26 @@ void GameWorld::updateBulletPhysics()
 					activeBullets[i]->setActive(false);
 				}
 			}
+			step++;
 		} // end while step 
 
 
 
 
-		// Tis is the debug line we check for collsion
-		if (activeBullets[i]->canDrawBulletTracer())
+		
+		while (activeBullets[i]->raycast.getHitObjects().size() > 0)
 		{
-			while (activeBullets[i]->raycast.getHitObjects().size() > 0)
+			if (activeBullets[i]->raycast.getClosest()->getTag() == ENEMY_TAG)
 			{
-				if (activeBullets[i]->raycast.getClosest()->getTag() == ENEMY_TAG)
-				{
-					dynamic_cast<Enemy*>(activeBullets[i]->raycast.getClosest())->setDead();
-				}
-
-
-
+				dynamic_cast<Enemy*>(activeBullets[i]->raycast.getClosest())->setDead();
 			}
-
 		}
 	} // end bulletphysics
 
 	// Tracer one frame rule has passed so we remove from the list
 	for (int i = activeBullets.size() - 1; i > -1; i--)
 	{
-		if (activeBullets[i]->canDrawBulletTracer() == false)
+		if (activeBullets[i]->isActive() == false)
 		{
 			activeBullets[i]->setActive(false);
 			activeBullets.pop_back();
