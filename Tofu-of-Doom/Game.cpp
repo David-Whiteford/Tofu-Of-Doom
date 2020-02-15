@@ -218,16 +218,8 @@ void Game::update(sf::Time t_deltaTime)
 
 void Game::updateWorld(sf::Time t_deltaTime)
 {
-	//======DEBUG COLLISION ====//
-	// system("cls");
-	/*std::cout << "Player: " << "x: " << camera.collider.bounds.x1 <<
-		"y: " << camera.collider.bounds.y1 << " x2: " << camera.collider.bounds.x2 << " y2: " << camera.collider.bounds.y2 << std::endl;
-	std::cout << "cube: " << "x: " << cubeCollider.bounds.x1 <<
-		"y: " << cubeCollider.bounds.y1 << " x2: " << cubeCollider.bounds.x2 << " y2: " << cubeCollider.bounds.y2 << std::endl;*/
-	if (Collider2D::isColliding(camera.collider.bounds, cubeCollider.bounds))
-	{
-		//	std::cout << "Working" << std::endl;
-	}
+	
+
 
 	//update the zombie sound position to follow test zombie
 
@@ -241,7 +233,6 @@ void Game::updateWorld(sf::Time t_deltaTime)
 
 	fireGun();
 
-	// std::cout << m_time.asSeconds() << std::endl;
 
 	// This is currently only used to display the mini-map
 	gameControls(t_deltaTime);
@@ -262,11 +253,7 @@ void Game::updateWorld(sf::Time t_deltaTime)
 
 	// Test cube
 	model_2 = glm::translate(glm::mat4(1.0f), glm::vec3(15.0f, 0.0f, 15.0f));
-	cubeCollider.bounds.x1 = 10;
-	cubeCollider.bounds.x2 = 20;
-	cubeCollider.bounds.y1 = 10;
-	cubeCollider.bounds.y2 = 20;
-	//============================================================================== DEBUG ONLY 
+	
 
 
 	// Send our transformation to the currently bound shader, in the "MVP" uniform
@@ -482,7 +469,13 @@ void Game::render()
 
 		// ---------------------------------------------------------------------------------------------------------------------
 
-		// Bind our texture in Texture Unit7
+
+
+
+
+
+
+
 		glActiveTexture(GL_TEXTURE7);
 		glBindTexture(GL_TEXTURE_2D, enemyTest_texture);
 
@@ -490,9 +483,22 @@ void Game::render()
 		glUniform1i(m_currentTextureID, 7);
 		glBindVertexArray(enemyTest_VAO_ID);
 
-		glUniformMatrix4fv(m_modelMatrixID, 1, GL_FALSE, &model_8[0][0]);
-		glDrawArrays(GL_TRIANGLES, 0, enemyTest_vertices.size());
+		
+		for (int i = 0; i < m_gameWorld->getActiveEnemyCount(); i++)
+		{
+
+			model_8 = glm::translate(glm::mat4(1.0f), glm::vec3(m_gameWorld->getEnemyPosition(i).x / s_displayScale, 3, m_gameWorld->getEnemyPosition(i).y / s_displayScale));
+
+			model_8 = glm::scale(model_8, glm::vec3(0.5f, 0.5f, 0.5f));
+			glUniformMatrix4fv(m_modelMatrixID, 1, GL_FALSE, &model_8[0][0]);
+			glDrawArrays(GL_TRIANGLES, 0, enemyTest_vertices.size());
+		}
+
 		glBindVertexArray(0);
+
+
+
+
 
 		// ---------------------------------------------------------------------------------------------------------------------
 
@@ -508,19 +514,17 @@ void Game::render()
 		glBindTexture(GL_TEXTURE_2D, 0);
 		glActiveTexture(GL_TEXTURE0);
 
-		break;
-	}
 
-	// Check for OpenGL error code
-	if (m_drawState == DrawState::GAME)
-	{
 		error = glGetError();
 
 		if (error != GL_NO_ERROR)
 		{
 			DEBUG_MSG(error);
 		}
+
+		break;
 	}
+
 
 	m_window.display();
 }
