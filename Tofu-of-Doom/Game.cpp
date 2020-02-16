@@ -3,7 +3,6 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
 
-
 /// <summary>
 /// Constructor for the Game class
 /// </summary>
@@ -11,9 +10,11 @@ Game::Game(sf::ContextSettings t_settings)
 	:
 	m_window{ sf::VideoMode{ 1280, 720, 32 }, "Tofu of Doom", sf::Style::Default, t_settings }
 {
+
 	// Initialise GLEW
 	GLuint m_error = glewInit();
-
+	//starte
+	initialise();
 	// Initialise everything else
 
 	m_splashScreen = new SplashScreen{ *this , m_font };
@@ -25,9 +26,7 @@ Game::Game(sf::ContextSettings t_settings)
 	m_sfmlSprite.setTexture(m_sfmlTexture);
 	m_sfmlScreen = new SFML{ *this , m_font, m_sfmlSprite };
 	m_mainMenu = new MainMenu{ *this , m_font };
-
-
-
+	m_optionsMenu = new Options{ *this,m_font };
 
 }
 
@@ -50,11 +49,12 @@ void Game::run()
 	sf::Time oldTime = sf::Time::Zero;
 	sf::Time timeSinceLastUpdate = sf::Time::Zero;
 	sf::Time timePerFrame = sf::seconds((1.f / 60.0f));
-	m_window.setFramerateLimit(120);
 
+	m_window.setFramerateLimit(120);
 	while (m_window.isOpen() && !m_exitGame)
 	{
 		m_deltaTime = clock.getElapsedTime() - oldTime;
+		//timeSinceLastUpdate += clock.restart();
 
 		if(clock.getElapsedTime() < oldTime + timePerFrame)
 		{
@@ -63,11 +63,12 @@ void Game::run()
 		{
 			m_time += gunClock.restart();
 			processEvents();
-			update(m_deltaTime);
+			update(timePerFrame);
+			//timeSinceLastUpdate -= timePerFrame;
 			processEvents();
-			oldTime = clock.getElapsedTime();
 			render();
-		}
+			oldTime = clock.getElapsedTime();
+		}		
 	}
 }
 
@@ -76,6 +77,7 @@ void Game::run()
 /// </summary>
 void Game::initialise()
 {
+	//m_drawState = DrawState::MAIN;
 	//loads font
 	if (!m_font.loadFromFile("models/AmazDooMRight.ttf"))
 	{
@@ -152,10 +154,9 @@ void Game::initialise()
 	// Enable depth test and face culling
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_CULL_FACE);
-	glCullFace(GL_BACK);
-	glFrontFace(GL_CCW);
 
-
+	// Uncomment this function to prove that culling faces is working by culling front faces instead of back (back is set by default)
+	// glCullFace(GL_FRONT);
 
 	// Accept fragment if it closer to the camera than the former one
 	glDepthFunc(GL_LESS);
@@ -214,7 +215,7 @@ void Game::update(sf::Time t_deltaTime)
 		m_mainMenu->update(t_deltaTime, sound);
 		break;
 	case DrawState::OPTIONS:
-		m_optionsMenu->update(m_deltaTime);
+		m_optionsMenu->update(t_deltaTime);
 		break;
 	case DrawState::GAME:
 		updateWorld(t_deltaTime);
@@ -285,12 +286,15 @@ void Game::updateWorld(sf::Time t_deltaTime)
 /// </summary>
 void Game::render()
 {
+	m_window.clear();
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	switch (m_drawState)
 	{
 	case DrawState::SPLASH:
+		m_window.pushGLStates();
 		m_splashScreen->render(m_window);
+		m_window.popGLStates();
 		break;
 	case DrawState::MAP:
 		m_window.pushGLStates();
@@ -306,6 +310,7 @@ void Game::render()
 		m_optionsMenu->render(m_window);
 		break;
 	case DrawState::GAME:
+		// Use shader
 		drawGameScene();
 
 
@@ -314,17 +319,15 @@ void Game::render()
 		m_window.popGLStates();
 		drawGameScene();
 
-		
 		break;
 	}
-
 
 	m_window.display();
 }
 
-
 void Game::drawGameScene()
-{// Use shader
+{
+
 	glUseProgram(m_mainShader->m_programID);
 
 	// Bind our texture in Texture Unit 0
@@ -546,9 +549,7 @@ void Game::drawGameScene()
 		DEBUG_MSG(error);
 	}
 
-
 }
-
 /// <summary>
 /// Game controls
 /// </summary>
@@ -666,7 +667,6 @@ void Game::loadVAO(std::string t_textureFilename, const char *t_modelFilename, G
 	glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
 
 	glBindVertexArray(0);
-
 }
 
 /// <summary>

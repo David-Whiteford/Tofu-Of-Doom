@@ -24,25 +24,21 @@ void Options::update(sf::Time t_deltaTime)
 		//if its 900 then set to 0
 		m_timer = 0;
 	}
-	//check the position of the outline rect and set its position variable dependong on the position
-	if (m_outlineRect.getPosition().y == 100.0f && m_outlineRect.getPosition().x == 100.0f)
+	
+	//function call for navigating mennus
+	if (m_optionsPos == 0 || m_optionsPos == 1|| m_optionsPos == 2)
 	{
-		//set to 0
-		m_optionsPos = 0;
+		navMenu(t_deltaTime);
 	}
-
-	if (m_outlineRect.getPosition().y == 300.0f && m_outlineRect.getPosition().x == 100.0f)
+	else if(m_optionsPos == 3 || m_optionsPos == 4)
 	{
-		//go to the volumn
-		m_optionsPos = 1;
+		navInnerMenu();
+		if(m_controller.yButton() == true)
+		{
+			m_outlineRect.setPosition(sf::Vector2f(100.0f,100.0f));
+		}
 	}
-	if (m_outlineRect.getPosition().y == 500.0f && m_outlineRect.getPosition().x == 100.0f)
-	{
-		//set to 2
-		m_optionsPos = 2;
-	}
-	//function call for navigating mennu and flashing text
-	navMenu(t_deltaTime);
+	checkPosition();
 	flashText();
 	//timer less than 0.5 then increment 
 	if (m_optionsTimer >= sf::seconds(0.0f) && m_optionsTimer <= sf::seconds(0.5f))
@@ -58,37 +54,25 @@ void Options::update(sf::Time t_deltaTime)
 	}
 	//temporary
 	//back button is pressed to go back to main menu
-	if (sf::Joystick::isButtonPressed(0, 6) || sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
+	if (m_controller.backButton() == true || sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
 	{
-		m_game.m_currentGameState = GameState::Main;
+		m_game.m_drawState = m_game.DrawState::MAIN;
 	}
 	//when at pos 2
 	//check if A is pressed
-	if ((sf::Joystick::isButtonPressed(0, 0) || sf::Keyboard::isKeyPressed(sf::Keyboard::Return)) && m_pressed == false)
+	if ((m_controller.aButton() ==true || sf::Keyboard::isKeyPressed(sf::Keyboard::Return)) && m_pressed == false)
 	{
 		//play sound effect and set to true
 		m_pressed = true;
-		if (m_soundFX == true)
-		{
-			m_soundFX = false;
-		}
-		else if (m_soundFX == false)
-		{
-			m_soundFX = true;
-		}
+	
 		if (m_optionsPos == 0)
 		{
-			m_game.m_currentGameState = GameState::Main;
-		}
-		else if (m_optionsPos == 1)
-		{
-
-			m_optionsPos = 3;
-			m_outlineRect.setPosition(m_musicmsgOff.getPosition());
+			m_outlineRect.setPosition(m_button[4].getPosition());
 			navInnerMenu();
 		}
 
 	}
+	std::cout << "outline Pos: " << m_outlineRect.getPosition().x << " , " << m_outlineRect.getPosition().y << std::endl;
 }
 /// <summary>
 /// render to t_window
@@ -99,6 +83,10 @@ void Options::render(sf::RenderWindow& t_window)
 
 	t_window.clear(sf::Color::Black);
 	t_window.draw(m_outlineRect);
+	for (int i = 0; i < 6; i++)
+	{
+		t_window.draw(m_button[i]);
+	}
 	//draw messages
 	t_window.draw(m_musicMessage);
 	t_window.draw(m_volumnMessage);
@@ -120,45 +108,43 @@ void Options::render(sf::RenderWindow& t_window)
 void Options::setUpContent()
 {
 
-
-	//volumn of music setup 
-	m_volumnMessage.setPosition(100.0f, 300.0f);
-	m_volumnMessage.setFont(m_font);
-	m_volumnMessage.setFillColor(sf::Color::Yellow);
-	m_volumnMessage.setString(VOL_MESSAGE);
-	m_volumnMessage.setCharacterSize(40);
-
-	//music on / off set up 
-	m_musicMessage.setPosition(100.0f, 500.0f);
-	m_musicMessage.setFont(m_font);
-	m_musicMessage.setFillColor(sf::Color::Yellow);
-	m_musicMessage.setString(BACKGROUND_MESSAGE);
-	m_musicMessage.setCharacterSize(40);
 	for (int i = 0; i < 2; i++)
 	{
 		//set their size pos and the color
-		m_radioBox[i].setSize(sf::Vector2f(20, 20));
+		m_radioBox[i].setSize(sf::Vector2f(50, 50));
 		//set the x pos to 600 and add next pos to y at 100
-		m_radioBox[i].setPosition(600.0f, 110.0f + nextPos);
-
+		m_radioBox[i].setPosition(800.0f, 110.0f + nextPos);
 		m_radioBox[i].setFillColor(sf::Color::Red);
 		//add 50 to set the next one 50 down from the last
-		nextPos += 50;
+		nextPos += 70;
 	}
-
 	m_musicmsgOff.setPosition(m_radioBox[0].getPosition().x - 50, m_radioBox[0].getPosition().y + nextPos / 2);
 	m_musicmsgOff.setFont(m_font);
-	m_musicmsgOff.setFillColor(sf::Color::Yellow);
+	m_musicmsgOff.setFillColor(sf::Color::White);
 	m_musicmsgOff.setString(OFF_MSG);
 	m_musicmsgOff.setCharacterSize(40);
 
 	m_musicmsgOn.setPosition(m_radioBox[1].getPosition().x - 50, m_radioBox[1].getPosition().y + nextPos);
 	m_musicmsgOn.setFont(m_font);
-	m_musicmsgOn.setFillColor(sf::Color::Yellow);
+	m_musicmsgOn.setFillColor(sf::Color::White);
 	m_musicmsgOn.setString(OFF_MSG);
 	m_musicmsgOn.setCharacterSize(40);
 
+	if (!m_buttonTexture.loadFromFile("models/bloodybutton.png"))
+	{
+		std::cout << "Cant load bloody button image " << std::endl;
+	}
+	for (int i = 0; i < 6; i++)
+	{
+		m_button[i].setTexture(m_buttonTexture);
+		m_button[i].setPosition(100, 100 + m_offsetX);
+		m_button[i].setScale(1.1, 1.5);
+		m_offsetX += 150;
 
+	}
+	sf::Vector2f offset = sf::Vector2f(0, 100);
+	m_button[4].setPosition(600  , 0 + offset.y);
+	m_button[5].setPosition(600, 78 + offset.y);
 
 	m_outlineRect.setSize(sf::Vector2f(200.0f, 70.0f));
 	m_outlineRect.setPosition(100.0f, 100.0f);
@@ -167,6 +153,7 @@ void Options::setUpContent()
 	m_volumnBarIn.setSize(sf::Vector2f(200.0f, 50.0f));
 	m_volumnBarIn.setPosition(100.0f, 350.0f);
 	m_volumnBarIn.setFillColor(sf::Color::Red);
+
 	m_volumnBarOuter.setSize(sf::Vector2f(200.0f, 50.0f));
 	m_volumnBarOuter.setPosition(100.0f, 350.0f);
 	m_volumnBarOuter.setFillColor(sf::Color::Green);
@@ -175,22 +162,22 @@ void Options::setUpContent()
 	m_selectSoundSquare.setPosition(230.0f, 510.0f);
 	m_selectSoundSquare.setFillColor(sf::Color::Green);
 
-	////sets the buffer and the volumn
-	//m_moveOptionSound.setBuffer(m_buffoptionMove);
-	//m_moveOptionSound.setVolume(50);
+	setUpText();
+
+	
 }
 void Options::navMenu(sf::Time t_deltaTime)
 {
 
 	//downwards on the d pad
-	if (sf::Joystick::getAxisPosition(0, sf::Joystick::PovY) < -50 && m_moved == false)
+	if (m_controller.downButton() ==true && m_moved == false)
 	{
 		//set moved to true 
 		m_moved = true;
 		//if the outline rect is less than 500
 		if (m_spaceOutline < 500.0f)
-		{   // add on 200
-			m_spaceOutline += 200.0f;
+		{   // move rect down 150
+			m_spaceOutline += 150.0f;
 			//play ove sound
 			if (m_soundFX == true)
 			{
@@ -201,15 +188,15 @@ void Options::navMenu(sf::Time t_deltaTime)
 		m_outlineRect.setPosition(100.0f, m_spaceOutline);
 	}
 	//up on the d pad
-	if (sf::Joystick::getAxisPosition(0, sf::Joystick::PovY) > 50 && m_moved == false)
+	if (m_controller.upButton() == true && m_moved == false)
 	{
 		//set moved to true 
 		m_moved = true;
 		//if the outline rect is greater than 100
 		if (m_spaceOutline > 100.0f)
 		{
-			//subtract 200
-			m_spaceOutline -= 200.0f;
+			/// move rect up 150
+			m_spaceOutline -= 150.0f;
 			//play the move sound 
 			if (m_soundFX == true)
 			{
@@ -241,6 +228,35 @@ void Options::navMenu(sf::Time t_deltaTime)
 
 }
 
+void Options::checkPosition()
+{
+	//check the position of the outline rect and set its position variable dependong on the position
+	if (m_outlineRect.getPosition().y == 100.0f && m_outlineRect.getPosition().x == 100.0f)
+	{
+		//set to 0
+		m_optionsPos = 0;
+	}
+
+	if (m_outlineRect.getPosition().y == 300.0f && m_outlineRect.getPosition().x == 100.0f)
+	{
+		//go to the volumn
+		m_optionsPos = 1;
+	}
+	if (m_outlineRect.getPosition().y == 500.0f && m_outlineRect.getPosition().x == 100.0f)
+	{
+		//set to 2
+		m_optionsPos = 2;
+	}
+	if (m_outlineRect.getPosition().y == 100.0f && m_outlineRect.getPosition().x == 600.0f)
+	{
+		m_optionsPos =3;
+	}
+	if (m_outlineRect.getPosition().y == 170.0f && m_outlineRect.getPosition().x == 600.0f)
+	{
+		m_optionsPos = 4;
+	}
+}
+
 
 void Options::flashText()
 {
@@ -252,45 +268,70 @@ void Options::navInnerMenu()
 {
 
 	//downwards on the d pad
-	if (sf::Joystick::getAxisPosition(0, sf::Joystick::PovY) < -50 && m_moved == false && m_optionsPos == 3)
+	if (m_controller.downButton()==true && m_moved == false )
 	{
 		//set moved to true 
 		m_moved = true;
 		//if the outline rect is less than 500
-		if (m_spaceOutline < m_outlineRect.getPosition().y + 50.0f)
+		if (m_spaceOutline < 170.0f)
 		{   // add on 200
-			m_spaceOutline += 50.0f;
+			m_spaceOutline += 70.0f;
 			//play ove sound
 			if (m_soundFX == true)
 			{
 				m_moveOptionSound.play();
 			}
-			m_optionsPos = 4;
+			
 		}
 		//set the position od the outline rect
 		m_outlineRect.setPosition(m_outlineRect.getPosition().x, m_spaceOutline);
 	}
 	//up on the d pad
-	if (sf::Joystick::getAxisPosition(0, sf::Joystick::PovY) > 50 && m_moved == false && m_optionsPos == 4)
+	if (m_controller.upButton() == true && m_moved == false )
 	{
 		//set moved to true 
 		m_moved = true;
 		//if the outline rect is greater than 100
-		if (m_spaceOutline > m_outlineRect.getPosition().y - 50.0f)
+		if (m_spaceOutline > 100.0f)
 		{
 			//subtract 200
-			m_spaceOutline -= 50.0f;
+			m_spaceOutline -= 70.0f;
 			//play the move sound 
 			if (m_soundFX == true)
 			{
 				m_moveOptionSound.play();
 			}
-			m_optionsPos = 3;
+			
 		}
 		//set the position of the outline rect
 
 		m_outlineRect.setPosition(m_outlineRect.getPosition().x, m_spaceOutline);
 	}
+}
+void Options::setUpText()
+{
+	sf::Vector2f offset(sf::Vector2f(50.0f, 20.0f));
+	//set the font , position and the string , character size of the texts used
+	m_musicMessage.setFont(m_font);
+	m_musicMessage.setPosition(m_button[0].getPosition().x + offset.x, m_button[0].getPosition().y + offset.y);
+	m_musicMessage.setString(BACKGROUND_MESSAGE);
+	m_musicMessage.setCharacterSize(40);
+
+
+	offset = (sf::Vector2f(35.0f, 20.0f));
+	m_volumnMessage.setFont(m_font);
+	m_volumnMessage.setPosition(m_button[1].getPosition().x + offset.x, m_button[1].getPosition().y + offset.y);
+	m_volumnMessage.setString(VOL_MESSAGE);
+	m_volumnMessage.setCharacterSize(40);
+
+	//offset = (sf::Vector2f(60.0f, 20.0f));
+	//m_exitText.setFont(m_font);
+	//m_exitText.setPosition(m_button[2].getPosition().x + offset.x, m_button[2].getPosition().y + offset.y);
+	//m_exitText.setString("EXIT");
+	//m_exitText.setCharacterSize(40);
+
+
+
 }
 void Options::adjustVolumn(sf::Music& t_backgroundMusic)
 {

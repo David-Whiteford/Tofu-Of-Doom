@@ -35,8 +35,9 @@ private:
 	bool m_continue{ false };
 	sf::Time m_timerAnimation = sf::seconds(0.0);
 	sf::Time transition_timer = sf::seconds(0.0);
-	bool m_startUp = true;
+	bool m_startUp = false;
 	bool m_moved = false;
+	int m_doOnce = 0;
 	int space = 0;
 	sf::Sprite m_button[5];
 	//textures , sound buffers rectangles
@@ -52,6 +53,8 @@ private:
 
 	//timer for button navigation
 	sf::Time timer{ sf::seconds(0.0f) };
+	sf::Time transitionTimer{ sf::seconds(0.0f) };
+	sf::Time transitionTimerOff{ sf::seconds(0.0f) };
 };
 
 #endif // Main_Menu
