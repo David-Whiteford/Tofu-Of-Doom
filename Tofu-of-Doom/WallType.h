@@ -3,12 +3,11 @@
 
 enum class WallType
 {
-	EMPTY,		// Obviously empty, duh
-	WALLTYPE_1, // Concrete
+	EMPTY,		// Empty
+	WALLTYPE_1, // Main wall type
 	WALLTYPE_2, // Stone
-	WALLTYPE_3, // Who knows?
-	WALLTYPE_4, // Maybe this could be snot
-	WALLTYPE_5	// This one could be made of onions and gravy
+	FIRE_EXT, // Fire extinguisher model
+	OIL_DRUM // Oil drum model
 };
 
 #endif // !WALLTYPE_H

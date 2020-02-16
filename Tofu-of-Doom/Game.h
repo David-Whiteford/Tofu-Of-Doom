@@ -23,7 +23,6 @@
 #include "ParticleEffect.h"
 #include "SplashScreen.h"
 #include "SFML.h"
-/// A star Algorithm 
 #include "MainMenu.h"
 #include <iostream>
 #include <fstream>
@@ -31,16 +30,14 @@
 #include "aStarStuff/Graph.h"
 #include "aStarStuff/NodeData.h"
 #include <map>
-/// </summary>
 #include "Options.h"
 #include "Camera.h"
 #include "DisplayScale.h"
-
-// Debug Only Remove and place in own class for model cube //
 #include "Collider2D.h"
 
 using namespace irrklang;
 #pragma comment(lib, "irrKlang.lib") // link with irrKlang.dll
+
 class SplashScreen;
 class SFML;
 class MainMenu;
@@ -50,9 +47,7 @@ typedef GraphNode<NodeData, int> Node;
 
 class Game
 {
-public:
-
-	
+public:	
 	Game(sf::ContextSettings t_settings);
 	~Game();
 
@@ -62,7 +57,7 @@ public:
 	ISoundEngine* gunSoundEngine;
 	ISound* music;
 	ISound* background;
-	sf::Font m_font; // font used by message
+	sf::Font m_font; // Font used by message
 	irrklang::ISoundSource* zombie;
 	irrklang::ISoundSource* shotgunSound;
 	irrklang::ISoundSource* machinegunSound;
@@ -70,22 +65,18 @@ public:
 	bool vibrate = false;
 	vec3df zombiePosition;
 	ISound* zombieEnemies[11];
-	//vec3df positionEnemies[11];
 	sf::Sprite m_sfmlSprite;
 	sf::Texture m_sfmlTexture;
-	// 1 is pistol, 2 is rifle, 3 is machine gun)
 	int gunNum = 1;
-	//menu screens
-	SplashScreen* m_splashScreen; // the splash screen
+
+	// Menu screens
+	SplashScreen* m_splashScreen; // The splash screen
 	SFML* m_sfmlScreen;
 	MainMenu* m_mainMenu;
 	Options* m_optionsMenu;
 	void initialise();
 	
-	/// <summary>
-	/// Astar stuff with graph for storing nodes
-	/// settng up the astar algorithm
-	/// </summary>
+	// A* stuff with graph for storing nodes
 	GameState m_currentGameState{ GameState::Main }; // used for whatever mode game starts
 	Graph<NodeData, int>* graph;
 	std::vector<Node*> graphPath;
@@ -93,11 +84,9 @@ public:
 	NodeData nodeData;
 	int nodeIndex{ 0 };
 	bool sound =false;
-	std::ifstream myfile;
+	std::ifstream myfile;	
 
-	
-
-	//find the neighbours of row 4 and column 4(temp Test
+	// Find the neighbours of row 4 and column 4
 	int row = 0;
 	int col = 0;
 
@@ -114,7 +103,7 @@ public:
 
 	std::queue <ISoundSource*> shotgunQueue;
 
-	enum DrawState
+	enum class DrawState
 	{
 		MAP,
 		GAME,
@@ -126,111 +115,43 @@ public:
 	DrawState m_drawState = DrawState::MAIN;
 
 private:
+	struct Model
+	{
+		unsigned char *data;
+		GLuint VAO_ID;
+		GLuint VBO_ID;
+		GLuint normalBufferID;
+		GLuint textureID;
+		GLuint texture;
+		GLuint uvBufferID;
+		GLuint elementBufferID;
+		std::vector<glm::vec3> vertices;
+		std::vector<glm::vec2> uvs;
+		std::vector<glm::vec3> normals;
+		std::vector<unsigned short> indices;
+	};
 
-
-
-	sf::RenderWindow m_window; // Window
+	sf::RenderWindow m_window;		
+	Camera camera; // Player camera
 	sf::Time m_deltaTime;
 	GameWorld *m_gameWorld = new GameWorld(m_window, m_deltaTime, &camera); // Create a game world
 
 	bool m_exitGame{ false };
+	bool m_buttonPressed = false;
 
-	// Wall type 1
-	unsigned char *wallType1_data;
-	GLuint wallType1_VAO_ID;
-	GLuint wallType1_VBO_ID;
-	GLuint wallType1_normalBufferID;
-	GLuint wallType1_textureID;
-	GLuint wallType1_texture;
-	GLuint wallType1_uvBufferID;
-	std::vector<glm::vec3> wallType1_vertices;
-	std::vector<glm::vec2> wallType1_uvs;
-	std::vector<glm::vec3> wallType1_normals;
-
-	// Wall type 2
-	unsigned char *wallType2_data;
-	GLuint wallType2_VAO_ID;
-	GLuint wallType2_VBO_ID;
-	GLuint wallType2_normalBufferID;
-	GLuint wallType2_textureID;
-	GLuint wallType2_texture;
-	GLuint wallType2_uvBufferID;
-	std::vector<glm::vec3> wallType2_vertices;
-	std::vector<glm::vec2> wallType2_uvs;
-	std::vector<glm::vec3> wallType2_normals;
-
-	// Machine gun
-	unsigned char *machineGun_data;
-	GLuint machineGun_VAO_ID;
-	GLuint machineGun_VBO_ID;
-	GLuint machineGun_normalBufferID;
-	GLuint machineGun_textureID;
-	GLuint machineGun_texture;
-	GLuint machineGun_uvBufferID;
-	std::vector<glm::vec3> machineGun_vertices;
-	std::vector<glm::vec2> machineGun_uvs;
-	std::vector<glm::vec3> machineGun_normals;	
-
-	// Oil drum
-	unsigned char* oilDrum_data;
-	GLuint oilDrum_VAO_ID;
-	GLuint oilDrum_VBO_ID;
-	GLuint oilDrum_normalBufferID;
-	GLuint oilDrum_textureID;
-	GLuint oilDrum_texture;
-	GLuint oilDrum_uvBufferID;
-	std::vector<glm::vec3> oilDrum_vertices;
-	std::vector<glm::vec2> oilDrum_uvs;
-	std::vector<glm::vec3> oilDrum_normals;
-
-	// Oil drum
-	unsigned char* enemyTest_data;
-	GLuint enemyTest_VAO_ID;
-	GLuint enemyTest_VBO_ID;
-	GLuint enemyTest_normalBufferID;
-	GLuint enemyTest_textureID;
-	GLuint enemyTest_texture;
-	GLuint enemyTest_uvBufferID;
-	std::vector<glm::vec3> enemyTest_vertices;
-	std::vector<glm::vec2> enemyTest_uvs;
-	std::vector<glm::vec3> enemyTest_normals;
-
-
-	// Fire extinguisher
-	unsigned char* fireExtinguisher_data;
-	GLuint fireExtinguisher_VAO_ID;
-	GLuint fireExtinguisher_VBO_ID;
-	GLuint fireExtinguisher_normalBufferID;
-	GLuint fireExtinguisher_textureID;
-	GLuint fireExtinguisher_texture;
-	GLuint fireExtinguisher_uvBufferID;
-	std::vector<glm::vec3> fireExtinguisher_vertices;
-	std::vector<glm::vec2> fireExtinguisher_uvs;
-	std::vector<glm::vec3> fireExtinguisher_normals;
-
-	// Rifle
-	unsigned char* rifle_data;
-	GLuint rifle_VAO_ID;
-	GLuint rifle_VBO_ID;
-	GLuint rifle_normalBufferID;
-	GLuint rifle_textureID;
-	GLuint rifle_texture;
-	GLuint rifle_uvBufferID;
-	std::vector<glm::vec3> rifle_vertices;
-	std::vector<glm::vec2> rifle_uvs;
-	std::vector<glm::vec3> rifle_normals;
-
-	// Pistol
-	unsigned char* pistol_data;
-	GLuint pistol_VAO_ID;
-	GLuint pistol_VBO_ID;
-	GLuint pistol_normalBufferID;
-	GLuint pistol_textureID;
-	GLuint pistol_texture;
-	GLuint pistol_uvBufferID;
-	std::vector<glm::vec3> pistol_vertices;
-	std::vector<glm::vec2> pistol_uvs;
-	std::vector<glm::vec3> pistol_normals;
+	// Models
+	Model m_wallType1;
+	Model m_wallType2;
+	Model m_fireExt;
+	Model m_oilDrum;
+	Model m_chair;
+	Model m_table_1;
+	Model m_table_2;
+	Model m_table_and_chair;
+	Model m_pistol;	
+	Model m_machineGun;
+	Model m_rifle;
+	Model m_enemy;
 
 	// Shader IDs
 	const static int LIGHT_AMOUNT = 25;
@@ -247,25 +168,29 @@ private:
 	// Used for OpenGL error check
 	GLenum error;
 
-	// The model matrices will eventually be stored in an array (probably on the GPU)
+	// Matrices for various models
 	glm::mat4 model_1;
-	glm::mat4 model_2; /* Cube Test*/ Collider2D cubeCollider; // Remove and place in own class after debugging
-	glm::mat4 model_3; // Machine gun matrix
-	glm::mat4 model_4;
-	glm::mat4 model_5;
-	glm::mat4 model_6; // Rifle matrix
-	glm::mat4 model_7; // Pistol matrix
-	glm::mat4 model_8; // test enemy matrix
+	glm::mat4 m_fireExtModelMatrix;
+	glm::mat4 m_oilDrumModelMatrix;
+	glm::mat4 m_chairModelMatrix;
+	glm::mat4 m_table_1_modelMatrix;
+	glm::mat4 m_table_2_modelMatrix;
+	glm::mat4 m_pistolModelMatrix;
+	glm::mat4 m_rifleModelMatrix;
+	glm::mat4 m_machineGunModelMatrix;
+	glm::mat4 m_enemyModelMatrix;
+	glm::mat4 m_rotationMatrix; // Generic, used for anything
+
+	// Projection matrix
 	glm::mat4 projection;	
 
-	tk::Shader *m_mainShader; // Shader object
+	// Shaders
+	tk::Shader *m_mainShader;
 	tk::Shader *m_particleShader;
-	glm::vec3 m_eye{ 0.f, 4.0f, 0.f }; // Current camera position
-	
-	glm::mat4 m_rotationMatrix;
+
+	glm::vec3 m_eye{ 0.f, 4.0f, 0.f }; // Current camera position		
 	glm::vec4 m_direction{ 0.f, 0.f, 1.f, 0.f }; // You move in this direction, it rotates when you rotate
 	float m_speed = 0.05f; // This value dictates the speed of all game movement
-
 	double m_yaw{ 0.0 }; // Look left and right (in degrees)
 	double m_pitch{ 0.0 }; // Look up and down (in degrees)
 	bool gunRecoil{ false };
@@ -273,22 +198,14 @@ private:
 	// Create particle object
 	ParticleEffect m_particleEffect = ParticleEffect(m_deltaTime);
 
+	// Functions
 	void processEvents();
 	void update(sf::Time t_deltaTime);
 	void updateWorld(sf::Time t_deltaTime);
 	void render();
 	void gameControls(sf::Time t_deltaTime);
-	void loadVAO(std::string t_textureFilename, const char *t_modelFilename, GLuint &t_vaoID,
-		GLuint &t_vboID, GLuint &t_normalBufferID, GLuint &t_textureID, GLuint &t_texture, GLuint &t_uvBufferID,
-		std::vector<glm::vec3>& t_vertices, std::vector<glm::vec2>& t_UVs, std::vector<glm::vec3>& t_normals);
-	void gunAnimation(glm::mat4 &t_gunMatrix);
-	void moveEnemy(glm::mat4& t_gunMatrix);
-
-
-	bool m_buttonPressed = false;
-	//Player Camera
-	Camera camera;
-
+	void loadVAO(std::string t_textureFilename, const char* t_modelFilename, Model& t_model);
+	void gunAnimation(glm::mat4& t_gunMatrix);
 	void fireGun();
 	void drawGameScene();
 };
