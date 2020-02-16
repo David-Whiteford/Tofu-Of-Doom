@@ -113,6 +113,7 @@ GameObject* Raycast::getClosest()
 		else
 		{
 			//dynamic_cast<GameObject*>(this)->setTag("Enemy");
+			// could possibly skip a check
 			// check tags
 			float dist1;
 			float dist2;
@@ -120,21 +121,28 @@ GameObject* Raycast::getClosest()
 			if (closest->getTag() == ENEMY_TAG)
 			{
 
-				GameObject* en = closest;
-				Enemy* sen = dynamic_cast<Enemy*>(en);
+				Enemy* sen = dynamic_cast<Enemy*>(closest);
 				dist1 = std::sqrt((std::pow((m_positon.x - sen->getPosition().x), 2) + (std::pow((m_positon.y - sen->getPosition().y), 2))));
 
 			}
-			else
+			else if (closest->getTag() == WALL_TAG)
 			{
+				Wall* sen = dynamic_cast<Wall*>(closest);
+				dist1 = std::sqrt((std::pow((m_positon.x - sen->position.x), 2) + (std::pow((m_positon.y - sen->position.y), 2))));
 
 			}
 			if (hitObjects.front()->getTag() == ENEMY_TAG)
 			{
-				GameObject *en = hitObjects.front();
-				Enemy *sen = dynamic_cast<Enemy*>(en);
+				Enemy *sen = dynamic_cast<Enemy*>(hitObjects.front());
 				dist2 = std::sqrt((std::pow((m_positon.x - sen->getPosition().x), 2) + (std::pow((m_positon.y - sen->getPosition().y), 2))));
 			}
+			else if (closest->getTag() == WALL_TAG)
+			{
+				Wall* sen = dynamic_cast<Wall*>(hitObjects.front());
+				dist2 = std::sqrt((std::pow((m_positon.x - sen->position.x), 2) + (std::pow((m_positon.y - sen->position.y), 2))));
+
+			}
+
 			if (dist2 < dist1)
 			{
 				closest = hitObjects.front();
@@ -142,8 +150,7 @@ GameObject* Raycast::getClosest()
 			hitObjects.pop();
 		}
 	}
-	//sf::Vector2f newPos = sf::Vector2f(200, 200);
-	//closest->setPosition(newPos);
+
 	return closest;
 }
 

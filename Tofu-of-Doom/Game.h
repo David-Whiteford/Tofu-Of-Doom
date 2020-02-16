@@ -123,7 +123,7 @@ public:
 		SPLASH
 	};
 
-	DrawState m_drawState = DrawState::OPTIONS;
+	DrawState m_drawState = DrawState::MAIN;
 
 private:
 
@@ -290,6 +290,7 @@ private:
 	Camera camera;
 
 	void fireGun();
+	void drawGameScene();
 };
 
 #endif // !GAME_H
