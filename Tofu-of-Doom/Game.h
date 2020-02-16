@@ -249,13 +249,14 @@ private:
 
 	// The model matrices will eventually be stored in an array (probably on the GPU)
 	glm::mat4 model_1;
-	glm::mat4 model_2; /* Cube Test*/ Collider2D cubeCollider; // Remove and place in own class after debugging
-	glm::mat4 model_3; // Machine gun matrix
-	glm::mat4 model_4;
-	glm::mat4 model_5;
-	glm::mat4 model_6; // Rifle matrix
-	glm::mat4 model_7; // Pistol matrix
-	glm::mat4 model_8; // test enemy matrix
+	// glm::mat4 model_2; /* Cube Test*/ Collider2D cubeCollider; // Remove and place in own class after debugging
+	glm::mat4 m_fireExtModelMatrix;
+	glm::mat4 m_oilDrumModelMatrix;
+	glm::mat4 m_pistolModelMatrix; // Pistol matrix
+	glm::mat4 m_rifleModelMatrix; // Rifle matrix
+	glm::mat4 m_machineGunModelMatrix; // Machine gun matrix
+
+	glm::mat4 m_enemyModelMatrix; // Enemy matrix
 	glm::mat4 projection;	
 
 	tk::Shader *m_mainShader; // Shader object
