@@ -131,9 +131,11 @@ private:
 		GLuint textureID;
 		GLuint texture;
 		GLuint uvBufferID;
+		GLuint elementBufferID;
 		std::vector<glm::vec3> vertices;
 		std::vector<glm::vec2> uvs;
 		std::vector<glm::vec3> normals;
+		std::vector<unsigned short> indices;
 	};
 
 	sf::RenderWindow m_window; // Window
