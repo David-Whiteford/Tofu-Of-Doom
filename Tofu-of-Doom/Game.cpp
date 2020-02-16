@@ -84,7 +84,7 @@ void Game::initialise()
 		std::cout << "problem loading font" << std::endl;
 	}
 
-	// Set light positions (this will be put into a level loader probably)
+	// Set light positions
 	for (int i = 0; i < LIGHT_AMOUNT; ++i)
 	{
 		glm::vec3 f_temp = glm::vec3(m_gameWorld->getLightPositions()->at(i).x / s_displayScale, m_gameWorld->getLightPositions()->at(i).y / s_displayScale, m_gameWorld->getLightPositions()->at(i).z / s_displayScale);
@@ -127,8 +127,8 @@ void Game::initialise()
 	loadVAO("models/wallType1/wallType1.png", "models/wallType1/wallType1.obj", wallType1_VAO_ID, wallType1_VBO_ID,
 		wallType1_normalBufferID, wallType1_textureID, wallType1_texture, wallType1_uvBufferID, wallType1_vertices, wallType1_uvs, wallType1_normals);
 
-	loadVAO("models/wallType2/wallType2.png", "models/wallType2/wallType2.obj", wallType2_VAO_ID, wallType2_VBO_ID,
-		wallType2_normalBufferID, wallType2_textureID, wallType2_texture, wallType2_uvBufferID, wallType2_vertices, wallType2_uvs, wallType2_normals);
+	//loadVAO("models/wallType2/wallType2.png", "models/wallType2/wallType2.obj", wallType2_VAO_ID, wallType2_VBO_ID,
+	//	wallType2_normalBufferID, wallType2_textureID, wallType2_texture, wallType2_uvBufferID, wallType2_vertices, wallType2_uvs, wallType2_normals);
 
 	loadVAO("models/machineGun/machineGun.png", "models/machineGun/machineGun.obj", machineGun_VAO_ID, machineGun_VBO_ID,
 		machineGun_normalBufferID, machineGun_textureID, machineGun_texture, machineGun_uvBufferID, machineGun_vertices, machineGun_uvs, machineGun_normals);
@@ -266,7 +266,7 @@ void Game::updateWorld(sf::Time t_deltaTime)
 	soundEngine->setListenerPosition(position, lookDirection, velPerSecond, upVector);
 
 	// Test cube
-	model_2 = glm::translate(glm::mat4(1.0f), glm::vec3(15.0f, 0.0f, 15.0f));
+	// model_2 = glm::translate(glm::mat4(1.0f), glm::vec3(15.0f, 0.0f, 15.0f));
 	
 
 
@@ -380,16 +380,16 @@ void Game::drawGameScene()
 	// ---------------------------------------------------------------------------------------------------------------------
 
 	// Bind our texture in Texture Unit 1
-	glActiveTexture(GL_TEXTURE1);
-	glBindTexture(GL_TEXTURE_2D, wallType2_texture);
+	//glActiveTexture(GL_TEXTURE1);
+	//glBindTexture(GL_TEXTURE_2D, wallType2_texture);
 
-	// Set shader to use Texture Unit 1
-	glUniform1i(m_currentTextureID, 1);
+	//// Set shader to use Texture Unit 1
+	//glUniform1i(m_currentTextureID, 1);
 
-	glBindVertexArray(wallType2_VAO_ID);
-	glUniformMatrix4fv(m_modelMatrixID, 1, GL_FALSE, &model_2[0][0]);
-	glDrawArrays(GL_TRIANGLES, 0, wallType2_vertices.size());
-	glBindVertexArray(0);
+	//glBindVertexArray(wallType2_VAO_ID);
+	//glUniformMatrix4fv(m_modelMatrixID, 1, GL_FALSE, &model_2[0][0]);
+	//glDrawArrays(GL_TRIANGLES, 0, wallType2_vertices.size());
+	//glBindVertexArray(0);
 
 	// ---------------------------------------------------------------------------------------------------------------------
 
@@ -405,9 +405,9 @@ void Game::drawGameScene()
 
 		glBindVertexArray(machineGun_VAO_ID);
 
-		gunAnimation(model_3); // Does nothing if recoil is false
+		gunAnimation(m_machineGunModelMatrix); // Does nothing if recoil is false
 
-		glUniformMatrix4fv(m_modelMatrixID, 1, GL_FALSE, &model_3[0][0]);
+		glUniformMatrix4fv(m_modelMatrixID, 1, GL_FALSE, &m_machineGunModelMatrix[0][0]);
 		glDrawArrays(GL_TRIANGLES, 0, machineGun_vertices.size());
 		glBindVertexArray(0);
 	}
@@ -423,11 +423,11 @@ void Game::drawGameScene()
 
 	glBindVertexArray(oilDrum_VAO_ID);
 
-	for (int i = 0; i < 5; ++i)
+	for (int i = 0; i < m_gameWorld->getOilDrumPositions()->size(); ++i)
 	{
-		model_4 = glm::translate(glm::mat4(1.0f), glm::vec3(20.0f + (i * 4.0f), -2.5f, 15.0f));
-		model_4 = glm::scale(model_4, glm::vec3(i + 1, i + 1, i + 1));  // Add 1 because 0 can't be used to scale
-		glUniformMatrix4fv(m_modelMatrixID, 1, GL_FALSE, &model_4[0][0]);
+		m_oilDrumModelMatrix = glm::translate(glm::mat4(1.0f), m_gameWorld->getOilDrumPositions()->at(i) / s_displayScale);
+		m_oilDrumModelMatrix = glm::scale(m_oilDrumModelMatrix, glm::vec3(5.0f, 5.0f, 5.0f));
+		glUniformMatrix4fv(m_modelMatrixID, 1, GL_FALSE, &m_oilDrumModelMatrix[0][0]);
 		glDrawArrays(GL_TRIANGLES, 0, oilDrum_vertices.size());
 	}
 
@@ -444,11 +444,11 @@ void Game::drawGameScene()
 
 	glBindVertexArray(fireExtinguisher_VAO_ID);
 
-	for (int i = 0; i < 5; ++i)
+	for (int i = 0; i < m_gameWorld->getFireExtPositions()->size(); ++i)
 	{
-		model_5 = glm::translate(glm::mat4(1.0f), glm::vec3(30.0f + (i * 0.8f), -2.5f, 20.0f));
-		model_5 = glm::scale(model_5, glm::vec3(i + 1, i + 1, i + 1)); // Add 1 because 0 can't be used to scale
-		glUniformMatrix4fv(m_modelMatrixID, 1, GL_FALSE, &model_5[0][0]);
+		m_fireExtModelMatrix = glm::translate(glm::mat4(1.0f), m_gameWorld->getFireExtPositions()->at(i) / s_displayScale);
+		m_fireExtModelMatrix = glm::scale(m_fireExtModelMatrix, glm::vec3(12.0f, 12.0f, 12.0f));
+		glUniformMatrix4fv(m_modelMatrixID, 1, GL_FALSE, &m_fireExtModelMatrix[0][0]);
 		glDrawArrays(GL_TRIANGLES, 0, fireExtinguisher_vertices.size());
 	}
 
@@ -468,9 +468,9 @@ void Game::drawGameScene()
 
 		glBindVertexArray(rifle_VAO_ID);
 
-		gunAnimation(model_6); // Does nothing if recoil is false
+		gunAnimation(m_rifleModelMatrix); // Does nothing if recoil is false
 
-		glUniformMatrix4fv(m_modelMatrixID, 1, GL_FALSE, &model_6[0][0]);
+		glUniformMatrix4fv(m_modelMatrixID, 1, GL_FALSE, &m_rifleModelMatrix[0][0]);
 		glDrawArrays(GL_TRIANGLES, 0, rifle_vertices.size());
 		glBindVertexArray(0);
 	}
@@ -489,9 +489,9 @@ void Game::drawGameScene()
 
 		glBindVertexArray(pistol_VAO_ID);
 
-		gunAnimation(model_7); // Does nothing if recoil is false
+		gunAnimation(m_pistolModelMatrix); // Does nothing if recoil is false
 
-		glUniformMatrix4fv(m_modelMatrixID, 1, GL_FALSE, &model_7[0][0]);
+		glUniformMatrix4fv(m_modelMatrixID, 1, GL_FALSE, &m_pistolModelMatrix[0][0]);
 		glDrawArrays(GL_TRIANGLES, 0, pistol_vertices.size());
 		glBindVertexArray(0);
 	}
@@ -516,10 +516,10 @@ void Game::drawGameScene()
 	for (int i = 0; i < m_gameWorld->getActiveEnemyCount(); i++)
 	{
 
-		model_8 = glm::translate(glm::mat4(1.0f), glm::vec3(m_gameWorld->getEnemyPosition(i).x / s_displayScale, 3, m_gameWorld->getEnemyPosition(i).y / s_displayScale));
+		m_enemyModelMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(m_gameWorld->getEnemyPosition(i).x / s_displayScale, 3, m_gameWorld->getEnemyPosition(i).y / s_displayScale));
 
-		model_8 = glm::scale(model_8, glm::vec3(0.5f, 0.5f, 0.5f));
-		glUniformMatrix4fv(m_modelMatrixID, 1, GL_FALSE, &model_8[0][0]);
+		m_enemyModelMatrix = glm::scale(m_enemyModelMatrix, glm::vec3(0.5f, 0.5f, 0.5f));
+		glUniformMatrix4fv(m_modelMatrixID, 1, GL_FALSE, &m_enemyModelMatrix[0][0]);
 		glDrawArrays(GL_TRIANGLES, 0, enemyTest_vertices.size());
 	}
 

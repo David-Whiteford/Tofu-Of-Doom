@@ -501,6 +501,25 @@ std::vector<glm::vec3>* GameWorld::getLightPositions()
 	return m_map->getLightPositions();
 }
 
+/// <summary>
+/// Gets the fire extinguisher positions from the GameWorld map
+/// </summary>
+std::vector<glm::vec3>* GameWorld::getFireExtPositions()
+{
+	return m_map->getFireExtPositions();
+}
+
+/// <summary>
+/// Gets the oil drum positions from the GameWorld map
+/// </summary>
+std::vector<glm::vec3>* GameWorld::getOilDrumPositions()
+{
+	return m_map->getOilDrumPositions();
+}
+
+/// <summary>
+/// Gets the amount of enemies currently active
+/// </summary>
 int GameWorld::getActiveEnemyCount()
 {
 	return m_enemyActive.size();
