@@ -22,7 +22,8 @@ public:
 	int getCurrentHandGunClip() { return currentHandgunCLip; }
 	int getCurrentHandGunBullets() { return currentHandGunBullets; }
 	
-	void reduceCurrentGunClip(int _gunType) { 
+	void reduceCurrentGunClip(int _gunType) 
+	{ 
 		if (_gunType == 1)
 		{
 			currentHandgunCLip--;
