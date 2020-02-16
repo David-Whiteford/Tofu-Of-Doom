@@ -505,8 +505,8 @@ void Game::drawGameScene()
 
 	// ---------------------------------------------------------------------------------------------------------------------
 
-	glActiveTexture(GL_TEXTURE9);
-	glBindTexture(GL_TEXTURE_2D, m_enemy.texture);
+	glActiveTexture(GL_TEXTURE8);
+	glBindTexture(GL_TEXTURE_2D, m_chair.texture);
 
 	// Set shader to use Texture Unit 8
 	glUniform1i(m_currentTextureID, 8);
@@ -519,6 +519,24 @@ void Game::drawGameScene()
 		glDrawElements(GL_TRIANGLES, m_chair.indices.size(), GL_UNSIGNED_SHORT, (void*)0);
 	}
 	   
+	glBindVertexArray(0);
+
+	// ---------------------------------------------------------------------------------------------------------------------
+
+	glActiveTexture(GL_TEXTURE9);
+	glBindTexture(GL_TEXTURE_2D, m_table_1.texture);
+
+	// Set shader to use Texture Unit 9
+	glUniform1i(m_currentTextureID, 9);
+	glBindVertexArray(m_table_1.VAO_ID);
+
+	for (int i = 0; i < 5; i++)
+	{
+		m_table_1_modelMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(25.0f * i, 0.0f, 25.0f * i));
+		glUniformMatrix4fv(m_modelMatrixID, 1, GL_FALSE, &m_table_1_modelMatrix[0][0]);
+		glDrawElements(GL_TRIANGLES, m_table_1.indices.size(), GL_UNSIGNED_SHORT, (void*)0);
+	}
+
 	glBindVertexArray(0);
 
 	// ---------------------------------------------------------------------------------------------------------------------
