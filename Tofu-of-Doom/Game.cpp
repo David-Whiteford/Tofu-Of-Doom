@@ -11,6 +11,8 @@ Game::Game(sf::ContextSettings t_settings) : m_window{ sf::VideoMode{ 1280, 720,
 	// Initialise GLEW
 	GLuint m_error = glewInit();
 
+
+	
 	// Initialise everything else
 	initialise();
 
@@ -208,7 +210,7 @@ void Game::update(sf::Time t_deltaTime)
 		{
 			camera.controller.Vibrate(0, 0);
 			m_gameWorld->~GameWorld();
-			//delete(m_gameWorld);
+			delete(m_gameWorld);
 			m_gameWorld = new GameWorld(m_window, m_deltaTime, &camera);
 			m_drawState = DrawState::MAIN;
 
