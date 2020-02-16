@@ -123,7 +123,7 @@ public:
 		SPLASH
 	};
 
-	DrawState m_drawState = DrawState::MAIN;
+	DrawState m_drawState = DrawState::OPTIONS;
 
 private:
 
