@@ -521,7 +521,7 @@ void Game::drawGameScene()
 	   
 	glBindVertexArray(0);
 
-	// ---------------------------------------------------------------------------------------------------------------------
+	//// ---------------------------------------------------------------------------------------------------------------------
 
 	glActiveTexture(GL_TEXTURE9);
 	glBindTexture(GL_TEXTURE_2D, m_table_1.texture);
@@ -535,6 +535,24 @@ void Game::drawGameScene()
 		m_table_1_modelMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(25.0f * i, 0.0f, 25.0f * i));
 		glUniformMatrix4fv(m_modelMatrixID, 1, GL_FALSE, &m_table_1_modelMatrix[0][0]);
 		glDrawElements(GL_TRIANGLES, m_table_1.indices.size(), GL_UNSIGNED_SHORT, (void*)0);
+	}
+
+	glBindVertexArray(0);
+
+	// ---------------------------------------------------------------------------------------------------------------------
+
+	glActiveTexture(GL_TEXTURE10);
+	glBindTexture(GL_TEXTURE_2D, m_table_2.texture);
+
+	// Set shader to use Texture Unit 10
+	glUniform1i(m_currentTextureID, 10);
+	glBindVertexArray(m_table_2.VAO_ID);
+
+	for (int i = 0; i < 5; i++)
+	{
+		m_table_2_modelMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(25.0f * i, 0.0f, 25.0f * i));
+		glUniformMatrix4fv(m_modelMatrixID, 1, GL_FALSE, &m_table_2_modelMatrix[0][0]);
+		glDrawElements(GL_TRIANGLES, m_table_2.indices.size(), GL_UNSIGNED_SHORT, (void*)0);
 	}
 
 	glBindVertexArray(0);
