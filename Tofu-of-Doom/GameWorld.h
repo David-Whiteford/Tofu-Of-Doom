@@ -7,14 +7,17 @@
 #include "libs/glm/gtc/matrix_transform.hpp"
 
 #include <SFML/OpenGL.hpp>
+
 #include "Path.h"
 #include "Map.h"
 #include "DisplayScale.h"
 #include "Camera.h"
 #include "Bullet.h"
 #include "Transform.h"
+
 #include <stdlib.h>
 #include <ctime>
+
 #include "Enemy.h"
 #include "Wall.h"
 #include "Quadtree.h"

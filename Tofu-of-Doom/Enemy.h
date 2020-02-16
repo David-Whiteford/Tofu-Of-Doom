@@ -46,9 +46,12 @@ private:
 	int m_endNode = 0;
 	int m_playerNode = 0;
 	int m_enemyNode = 0;
+
 	Transform m_transform;
 	Transform::Position enemyPos;
 	Transform::Position graphPos;
+
+
 	sf::CircleShape m_enemy;
 	std::vector<Node*> graphPath;
 	sf::RenderWindow& m_window;
@@ -57,12 +60,15 @@ private:
 	bool follow = false;
 	std::vector<int> m_startNodes;
 	std::vector<int> m_endNodes;
+
+
 	int m_doOncePatrol = 0;
 	int m_doOnceSeek = 0;
 	int startNode = 103;
 	int endNode = 2237;
-	//sf::CircleShape m_enemies;
-	float m_radius = 25;
+
+
+	float m_radius = 33; // makes hitting enmies easier
 	int m_aliveAt = 0;
 	float m_timeToLive = 2;
 	sf::Vector2f m_direction = sf::Vector2f(0, 0);

@@ -351,21 +351,7 @@ void Game::drawGameScene()
 
 	glBindVertexArray(0);
 
-	// ---------------------------------------------------------------------------------------------------------------------
 
-	// Bind our texture in Texture Unit 1
-	//glActiveTexture(GL_TEXTURE1);
-	//glBindTexture(GL_TEXTURE_2D, wallType2_texture);
-
-	//// Set shader to use Texture Unit 1
-	//glUniform1i(m_currentTextureID, 1);
-
-	//glBindVertexArray(wallType2_VAO_ID);
-	//glUniformMatrix4fv(m_modelMatrixID, 1, GL_FALSE, &model_2[0][0]);
-	//glDrawArrays(GL_TRIANGLES, 0, wallType2_vertices.size());
-	//glBindVertexArray(0);
-
-	// ---------------------------------------------------------------------------------------------------------------------
 
 	// This section contains the machine gun draw data
 	if (gunNum == 3)
