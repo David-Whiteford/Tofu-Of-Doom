@@ -124,29 +124,14 @@ void Game::initialise()
 	GLint isLinked = 0;
 
 	// Load models and textures and bind to VAOs
-	loadVAO("models/wallType1/wallType1.png", "models/wallType1/wallType1.obj", wallType1_VAO_ID, wallType1_VBO_ID,
-		wallType1_normalBufferID, wallType1_textureID, wallType1_texture, wallType1_uvBufferID, wallType1_vertices, wallType1_uvs, wallType1_normals);
-
-	//loadVAO("models/wallType2/wallType2.png", "models/wallType2/wallType2.obj", wallType2_VAO_ID, wallType2_VBO_ID,
-	//	wallType2_normalBufferID, wallType2_textureID, wallType2_texture, wallType2_uvBufferID, wallType2_vertices, wallType2_uvs, wallType2_normals);
-
-	loadVAO("models/machineGun/machineGun.png", "models/machineGun/machineGun.obj", machineGun_VAO_ID, machineGun_VBO_ID,
-		machineGun_normalBufferID, machineGun_textureID, machineGun_texture, machineGun_uvBufferID, machineGun_vertices, machineGun_uvs, machineGun_normals);
-	   
-	loadVAO("models/oilDrum/oilDrum.jpg", "models/oilDrum/oilDrum.obj", oilDrum_VAO_ID, oilDrum_VBO_ID,
-		oilDrum_normalBufferID, oilDrum_textureID, oilDrum_texture, oilDrum_uvBufferID, oilDrum_vertices, oilDrum_uvs, oilDrum_normals);
-	
-	loadVAO("models/fireExtinguisher/fireExtinguisher.png", "models/fireExtinguisher/fireExtinguisher.obj", fireExtinguisher_VAO_ID, fireExtinguisher_VBO_ID,
-		fireExtinguisher_normalBufferID, fireExtinguisher_textureID, fireExtinguisher_texture, fireExtinguisher_uvBufferID, fireExtinguisher_vertices, fireExtinguisher_uvs, fireExtinguisher_normals);
-	
-	loadVAO("models/rifle/rifle.png", "models/rifle/rifle.obj", rifle_VAO_ID, rifle_VBO_ID,
-		rifle_normalBufferID, rifle_textureID, rifle_texture, rifle_uvBufferID, rifle_vertices, rifle_uvs, rifle_normals);
-
-	loadVAO("models/pistol/pistol.jpg", "models/pistol/pistol.obj", pistol_VAO_ID, pistol_VBO_ID,
-		pistol_normalBufferID, pistol_textureID, pistol_texture, pistol_uvBufferID, pistol_vertices, pistol_uvs, pistol_normals);
-
-	loadVAO("models/enemyTest/enemyTest.png", "models/enemyTest/enemyTest.obj", enemyTest_VAO_ID, enemyTest_VBO_ID,
-		enemyTest_normalBufferID, enemyTest_textureID, enemyTest_texture, enemyTest_uvBufferID, enemyTest_vertices, enemyTest_uvs, enemyTest_normals);
+	loadVAO("models/wallType1/wallType1.png", "models/wallType1/wallType1.obj", m_wallType1);
+	loadVAO("models/wallType2/wallType2.png", "models/wallType2/wallType2.obj", m_wallType2);
+	loadVAO("models/machineGun/machineGun.png", "models/machineGun/machineGun.obj", m_machineGun);	   
+	loadVAO("models/oilDrum/oilDrum.jpg", "models/oilDrum/oilDrum.obj", m_oilDrum);	
+	loadVAO("models/fireExtinguisher/fireExtinguisher.png", "models/fireExtinguisher/fireExtinguisher.obj", m_fireExt);	
+	loadVAO("models/rifle/rifle.png", "models/rifle/rifle.obj", m_rifle);
+	loadVAO("models/pistol/pistol.jpg", "models/pistol/pistol.obj", m_pistol);
+	loadVAO("models/enemyTest/enemyTest.png", "models/enemyTest/enemyTest.obj", m_enemy);
 	
 	// Projection matrix 
 	projection = glm::perspective(45.0f, 4.0f / 3.0f, 1.0f, 1000.0f); // Enable depth test
@@ -334,12 +319,12 @@ void Game::drawGameScene()
 
 	// Bind our texture in Texture Unit 0
 	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, wallType1_texture);
+	glBindTexture(GL_TEXTURE_2D, m_wallType1.texture);
 
 	// Set shader to use Texture Unit 0
 	glUniform1i(m_currentTextureID, 0);
 
-	glBindVertexArray(wallType1_VAO_ID);
+	glBindVertexArray(m_wallType1.VAO_ID);
 
 	glm::vec3 f_offset(0.0f, 50.0f, 0.0f);
 
@@ -349,15 +334,15 @@ void Game::drawGameScene()
 		{
 			model_1 = glm::translate(glm::mat4(1.0f), m_gameWorld->getWallData()->at(i).first / s_displayScale);
 			glUniformMatrix4fv(m_modelMatrixID, 1, GL_FALSE, &model_1[0][0]);
-			glDrawArrays(GL_TRIANGLES, 0, wallType1_vertices.size());
+			glDrawArrays(GL_TRIANGLES, 0, m_wallType1.vertices.size());
 
 			model_1 = glm::translate(glm::mat4(1.0f), (m_gameWorld->getWallData()->at(i).first + f_offset) / s_displayScale);
 			glUniformMatrix4fv(m_modelMatrixID, 1, GL_FALSE, &model_1[0][0]);
-			glDrawArrays(GL_TRIANGLES, 0, wallType1_vertices.size());
+			glDrawArrays(GL_TRIANGLES, 0, m_wallType1.vertices.size());
 
 			model_1 = glm::translate(glm::mat4(1.0f), (m_gameWorld->getWallData()->at(i).first + (f_offset * 2.0f)) / s_displayScale);
 			glUniformMatrix4fv(m_modelMatrixID, 1, GL_FALSE, &model_1[0][0]);
-			glDrawArrays(GL_TRIANGLES, 0, wallType1_vertices.size());
+			glDrawArrays(GL_TRIANGLES, 0, m_wallType1.vertices.size());
 		}
 	}
 
@@ -367,12 +352,12 @@ void Game::drawGameScene()
 		// Floor
 		model_1 = glm::translate(glm::mat4(1.0f), (m_gameWorld->getWallData()->at(i).first - f_offset) / s_displayScale);
 		glUniformMatrix4fv(m_modelMatrixID, 1, GL_FALSE, &model_1[0][0]);
-		glDrawArrays(GL_TRIANGLES, 0, wallType1_vertices.size());
+		glDrawArrays(GL_TRIANGLES, 0, m_wallType1.vertices.size());
 
 		// Ceiling
 		model_1 = glm::translate(glm::mat4(1.0f), (m_gameWorld->getWallData()->at(i).first + (f_offset * 3.0f)) / s_displayScale);
 		glUniformMatrix4fv(m_modelMatrixID, 1, GL_FALSE, &model_1[0][0]);
-		glDrawArrays(GL_TRIANGLES, 0, wallType1_vertices.size());
+		glDrawArrays(GL_TRIANGLES, 0, m_wallType1.vertices.size());
 	}
 
 	glBindVertexArray(0);
@@ -398,17 +383,17 @@ void Game::drawGameScene()
 	{
 		// Bind our texture in Texture Unit 2
 		glActiveTexture(GL_TEXTURE2);
-		glBindTexture(GL_TEXTURE_2D, machineGun_texture);
+		glBindTexture(GL_TEXTURE_2D, m_machineGun.texture);
 
 		// Set shader to use Texture Unit 2
 		glUniform1i(m_currentTextureID, 2);
 
-		glBindVertexArray(machineGun_VAO_ID);
+		glBindVertexArray(m_machineGun.VAO_ID);
 
 		gunAnimation(m_machineGunModelMatrix); // Does nothing if recoil is false
 
 		glUniformMatrix4fv(m_modelMatrixID, 1, GL_FALSE, &m_machineGunModelMatrix[0][0]);
-		glDrawArrays(GL_TRIANGLES, 0, machineGun_vertices.size());
+		glDrawArrays(GL_TRIANGLES, 0, m_machineGun.vertices.size());
 		glBindVertexArray(0);
 	}
 
@@ -416,19 +401,19 @@ void Game::drawGameScene()
 
 	// Bind our texture in Texture Unit 3
 	glActiveTexture(GL_TEXTURE3);
-	glBindTexture(GL_TEXTURE_2D, oilDrum_texture);
+	glBindTexture(GL_TEXTURE_2D, m_oilDrum.texture);
 
 	// Set shader to use Texture Unit 3
 	glUniform1i(m_currentTextureID, 3);
 
-	glBindVertexArray(oilDrum_VAO_ID);
+	glBindVertexArray(m_oilDrum.VAO_ID);
 
 	for (int i = 0; i < m_gameWorld->getOilDrumPositions()->size(); ++i)
 	{
 		m_oilDrumModelMatrix = glm::translate(glm::mat4(1.0f), m_gameWorld->getOilDrumPositions()->at(i) / s_displayScale);
 		m_oilDrumModelMatrix = glm::scale(m_oilDrumModelMatrix, glm::vec3(5.0f, 5.0f, 5.0f));
 		glUniformMatrix4fv(m_modelMatrixID, 1, GL_FALSE, &m_oilDrumModelMatrix[0][0]);
-		glDrawArrays(GL_TRIANGLES, 0, oilDrum_vertices.size());
+		glDrawArrays(GL_TRIANGLES, 0, m_oilDrum.vertices.size());
 	}
 
 	glBindVertexArray(0);
@@ -437,19 +422,19 @@ void Game::drawGameScene()
 
 	// Bind our texture in Texture Unit 4
 	glActiveTexture(GL_TEXTURE4);
-	glBindTexture(GL_TEXTURE_2D, fireExtinguisher_texture);
+	glBindTexture(GL_TEXTURE_2D, m_fireExt.texture);
 
 	// Set shader to use Texture Unit 4
 	glUniform1i(m_currentTextureID, 4);
 
-	glBindVertexArray(fireExtinguisher_VAO_ID);
+	glBindVertexArray(m_fireExt.VAO_ID);
 
 	for (int i = 0; i < m_gameWorld->getFireExtPositions()->size(); ++i)
 	{
 		m_fireExtModelMatrix = glm::translate(glm::mat4(1.0f), m_gameWorld->getFireExtPositions()->at(i) / s_displayScale);
 		m_fireExtModelMatrix = glm::scale(m_fireExtModelMatrix, glm::vec3(12.0f, 12.0f, 12.0f));
 		glUniformMatrix4fv(m_modelMatrixID, 1, GL_FALSE, &m_fireExtModelMatrix[0][0]);
-		glDrawArrays(GL_TRIANGLES, 0, fireExtinguisher_vertices.size());
+		glDrawArrays(GL_TRIANGLES, 0, m_fireExt.vertices.size());
 	}
 
 	glBindVertexArray(0);
@@ -461,17 +446,17 @@ void Game::drawGameScene()
 	{
 		// Bind our texture in Texture Unit 5
 		glActiveTexture(GL_TEXTURE5);
-		glBindTexture(GL_TEXTURE_2D, rifle_texture);
+		glBindTexture(GL_TEXTURE_2D, m_rifle.texture);
 
 		// Set shader to use Texture Unit 5
 		glUniform1i(m_currentTextureID, 5);
 
-		glBindVertexArray(rifle_VAO_ID);
+		glBindVertexArray(m_rifle.VAO_ID);
 
 		gunAnimation(m_rifleModelMatrix); // Does nothing if recoil is false
 
 		glUniformMatrix4fv(m_modelMatrixID, 1, GL_FALSE, &m_rifleModelMatrix[0][0]);
-		glDrawArrays(GL_TRIANGLES, 0, rifle_vertices.size());
+		glDrawArrays(GL_TRIANGLES, 0, m_rifle.vertices.size());
 		glBindVertexArray(0);
 	}
 
@@ -482,52 +467,38 @@ void Game::drawGameScene()
 	{
 		// Bind our texture in Texture Unit 6
 		glActiveTexture(GL_TEXTURE6);
-		glBindTexture(GL_TEXTURE_2D, pistol_texture);
+		glBindTexture(GL_TEXTURE_2D, m_pistol.texture);
 
 		// Set shader to use Texture Unit 6
 		glUniform1i(m_currentTextureID, 6);
 
-		glBindVertexArray(pistol_VAO_ID);
+		glBindVertexArray(m_pistol.VAO_ID);
 
 		gunAnimation(m_pistolModelMatrix); // Does nothing if recoil is false
 
 		glUniformMatrix4fv(m_modelMatrixID, 1, GL_FALSE, &m_pistolModelMatrix[0][0]);
-		glDrawArrays(GL_TRIANGLES, 0, pistol_vertices.size());
+		glDrawArrays(GL_TRIANGLES, 0, m_pistol.vertices.size());
 		glBindVertexArray(0);
 	}
 
 	// ---------------------------------------------------------------------------------------------------------------------
 
-
-
-
-
-
-
-
 	glActiveTexture(GL_TEXTURE7);
-	glBindTexture(GL_TEXTURE_2D, enemyTest_texture);
+	glBindTexture(GL_TEXTURE_2D, m_enemy.texture);
 
 	// Set shader to use Texture Unit 7
 	glUniform1i(m_currentTextureID, 7);
-	glBindVertexArray(enemyTest_VAO_ID);
-
+	glBindVertexArray(m_enemy.VAO_ID);
 
 	for (int i = 0; i < m_gameWorld->getActiveEnemyCount(); i++)
 	{
-
 		m_enemyModelMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(m_gameWorld->getEnemyPosition(i).x / s_displayScale, 3, m_gameWorld->getEnemyPosition(i).y / s_displayScale));
-
 		m_enemyModelMatrix = glm::scale(m_enemyModelMatrix, glm::vec3(0.5f, 0.5f, 0.5f));
 		glUniformMatrix4fv(m_modelMatrixID, 1, GL_FALSE, &m_enemyModelMatrix[0][0]);
-		glDrawArrays(GL_TRIANGLES, 0, enemyTest_vertices.size());
+		glDrawArrays(GL_TRIANGLES, 0, m_enemy.vertices.size());
 	}
 
 	glBindVertexArray(0);
-
-
-
-
 
 	// ---------------------------------------------------------------------------------------------------------------------
 
@@ -604,9 +575,7 @@ void Game::gameControls(sf::Time t_deltaTime)
 ///  
 /// This function loads a texture and model, and binds them to a given VAO
 /// </summary>
-void Game::loadVAO(std::string t_textureFilename, const char *t_modelFilename, GLuint &t_vaoID,
-	GLuint &t_vboID, GLuint &t_normalBufferID, GLuint &t_textureID, GLuint &t_texture, GLuint &t_uvBufferID,
-	std::vector<glm::vec3> &t_vertices, std::vector<glm::vec2> &t_UVs, std::vector<glm::vec3> &t_normals)
+void Game::loadVAO(std::string t_textureFilename, const char *t_modelFilename, Model &t_model)
 {
 	// This is used to hold the texture data
 	unsigned char *f_data;
@@ -621,8 +590,8 @@ void Game::loadVAO(std::string t_textureFilename, const char *t_modelFilename, G
 	stbi_set_flip_vertically_on_load(false);
 	f_data = stbi_load(t_textureFilename.c_str(), &f_width, &f_height, &f_compCount, 4);
 
-	glGenTextures(1, &t_texture);
-	glBindTexture(GL_TEXTURE_2D, t_texture);
+	glGenTextures(1, &t_model.texture);
+	glBindTexture(GL_TEXTURE_2D, t_model.texture);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, f_width, f_height, 0, GL_RGBA, GL_UNSIGNED_BYTE, f_data);
 
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
@@ -631,40 +600,40 @@ void Game::loadVAO(std::string t_textureFilename, const char *t_modelFilename, G
 	stbi_image_free(f_data); // Unload data from CPU as it's on the GPU now
 
 	// Load .obj file
-	if (!tk::ModelLoader::loadOBJ(t_modelFilename, t_vertices, t_UVs, t_normals))
+	if (!tk::ModelLoader::loadOBJ(t_modelFilename, t_model.vertices, t_model.uvs, t_model.normals))
 	{
 		std::cout << "Error loading model!" << std::endl;
 	}
 
 	// Initialise buffers for model
-	glGenBuffers(1, &t_vboID);
-	glBindBuffer(GL_ARRAY_BUFFER, t_vboID);
-	glBufferData(GL_ARRAY_BUFFER, t_vertices.size() * sizeof(glm::vec3), &t_vertices[0], GL_STATIC_DRAW);
+	glGenBuffers(1, &t_model.VBO_ID);
+	glBindBuffer(GL_ARRAY_BUFFER, t_model.VBO_ID);
+	glBufferData(GL_ARRAY_BUFFER, t_model.vertices.size() * sizeof(glm::vec3), &t_model.vertices[0], GL_STATIC_DRAW);
 
-	glGenBuffers(1, &t_uvBufferID);
-	glBindBuffer(GL_ARRAY_BUFFER, t_uvBufferID);
-	glBufferData(GL_ARRAY_BUFFER, t_UVs.size() * sizeof(glm::vec2), &t_UVs[0], GL_STATIC_DRAW);
+	glGenBuffers(1, &t_model.uvBufferID);
+	glBindBuffer(GL_ARRAY_BUFFER, t_model.uvBufferID);
+	glBufferData(GL_ARRAY_BUFFER, t_model.uvs.size() * sizeof(glm::vec2), &t_model.uvs[0], GL_STATIC_DRAW);
 
-	glGenBuffers(1, &t_normalBufferID);
-	glBindBuffer(GL_ARRAY_BUFFER, t_normalBufferID);
-	glBufferData(GL_ARRAY_BUFFER, t_normals.size() * sizeof(glm::vec3), &t_normals[0], GL_STATIC_DRAW);
+	glGenBuffers(1, &t_model.normalBufferID);
+	glBindBuffer(GL_ARRAY_BUFFER, t_model.normalBufferID);
+	glBufferData(GL_ARRAY_BUFFER, t_model.normals.size() * sizeof(glm::vec3), &t_model.normals[0], GL_STATIC_DRAW);
 
 	// This VAO stores all states for model
-	glGenVertexArrays(1, &t_vaoID);
-	glBindVertexArray(t_vaoID);
+	glGenVertexArrays(1, &t_model.VAO_ID);
+	glBindVertexArray(t_model.VAO_ID);
 
 	// Vertex buffer	
-	glBindBuffer(GL_ARRAY_BUFFER, t_vboID);
+	glBindBuffer(GL_ARRAY_BUFFER, t_model.VBO_ID);
 	glEnableVertexAttribArray(0);
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
 
 	// UV buffer
-	glBindBuffer(GL_ARRAY_BUFFER, t_uvBufferID);
+	glBindBuffer(GL_ARRAY_BUFFER, t_model.uvBufferID);
 	glEnableVertexAttribArray(1);
 	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 0, (void*)0);
 
 	// Normal buffer
-	glBindBuffer(GL_ARRAY_BUFFER, t_normalBufferID);
+	glBindBuffer(GL_ARRAY_BUFFER, t_model.normalBufferID);
 	glEnableVertexAttribArray(2);
 	glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
 
