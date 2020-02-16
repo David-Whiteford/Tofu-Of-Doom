@@ -37,6 +37,10 @@ Game::~Game()
 {
 	delete m_mainShader;
 }
+void Game::resetScreenTrans()
+{
+	m_mainMenu->setStartUP(true);
+}
 
 /// <summary>
 /// Run
@@ -286,7 +290,12 @@ void Game::render()
 		break;
 
 	case DrawState::OPTIONS:
+		m_window.pushGLStates();
 		m_optionsMenu->render(m_window);
+		m_window.popGLStates();
+		break;
+	case DrawState::EXIT:
+		m_window.close();
 		break;
 
 	case DrawState::GAME:

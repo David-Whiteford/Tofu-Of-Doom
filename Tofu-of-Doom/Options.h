@@ -5,14 +5,16 @@
 #include "Enum.h"
 #include "Game.h"
 #include "Controller.h"
+#include "MainMenu.h"
 #include <string.h>
 #include <iostream>
 #include "irrKlang.h"
-#include "MainMenu.h"
+
 using namespace irrklang;
 #pragma comment(lib, "irrKlang.lib") // link with irrKlang.dll
 
 class Game;
+
 
 class Options
 {
@@ -26,6 +28,7 @@ public:
 	void setUpContent();
 	void navMenu(sf::Time t_deltaTime, ISoundEngine* bgSoundEngine);
 	void checkPosition();
+	void checkButtonPosition();
 	void changeMusicState(ISoundEngine* bgSoundEngine);
 	void changeMusicVol(ISoundEngine* bgSoundEngine);
 	bool getBackgroundMusic();
@@ -48,6 +51,7 @@ public:
 	bool m_levelSelect = false;
 	void setUpText();
 	CXBOXController m_controller;
+
 private:
 	Game& m_game; // refrence to game object used to set game state
 	sf::Font m_font; // font loaded by game
@@ -71,6 +75,7 @@ private:
 	int m_offsetX = 0;
 	bool m_soundFX = true;
 	sf::Texture m_buttonTexture;
+	sf::Text m_pressBackMessage; // sf text used for message
 };
 
 #endif 

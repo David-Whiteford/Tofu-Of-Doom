@@ -40,7 +40,7 @@ void SplashScreen::update(sf::Time t_deltaTime)
 		}
 	}
 	// if the start is preed then continue set transition to false
-	if (m_controller.yButton() == true)
+	if (m_controller.startButton() == true)
 	{
 		m_continue = true;
 
@@ -53,6 +53,7 @@ void SplashScreen::update(sf::Time t_deltaTime)
 
 	if (m_transition == true)
 	{
+		m_game.resetScreenTrans();
 		m_game.m_drawState = m_game.DrawState::MAIN;
 	}
 
@@ -79,7 +80,7 @@ void SplashScreen::setUpContent()
 	//sets up the message for the press start message
 	m_pressstartMessage.setFont(m_font);
 	m_pressstartMessage.setPosition(800.0f, 500.0f);
-	m_pressstartMessage.setString("Press Start to continue");
+	m_pressstartMessage.setString("Press START to continue");
 	m_pressstartMessage.setCharacterSize(55);
 
 	//sets up the message for the first title message

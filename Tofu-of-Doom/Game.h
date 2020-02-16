@@ -69,7 +69,7 @@ public:
 	sf::Sprite m_sfmlSprite;
 	sf::Texture m_sfmlTexture;
 	int gunNum = 1;
-	
+	void resetScreenTrans();
 	// Menu screens
 	SplashScreen* m_splashScreen; // The splash screen
 	SFML* m_sfmlScreen;
@@ -101,10 +101,11 @@ public:
 		GAME,
 		MAIN,
 		OPTIONS,
-		SPLASH
+		SPLASH,
+		EXIT
 	};
 
-	DrawState m_drawState = DrawState::OPTIONS;
+	DrawState m_drawState = DrawState::SPLASH;
 
 private:
 	struct Model

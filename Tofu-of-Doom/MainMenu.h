@@ -1,6 +1,5 @@
 #ifndef MAINMENU_SCREEN
 #define MAINMENU_SCREEN
-
 #include<SFML\Graphics.hpp>
 #include "Enum.h"
 #include "Game.h"
@@ -44,7 +43,7 @@ private:
 	//textures , sound buffers rectangles
 	sf::Texture m_buttonTexture;
 	sf::RectangleShape m_outlineRect;
-
+	bool m_transitionToScreen = true;
 	int m_spaceOutline = 20;
 	int m_selectPos = 0;
 	//all text used

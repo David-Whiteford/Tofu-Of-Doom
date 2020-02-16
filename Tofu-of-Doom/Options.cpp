@@ -39,6 +39,7 @@ void Options::update(sf::Time t_deltaTime, ISoundEngine* bgSoundEngine)
 		}
 	}
 	checkPosition();
+	checkButtonPosition();
 	flashText();
 	//timer less than 0.5 then increment 
 	if (m_optionsTimer >= sf::seconds(0.0f) && m_optionsTimer <= sf::seconds(0.5f))
@@ -56,7 +57,9 @@ void Options::update(sf::Time t_deltaTime, ISoundEngine* bgSoundEngine)
 	//back button is pressed to go back to main menu
 	if (m_controller.backButton() == true || sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
 	{
+		m_game.resetScreenTrans();
 		m_game.m_drawState = m_game.DrawState::MAIN;
+
 	}
 	//when at pos 2
 	//check if A is pressed
@@ -91,7 +94,7 @@ void Options::render(sf::RenderWindow& t_window)
 {
 
 	t_window.clear(sf::Color::Black);
-	t_window.draw(m_outlineRect);
+
 	for (int i = 0; i < 6; i++)
 	{
 		if (i != 3)
@@ -115,8 +118,49 @@ void Options::render(sf::RenderWindow& t_window)
 	}
 	t_window.draw(m_musicmsgOff);
 	t_window.draw(m_musicmsgOn);
+	t_window.draw(m_pressBackMessage);
 
 	t_window.display();
+}
+void Options::checkButtonPosition()
+{
+
+	if (m_optionsPos == 0)
+	{
+		m_musicMessage.setColor(sf::Color(sf::Color::Yellow));
+		m_musicmsgOn.setColor(sf::Color(sf::Color::White));
+		m_volumnMessage.setColor(sf::Color(sf::Color::White));
+		m_musicmsgOff.setColor(sf::Color(sf::Color::White));
+	}
+	if (m_optionsPos == 1)
+	{
+		m_musicMessage.setColor(sf::Color(sf::Color::White));
+		m_musicmsgOn.setColor(sf::Color(sf::Color::White));
+		m_volumnMessage.setColor(sf::Color(sf::Color::Yellow));
+		m_musicmsgOff.setColor(sf::Color(sf::Color::White));
+	}
+	if (m_optionsPos == 2)
+	{
+
+	}
+	if (m_optionsPos == 3)
+	{
+		m_musicmsgOff.setColor(sf::Color(sf::Color::Yellow));
+		m_volumnMessage.setColor(sf::Color(sf::Color::White));
+		m_musicMessage.setColor(sf::Color(sf::Color::White));
+		m_musicmsgOn.setColor(sf::Color(sf::Color::White));
+	}
+	if (m_optionsPos == 4)
+	{
+
+
+		m_musicmsgOn.setColor(sf::Color(sf::Color::Yellow));
+		m_musicmsgOff.setColor(sf::Color(sf::Color::White));
+		m_volumnMessage.setColor(sf::Color(sf::Color::White));
+		m_musicMessage.setColor(sf::Color(sf::Color::White));
+	}
+
+
 }
 
 void Options::setUpContent()
@@ -180,7 +224,10 @@ void Options::setUpContent()
 	m_selectSoundSquare.setFillColor(sf::Color::Green);
 
 	setUpText();
-
+	m_pressBackMessage.setFont(m_font);
+	m_pressBackMessage.setPosition(600.0f, 500.0f);
+	m_pressBackMessage.setString("Press BACK to return to menu");
+	m_pressBackMessage.setCharacterSize(55);
 
 }
 void Options::navMenu(sf::Time t_deltaTime, ISoundEngine* bgSoundEngine)

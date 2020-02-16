@@ -88,6 +88,10 @@ public:
 	bool backButtonDown();
 	bool backButton();
 
+
+	bool startButtonDown();
+	bool startButton();
+
 	//bool leftButtonDown();
 	bool leftButton();
 
