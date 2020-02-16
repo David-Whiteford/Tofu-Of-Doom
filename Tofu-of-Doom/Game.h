@@ -5,6 +5,7 @@
 #include "libs/glew/wglew.h"
 #include "libs/glm/glm.hpp"
 #include "libs/glm/gtc/matrix_transform.hpp"
+
 #include <iostream>
 #include <fstream>
 #include <SFML/Graphics.hpp>
@@ -52,7 +53,6 @@ class Game
 {
 public:
 
-	
 	Game(sf::ContextSettings t_settings);
 	~Game();
 
@@ -80,6 +80,7 @@ public:
 	SFML* m_sfmlScreen;
 	MainMenu* m_mainMenu;
 
+	void drawGameScene();
 	void initialise();
 	Options* m_optionsMenu;
 	/// <summary>

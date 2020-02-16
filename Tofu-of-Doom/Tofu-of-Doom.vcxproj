@@ -48,6 +48,7 @@
     <ClCompile Include="ShotTrajectory.cpp" />
     <ClCompile Include="SplashScreen.cpp" />
     <ClCompile Include="Transform.cpp" />
+    <ClCompile Include="UI.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="aStarStuff\Graph.h" />
@@ -105,6 +106,7 @@
     <ClInclude Include="ShotTrajectory.h" />
     <ClInclude Include="SplashScreen.h" />
     <ClInclude Include="Transform.h" />
+    <ClInclude Include="UI.h" />
     <ClInclude Include="Wall.h" />
     <ClInclude Include="WallType.h" />
     <ClInclude Include="Shader.h" />
@@ -205,7 +207,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(SFML_SDK)/include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\paulj\Desktop\main\Tofu-Of-Doom\Tofu-of-Doom\freetype-2.10.0\include;$(SFML_SDK)/include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>

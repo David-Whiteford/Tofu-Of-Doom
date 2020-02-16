@@ -3,6 +3,7 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
 
+
 /// <summary>
 /// Constructor for the Game class
 /// </summary>
@@ -26,6 +27,8 @@ Game::Game(sf::ContextSettings t_settings)
 	m_mainMenu = new MainMenu{ *this , m_font };
 
 
+
+
 }
 
 /// <summary>
@@ -47,12 +50,11 @@ void Game::run()
 	sf::Time oldTime = sf::Time::Zero;
 	sf::Time timeSinceLastUpdate = sf::Time::Zero;
 	sf::Time timePerFrame = sf::seconds((1.f / 60.0f));
-
+	m_window.setFramerateLimit(120);
 
 	while (m_window.isOpen() && !m_exitGame)
 	{
 		m_deltaTime = clock.getElapsedTime() - oldTime;
-		//timeSinceLastUpdate += clock.restart();
 
 		if(clock.getElapsedTime() < oldTime + timePerFrame)
 		{
@@ -62,11 +64,10 @@ void Game::run()
 			m_time += gunClock.restart();
 			processEvents();
 			update(m_deltaTime);
-			//timeSinceLastUpdate -= timePerFrame;
 			processEvents();
-			render();
 			oldTime = clock.getElapsedTime();
-		}		
+			render();
+		}
 	}
 }
 
@@ -151,9 +152,10 @@ void Game::initialise()
 	// Enable depth test and face culling
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_CULL_FACE);
+	glCullFace(GL_BACK);
+	glFrontFace(GL_CCW);
 
-	// Uncomment this function to prove that culling faces is working by culling front faces instead of back (back is set by default)
-	// glCullFace(GL_FRONT);
+
 
 	// Accept fragment if it closer to the camera than the former one
 	glDepthFunc(GL_LESS);
@@ -304,233 +306,247 @@ void Game::render()
 		m_optionsMenu->render(m_window);
 		break;
 	case DrawState::GAME:
-		// Use shader
-		glUseProgram(m_mainShader->m_programID);
-
-		// Bind our texture in Texture Unit 0
-		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, wallType1_texture);
-
-		// Set shader to use Texture Unit 0
-		glUniform1i(m_currentTextureID, 0);
-
-		glBindVertexArray(wallType1_VAO_ID);
-
-		glm::vec3 f_offset(0.0f, 50.0f, 0.0f);
-
-		for (int i = 0; i < m_gameWorld->getWallData()->size(); ++i)
-		{
-			if (m_gameWorld->getWallData()->at(i).second == WallType::WALLTYPE_1)
-			{
-				model_1 = glm::translate(glm::mat4(1.0f), m_gameWorld->getWallData()->at(i).first / s_displayScale);
-				glUniformMatrix4fv(m_modelMatrixID, 1, GL_FALSE, &model_1[0][0]);
-				glDrawArrays(GL_TRIANGLES, 0, wallType1_vertices.size());
-
-				model_1 = glm::translate(glm::mat4(1.0f), (m_gameWorld->getWallData()->at(i).first + f_offset) / s_displayScale);
-				glUniformMatrix4fv(m_modelMatrixID, 1, GL_FALSE, &model_1[0][0]);
-				glDrawArrays(GL_TRIANGLES, 0, wallType1_vertices.size());
-
-				model_1 = glm::translate(glm::mat4(1.0f), (m_gameWorld->getWallData()->at(i).first + (f_offset * 2.0f)) / s_displayScale);
-				glUniformMatrix4fv(m_modelMatrixID, 1, GL_FALSE, &model_1[0][0]);
-				glDrawArrays(GL_TRIANGLES, 0, wallType1_vertices.size());
-			}
-		}
-
-		// Draw floors and ceilings
-		for (int i = 0; i < m_gameWorld->getWallData()->size(); ++i)
-		{
-			// Floor
-			model_1 = glm::translate(glm::mat4(1.0f), (m_gameWorld->getWallData()->at(i).first - f_offset) / s_displayScale);
-			glUniformMatrix4fv(m_modelMatrixID, 1, GL_FALSE, &model_1[0][0]);
-			glDrawArrays(GL_TRIANGLES, 0, wallType1_vertices.size());
-
-			// Ceiling
-			model_1 = glm::translate(glm::mat4(1.0f), (m_gameWorld->getWallData()->at(i).first + (f_offset * 3.0f)) / s_displayScale);
-			glUniformMatrix4fv(m_modelMatrixID, 1, GL_FALSE, &model_1[0][0]);
-			glDrawArrays(GL_TRIANGLES, 0, wallType1_vertices.size());
-		}
-
-		glBindVertexArray(0);
-
-		// ---------------------------------------------------------------------------------------------------------------------
-
-		// Bind our texture in Texture Unit 1
-		glActiveTexture(GL_TEXTURE1);
-		glBindTexture(GL_TEXTURE_2D, wallType2_texture);
-
-		// Set shader to use Texture Unit 1
-		glUniform1i(m_currentTextureID, 1);
-
-		glBindVertexArray(wallType2_VAO_ID);
-		glUniformMatrix4fv(m_modelMatrixID, 1, GL_FALSE, &model_2[0][0]);
-		glDrawArrays(GL_TRIANGLES, 0, wallType2_vertices.size());
-		glBindVertexArray(0);
-
-		// ---------------------------------------------------------------------------------------------------------------------
-
-		// This section contains the machine gun draw data
-		if (gunNum == 3)
-		{
-			// Bind our texture in Texture Unit 2
-			glActiveTexture(GL_TEXTURE2);
-			glBindTexture(GL_TEXTURE_2D, machineGun_texture);
-
-			// Set shader to use Texture Unit 2
-			glUniform1i(m_currentTextureID, 2);
-
-			glBindVertexArray(machineGun_VAO_ID);
-
-			gunAnimation(model_3); // Does nothing if recoil is false
-
-			glUniformMatrix4fv(m_modelMatrixID, 1, GL_FALSE, &model_3[0][0]);
-			glDrawArrays(GL_TRIANGLES, 0, machineGun_vertices.size());
-			glBindVertexArray(0);
-		}
-
-		// ---------------------------------------------------------------------------------------------------------------------
-
-		// Bind our texture in Texture Unit 3
-		glActiveTexture(GL_TEXTURE3);
-		glBindTexture(GL_TEXTURE_2D, oilDrum_texture);
-
-		// Set shader to use Texture Unit 3
-		glUniform1i(m_currentTextureID, 3);
-
-		glBindVertexArray(oilDrum_VAO_ID);
-
-		for (int i = 0; i < 5; ++i)
-		{
-			model_4 = glm::translate(glm::mat4(1.0f), glm::vec3(20.0f + (i * 4.0f), -2.5f, 15.0f));
-			model_4 = glm::scale(model_4, glm::vec3(i + 1, i + 1, i + 1));  // Add 1 because 0 can't be used to scale
-			glUniformMatrix4fv(m_modelMatrixID, 1, GL_FALSE, &model_4[0][0]);
-			glDrawArrays(GL_TRIANGLES, 0, oilDrum_vertices.size());
-		}
-
-		glBindVertexArray(0);
-
-		// ---------------------------------------------------------------------------------------------------------------------
-
-		// Bind our texture in Texture Unit 4
-		glActiveTexture(GL_TEXTURE4);
-		glBindTexture(GL_TEXTURE_2D, fireExtinguisher_texture);
-
-		// Set shader to use Texture Unit 4
-		glUniform1i(m_currentTextureID, 4);
-
-		glBindVertexArray(fireExtinguisher_VAO_ID);
-
-		for (int i = 0; i < 5; ++i)
-		{
-			model_5 = glm::translate(glm::mat4(1.0f), glm::vec3(30.0f + (i * 0.8f), -2.5f, 20.0f));
-			model_5 = glm::scale(model_5, glm::vec3(i + 1, i + 1, i + 1)); // Add 1 because 0 can't be used to scale
-			glUniformMatrix4fv(m_modelMatrixID, 1, GL_FALSE, &model_5[0][0]);
-			glDrawArrays(GL_TRIANGLES, 0, fireExtinguisher_vertices.size());
-		}
-
-		glBindVertexArray(0);
-
-		// ---------------------------------------------------------------------------------------------------------------------
-
-		// This section contains the rifle draw data
-		if (gunNum == 2)
-		{
-			// Bind our texture in Texture Unit 5
-			glActiveTexture(GL_TEXTURE5);
-			glBindTexture(GL_TEXTURE_2D, rifle_texture);
-
-			// Set shader to use Texture Unit 5
-			glUniform1i(m_currentTextureID, 5);
-
-			glBindVertexArray(rifle_VAO_ID);
-
-			gunAnimation(model_6); // Does nothing if recoil is false
-
-			glUniformMatrix4fv(m_modelMatrixID, 1, GL_FALSE, &model_6[0][0]);
-			glDrawArrays(GL_TRIANGLES, 0, rifle_vertices.size());
-			glBindVertexArray(0);
-		}
-
-		// ---------------------------------------------------------------------------------------------------------------------
-
-		// This section contains the pistol draw data
-		if (gunNum == 1)
-		{
-			// Bind our texture in Texture Unit 6
-			glActiveTexture(GL_TEXTURE6);
-			glBindTexture(GL_TEXTURE_2D, pistol_texture);
-
-			// Set shader to use Texture Unit 6
-			glUniform1i(m_currentTextureID, 6);
-
-			glBindVertexArray(pistol_VAO_ID);
-
-			gunAnimation(model_7); // Does nothing if recoil is false
-
-			glUniformMatrix4fv(m_modelMatrixID, 1, GL_FALSE, &model_7[0][0]);
-			glDrawArrays(GL_TRIANGLES, 0, pistol_vertices.size());
-			glBindVertexArray(0);
-		}
-
-		// ---------------------------------------------------------------------------------------------------------------------
+		drawGameScene();
 
 
-
-
-
-
-
-
-		glActiveTexture(GL_TEXTURE7);
-		glBindTexture(GL_TEXTURE_2D, enemyTest_texture);
-
-		// Set shader to use Texture Unit 7
-		glUniform1i(m_currentTextureID, 7);
-		glBindVertexArray(enemyTest_VAO_ID);
+		m_window.pushGLStates();
+		m_gameWorld->drawWorld();
+		m_window.popGLStates();
+		drawGameScene();
 
 		
-		for (int i = 0; i < m_gameWorld->getActiveEnemyCount(); i++)
-		{
-
-			model_8 = glm::translate(glm::mat4(1.0f), glm::vec3(m_gameWorld->getEnemyPosition(i).x / s_displayScale, 3, m_gameWorld->getEnemyPosition(i).y / s_displayScale));
-
-			model_8 = glm::scale(model_8, glm::vec3(0.5f, 0.5f, 0.5f));
-			glUniformMatrix4fv(m_modelMatrixID, 1, GL_FALSE, &model_8[0][0]);
-			glDrawArrays(GL_TRIANGLES, 0, enemyTest_vertices.size());
-		}
-
-		glBindVertexArray(0);
-
-
-
-
-
-		// ---------------------------------------------------------------------------------------------------------------------
-
-		// Particles! Particles! Particles!
-		//glUseProgram(m_particleShader->m_programID);
-		m_particleEffect.generateParticles(m_eye);
-		m_particleEffect.drawParticles();
-
-		// ---------------------------------------------------------------------------------------------------------------------
-
-		// Reset OpenGL
-		glBindVertexArray(GL_NONE);
-		glBindTexture(GL_TEXTURE_2D, 0);
-		glActiveTexture(GL_TEXTURE0);
-
-
-		error = glGetError();
-
-		if (error != GL_NO_ERROR)
-		{
-			DEBUG_MSG(error);
-		}
-
 		break;
 	}
 
 
 	m_window.display();
+}
+
+
+void Game::drawGameScene()
+{// Use shader
+	glUseProgram(m_mainShader->m_programID);
+
+	// Bind our texture in Texture Unit 0
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, wallType1_texture);
+
+	// Set shader to use Texture Unit 0
+	glUniform1i(m_currentTextureID, 0);
+
+	glBindVertexArray(wallType1_VAO_ID);
+
+	glm::vec3 f_offset(0.0f, 50.0f, 0.0f);
+
+	for (int i = 0; i < m_gameWorld->getWallData()->size(); ++i)
+	{
+		if (m_gameWorld->getWallData()->at(i).second == WallType::WALLTYPE_1)
+		{
+			model_1 = glm::translate(glm::mat4(1.0f), m_gameWorld->getWallData()->at(i).first / s_displayScale);
+			glUniformMatrix4fv(m_modelMatrixID, 1, GL_FALSE, &model_1[0][0]);
+			glDrawArrays(GL_TRIANGLES, 0, wallType1_vertices.size());
+
+			model_1 = glm::translate(glm::mat4(1.0f), (m_gameWorld->getWallData()->at(i).first + f_offset) / s_displayScale);
+			glUniformMatrix4fv(m_modelMatrixID, 1, GL_FALSE, &model_1[0][0]);
+			glDrawArrays(GL_TRIANGLES, 0, wallType1_vertices.size());
+
+			model_1 = glm::translate(glm::mat4(1.0f), (m_gameWorld->getWallData()->at(i).first + (f_offset * 2.0f)) / s_displayScale);
+			glUniformMatrix4fv(m_modelMatrixID, 1, GL_FALSE, &model_1[0][0]);
+			glDrawArrays(GL_TRIANGLES, 0, wallType1_vertices.size());
+		}
+	}
+
+	// Draw floors and ceilings
+	for (int i = 0; i < m_gameWorld->getWallData()->size(); ++i)
+	{
+		// Floor
+		model_1 = glm::translate(glm::mat4(1.0f), (m_gameWorld->getWallData()->at(i).first - f_offset) / s_displayScale);
+		glUniformMatrix4fv(m_modelMatrixID, 1, GL_FALSE, &model_1[0][0]);
+		glDrawArrays(GL_TRIANGLES, 0, wallType1_vertices.size());
+
+		// Ceiling
+		model_1 = glm::translate(glm::mat4(1.0f), (m_gameWorld->getWallData()->at(i).first + (f_offset * 3.0f)) / s_displayScale);
+		glUniformMatrix4fv(m_modelMatrixID, 1, GL_FALSE, &model_1[0][0]);
+		glDrawArrays(GL_TRIANGLES, 0, wallType1_vertices.size());
+	}
+
+	glBindVertexArray(0);
+
+	// ---------------------------------------------------------------------------------------------------------------------
+
+	// Bind our texture in Texture Unit 1
+	glActiveTexture(GL_TEXTURE1);
+	glBindTexture(GL_TEXTURE_2D, wallType2_texture);
+
+	// Set shader to use Texture Unit 1
+	glUniform1i(m_currentTextureID, 1);
+
+	glBindVertexArray(wallType2_VAO_ID);
+	glUniformMatrix4fv(m_modelMatrixID, 1, GL_FALSE, &model_2[0][0]);
+	glDrawArrays(GL_TRIANGLES, 0, wallType2_vertices.size());
+	glBindVertexArray(0);
+
+	// ---------------------------------------------------------------------------------------------------------------------
+
+	// This section contains the machine gun draw data
+	if (gunNum == 3)
+	{
+		// Bind our texture in Texture Unit 2
+		glActiveTexture(GL_TEXTURE2);
+		glBindTexture(GL_TEXTURE_2D, machineGun_texture);
+
+		// Set shader to use Texture Unit 2
+		glUniform1i(m_currentTextureID, 2);
+
+		glBindVertexArray(machineGun_VAO_ID);
+
+		gunAnimation(model_3); // Does nothing if recoil is false
+
+		glUniformMatrix4fv(m_modelMatrixID, 1, GL_FALSE, &model_3[0][0]);
+		glDrawArrays(GL_TRIANGLES, 0, machineGun_vertices.size());
+		glBindVertexArray(0);
+	}
+
+	// ---------------------------------------------------------------------------------------------------------------------
+
+	// Bind our texture in Texture Unit 3
+	glActiveTexture(GL_TEXTURE3);
+	glBindTexture(GL_TEXTURE_2D, oilDrum_texture);
+
+	// Set shader to use Texture Unit 3
+	glUniform1i(m_currentTextureID, 3);
+
+	glBindVertexArray(oilDrum_VAO_ID);
+
+	for (int i = 0; i < 5; ++i)
+	{
+		model_4 = glm::translate(glm::mat4(1.0f), glm::vec3(20.0f + (i * 4.0f), -2.5f, 15.0f));
+		model_4 = glm::scale(model_4, glm::vec3(i + 1, i + 1, i + 1));  // Add 1 because 0 can't be used to scale
+		glUniformMatrix4fv(m_modelMatrixID, 1, GL_FALSE, &model_4[0][0]);
+		glDrawArrays(GL_TRIANGLES, 0, oilDrum_vertices.size());
+	}
+
+	glBindVertexArray(0);
+
+	// ---------------------------------------------------------------------------------------------------------------------
+
+	// Bind our texture in Texture Unit 4
+	glActiveTexture(GL_TEXTURE4);
+	glBindTexture(GL_TEXTURE_2D, fireExtinguisher_texture);
+
+	// Set shader to use Texture Unit 4
+	glUniform1i(m_currentTextureID, 4);
+
+	glBindVertexArray(fireExtinguisher_VAO_ID);
+
+	for (int i = 0; i < 5; ++i)
+	{
+		model_5 = glm::translate(glm::mat4(1.0f), glm::vec3(30.0f + (i * 0.8f), -2.5f, 20.0f));
+		model_5 = glm::scale(model_5, glm::vec3(i + 1, i + 1, i + 1)); // Add 1 because 0 can't be used to scale
+		glUniformMatrix4fv(m_modelMatrixID, 1, GL_FALSE, &model_5[0][0]);
+		glDrawArrays(GL_TRIANGLES, 0, fireExtinguisher_vertices.size());
+	}
+
+	glBindVertexArray(0);
+
+	// ---------------------------------------------------------------------------------------------------------------------
+
+	// This section contains the rifle draw data
+	if (gunNum == 2)
+	{
+		// Bind our texture in Texture Unit 5
+		glActiveTexture(GL_TEXTURE5);
+		glBindTexture(GL_TEXTURE_2D, rifle_texture);
+
+		// Set shader to use Texture Unit 5
+		glUniform1i(m_currentTextureID, 5);
+
+		glBindVertexArray(rifle_VAO_ID);
+
+		gunAnimation(model_6); // Does nothing if recoil is false
+
+		glUniformMatrix4fv(m_modelMatrixID, 1, GL_FALSE, &model_6[0][0]);
+		glDrawArrays(GL_TRIANGLES, 0, rifle_vertices.size());
+		glBindVertexArray(0);
+	}
+
+	// ---------------------------------------------------------------------------------------------------------------------
+
+	// This section contains the pistol draw data
+	if (gunNum == 1)
+	{
+		// Bind our texture in Texture Unit 6
+		glActiveTexture(GL_TEXTURE6);
+		glBindTexture(GL_TEXTURE_2D, pistol_texture);
+
+		// Set shader to use Texture Unit 6
+		glUniform1i(m_currentTextureID, 6);
+
+		glBindVertexArray(pistol_VAO_ID);
+
+		gunAnimation(model_7); // Does nothing if recoil is false
+
+		glUniformMatrix4fv(m_modelMatrixID, 1, GL_FALSE, &model_7[0][0]);
+		glDrawArrays(GL_TRIANGLES, 0, pistol_vertices.size());
+		glBindVertexArray(0);
+	}
+
+	// ---------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+	glActiveTexture(GL_TEXTURE7);
+	glBindTexture(GL_TEXTURE_2D, enemyTest_texture);
+
+	// Set shader to use Texture Unit 7
+	glUniform1i(m_currentTextureID, 7);
+	glBindVertexArray(enemyTest_VAO_ID);
+
+
+	for (int i = 0; i < m_gameWorld->getActiveEnemyCount(); i++)
+	{
+
+		model_8 = glm::translate(glm::mat4(1.0f), glm::vec3(m_gameWorld->getEnemyPosition(i).x / s_displayScale, 3, m_gameWorld->getEnemyPosition(i).y / s_displayScale));
+
+		model_8 = glm::scale(model_8, glm::vec3(0.5f, 0.5f, 0.5f));
+		glUniformMatrix4fv(m_modelMatrixID, 1, GL_FALSE, &model_8[0][0]);
+		glDrawArrays(GL_TRIANGLES, 0, enemyTest_vertices.size());
+	}
+
+	glBindVertexArray(0);
+
+
+
+
+
+	// ---------------------------------------------------------------------------------------------------------------------
+
+	// Particles! Particles! Particles!
+	//glUseProgram(m_particleShader->m_programID);
+	m_particleEffect.generateParticles(m_eye);
+	m_particleEffect.drawParticles();
+
+	// ---------------------------------------------------------------------------------------------------------------------
+
+	// Reset OpenGL
+	glBindVertexArray(GL_NONE);
+	glBindTexture(GL_TEXTURE_2D, 0);
+	glActiveTexture(GL_TEXTURE0);
+
+
+	error = glGetError();
+
+	if (error != GL_NO_ERROR)
+	{
+		DEBUG_MSG(error);
+	}
+
+
 }
 
 /// <summary>
@@ -650,6 +666,7 @@ void Game::loadVAO(std::string t_textureFilename, const char *t_modelFilename, G
 	glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
 
 	glBindVertexArray(0);
+
 }
 
 /// <summary>
