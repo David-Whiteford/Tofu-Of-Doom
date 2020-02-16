@@ -253,7 +253,7 @@ void Options::checkPosition()
 	}
 	if (m_outlineRect.getPosition().y == 170.0f && m_outlineRect.getPosition().x == 600.0f)
 	{
-		m_optionsPos = 3;
+		m_optionsPos = 4;
 	}
 }
 
