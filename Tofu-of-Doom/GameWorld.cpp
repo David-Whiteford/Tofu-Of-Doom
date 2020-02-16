@@ -10,9 +10,9 @@ GameWorld::GameWorld(sf::RenderWindow& t_window, sf::Time& t_deltaTime, Camera* 
 	//quadtree = new Quadtree(-50, -50, 400, 400, 0, 8);
 
 	// Player
-	m_player.setRadius(25.0f);
-	m_player.setFillColor(sf::Color::Blue);
-	m_player.setOrigin(sf::Vector2f(25.0f, 25.0f));
+	//m_player.setRadius(25.0f);
+	//m_player.setFillColor(sf::Color::Blue);
+	//m_player.setOrigin(sf::Vector2f(25.0f, 25.0f));
 	m_player.setPosition(m_camera.getEye().x, m_camera.getEye().z); // Test starting position
 	m_newPosition = sf::Vector2f(0, 0);
 	m_playerGun.setRadius(5.0f);
@@ -130,10 +130,9 @@ GameWorld::~GameWorld()
 /// Update the world
 /// </summary>
 void GameWorld::updateWorld()
-{
-
-	
+{	
 	m_player.setPosition(m_camera.getEye().x * s_displayScale, m_camera.getEye().z * s_displayScale);
+	m_player.update();
 	setGunPosition();
 	updateBulletPhysics();
 
@@ -141,7 +140,7 @@ void GameWorld::updateWorld()
 	// only update the active enemies
 	for (int i = 0; i < m_enemyActive.size(); i++)
 	{
-		m_enemyActive[i]->update(m_player);
+		m_enemyActive[i]->update(m_player.getSprite());
 	}
 
 	// check and remove objects
@@ -177,7 +176,7 @@ void GameWorld::drawWorld()
 	}
 
 
-	m_window.draw(m_player);
+	m_window.draw(m_player.getSprite());
 	m_window.draw(m_playerGun);
 
 
