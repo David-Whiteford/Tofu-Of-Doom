@@ -6,29 +6,28 @@
 /// <summary>
 /// Constructor for the Game class
 /// </summary>
-Game::Game(sf::ContextSettings t_settings)
-	:
-	m_window{ sf::VideoMode{ 1280, 720, 32 }, "Tofu of Doom", sf::Style::Default, t_settings }
+Game::Game(sf::ContextSettings t_settings) : m_window{ sf::VideoMode{ 1280, 720, 32 }, "Tofu of Doom", sf::Style::Default, t_settings }
 {
-
 	// Initialise GLEW
 	GLuint m_error = glewInit();
-	//starte
-	initialise();
-	// Initialise everything else
 
+	// Initialise everything else
+	initialise();
+
+	// Loads the SFML texture and the background music
 	m_splashScreen = new SplashScreen{ *this , m_font };
-	//loads the sfml texture and the background music
+	
 	if (!m_sfmlTexture.loadFromFile("sfml.png"))
 	{
 		std::cout << "Cant load sfml image " << std::endl;
 	}
+
 	m_sfmlSprite.setTexture(m_sfmlTexture);
 	m_sfmlScreen = new SFML{ *this , m_font, m_sfmlSprite };
 	m_mainMenu = new MainMenu{ *this , m_font };
 	m_optionsMenu = new Options{ *this,m_font };
-	m_window.setFramerateLimit(120);
 
+	m_window.setFramerateLimit(120);
 }
 
 /// <summary>
@@ -39,28 +38,22 @@ Game::~Game()
 	delete m_mainShader;
 }
 
-
 /// <summary>
 /// Run
 /// </summary>
 void Game::run()
 {
-	m_window.setFramerateLimit(120);
 	sf::Clock clock;
 	sf::Clock gunClock;
 	sf::Time oldTime = sf::Time::Zero;
 	sf::Time timeSinceLastUpdate = sf::Time::Zero;
 	sf::Time timePerFrame = sf::seconds((1.f / 60.0f));
-	m_window.setFramerateLimit(120);
 
 	while (m_window.isOpen() && !m_exitGame)
 	{
 		m_deltaTime = clock.getElapsedTime() - oldTime;
 
-		if (clock.getElapsedTime() < oldTime + timePerFrame)
-		{
-		}
-		else
+		if (clock.getElapsedTime() > oldTime + timePerFrame)
 		{
 			m_time += gunClock.restart();
 			processEvents();
@@ -77,11 +70,10 @@ void Game::run()
 /// </summary>
 void Game::initialise()
 {
-	//m_drawState = DrawState::MAIN;
-	//loads font
+	// Load fonr
 	if (!m_font.loadFromFile("models/AmazDooMRight.ttf"))
 	{
-		std::cout << "problem loading font" << std::endl;
+		std::cout << "Error loading font!" << std::endl;
 	}
 
 	// Set light positions
@@ -96,7 +88,6 @@ void Game::initialise()
 	m_vibrateLength = sf::seconds(.1f); // .7f is the length for the reload sound to finish
 	soundEngine = createIrrKlangDevice();
 	gunSoundEngine = createIrrKlangDevice();
-	//name of file , position in 3D space , play loop , start paused , track
 	background = soundEngine->play2D("horror.mp3" , true);
 	glm::vec3 soundPos(25, 0, 25);
 	vec3df position(25, 0, 25);
@@ -106,17 +97,15 @@ void Game::initialise()
 	machinegunSound = soundEngine->addSoundSourceFromFile("cg1.wav");
 	pistolSound = soundEngine->addSoundSourceFromFile("9mm.mp3");
 	zombie = soundEngine->addSoundSourceFromFile("Monster.mp3");
+
 	shotgunQueue.push(shotgunSound); // 4
 	shotgunQueue.push(machinegunSound); // 3
 	shotgunQueue.push(pistolSound); // 2
-	shotgunQueue.push(shotgunSound); // 1
-
-	
+	shotgunQueue.push(shotgunSound); // 1	
 
 	soundEngine->play3D(zombie, zombiePosition, true, false, false, false);
-
 	
-	// Load shader
+	// Load shaders
 	m_mainShader = new tk::Shader("shaders/mainShader.vert", "shaders/mainShader.frag");
 	m_particleShader = new tk::Shader("shaders/particleShader.vert", "shaders/particleShader.frag");
 
@@ -144,9 +133,6 @@ void Game::initialise()
 	glEnable(GL_CULL_FACE);
 	glCullFace(GL_BACK);
 	glFrontFace(GL_CCW);
-
-	// Uncomment this function to prove that culling faces is working by culling front faces instead of back (back is set by default)
-	// glCullFace(GL_FRONT);
 
 	// Accept fragment if it closer to the camera than the former one
 	glDepthFunc(GL_LESS);
@@ -192,54 +178,55 @@ void Game::processEvents()
 /// </summary>
 void Game::update(sf::Time t_deltaTime)
 {
-
 	switch (m_drawState)
 	{
 	case DrawState::SPLASH:
 		m_splashScreen->update(t_deltaTime);
 		break;
+
 	case DrawState::MAP:
 		updateWorld(t_deltaTime);
 		break;
+
 	case DrawState::MAIN:
 		m_mainMenu->update(t_deltaTime, sound);
 		break;
+
 	case DrawState::OPTIONS:
 		m_optionsMenu->update(t_deltaTime);
 		break;
+
 	case DrawState::GAME:
 		updateWorld(t_deltaTime);
+
 		if (m_gameWorld->getActiveEnemyCount() == 0)
 		{
 			m_drawState = DrawState::MAIN;
 			camera.controller.Vibrate(0, 0);
 		}
+
 		break;
 	}
 }
 
 void Game::updateWorld(sf::Time t_deltaTime)
 {
-	
-
-
-	//update the zombie sound position to follow test zombie
-
+	// Check collisions
 	m_gameWorld->checkPlayerRayCollsions(t_deltaTime);
+
 	// Update game controls
 	camera.input(t_deltaTime);
 	camera.transform.position.x = camera.getEye().x;
 	camera.transform.position.y = camera.getEye().y;
 	camera.transform.position.z = camera.getEye().z;
 
-
+	// Handle gun fire
 	fireGun();
-
 
 	// This is currently only used to display the mini-map
 	gameControls(t_deltaTime);
 
-
+	// Update the gameworld
 	m_gameWorld->updateWorld();
 
 	// Update view (camera)
@@ -247,16 +234,11 @@ void Game::updateWorld(sf::Time t_deltaTime)
 
 	// Sound stuff
 	irrklang::vec3df position(m_gameWorld->getCameraPosition().x, m_gameWorld->getCameraPosition().y, m_gameWorld->getCameraPosition().z);        // position of the listener
-	irrklang::vec3df lookDirection(10, 0, 10); // the direction the listener looks into
-	irrklang::vec3df velPerSecond(0, 0, 0);    // only relevant for doppler effects
-	irrklang::vec3df upVector(0, 1, 0);        // where 'up' is in your 3D scene
+	irrklang::vec3df lookDirection(10, 0, 10); // The direction the listener looks into
+	irrklang::vec3df velPerSecond(0, 0, 0); // Only relevant for doppler effects
+	irrklang::vec3df upVector(0, 1, 0); // Where 'up' is in your 3D scene
 
 	soundEngine->setListenerPosition(position, lookDirection, velPerSecond, upVector);
-
-	// Test cube
-	// model_2 = glm::translate(glm::mat4(1.0f), glm::vec3(15.0f, 0.0f, 15.0f));
-	
-
 
 	// Send our transformation to the currently bound shader, in the "MVP" uniform
 	// This is done in the update loop since each model will have a different MVP matrix (At least for the M part)
@@ -268,10 +250,9 @@ void Game::updateWorld(sf::Time t_deltaTime)
 
 	// Send array of light positions to shader
 	glUniform3fv(m_lightPositionsID, LIGHT_AMOUNT * sizeof(glm::vec3), &m_lightPositions[0][0]);
-
 }
 
-	/// <summary>
+/// <summary>
 /// Render
 /// </summary>
 void Game::render()
@@ -286,38 +267,41 @@ void Game::render()
 		m_splashScreen->render(m_window);
 		m_window.popGLStates();
 		break;
+
 	case DrawState::MAP:
 		m_window.pushGLStates();
 		m_gameWorld->drawWorld();
 		m_window.popGLStates();
 		break;
+
 	case DrawState::MAIN:
 		m_window.pushGLStates();
 		m_mainMenu->render(m_window);
 		m_window.popGLStates();
 		break;
+
 	case DrawState::OPTIONS:
 		m_optionsMenu->render(m_window);
 		break;
+
 	case DrawState::GAME:
-		// Use shader
 		drawGameScene();
-
-
 		m_window.pushGLStates();
 		m_gameWorld->drawWorld();
 		m_window.popGLStates();
 		drawGameScene();
-
 		break;
 	}
 
 	m_window.display();
 }
 
+/// <summary>
+/// Draw the scene
+/// </summary>
 void Game::drawGameScene()
 {
-
+	// Use shader
 	glUseProgram(m_mainShader->m_programID);
 
 	// Bind our texture in Texture Unit 0
@@ -709,7 +693,7 @@ void Game::loadVAO(std::string t_textureFilename, const char *t_modelFilename, M
 }
 
 /// <summary>
-/// This functions handles gun recoil
+/// This function handles gun recoil
 /// </summary>
 void Game::gunAnimation(glm::mat4 &t_gunMatrix)
 {
@@ -727,22 +711,17 @@ void Game::gunAnimation(glm::mat4 &t_gunMatrix)
 	t_gunMatrix = glm::rotate(t_gunMatrix, glm::radians(camera.getYaw()), glm::vec3(0.0f, 1.0f, 0.0f));
 }
 
+/// <summary>
+/// This function handles gun fire
+/// </summary>
 void Game::fireGun()
 {
-
-	if (gunNum == 1)
+	if (gunNum == 1) // Pistol
 	{
 		if (camera.controller.rightTriggerDown())
 		{
 			m_gameWorld->fireBullet(gunNum);
-
 			gunSoundEngine->play2D(pistolSound);
-			/*if (gunSoundEngine->isCurrentlyPlaying(shotgunSound) == false)
-			{
-
-				shotgunQueue.pop();
-			}*/
-
 			m_time = sf::Time::Zero;
 			m_time = m_time.Zero;
 
@@ -753,7 +732,6 @@ void Game::fireGun()
 
 			vibrate = true;
 			camera.controller.Vibrate(65535, 65535);
-
 			m_vibrateLength = m_ShotDelay/(float)10;
 			m_muzzleFlashIntensity = 300.0f;
 			gunRecoil = true; // If the gun is being shot, create some recoil
@@ -767,9 +745,7 @@ void Game::fireGun()
 	{
 		if (camera.controller.rightTriggerDown())
 		{
-
 			m_gameWorld->fireBullet(gunNum);
-
 			gunSoundEngine->play2D(shotgunQueue.front());
 			m_time = sf::Time::Zero;
 			m_time = m_time.Zero;
@@ -792,12 +768,9 @@ void Game::fireGun()
 	}
 	else if (gunNum == 3 && m_time > m_ShotDelay / (float)6) // Machine gun
 	{
-		// Fire a shot with chosen gun
 		if (camera.controller.rightTrigger())
 		{
-
 			m_gameWorld->fireBullet(gunNum);
-
 			gunSoundEngine->play2D(machinegunSound);
 			m_time = sf::Time::Zero;
 			m_time = m_time.Zero;
@@ -806,9 +779,9 @@ void Game::fireGun()
 			{
 				camera.setCameraShake(true);
 			}
+
 			vibrate = true;
 			camera.controller.Vibrate(65535, 65535);
-
 			m_vibrateLength = m_ShotDelay/(float)2;
 			m_muzzleFlashIntensity = 300.0f;
 			gunRecoil = true; // If the gun is being shot, create some recoil
@@ -858,10 +831,6 @@ void Game::fireGun()
 
 	glUniform1f(m_muzzleFlashIntensityID, m_muzzleFlashIntensity);
 	camera.cameraShake();
-}
-
-void Game::moveEnemy(glm::mat4& t_gunMatrix)
-{
 }
 
 
