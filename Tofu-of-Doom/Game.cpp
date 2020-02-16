@@ -334,15 +334,15 @@ void Game::drawGameScene()
 		{
 			model_1 = glm::translate(glm::mat4(1.0f), m_gameWorld->getWallData()->at(i).first / s_displayScale);
 			glUniformMatrix4fv(m_modelMatrixID, 1, GL_FALSE, &model_1[0][0]);
-			glDrawArrays(GL_TRIANGLES, 0, m_wallType1.vertices.size());
+			glDrawElements(GL_TRIANGLES, m_wallType1.indices.size(), GL_UNSIGNED_SHORT, (void*)0);
 
 			model_1 = glm::translate(glm::mat4(1.0f), (m_gameWorld->getWallData()->at(i).first + f_offset) / s_displayScale);
 			glUniformMatrix4fv(m_modelMatrixID, 1, GL_FALSE, &model_1[0][0]);
-			glDrawArrays(GL_TRIANGLES, 0, m_wallType1.vertices.size());
+			glDrawElements(GL_TRIANGLES, m_wallType1.indices.size(), GL_UNSIGNED_SHORT, (void*)0);
 
 			model_1 = glm::translate(glm::mat4(1.0f), (m_gameWorld->getWallData()->at(i).first + (f_offset * 2.0f)) / s_displayScale);
 			glUniformMatrix4fv(m_modelMatrixID, 1, GL_FALSE, &model_1[0][0]);
-			glDrawArrays(GL_TRIANGLES, 0, m_wallType1.vertices.size());
+			glDrawElements(GL_TRIANGLES, m_wallType1.indices.size(), GL_UNSIGNED_SHORT, (void*)0);
 		}
 	}
 
@@ -352,12 +352,12 @@ void Game::drawGameScene()
 		// Floor
 		model_1 = glm::translate(glm::mat4(1.0f), (m_gameWorld->getWallData()->at(i).first - f_offset) / s_displayScale);
 		glUniformMatrix4fv(m_modelMatrixID, 1, GL_FALSE, &model_1[0][0]);
-		glDrawArrays(GL_TRIANGLES, 0, m_wallType1.vertices.size());
+		glDrawElements(GL_TRIANGLES, m_wallType1.indices.size(), GL_UNSIGNED_SHORT, (void*)0);
 
 		// Ceiling
 		model_1 = glm::translate(glm::mat4(1.0f), (m_gameWorld->getWallData()->at(i).first + (f_offset * 3.0f)) / s_displayScale);
 		glUniformMatrix4fv(m_modelMatrixID, 1, GL_FALSE, &model_1[0][0]);
-		glDrawArrays(GL_TRIANGLES, 0, m_wallType1.vertices.size());
+		glDrawElements(GL_TRIANGLES, m_wallType1.indices.size(), GL_UNSIGNED_SHORT, (void*)0);
 	}
 
 	glBindVertexArray(0);
@@ -393,7 +393,7 @@ void Game::drawGameScene()
 		gunAnimation(m_machineGunModelMatrix); // Does nothing if recoil is false
 
 		glUniformMatrix4fv(m_modelMatrixID, 1, GL_FALSE, &m_machineGunModelMatrix[0][0]);
-		glDrawArrays(GL_TRIANGLES, 0, m_machineGun.vertices.size());
+		glDrawElements(GL_TRIANGLES, m_machineGun.indices.size(), GL_UNSIGNED_SHORT, (void*)0);
 		glBindVertexArray(0);
 	}
 
@@ -413,7 +413,7 @@ void Game::drawGameScene()
 		m_oilDrumModelMatrix = glm::translate(glm::mat4(1.0f), m_gameWorld->getOilDrumPositions()->at(i) / s_displayScale);
 		m_oilDrumModelMatrix = glm::scale(m_oilDrumModelMatrix, glm::vec3(5.0f, 5.0f, 5.0f));
 		glUniformMatrix4fv(m_modelMatrixID, 1, GL_FALSE, &m_oilDrumModelMatrix[0][0]);
-		glDrawArrays(GL_TRIANGLES, 0, m_oilDrum.vertices.size());
+		glDrawElements(GL_TRIANGLES, m_oilDrum.indices.size(), GL_UNSIGNED_SHORT, (void*)0);
 	}
 
 	glBindVertexArray(0);
@@ -434,7 +434,7 @@ void Game::drawGameScene()
 		m_fireExtModelMatrix = glm::translate(glm::mat4(1.0f), m_gameWorld->getFireExtPositions()->at(i) / s_displayScale);
 		m_fireExtModelMatrix = glm::scale(m_fireExtModelMatrix, glm::vec3(12.0f, 12.0f, 12.0f));
 		glUniformMatrix4fv(m_modelMatrixID, 1, GL_FALSE, &m_fireExtModelMatrix[0][0]);
-		glDrawArrays(GL_TRIANGLES, 0, m_fireExt.vertices.size());
+		glDrawElements(GL_TRIANGLES, m_fireExt.indices.size(), GL_UNSIGNED_SHORT, (void*)0);
 	}
 
 	glBindVertexArray(0);
@@ -456,7 +456,7 @@ void Game::drawGameScene()
 		gunAnimation(m_rifleModelMatrix); // Does nothing if recoil is false
 
 		glUniformMatrix4fv(m_modelMatrixID, 1, GL_FALSE, &m_rifleModelMatrix[0][0]);
-		glDrawArrays(GL_TRIANGLES, 0, m_rifle.vertices.size());
+		glDrawElements(GL_TRIANGLES, m_rifle.indices.size(), GL_UNSIGNED_SHORT, (void*)0);
 		glBindVertexArray(0);
 	}
 
@@ -477,7 +477,7 @@ void Game::drawGameScene()
 		gunAnimation(m_pistolModelMatrix); // Does nothing if recoil is false
 
 		glUniformMatrix4fv(m_modelMatrixID, 1, GL_FALSE, &m_pistolModelMatrix[0][0]);
-		glDrawArrays(GL_TRIANGLES, 0, m_pistol.vertices.size());
+		glDrawElements(GL_TRIANGLES, m_pistol.indices.size(), GL_UNSIGNED_SHORT, (void*)0);
 		glBindVertexArray(0);
 	}
 
@@ -495,7 +495,7 @@ void Game::drawGameScene()
 		m_enemyModelMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(m_gameWorld->getEnemyPosition(i).x / s_displayScale, 3, m_gameWorld->getEnemyPosition(i).y / s_displayScale));
 		m_enemyModelMatrix = glm::scale(m_enemyModelMatrix, glm::vec3(0.5f, 0.5f, 0.5f));
 		glUniformMatrix4fv(m_modelMatrixID, 1, GL_FALSE, &m_enemyModelMatrix[0][0]);
-		glDrawArrays(GL_TRIANGLES, 0, m_enemy.vertices.size());
+		glDrawElements(GL_TRIANGLES, m_enemy.indices.size(), GL_UNSIGNED_SHORT, (void*)0);
 	}
 
 	glBindVertexArray(0);
@@ -504,8 +504,8 @@ void Game::drawGameScene()
 
 	// Particles! Particles! Particles!
 	//glUseProgram(m_particleShader->m_programID);
-	m_particleEffect.generateParticles(m_eye);
-	m_particleEffect.drawParticles();
+	//m_particleEffect.generateParticles(m_eye);
+	//m_particleEffect.drawParticles();
 
 	// ---------------------------------------------------------------------------------------------------------------------
 
@@ -618,6 +618,11 @@ void Game::loadVAO(std::string t_textureFilename, const char *t_modelFilename, M
 	glBindBuffer(GL_ARRAY_BUFFER, t_model.normalBufferID);
 	glBufferData(GL_ARRAY_BUFFER, t_model.normals.size() * sizeof(glm::vec3), &t_model.normals[0], GL_STATIC_DRAW);
 
+	// Element buffer object (used for indices)
+	glGenBuffers(1, &t_model.elementBufferID);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, t_model.elementBufferID);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, t_model.indices.size() * sizeof(unsigned short), &t_model.indices[0], GL_STATIC_DRAW);
+
 	// This VAO stores all states for model
 	glGenVertexArrays(1, &t_model.VAO_ID);
 	glBindVertexArray(t_model.VAO_ID);
@@ -636,6 +641,11 @@ void Game::loadVAO(std::string t_textureFilename, const char *t_modelFilename, M
 	glBindBuffer(GL_ARRAY_BUFFER, t_model.normalBufferID);
 	glEnableVertexAttribArray(2);
 	glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
+
+	// Element buffer (used for indices)
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, t_model.elementBufferID);
+	glEnableVertexAttribArray(3);
+	glVertexAttribPointer(3, 1, GL_UNSIGNED_SHORT, GL_FALSE, 0, (void*)0);
 
 	glBindVertexArray(0);
 }
