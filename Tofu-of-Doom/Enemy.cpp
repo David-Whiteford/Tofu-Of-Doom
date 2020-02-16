@@ -19,6 +19,8 @@ Enemy::Enemy(sf::RenderWindow& t_window, sf::Time& t_deltaTime,sf::Vector2f t_po
 
 Enemy::~Enemy()
 {
+	delete(m_gamePath);
+	delete(this);
 }
 
 void Enemy::enemyInit()

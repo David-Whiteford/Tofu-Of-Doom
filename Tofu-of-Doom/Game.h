@@ -75,20 +75,11 @@ public:
 	MainMenu* m_mainMenu;
 	Options* m_optionsMenu;
 	void initialise();
-	
+
 	// A* stuff with graph for storing nodes
 	GameState m_currentGameState{ GameState::Main }; // used for whatever mode game starts
-	Graph<NodeData, int>* graph;
-	std::vector<Node*> graphPath;
-	std::map<std::string, int> nodeMap;
-	NodeData nodeData;
-	int nodeIndex{ 0 };
-	bool sound =false;
-	std::ifstream myfile;	
 
-	// Find the neighbours of row 4 and column 4
-	int row = 0;
-	int col = 0;
+	bool sound = false;
 
 	bool yButtonPressed{ false }; // This is used so that a gun is only changed when Y is released
 	bool backButtonPressed{ false }; // This is used so that the map is only displayed when the Back button is released

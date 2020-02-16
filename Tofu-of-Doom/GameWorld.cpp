@@ -7,12 +7,16 @@ GameWorld::GameWorld(sf::RenderWindow& t_window, sf::Time& t_deltaTime, Camera* 
 	: m_window(t_window), m_deltaTime(t_deltaTime), m_camera(*t_camera)
 {
 	// Player
+	m_player.setPosition(10, 10);
 	m_player.setPosition(m_camera.getEye().x, m_camera.getEye().z); // Test starting position
 	m_newPosition = sf::Vector2f(0, 0);
 	m_playerGun.setRadius(5.0f);
 	m_playerGun.setFillColor(sf::Color::Red);
 	m_playerGun.setOrigin(sf::Vector2f(5, 5));
 	m_playerGun.setPosition(m_camera.getEye().x, m_camera.getEye().z + 5); // Test starting position
+
+
+	graph = new Graph<NodeData, int>(25);
 
 	// Vector of endNodes
 	m_endNodes.push_back(252);
@@ -50,7 +54,7 @@ GameWorld::GameWorld(sf::RenderWindow& t_window, sf::Time& t_deltaTime, Camera* 
 	m_startingPos.push_back(sf::Vector2f(1518, 1365));
 	m_startingPos.push_back(sf::Vector2f(2313, 2356));
 
-	for (int i = 0; i < 18; i++)
+	for (int i = 0; i < 1; i++)
 	{
 		m_enemyVec[i] = new Enemy(m_window, m_deltaTime, m_startingPos[i], m_gamePath);
 		m_enemyVec[i]->setAlive(true);
@@ -85,7 +89,7 @@ GameWorld::GameWorld(sf::RenderWindow& t_window, sf::Time& t_deltaTime, Camera* 
 	// A*
 	m_gamePath->initAStar(m_wallVec);
 
-	for (int i = 0; i < 8; i++)
+	for (int i = 0; i < 1; i++)
 	{
 		m_enemyVec[i] = new Enemy(m_window, m_deltaTime, m_startingPos[i], m_gamePath);
 		m_enemyVec[i]->setAlive(true);
@@ -105,8 +109,7 @@ GameWorld::GameWorld(sf::RenderWindow& t_window, sf::Time& t_deltaTime, Camera* 
 /// </summary>
 GameWorld::~GameWorld()
 {
-	delete m_gamePath;
-	delete m_map;
+
 }
 
 /// <summary>

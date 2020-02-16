@@ -61,10 +61,24 @@ public:
 	std::vector<glm::vec3> *getTable2Positions();
 
 private:
+
+	Graph<NodeData, int>* graph;
+
+	std::map<std::string, int> nodeMap;
+	NodeData nodeData;
+	int nodeIndex{ 0 };
+	std::ifstream myfile;
+
+	// Find the neighbours of row 4 and column 4
+	int row = 0;
+	int col = 0;
+
+
 	Quadtree quadtree = Quadtree(-50, -50, 2550, 2550, 0, 6);
 	Quadtree quadtreeBullet = Quadtree(-500, -500, 3550, 3550, 0, 4);
 	Path* m_gamePath = new Path(m_window);
-	Enemy* m_enemyVec[18];
+	Enemy* m_enemyVec[1];
+
 	std::vector<GameObject*> previousReturn;
 	std::vector<GameObject*> returnWall;
 	std::vector<Node*> graphPath;
