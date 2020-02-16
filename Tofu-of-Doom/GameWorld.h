@@ -18,6 +18,7 @@
 #include "Enemy.h"
 #include "Wall.h"
 #include "Quadtree.h"
+#include "UI.h"
 #include "Player.h"
 
 class GameWorld
@@ -27,6 +28,8 @@ public:
 	~GameWorld();
 	void updateWorld();
 	void drawWorld();
+
+	void drawUI();
 	void fireBullet(int t_gunType);
 	void checkPlayerRayCollsions(sf::Time t_deltaTime); 
 	void updateBulletPhysics();
@@ -44,6 +47,13 @@ public:
 	double getYaw();
 	std::vector<std::pair<glm::vec3, WallType>> *getWallData();
 	std::vector<glm::vec3> *getLightPositions();
+	int getActiveEnemyCount();
+	void checkEnemyInQueueAlive();
+	void populateQuadtree();
+
+	UI ui;
+	sf::View ui_view;
+
 	std::vector<glm::vec3> *getFireExtPositions();
 	std::vector<glm::vec3> *getOilDrumPositions();
 	std::vector<glm::vec3> *getChairPositions();

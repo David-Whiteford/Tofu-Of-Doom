@@ -287,7 +287,7 @@ void Game::render()
 	case DrawState::GAME:
 		drawGameScene();
 		m_window.pushGLStates();
-		m_gameWorld->drawWorld();
+		m_gameWorld->drawUI();
 		m_window.popGLStates();
 		drawGameScene();
 		break;
