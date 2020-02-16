@@ -47,9 +47,6 @@ public:
 	double getYaw();
 	std::vector<std::pair<glm::vec3, WallType>> *getWallData();
 	std::vector<glm::vec3> *getLightPositions();
-	int getActiveEnemyCount();
-	void checkEnemyInQueueAlive();
-	void populateQuadtree();
 
 	UI ui;
 	sf::View ui_view;
