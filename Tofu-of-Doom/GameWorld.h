@@ -45,6 +45,9 @@ public:
 	std::vector<glm::vec3> *getLightPositions();
 	std::vector<glm::vec3> *getFireExtPositions();
 	std::vector<glm::vec3> *getOilDrumPositions();
+	std::vector<glm::vec3>* getChairPositions();
+	std::vector<glm::vec3>* getTable1Positions();
+	std::vector<glm::vec3>* getTable2Positions();
 	int getActiveEnemyCount();
 	void checkEnemyInQueueAlive();
 	void populateQuadtree();

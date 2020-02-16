@@ -512,9 +512,9 @@ void Game::drawGameScene()
 	glUniform1i(m_currentTextureID, 8);
 	glBindVertexArray(m_chair.VAO_ID);
 
-	for (int i = 0; i < 5; i++)
+	for (int i = 0; i < m_gameWorld->getChairPositions()->size(); ++i)
 	{
-		m_chairModelMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(25.0f * i, 0.0f, 25.0f * i));
+		m_chairModelMatrix = glm::translate(glm::mat4(1.0f), m_gameWorld->getChairPositions()->at(i) / s_displayScale);
 		glUniformMatrix4fv(m_modelMatrixID, 1, GL_FALSE, &m_chairModelMatrix[0][0]);
 		glDrawElements(GL_TRIANGLES, m_chair.indices.size(), GL_UNSIGNED_SHORT, (void*)0);
 	}
@@ -530,9 +530,9 @@ void Game::drawGameScene()
 	glUniform1i(m_currentTextureID, 9);
 	glBindVertexArray(m_table_1.VAO_ID);
 
-	for (int i = 0; i < 5; i++)
+	for (int i = 0; i < m_gameWorld->getTable1Positions()->size(); ++i)
 	{
-		m_table_1_modelMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(25.0f * i, 0.0f, 25.0f * i));
+		m_table_1_modelMatrix = glm::translate(glm::mat4(1.0f), m_gameWorld->getTable1Positions()->at(i) / s_displayScale);
 		glUniformMatrix4fv(m_modelMatrixID, 1, GL_FALSE, &m_table_1_modelMatrix[0][0]);
 		glDrawElements(GL_TRIANGLES, m_table_1.indices.size(), GL_UNSIGNED_SHORT, (void*)0);
 	}
@@ -548,9 +548,10 @@ void Game::drawGameScene()
 	glUniform1i(m_currentTextureID, 10);
 	glBindVertexArray(m_table_2.VAO_ID);
 
-	for (int i = 0; i < 5; i++)
+	for (int i = 0; i < m_gameWorld->getTable2Positions()->size(); ++i)
 	{
-		m_table_2_modelMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(25.0f * i, 0.0f, 25.0f * i));
+		m_table_2_modelMatrix = glm::translate(glm::mat4(1.0f), m_gameWorld->getTable2Positions()->at(i) / s_displayScale);
+		m_table_2_modelMatrix = glm::scale(m_table_2_modelMatrix, glm::vec3(2.0f, 2.0f, 2.0f));
 		glUniformMatrix4fv(m_modelMatrixID, 1, GL_FALSE, &m_table_2_modelMatrix[0][0]);
 		glDrawElements(GL_TRIANGLES, m_table_2.indices.size(), GL_UNSIGNED_SHORT, (void*)0);
 	}
