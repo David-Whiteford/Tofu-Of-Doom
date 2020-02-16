@@ -33,12 +33,11 @@
 #include "Options.h"
 #include "Camera.h"
 #include "DisplayScale.h"
-
-// Debug Only Remove and place in own class for model cube //
 #include "Collider2D.h"
 
 using namespace irrklang;
 #pragma comment(lib, "irrKlang.lib") // link with irrKlang.dll
+
 class SplashScreen;
 class SFML;
 class MainMenu;
@@ -58,7 +57,7 @@ public:
 	ISoundEngine* gunSoundEngine;
 	ISound* music;
 	ISound* background;
-	sf::Font m_font; // font used by message
+	sf::Font m_font; // Font used by message
 	irrklang::ISoundSource* zombie;
 	irrklang::ISoundSource* shotgunSound;
 	irrklang::ISoundSource* machinegunSound;
@@ -66,22 +65,18 @@ public:
 	bool vibrate = false;
 	vec3df zombiePosition;
 	ISound* zombieEnemies[11];
-	//vec3df positionEnemies[11];
 	sf::Sprite m_sfmlSprite;
 	sf::Texture m_sfmlTexture;
-	// 1 is pistol, 2 is rifle, 3 is machine gun)
 	int gunNum = 1;
-	//menu screens
-	SplashScreen* m_splashScreen; // the splash screen
+
+	// Menu screens
+	SplashScreen* m_splashScreen; // The splash screen
 	SFML* m_sfmlScreen;
 	MainMenu* m_mainMenu;
 	Options* m_optionsMenu;
 	void initialise();
 	
-	/// <summary>
-	/// Astar stuff with graph for storing nodes
-	/// settng up the astar algorithm
-	/// </summary>
+	// A* stuff with graph for storing nodes
 	GameState m_currentGameState{ GameState::Main }; // used for whatever mode game starts
 	Graph<NodeData, int>* graph;
 	std::vector<Node*> graphPath;
@@ -89,11 +84,9 @@ public:
 	NodeData nodeData;
 	int nodeIndex{ 0 };
 	bool sound =false;
-	std::ifstream myfile;
+	std::ifstream myfile;	
 
-	
-
-	//find the neighbours of row 4 and column 4(temp Test
+	// Find the neighbours of row 4 and column 4
 	int row = 0;
 	int col = 0;
 
@@ -110,7 +103,7 @@ public:
 
 	std::queue <ISoundSource*> shotgunQueue;
 
-	enum DrawState
+	enum class DrawState
 	{
 		MAP,
 		GAME,
@@ -138,11 +131,13 @@ private:
 		std::vector<unsigned short> indices;
 	};
 
-	sf::RenderWindow m_window; // Window
+	sf::RenderWindow m_window;		
+	Camera camera; // Player camera
 	sf::Time m_deltaTime;
 	GameWorld *m_gameWorld = new GameWorld(m_window, m_deltaTime, &camera); // Create a game world
 
 	bool m_exitGame{ false };
+	bool m_buttonPressed = false;
 
 	// Models
 	Model m_wallType1;
@@ -173,29 +168,29 @@ private:
 	// Used for OpenGL error check
 	GLenum error;
 
-	// The model matrices will eventually be stored in an array (probably on the GPU)
+	// Matrices for various models
 	glm::mat4 model_1;
-	// glm::mat4 model_2; /* Cube Test*/ Collider2D cubeCollider; // Remove and place in own class after debugging
 	glm::mat4 m_fireExtModelMatrix;
 	glm::mat4 m_oilDrumModelMatrix;
 	glm::mat4 m_chairModelMatrix;
 	glm::mat4 m_table_1_modelMatrix;
 	glm::mat4 m_table_2_modelMatrix;
-	glm::mat4 m_pistolModelMatrix; // Pistol matrix
-	glm::mat4 m_rifleModelMatrix; // Rifle matrix
-	glm::mat4 m_machineGunModelMatrix; // Machine gun matrix
+	glm::mat4 m_pistolModelMatrix;
+	glm::mat4 m_rifleModelMatrix;
+	glm::mat4 m_machineGunModelMatrix;
+	glm::mat4 m_enemyModelMatrix;
+	glm::mat4 m_rotationMatrix; // Generic, used for anything
 
-	glm::mat4 m_enemyModelMatrix; // Enemy matrix
+	// Projection matrix
 	glm::mat4 projection;	
 
-	tk::Shader *m_mainShader; // Shader object
+	// Shaders
+	tk::Shader *m_mainShader;
 	tk::Shader *m_particleShader;
-	glm::vec3 m_eye{ 0.f, 4.0f, 0.f }; // Current camera position
-	
-	glm::mat4 m_rotationMatrix;
+
+	glm::vec3 m_eye{ 0.f, 4.0f, 0.f }; // Current camera position		
 	glm::vec4 m_direction{ 0.f, 0.f, 1.f, 0.f }; // You move in this direction, it rotates when you rotate
 	float m_speed = 0.05f; // This value dictates the speed of all game movement
-
 	double m_yaw{ 0.0 }; // Look left and right (in degrees)
 	double m_pitch{ 0.0 }; // Look up and down (in degrees)
 	bool gunRecoil{ false };
@@ -203,20 +198,14 @@ private:
 	// Create particle object
 	ParticleEffect m_particleEffect = ParticleEffect(m_deltaTime);
 
+	// Functions
 	void processEvents();
 	void update(sf::Time t_deltaTime);
 	void updateWorld(sf::Time t_deltaTime);
 	void render();
 	void gameControls(sf::Time t_deltaTime);
 	void loadVAO(std::string t_textureFilename, const char* t_modelFilename, Model& t_model);
-	void gunAnimation(glm::mat4 &t_gunMatrix);
-	void moveEnemy(glm::mat4& t_gunMatrix);
-
-
-	bool m_buttonPressed = false;
-	//Player Camera
-	Camera camera;
-
+	void gunAnimation(glm::mat4& t_gunMatrix);
 	void fireGun();
 	void drawGameScene();
 };
