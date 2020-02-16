@@ -16,27 +16,41 @@
 class UI
 {
 public:
-	UI() { bottomBorder.setFillColor(sf::Color::Black); bottomBorder.setSize(sf::Vector2f(720, 80)); 
+	UI() { bottomBorder.setFillColor(sf::Color(0,0,0,135)); bottomBorder.setSize(sf::Vector2f(720, 80)); 
+	
 	if (!m_font.loadFromFile("models/AmazDooMRight.ttf"))
 	{
 		std::cout << "problem loading font" << std::endl;
 	}
+
+	if (!texture.loadFromFile("gunReticle.png"))
+	{
+		// error...
+	}
+	
+	retina.setTexture(texture);
+	retina.setPosition(560, 300);
+
+	retina.setScale(.3f, .3f);
+
 	displayHealth.setFont(m_font);
 	displayHealth.setFillColor(sf::Color::Red);
-	displayHealth.setPosition(offset);
+	displayHealth.setPosition(sf::Vector2f(65,633));
 	displayHealth.setCharacterSize(50); // in pixels, not points!
 	displayHealth.setScale(1,1);
-	displayHealth.setString("hello world");
 	}
 	~UI() {}
 
 
 	sf::RectangleShape getBorder() { return bottomBorder; }
-	sf::Text getText() { return displayHealth; }
-
+	sf::Text getText() { displayHealth.setString("Health: " + std::to_string(healthTest));  return displayHealth; }
+	sf::Sprite getRetina() { return retina; }
 	void update();
 	float x = 0, y = 0;
+
 private:
+	sf::Sprite retina;
+	sf::Texture texture;
 	sf::RectangleShape bottomBorder;
 	sf::Vector2f offset{ sf::Vector2f(0.0f, 690) };
 	sf::Text displayHealth;

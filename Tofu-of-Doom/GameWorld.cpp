@@ -175,7 +175,9 @@ void GameWorld::drawUI()
 {
 	ui_view.setCenter(sf::Vector2f(0,0));
 
+	m_window.draw(ui.getBorder());
 	m_window.draw(ui.getText());
+	m_window.draw(ui.getRetina());
 
 	if (m_camera.controller.leftButton())
 	{
@@ -197,10 +199,6 @@ void GameWorld::drawUI()
 		ui.y++;
 	}
 
-	std::cout << "x: " + std::to_string(ui.x) << ", y: " + std::to_string(ui.y) << std::endl;
-	std::cout << "px: " + std::to_string(getPlayerPosition().x) << ", py: " + std::to_string(getPlayerPosition().y) << std::endl;
-
-	ui.update();
 
 }
 
