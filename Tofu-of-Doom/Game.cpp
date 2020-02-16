@@ -27,6 +27,7 @@ Game::Game(sf::ContextSettings t_settings)
 	m_sfmlScreen = new SFML{ *this , m_font, m_sfmlSprite };
 	m_mainMenu = new MainMenu{ *this , m_font };
 	m_optionsMenu = new Options{ *this,m_font };
+	m_window.setFramerateLimit(120);
 
 }
 
@@ -44,31 +45,30 @@ Game::~Game()
 /// </summary>
 void Game::run()
 {
+	m_window.setFramerateLimit(120);
 	sf::Clock clock;
 	sf::Clock gunClock;
 	sf::Time oldTime = sf::Time::Zero;
 	sf::Time timeSinceLastUpdate = sf::Time::Zero;
 	sf::Time timePerFrame = sf::seconds((1.f / 60.0f));
-
 	m_window.setFramerateLimit(120);
+
 	while (m_window.isOpen() && !m_exitGame)
 	{
 		m_deltaTime = clock.getElapsedTime() - oldTime;
-		//timeSinceLastUpdate += clock.restart();
 
-		if(clock.getElapsedTime() < oldTime + timePerFrame)
+		if (clock.getElapsedTime() < oldTime + timePerFrame)
 		{
 		}
 		else
 		{
 			m_time += gunClock.restart();
 			processEvents();
-			update(timePerFrame);
-			//timeSinceLastUpdate -= timePerFrame;
+			update(m_deltaTime);
 			processEvents();
-			render();
 			oldTime = clock.getElapsedTime();
-		}		
+			render();
+		}
 	}
 }
 
@@ -154,6 +154,8 @@ void Game::initialise()
 	// Enable depth test and face culling
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_CULL_FACE);
+	glCullFace(GL_BACK);
+	glFrontFace(GL_CCW);
 
 	// Uncomment this function to prove that culling faces is working by culling front faces instead of back (back is set by default)
 	// glCullFace(GL_FRONT);

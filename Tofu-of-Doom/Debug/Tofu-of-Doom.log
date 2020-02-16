@@ -4,6 +4,6 @@ C:\Users\paulj\Desktop\main\Tofu-Of-Doom\Tofu-of-Doom\Collider2D.h(13): warning 
 C:\Users\paulj\Desktop\main\Tofu-Of-Doom\Tofu-of-Doom\Camera.h(84,26): warning C4305: 'initializing': truncation from 'double' to 'float'
 C:\Users\paulj\Desktop\main\Tofu-Of-Doom\Tofu-of-Doom\Camera.h(85,30): warning C4305: 'initializing': truncation from 'double' to 'float'
 C:\Users\paulj\Desktop\main\Tofu-Of-Doom\Tofu-of-Doom\GameWorld.h(32,17): warning C4305: 'initializing': truncation from 'double' to 'float'
-C:\Users\paulj\Desktop\main\Tofu-Of-Doom\Tofu-of-Doom\Game.cpp(344,20): warning C4018: '<': signed/unsigned mismatch
-C:\Users\paulj\Desktop\main\Tofu-Of-Doom\Tofu-of-Doom\Game.cpp(363,20): warning C4018: '<': signed/unsigned mismatch
+C:\Users\paulj\Desktop\main\Tofu-Of-Doom\Tofu-of-Doom\Game.cpp(346,20): warning C4018: '<': signed/unsigned mismatch
+C:\Users\paulj\Desktop\main\Tofu-Of-Doom\Tofu-of-Doom\Game.cpp(365,20): warning C4018: '<': signed/unsigned mismatch
   Tofu-of-Doom.vcxproj -> C:\Users\paulj\Desktop\main\Tofu-Of-Doom\Debug\Tofu-of-Doom.exe
