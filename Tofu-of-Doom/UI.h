@@ -16,28 +16,31 @@
 class UI
 {
 public:
-	UI() { bottomBorder.setFillColor(sf::Color(0,0,0,135)); bottomBorder.setSize(sf::Vector2f(720, 80)); 
-	
-	if (!m_font.loadFromFile("models/AmazDooMRight.ttf"))
-	{
-		std::cout << "problem loading font" << std::endl;
-	}
+	UI() {
+		bottomBorder.setFillColor(sf::Color(0, 0, 0, 190)); bottomBorder.setSize(sf::Vector2f(230, 70));
 
-	if (!texture.loadFromFile("gunReticle.png"))
-	{
-		// error...
-	}
-	
-	retina.setTexture(texture);
-	retina.setPosition(560, 300);
+		if (!m_font.loadFromFile("models/AmazDooMRight.ttf"))
+		{
+			std::cout << "problem loading font" << std::endl;
+		}
 
-	retina.setScale(.3f, .3f);
+		if (!retinaTexture.loadFromFile("gunReticle.png"))
+		{
+			// error...
+		}
 
-	displayHealth.setFont(m_font);
-	displayHealth.setFillColor(sf::Color::Red);
-	displayHealth.setPosition(sf::Vector2f(65,633));
-	displayHealth.setCharacterSize(50); // in pixels, not points!
-	displayHealth.setScale(1,1);
+		retina.setTexture(retinaTexture);
+		retina.setPosition(560, 300);
+
+		retina.setScale(.3f, .3f);
+
+		displayHealth.setFont(m_font);
+		displayHealth.setFillColor(sf::Color::Red);
+		displayHealth.setPosition(sf::Vector2f(65, 633));
+		displayHealth.setCharacterSize(50); // in pixels, not points!
+		displayHealth.setScale(1, 1);
+
+		bottomBorder.setPosition(30, 630);
 	}
 	~UI() {}
 
@@ -50,8 +53,10 @@ public:
 
 private:
 	sf::Sprite retina;
-	sf::Texture texture;
+	sf::Texture retinaTexture;
+
 	sf::RectangleShape bottomBorder;
+
 	sf::Vector2f offset{ sf::Vector2f(0.0f, 690) };
 	sf::Text displayHealth;
 	int healthTest = 100;
