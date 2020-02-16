@@ -89,7 +89,7 @@ GameWorld::GameWorld(sf::RenderWindow& t_window, sf::Time& t_deltaTime, Camera* 
 	// A*
 	m_gamePath->initAStar(m_wallVec);
 
-	for (int i = 0; i < 1; i++)
+	for (int i = 0; i < 18; i++)
 	{
 		m_enemyVec[i] = new Enemy(m_window, m_deltaTime, m_startingPos[i], m_gamePath);
 		m_enemyVec[i]->setAlive(true);
@@ -176,6 +176,17 @@ void GameWorld::drawWorld()
 	}
 }
 
+void GameWorld::initialise()
+{
+	for (int i = 0; i < 18; i++)
+	{
+		m_enemyVec[i]->setAlive(true);
+
+		// Add enemy to the active vector
+		m_enemyActive.push_back(m_enemyVec[i]);
+	}
+}
+
 void GameWorld::drawUI()
 {
 
@@ -211,7 +222,7 @@ void GameWorld::drawUI()
 
 }
 
-void GameWorld::fireBullet(int t_gunType)
+bool GameWorld::fireBullet(int t_gunType)
 {
 	for (int i = 0; i < m_wallVec.size(); i++)
 	{
@@ -220,21 +231,28 @@ void GameWorld::fireBullet(int t_gunType)
 
 	if (t_gunType == 1 || t_gunType == 3)
 	{
-		if (t_gunType == 1 && m_player.getCurrentHandGunClip() != 0)
+		if (t_gunType == 1)
 		{
-
-			for (int i = 0; i < 100; i++)
+			if (m_player.getCurrentHandGunClip() > 0)
 			{
-				if (bullets[i]->isActive() == false)
+				for (int i = 0; i < 100; i++)
 				{
-					m_player.reduceCurrentGunClip(t_gunType);
-					glm::vec3 tempDirection(m_camera.getDirection().x, m_camera.getDirection().y, m_camera.getDirection().z);
-					glm::normalize(tempDirection);
-					bullets[i]->bulletInit(sf::Vector2f(tempDirection.x, tempDirection.z), 0, m_playerGun.getPosition());
-					activeBullets.push_back(bullets[i]);
-					ui.setAmmoTextBullet(m_player.getCurrentHandGunClip(),m_player.getCurrentHandGunBullets());
-					break;
+					if (bullets[i]->isActive() == false)
+					{
+						m_player.reduceCurrentGunClip(t_gunType);
+						glm::vec3 tempDirection(m_camera.getDirection().x, m_camera.getDirection().y, m_camera.getDirection().z);
+						glm::normalize(tempDirection);
+						bullets[i]->bulletInit(sf::Vector2f(tempDirection.x, tempDirection.z), 0, m_playerGun.getPosition());
+						activeBullets.push_back(bullets[i]);
+						ui.setAmmoTextBullet(m_player.getCurrentHandGunClip(), m_player.getCurrentHandGunBullets());
+						break;
+					}
 				}
+				return true;
+			}
+			else
+			{
+				return false;
 			}
 		}
 		else if (t_gunType == 3 && m_player.getCurrentMachineGunClip() != 0)
@@ -252,9 +270,10 @@ void GameWorld::fireBullet(int t_gunType)
 					break;
 				}
 			}
+			return true;
 		}
 	}
-	else if (t_gunType == 2)
+	else if (t_gunType == 2 && m_player.getCurrentShotGunClip() != 0)
 	{
 		int bulletSpreadAmount = 0;
 
@@ -277,11 +296,14 @@ void GameWorld::fireBullet(int t_gunType)
 				{
 					m_player.reduceCurrentGunClip(t_gunType);
 					ui.setAmmoTextBullet(m_player.getCurrentShotGunClip(), m_player.getCurrentShotGunBullets());
+					
 					break;
 				}
 			}
 		}
+		return true;
 	}
+	return false;
 }
 
 /// <summary>

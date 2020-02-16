@@ -104,6 +104,8 @@ void Game::initialise()
 	machinegunSound = soundEngine->addSoundSourceFromFile("cg1.wav");
 	pistolSound = soundEngine->addSoundSourceFromFile("9mm.mp3");
 	zombie = soundEngine->addSoundSourceFromFile("Monster.mp3");
+	outOfAmmo = soundEngine->addSoundSourceFromFile("outofammo.wav");
+	weaponLoad = soundEngine->addSoundSourceFromFile("weapload.wav");
 
 	shotgunQueue.push(shotgunSound); // 4
 	shotgunQueue.push(machinegunSound); // 3
@@ -209,10 +211,9 @@ void Game::update(sf::Time t_deltaTime)
 		if (m_gameWorld->getActiveEnemyCount() == 0)
 		{
 			camera.controller.Vibrate(0, 0);
-			m_gameWorld->~GameWorld();
-			delete(m_gameWorld);
-			m_gameWorld = new GameWorld(m_window, m_deltaTime, &camera);
+
 			m_drawState = DrawState::MAIN;
+			m_gameWorld->initialise();
 
 		}
 
@@ -722,21 +723,32 @@ void Game::fireGun()
 	{
 		if (camera.controller.rightTriggerDown())
 		{
-			m_gameWorld->fireBullet(gunNum);
-			gunSoundEngine->play2D(pistolSound);
-			m_time = sf::Time::Zero;
-			m_time = m_time.Zero;
-
-			if (camera.isCameraShaking() == false)
+			if (m_gameWorld->fireBullet(gunNum))
 			{
-				camera.setCameraShake(true);
-			}
+				gunSoundEngine->play2D(pistolSound);
 
-			vibrate = true;
-			camera.controller.Vibrate(65535, 65535);
-			m_vibrateLength = m_ShotDelay/(float)10;
-			m_muzzleFlashIntensity = 300.0f;
-			gunRecoil = true; // If the gun is being shot, create some recoil
+				m_time = sf::Time::Zero;
+				m_time = m_time.Zero;
+
+				if (camera.isCameraShaking() == false)
+				{
+					camera.setCameraShake(true);
+				}
+
+				vibrate = true;
+				camera.controller.Vibrate(65535, 65535);
+				m_vibrateLength = m_ShotDelay / (float)10;
+				m_muzzleFlashIntensity = 300.0f;
+				gunRecoil = true; // If the gun is being shot, create some recoil
+			}
+			else
+			{
+				m_time = sf::Time::Zero;
+				m_time = m_time.Zero;
+				gunSoundEngine->play2D(outOfAmmo);
+
+				camera.controller.Vibrate(0, 0);
+			}
 		}
 		else
 		{
@@ -747,21 +759,31 @@ void Game::fireGun()
 	{
 		if (camera.controller.rightTriggerDown())
 		{
-			m_gameWorld->fireBullet(gunNum);
-			gunSoundEngine->play2D(shotgunQueue.front());
-			m_time = sf::Time::Zero;
-			m_time = m_time.Zero;
-
-			if (camera.isCameraShaking() == false)
+			if (m_gameWorld->fireBullet(gunNum))
 			{
-				camera.setCameraShake(true);
-			}
+				gunSoundEngine->play2D(shotgunQueue.front());
+				m_time = sf::Time::Zero;
+				m_time = m_time.Zero;
 
-			vibrate = true;
-			camera.controller.Vibrate(65535, 65535);
-			m_vibrateLength = m_ShotDelay *.8f;
-			m_muzzleFlashIntensity = 300.0f;
-			gunRecoil = true; // If the gun is being shot, create some recoil
+				if (camera.isCameraShaking() == false)
+				{
+					camera.setCameraShake(true);
+				}
+
+				vibrate = true;
+				camera.controller.Vibrate(65535, 65535);
+				m_vibrateLength = m_ShotDelay * .8f;
+				m_muzzleFlashIntensity = 300.0f;
+				gunRecoil = true; // If the gun is being shot, create some recoil
+			}
+			else
+			{
+				m_time = sf::Time::Zero;
+				m_time = m_time.Zero;
+				gunSoundEngine->play2D(outOfAmmo);
+
+				camera.controller.Vibrate(0, 0);
+			}
 		}
 		else
 		{
@@ -772,21 +794,32 @@ void Game::fireGun()
 	{
 		if (camera.controller.rightTrigger())
 		{
-			m_gameWorld->fireBullet(gunNum);
-			gunSoundEngine->play2D(machinegunSound);
-			m_time = sf::Time::Zero;
-			m_time = m_time.Zero;
-
-			if (camera.isCameraShaking() == false)
+			if (m_gameWorld->fireBullet(gunNum))
 			{
-				camera.setCameraShake(true);
+				gunSoundEngine->play2D(machinegunSound);
+				m_time = sf::Time::Zero;
+				m_time = m_time.Zero;
+
+				if (camera.isCameraShaking() == false)
+				{
+					camera.setCameraShake(true);
+				}
+
+				vibrate = true;
+				camera.controller.Vibrate(65535, 65535);
+				m_vibrateLength = m_ShotDelay / (float)2;
+				m_muzzleFlashIntensity = 300.0f;
+				gunRecoil = true; // If the gun is being shot, create some recoil
 			}
 
-			vibrate = true;
-			camera.controller.Vibrate(65535, 65535);
-			m_vibrateLength = m_ShotDelay/(float)2;
-			m_muzzleFlashIntensity = 300.0f;
-			gunRecoil = true; // If the gun is being shot, create some recoil
+			else
+			{
+				m_time = sf::Time::Zero;
+				m_time = m_time.Zero;
+				gunSoundEngine->play2D(outOfAmmo);
+
+				camera.controller.Vibrate(0, 0);
+			}
 		}
 		else
 		{
