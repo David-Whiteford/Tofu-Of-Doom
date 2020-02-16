@@ -63,6 +63,8 @@ public:
 	irrklang::ISoundSource* shotgunSound;
 	irrklang::ISoundSource* machinegunSound;
 	irrklang::ISoundSource* pistolSound;
+	irrklang::ISoundSource* outOfAmmo;
+	irrklang::ISoundSource* weaponLoad;
 	bool vibrate = false;
 	vec3df zombiePosition;
 	ISound* zombieEnemies[11];
