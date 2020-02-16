@@ -32,6 +32,8 @@ public:
 	void updateWorld();
 	void drawWorld();
 
+	void initialise();
+
 	void drawUI();
 	void fireBullet(int t_gunType);
 	void checkPlayerRayCollsions(sf::Time t_deltaTime); 
@@ -77,7 +79,7 @@ private:
 	Quadtree quadtree = Quadtree(-50, -50, 2550, 2550, 0, 6);
 	Quadtree quadtreeBullet = Quadtree(-500, -500, 3550, 3550, 0, 4);
 	Path* m_gamePath = new Path(m_window);
-	Enemy* m_enemyVec[1];
+	Enemy* m_enemyVec[18];
 
 	std::vector<GameObject*> previousReturn;
 	std::vector<GameObject*> returnWall;

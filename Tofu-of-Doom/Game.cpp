@@ -209,10 +209,9 @@ void Game::update(sf::Time t_deltaTime)
 		if (m_gameWorld->getActiveEnemyCount() == 0)
 		{
 			camera.controller.Vibrate(0, 0);
-			m_gameWorld->~GameWorld();
-			delete(m_gameWorld);
-			m_gameWorld = new GameWorld(m_window, m_deltaTime, &camera);
+
 			m_drawState = DrawState::MAIN;
+			m_gameWorld->initialise();
 
 		}
 

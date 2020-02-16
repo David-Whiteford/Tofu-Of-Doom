@@ -89,7 +89,7 @@ GameWorld::GameWorld(sf::RenderWindow& t_window, sf::Time& t_deltaTime, Camera* 
 	// A*
 	m_gamePath->initAStar(m_wallVec);
 
-	for (int i = 0; i < 1; i++)
+	for (int i = 0; i < 18; i++)
 	{
 		m_enemyVec[i] = new Enemy(m_window, m_deltaTime, m_startingPos[i], m_gamePath);
 		m_enemyVec[i]->setAlive(true);
@@ -173,6 +173,17 @@ void GameWorld::drawWorld()
 			m_window.draw(activeBullets[i]->raycast.drawRay());
 			activeBullets[i]->update();
 		}
+	}
+}
+
+void GameWorld::initialise()
+{
+	for (int i = 0; i < 18; i++)
+	{
+		m_enemyVec[i]->setAlive(true);
+
+		// Add enemy to the active vector
+		m_enemyActive.push_back(m_enemyVec[i]);
 	}
 }
 
