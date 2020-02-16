@@ -17,11 +17,7 @@ MainMenu::~MainMenu()
 
 void MainMenu::update(sf::Time t_deltaTime, bool t_soundFX)
 {
-	if (m_doOnce < 1)
-	{
-		m_doOnce++;
-		m_startUp = true;
-	}
+	
 	std::cout << "start" << m_startUp << std::endl;
 	//when start up is true then screen tran is on 
 	if (m_startUp == true)
@@ -128,7 +124,6 @@ void MainMenu::setUpContent()
 	//set the size , position and colour of the outline rect
 	m_outlineRect.setSize(sf::Vector2f(165, 70));
 	m_outlineRect.setPosition(50, 20);
-
 
 	m_bg.setTexture(m_bgTexture);
 	m_bg.setPosition(400.0f, -50.0f);

@@ -79,9 +79,9 @@ public:
 	SplashScreen* m_splashScreen; // the splash screen
 	SFML* m_sfmlScreen;
 	MainMenu* m_mainMenu;
-
-	void initialise();
 	Options* m_optionsMenu;
+	void initialise();
+	
 	/// <summary>
 	/// Astar stuff with graph for storing nodes
 	/// settng up the astar algorithm
@@ -123,7 +123,7 @@ public:
 		SPLASH
 	};
 
-	DrawState m_drawState = DrawState::SPLASH;
+	DrawState m_drawState = DrawState::OPTIONS;
 
 private:
 

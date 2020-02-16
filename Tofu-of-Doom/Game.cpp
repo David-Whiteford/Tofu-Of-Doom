@@ -26,7 +26,7 @@ Game::Game(sf::ContextSettings t_settings)
 	m_sfmlSprite.setTexture(m_sfmlTexture);
 	m_sfmlScreen = new SFML{ *this , m_font, m_sfmlSprite };
 	m_mainMenu = new MainMenu{ *this , m_font };
-
+	m_optionsMenu = new Options{ *this,m_font };
 
 }
 
@@ -214,7 +214,7 @@ void Game::update(sf::Time t_deltaTime)
 		m_mainMenu->update(t_deltaTime, sound);
 		break;
 	case DrawState::OPTIONS:
-		m_optionsMenu->update(m_deltaTime);
+		m_optionsMenu->update(t_deltaTime);
 		break;
 	case DrawState::GAME:
 		updateWorld(t_deltaTime);
