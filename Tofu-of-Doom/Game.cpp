@@ -600,7 +600,7 @@ void Game::loadVAO(std::string t_textureFilename, const char *t_modelFilename, M
 	stbi_image_free(f_data); // Unload data from CPU as it's on the GPU now
 
 	// Load .obj file
-	if (!tk::ModelLoader::loadOBJ(t_modelFilename, t_model.vertices, t_model.uvs, t_model.normals))
+	if (!tk::ModelLoader::loadOBJ(t_modelFilename, t_model.vertices, t_model.uvs, t_model.normals, t_model.indices))
 	{
 		std::cout << "Error loading model!" << std::endl;
 	}

@@ -3,7 +3,8 @@
 /// <summary>
 /// This function loads an obj format model
 /// </summary>
-bool tk::ModelLoader::loadOBJ(const char *path, std::vector<glm::vec3> &out_vertices, std::vector<glm::vec2> &out_uvs, std::vector<glm::vec3> &out_normals)
+bool tk::ModelLoader::loadOBJ(const char *path, std::vector<glm::vec3> &out_vertices, std::vector<glm::vec2> &out_uvs, 
+	std::vector<glm::vec3> &out_normals, std::vector<unsigned short> &indices)
 {
 	std::vector<unsigned int> vertexIndices;
 	std::vector<unsigned int> uvIndices;
