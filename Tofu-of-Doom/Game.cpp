@@ -83,7 +83,6 @@ void Game::initialise()
 		m_lightPositions.push_back(f_temp);
 	}
 
-	graph = new Graph<NodeData, int>(25);
 	m_ShotDelay = sf::seconds(.7f); // .7f is the length for the reload sound to finish
 	m_vibrateLength = sf::seconds(.1f); // .7f is the length for the reload sound to finish
 	soundEngine = createIrrKlangDevice();
@@ -203,8 +202,12 @@ void Game::update(sf::Time t_deltaTime)
 
 		if (m_gameWorld->getActiveEnemyCount() == 0)
 		{
-			m_drawState = DrawState::MAIN;
 			camera.controller.Vibrate(0, 0);
+			m_gameWorld->~GameWorld();
+			//delete(m_gameWorld);
+			m_gameWorld = new GameWorld(m_window, m_deltaTime, &camera);
+			m_drawState = DrawState::MAIN;
+
 		}
 
 		break;
@@ -812,7 +815,7 @@ void Game::fireGun()
 				camera.setCameraShakeMax(4);
 				camera.setCameraShakeSpeed(2);
 			}
-
+			
 			yButtonPressed = false;
 		}
 	}
