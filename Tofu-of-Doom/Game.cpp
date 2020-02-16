@@ -132,6 +132,9 @@ void Game::initialise()
 	loadVAO("models/rifle/rifle.png", "models/rifle/rifle.obj", m_rifle);
 	loadVAO("models/pistol/pistol.jpg", "models/pistol/pistol.obj", m_pistol);
 	loadVAO("models/enemyTest/enemyTest.png", "models/enemyTest/enemyTest.obj", m_enemy);
+	loadVAO("models/chair/chair.png", "models/chair/chair.obj", m_chair);
+	loadVAO("models/table_1/table_1.png", "models/table_1/table_1.obj", m_table_1);
+	loadVAO("models/table_2/table_2.png", "models/table_2/table_2.obj", m_table_2);
 	
 	// Projection matrix 
 	projection = glm::perspective(45.0f, 4.0f / 3.0f, 1.0f, 1000.0f); // Enable depth test
@@ -498,6 +501,24 @@ void Game::drawGameScene()
 		glDrawElements(GL_TRIANGLES, m_enemy.indices.size(), GL_UNSIGNED_SHORT, (void*)0);
 	}
 
+	glBindVertexArray(0);
+
+	// ---------------------------------------------------------------------------------------------------------------------
+
+	glActiveTexture(GL_TEXTURE9);
+	glBindTexture(GL_TEXTURE_2D, m_enemy.texture);
+
+	// Set shader to use Texture Unit 8
+	glUniform1i(m_currentTextureID, 8);
+	glBindVertexArray(m_chair.VAO_ID);
+
+	for (int i = 0; i < 5; i++)
+	{
+		m_chairModelMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(25.0f * i, 0.0f, 25.0f * i));
+		glUniformMatrix4fv(m_modelMatrixID, 1, GL_FALSE, &m_chairModelMatrix[0][0]);
+		glDrawElements(GL_TRIANGLES, m_chair.indices.size(), GL_UNSIGNED_SHORT, (void*)0);
+	}
+	   
 	glBindVertexArray(0);
 
 	// ---------------------------------------------------------------------------------------------------------------------

@@ -4,8 +4,8 @@ C:\Users\Carillon AC-1\Desktop\Tofu-Of-Doom\Tofu-of-Doom\Collider2D.h(13): warni
 C:\Users\Carillon AC-1\Desktop\Tofu-Of-Doom\Tofu-of-Doom\Camera.h(84,26): warning C4305: 'initializing': truncation from 'double' to 'float'
 C:\Users\Carillon AC-1\Desktop\Tofu-Of-Doom\Tofu-of-Doom\Camera.h(85,30): warning C4305: 'initializing': truncation from 'double' to 'float'
 C:\Users\Carillon AC-1\Desktop\Tofu-Of-Doom\Tofu-of-Doom\GameWorld.h(32,17): warning C4305: 'initializing': truncation from 'double' to 'float'
-C:\Users\Carillon AC-1\Desktop\Tofu-Of-Doom\Tofu-of-Doom\Game.cpp(331,20): warning C4018: '<': signed/unsigned mismatch
-C:\Users\Carillon AC-1\Desktop\Tofu-Of-Doom\Tofu-of-Doom\Game.cpp(350,20): warning C4018: '<': signed/unsigned mismatch
-C:\Users\Carillon AC-1\Desktop\Tofu-Of-Doom\Tofu-of-Doom\Game.cpp(411,20): warning C4018: '<': signed/unsigned mismatch
-C:\Users\Carillon AC-1\Desktop\Tofu-Of-Doom\Tofu-of-Doom\Game.cpp(432,20): warning C4018: '<': signed/unsigned mismatch
+C:\Users\Carillon AC-1\Desktop\Tofu-Of-Doom\Tofu-of-Doom\Game.cpp(334,20): warning C4018: '<': signed/unsigned mismatch
+C:\Users\Carillon AC-1\Desktop\Tofu-Of-Doom\Tofu-of-Doom\Game.cpp(353,20): warning C4018: '<': signed/unsigned mismatch
+C:\Users\Carillon AC-1\Desktop\Tofu-Of-Doom\Tofu-of-Doom\Game.cpp(414,20): warning C4018: '<': signed/unsigned mismatch
+C:\Users\Carillon AC-1\Desktop\Tofu-Of-Doom\Tofu-of-Doom\Game.cpp(435,20): warning C4018: '<': signed/unsigned mismatch
   Tofu-of-Doom.vcxproj -> C:\Users\Carillon AC-1\Desktop\Tofu-Of-Doom\Debug\Tofu-of-Doom.exe
