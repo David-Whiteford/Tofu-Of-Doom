@@ -23,7 +23,6 @@
 #include "ParticleEffect.h"
 #include "SplashScreen.h"
 #include "SFML.h"
-/// A star Algorithm 
 #include "MainMenu.h"
 #include <iostream>
 #include <fstream>
@@ -31,7 +30,6 @@
 #include "aStarStuff/Graph.h"
 #include "aStarStuff/NodeData.h"
 #include <map>
-/// </summary>
 #include "Options.h"
 #include "Camera.h"
 #include "DisplayScale.h"
@@ -50,9 +48,7 @@ typedef GraphNode<NodeData, int> Node;
 
 class Game
 {
-public:
-
-	
+public:	
 	Game(sf::ContextSettings t_settings);
 	~Game();
 
@@ -126,8 +122,19 @@ public:
 	DrawState m_drawState = DrawState::MAIN;
 
 private:
-
-
+	struct Model
+	{
+		unsigned char *data;
+		GLuint VAO_ID;
+		GLuint VBO_ID;
+		GLuint normalBufferID;
+		GLuint textureID;
+		GLuint texture;
+		GLuint uvBufferID;
+		std::vector<glm::vec3> vertices;
+		std::vector<glm::vec2> uvs;
+		std::vector<glm::vec3> normals;
+	};
 
 	sf::RenderWindow m_window; // Window
 	sf::Time m_deltaTime;
@@ -135,102 +142,15 @@ private:
 
 	bool m_exitGame{ false };
 
-	// Wall type 1
-	unsigned char *wallType1_data;
-	GLuint wallType1_VAO_ID;
-	GLuint wallType1_VBO_ID;
-	GLuint wallType1_normalBufferID;
-	GLuint wallType1_textureID;
-	GLuint wallType1_texture;
-	GLuint wallType1_uvBufferID;
-	std::vector<glm::vec3> wallType1_vertices;
-	std::vector<glm::vec2> wallType1_uvs;
-	std::vector<glm::vec3> wallType1_normals;
-
-	// Wall type 2
-	unsigned char *wallType2_data;
-	GLuint wallType2_VAO_ID;
-	GLuint wallType2_VBO_ID;
-	GLuint wallType2_normalBufferID;
-	GLuint wallType2_textureID;
-	GLuint wallType2_texture;
-	GLuint wallType2_uvBufferID;
-	std::vector<glm::vec3> wallType2_vertices;
-	std::vector<glm::vec2> wallType2_uvs;
-	std::vector<glm::vec3> wallType2_normals;
-
-	// Machine gun
-	unsigned char *machineGun_data;
-	GLuint machineGun_VAO_ID;
-	GLuint machineGun_VBO_ID;
-	GLuint machineGun_normalBufferID;
-	GLuint machineGun_textureID;
-	GLuint machineGun_texture;
-	GLuint machineGun_uvBufferID;
-	std::vector<glm::vec3> machineGun_vertices;
-	std::vector<glm::vec2> machineGun_uvs;
-	std::vector<glm::vec3> machineGun_normals;	
-
-	// Oil drum
-	unsigned char* oilDrum_data;
-	GLuint oilDrum_VAO_ID;
-	GLuint oilDrum_VBO_ID;
-	GLuint oilDrum_normalBufferID;
-	GLuint oilDrum_textureID;
-	GLuint oilDrum_texture;
-	GLuint oilDrum_uvBufferID;
-	std::vector<glm::vec3> oilDrum_vertices;
-	std::vector<glm::vec2> oilDrum_uvs;
-	std::vector<glm::vec3> oilDrum_normals;
-
-	// Oil drum
-	unsigned char* enemyTest_data;
-	GLuint enemyTest_VAO_ID;
-	GLuint enemyTest_VBO_ID;
-	GLuint enemyTest_normalBufferID;
-	GLuint enemyTest_textureID;
-	GLuint enemyTest_texture;
-	GLuint enemyTest_uvBufferID;
-	std::vector<glm::vec3> enemyTest_vertices;
-	std::vector<glm::vec2> enemyTest_uvs;
-	std::vector<glm::vec3> enemyTest_normals;
-
-
-	// Fire extinguisher
-	unsigned char* fireExtinguisher_data;
-	GLuint fireExtinguisher_VAO_ID;
-	GLuint fireExtinguisher_VBO_ID;
-	GLuint fireExtinguisher_normalBufferID;
-	GLuint fireExtinguisher_textureID;
-	GLuint fireExtinguisher_texture;
-	GLuint fireExtinguisher_uvBufferID;
-	std::vector<glm::vec3> fireExtinguisher_vertices;
-	std::vector<glm::vec2> fireExtinguisher_uvs;
-	std::vector<glm::vec3> fireExtinguisher_normals;
-
-	// Rifle
-	unsigned char* rifle_data;
-	GLuint rifle_VAO_ID;
-	GLuint rifle_VBO_ID;
-	GLuint rifle_normalBufferID;
-	GLuint rifle_textureID;
-	GLuint rifle_texture;
-	GLuint rifle_uvBufferID;
-	std::vector<glm::vec3> rifle_vertices;
-	std::vector<glm::vec2> rifle_uvs;
-	std::vector<glm::vec3> rifle_normals;
-
-	// Pistol
-	unsigned char* pistol_data;
-	GLuint pistol_VAO_ID;
-	GLuint pistol_VBO_ID;
-	GLuint pistol_normalBufferID;
-	GLuint pistol_textureID;
-	GLuint pistol_texture;
-	GLuint pistol_uvBufferID;
-	std::vector<glm::vec3> pistol_vertices;
-	std::vector<glm::vec2> pistol_uvs;
-	std::vector<glm::vec3> pistol_normals;
+	// Models
+	Model m_wallType1;
+	Model m_wallType2;
+	Model m_fireExt;
+	Model m_oilDrum;
+	Model m_pistol;	
+	Model m_machineGun;
+	Model m_rifle;
+	Model m_enemy;
 
 	// Shader IDs
 	const static int LIGHT_AMOUNT = 25;
@@ -279,9 +199,7 @@ private:
 	void updateWorld(sf::Time t_deltaTime);
 	void render();
 	void gameControls(sf::Time t_deltaTime);
-	void loadVAO(std::string t_textureFilename, const char *t_modelFilename, GLuint &t_vaoID,
-		GLuint &t_vboID, GLuint &t_normalBufferID, GLuint &t_textureID, GLuint &t_texture, GLuint &t_uvBufferID,
-		std::vector<glm::vec3>& t_vertices, std::vector<glm::vec2>& t_UVs, std::vector<glm::vec3>& t_normals);
+	void loadVAO(std::string t_textureFilename, const char* t_modelFilename, Model& t_model);
 	void gunAnimation(glm::mat4 &t_gunMatrix);
 	void moveEnemy(glm::mat4& t_gunMatrix);
 
