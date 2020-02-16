@@ -202,6 +202,39 @@ void GameWorld::drawWorld()
 
 }
 
+void GameWorld::drawUI()
+{
+	ui_view.setCenter(sf::Vector2f(0,0));
+
+	m_window.draw(ui.getText());
+
+	if (m_camera.controller.leftButton())
+	{
+		ui.x--;
+	}
+	else if (m_camera.controller.rightButton())
+	{
+
+		ui.x++;
+	}
+
+	if (m_camera.controller.leftButtonRTS())
+	{
+		ui.y--;
+	}
+	else if (m_camera.controller.rightButtonRTS())
+	{
+
+		ui.y++;
+	}
+
+	std::cout << "x: " + std::to_string(ui.x) << ", y: " + std::to_string(ui.y) << std::endl;
+	std::cout << "px: " + std::to_string(getPlayerPosition().x) << ", py: " + std::to_string(getPlayerPosition().y) << std::endl;
+
+	ui.update();
+
+}
+
 void GameWorld::fireBullet(int t_gunType)
 {
 	for (int i = 0; i < m_wallVec.size(); i++)

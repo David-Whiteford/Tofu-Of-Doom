@@ -18,6 +18,7 @@
 #include "Enemy.h"
 #include "Wall.h"
 #include "Quadtree.h"
+#include "UI.h"
 
 
 class GameWorld
@@ -28,6 +29,8 @@ public:
 	void updateWorld();
 
 	void drawWorld();
+
+	void drawUI();
 	void fireBullet(int t_gunType);
 	float Pi = 3.14;
 	void checkPlayerRayCollsions(sf::Time t_deltaTime); 
@@ -47,7 +50,8 @@ public:
 	void checkEnemyInQueueAlive();
 	void populateQuadtree();
 private:
-
+	UI ui;
+	sf::View ui_view;
 
 	Quadtree quadtree = Quadtree(-50, -50, 2550, 2550, 0, 6);
 	Quadtree quadtreeBullet = Quadtree(-500, -500, 3550, 3550, 0, 4);
