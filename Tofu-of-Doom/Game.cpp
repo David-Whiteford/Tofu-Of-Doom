@@ -132,6 +132,9 @@ void Game::initialise()
 	loadVAO("models/rifle/rifle.png", "models/rifle/rifle.obj", m_rifle);
 	loadVAO("models/pistol/pistol.jpg", "models/pistol/pistol.obj", m_pistol);
 	loadVAO("models/enemyTest/enemyTest.png", "models/enemyTest/enemyTest.obj", m_enemy);
+	loadVAO("models/chair/chair.png", "models/chair/chair.obj", m_chair);
+	loadVAO("models/table_1/table_1.png", "models/table_1/table_1.obj", m_table_1);
+	loadVAO("models/table_2/table_2.png", "models/table_2/table_2.obj", m_table_2);
 	
 	// Projection matrix 
 	projection = glm::perspective(45.0f, 4.0f / 3.0f, 1.0f, 1000.0f); // Enable depth test
@@ -496,6 +499,61 @@ void Game::drawGameScene()
 		m_enemyModelMatrix = glm::scale(m_enemyModelMatrix, glm::vec3(0.5f, 0.5f, 0.5f));
 		glUniformMatrix4fv(m_modelMatrixID, 1, GL_FALSE, &m_enemyModelMatrix[0][0]);
 		glDrawElements(GL_TRIANGLES, m_enemy.indices.size(), GL_UNSIGNED_SHORT, (void*)0);
+	}
+
+	glBindVertexArray(0);
+
+	// ---------------------------------------------------------------------------------------------------------------------
+
+	glActiveTexture(GL_TEXTURE8);
+	glBindTexture(GL_TEXTURE_2D, m_chair.texture);
+
+	// Set shader to use Texture Unit 8
+	glUniform1i(m_currentTextureID, 8);
+	glBindVertexArray(m_chair.VAO_ID);
+
+	for (int i = 0; i < m_gameWorld->getChairPositions()->size(); ++i)
+	{
+		m_chairModelMatrix = glm::translate(glm::mat4(1.0f), m_gameWorld->getChairPositions()->at(i) / s_displayScale);
+		glUniformMatrix4fv(m_modelMatrixID, 1, GL_FALSE, &m_chairModelMatrix[0][0]);
+		glDrawElements(GL_TRIANGLES, m_chair.indices.size(), GL_UNSIGNED_SHORT, (void*)0);
+	}
+	   
+	glBindVertexArray(0);
+
+	//// ---------------------------------------------------------------------------------------------------------------------
+
+	glActiveTexture(GL_TEXTURE9);
+	glBindTexture(GL_TEXTURE_2D, m_table_1.texture);
+
+	// Set shader to use Texture Unit 9
+	glUniform1i(m_currentTextureID, 9);
+	glBindVertexArray(m_table_1.VAO_ID);
+
+	for (int i = 0; i < m_gameWorld->getTable1Positions()->size(); ++i)
+	{
+		m_table_1_modelMatrix = glm::translate(glm::mat4(1.0f), m_gameWorld->getTable1Positions()->at(i) / s_displayScale);
+		glUniformMatrix4fv(m_modelMatrixID, 1, GL_FALSE, &m_table_1_modelMatrix[0][0]);
+		glDrawElements(GL_TRIANGLES, m_table_1.indices.size(), GL_UNSIGNED_SHORT, (void*)0);
+	}
+
+	glBindVertexArray(0);
+
+	// ---------------------------------------------------------------------------------------------------------------------
+
+	glActiveTexture(GL_TEXTURE10);
+	glBindTexture(GL_TEXTURE_2D, m_table_2.texture);
+
+	// Set shader to use Texture Unit 10
+	glUniform1i(m_currentTextureID, 10);
+	glBindVertexArray(m_table_2.VAO_ID);
+
+	for (int i = 0; i < m_gameWorld->getTable2Positions()->size(); ++i)
+	{
+		m_table_2_modelMatrix = glm::translate(glm::mat4(1.0f), m_gameWorld->getTable2Positions()->at(i) / s_displayScale);
+		m_table_2_modelMatrix = glm::scale(m_table_2_modelMatrix, glm::vec3(2.0f, 2.0f, 2.0f));
+		glUniformMatrix4fv(m_modelMatrixID, 1, GL_FALSE, &m_table_2_modelMatrix[0][0]);
+		glDrawElements(GL_TRIANGLES, m_table_2.indices.size(), GL_UNSIGNED_SHORT, (void*)0);
 	}
 
 	glBindVertexArray(0);

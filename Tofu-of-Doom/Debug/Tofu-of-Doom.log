@@ -1,11 +1,3 @@
-﻿  Game.cpp
-C:\Users\Carillon AC-1\Desktop\Tofu-Of-Doom\Tofu-of-Doom\Transform.h(17): warning C4091: 'typedef ': ignored on left of 'Transform::Position' when no variable is declared
-C:\Users\Carillon AC-1\Desktop\Tofu-Of-Doom\Tofu-of-Doom\Collider2D.h(13): warning C4091: 'typedef ': ignored on left of 'Collider2D::Bounds' when no variable is declared
-C:\Users\Carillon AC-1\Desktop\Tofu-Of-Doom\Tofu-of-Doom\Camera.h(84,26): warning C4305: 'initializing': truncation from 'double' to 'float'
-C:\Users\Carillon AC-1\Desktop\Tofu-Of-Doom\Tofu-of-Doom\Camera.h(85,30): warning C4305: 'initializing': truncation from 'double' to 'float'
-C:\Users\Carillon AC-1\Desktop\Tofu-Of-Doom\Tofu-of-Doom\GameWorld.h(32,17): warning C4305: 'initializing': truncation from 'double' to 'float'
-C:\Users\Carillon AC-1\Desktop\Tofu-Of-Doom\Tofu-of-Doom\Game.cpp(331,20): warning C4018: '<': signed/unsigned mismatch
-C:\Users\Carillon AC-1\Desktop\Tofu-Of-Doom\Tofu-of-Doom\Game.cpp(350,20): warning C4018: '<': signed/unsigned mismatch
-C:\Users\Carillon AC-1\Desktop\Tofu-Of-Doom\Tofu-of-Doom\Game.cpp(411,20): warning C4018: '<': signed/unsigned mismatch
-C:\Users\Carillon AC-1\Desktop\Tofu-Of-Doom\Tofu-of-Doom\Game.cpp(432,20): warning C4018: '<': signed/unsigned mismatch
+﻿  Map.cpp
+C:\Users\Carillon AC-1\Desktop\Tofu-Of-Doom\Tofu-of-Doom\Map.cpp(31,12): warning C4101: 'f_tempVec': unreferenced local variable
   Tofu-of-Doom.vcxproj -> C:\Users\Carillon AC-1\Desktop\Tofu-Of-Doom\Debug\Tofu-of-Doom.exe

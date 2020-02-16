@@ -518,6 +518,30 @@ std::vector<glm::vec3>* GameWorld::getOilDrumPositions()
 }
 
 /// <summary>
+/// Gets the chair positions from the GameWorld map
+/// </summary>
+std::vector<glm::vec3>* GameWorld::getChairPositions()
+{
+	return m_map->getChairPositions();
+}
+
+/// <summary>
+/// Gets the table (type 1) positions from the GameWorld map
+/// </summary>
+std::vector<glm::vec3>* GameWorld::getTable1Positions()
+{
+	return m_map->getTable1Positions();
+}
+
+/// <summary>
+/// Gets the table (type 2) positions from the GameWorld map
+/// </summary>
+std::vector<glm::vec3>* GameWorld::getTable2Positions()
+{
+	return m_map->getTable2Positions();
+}
+
+/// <summary>
 /// Gets the amount of enemies currently active
 /// </summary>
 int GameWorld::getActiveEnemyCount()

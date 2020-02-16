@@ -149,6 +149,10 @@ private:
 	Model m_wallType2;
 	Model m_fireExt;
 	Model m_oilDrum;
+	Model m_chair;
+	Model m_table_1;
+	Model m_table_2;
+	Model m_table_and_chair;
 	Model m_pistol;	
 	Model m_machineGun;
 	Model m_rifle;
@@ -174,6 +178,9 @@ private:
 	// glm::mat4 model_2; /* Cube Test*/ Collider2D cubeCollider; // Remove and place in own class after debugging
 	glm::mat4 m_fireExtModelMatrix;
 	glm::mat4 m_oilDrumModelMatrix;
+	glm::mat4 m_chairModelMatrix;
+	glm::mat4 m_table_1_modelMatrix;
+	glm::mat4 m_table_2_modelMatrix;
 	glm::mat4 m_pistolModelMatrix; // Pistol matrix
 	glm::mat4 m_rifleModelMatrix; // Rifle matrix
 	glm::mat4 m_machineGunModelMatrix; // Machine gun matrix
