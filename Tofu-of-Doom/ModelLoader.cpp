@@ -4,7 +4,7 @@
 /// This function loads an obj format model
 /// </summary>
 bool tk::ModelLoader::loadOBJ(const char *path, std::vector<glm::vec3> &out_vertices, std::vector<glm::vec2> &out_uvs, 
-	std::vector<glm::vec3> &out_normals, std::vector<unsigned short> &indices)
+	std::vector<glm::vec3> &out_normals, std::vector<unsigned short> &out_indices)
 {
 	std::vector<unsigned int> vertexIndices;
 	std::vector<unsigned int> uvIndices;
@@ -13,6 +13,10 @@ bool tk::ModelLoader::loadOBJ(const char *path, std::vector<glm::vec3> &out_vert
 	std::vector<glm::vec3> temp_vertices;
 	std::vector<glm::vec2> temp_uvs;
 	std::vector<glm::vec3> temp_normals;
+
+	std::vector<glm::vec3> in_vertices;
+	std::vector<glm::vec2> in_uvs;
+	std::vector<glm::vec3> in_normals;
 
 	FILE *file = std::fopen(path, "r");
 
@@ -101,15 +105,24 @@ bool tk::ModelLoader::loadOBJ(const char *path, std::vector<glm::vec3> &out_vert
 		glm::vec3 normal = temp_normals[normalIndex - 1];
 
 		// Put the attributes in buffers
-		out_vertices.push_back(vertex);
-		out_uvs.push_back(uv);
-		out_normals.push_back(normal);
+		in_vertices.push_back(vertex);
+		in_uvs.push_back(uv);
+		in_normals.push_back(normal);
 	}
 
 	fclose(file);
 
 	// Put indices in buffer array
-	//tk::VBOIndexer::VBOindexer(temp_out_vertices, temp_out_uvs, temp_out_normals, temp_out_tangents, temp_out_bitangents, indices, out_vertices, out_uvs, out_normals, tangents, bitangents);
+	//std::vector<glm::vec3>& in_vertices,
+	//	std::vector<glm::vec2>& in_uvs,
+	//	std::vector<glm::vec3>& in_normals,
+
+	//	std::vector<unsigned short>& out_indices,
+	//	std::vector<glm::vec3>& out_vertices,
+	//	std::vector<glm::vec2>& out_uvs,
+	//	std::vector<glm::vec3>& out_normals);
+
+	tk::VBOIndexer::indexVBO(in_vertices, in_uvs, in_normals, out_indices, out_vertices, out_uvs, out_normals);
 
 	return true;
 }
