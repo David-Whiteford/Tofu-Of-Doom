@@ -228,6 +228,34 @@ bool CXBOXController::backButton()
 	}
 }
 
+bool CXBOXController::startButton()
+{
+	Player = new CXBOXController(m_playerID);
+
+	if (Player->IsConnected())
+	{
+		if (Player->GetState().Gamepad.wButtons & XINPUT_GAMEPAD_START)
+		{
+			delete(Player); // remove instance from memeory
+			return true;
+		}
+		// is not holding Y
+		else
+		{
+			delete(Player);
+			return false;
+
+		}
+	} // end is connected
+	else
+	{
+		delete(Player);
+		// No Controller found
+		std::cout << "Error no controller found for Player 1" << std::endl;
+		return false;
+	}
+}
+
 /// <summary> Detects a single up button press </summary>
 bool CXBOXController::upButtonDown()
 {

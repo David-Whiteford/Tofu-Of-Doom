@@ -17,7 +17,7 @@ MainMenu::~MainMenu()
 
 void MainMenu::update(sf::Time t_deltaTime, bool t_soundFX)
 {
-	
+
 	std::cout << "start" << m_startUp << std::endl;
 	//when start up is true then screen tran is on 
 	if (m_startUp == true)
@@ -26,10 +26,10 @@ void MainMenu::update(sf::Time t_deltaTime, bool t_soundFX)
 
 	}
 	//when continue is true then screen tran is off 
-	if (m_continue == true)
-	{
-		screenTransitionOff(t_deltaTime);
-	}
+	//if (m_continue == true)
+	//{
+	//	screenTransitionOff(t_deltaTime);
+	//}
 
 	//moved the outline for the menu down to bottom
 	if ((m_controller.downButton() == true || sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) && m_moved == false)
@@ -149,9 +149,10 @@ void MainMenu::screenTransitionOff(sf::Time t_deltaTime)
 		m_exitText.setColor(sf::Color(255, 255, 255, m_bg.getColor().a - 1));
 
 	}
-	else
+	else if (transitionTimerOff >= sf::seconds(3.9f))
 	{
-		m_continue = false;
+
+		m_transitionToScreen = true;
 
 	}
 }
@@ -192,15 +193,11 @@ void MainMenu::changeGameState(bool t_soundFX)
 {
 	if (m_controller.aButton() || sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
 	{
-		//play move sound move if true
-		if (t_soundFX == true)
-		{
-			//m_selectSound.play();
-		}
 		//set continue to true
 		m_continue = true;
 		//check the position of the outline rectangle
-		//depending on the position of the outline rect set the gamemode
+
+			//depending on the position of the outline rect set the gamemode
 		if (m_selectPos == 0)
 		{
 			m_game.m_drawState = m_game.DrawState::GAME;
@@ -213,8 +210,9 @@ void MainMenu::changeGameState(bool t_soundFX)
 		}
 		if (m_selectPos == 2)
 		{
-			//m_game.m_drawState = m_game.DrawState::EXIT;
+			m_game.m_drawState = m_game.DrawState::EXIT;
 		}
+
 
 	}
 }
@@ -241,6 +239,13 @@ void MainMenu::setUpText()
 
 
 
+}
+
+void MainMenu::setStartUP(bool startup)
+{
+	m_startUp = startup;
+	m_transitionToScreen = false;
+	m_continue = false;
 }
 
 void MainMenu::screenTransitionOn(sf::Time t_deltaTime)

@@ -1,6 +1,5 @@
 #ifndef MAINMENU_SCREEN
 #define MAINMENU_SCREEN
-
 #include<SFML\Graphics.hpp>
 #include "Enum.h"
 #include "Game.h"
@@ -25,6 +24,7 @@ public:
 	void checkPosition();
 	void changeGameState(bool t_soundFX);
 	void setUpText();
+	void setStartUP(bool startup);
 private:
 	Game& m_game; // refrence to game object used to set game state
 	sf::Font m_font; // font loaded by game
@@ -43,7 +43,7 @@ private:
 	//textures , sound buffers rectangles
 	sf::Texture m_buttonTexture;
 	sf::RectangleShape m_outlineRect;
-
+	bool m_transitionToScreen = true;
 	int m_spaceOutline = 20;
 	int m_selectPos = 0;
 	//all text used
