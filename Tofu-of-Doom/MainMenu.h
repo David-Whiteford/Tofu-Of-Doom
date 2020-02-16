@@ -25,6 +25,7 @@ public:
 	void checkPosition();
 	void changeGameState(bool t_soundFX);
 	void setUpText();
+	void setStartUP(bool startup);
 private:
 	Game& m_game; // refrence to game object used to set game state
 	sf::Font m_font; // font loaded by game

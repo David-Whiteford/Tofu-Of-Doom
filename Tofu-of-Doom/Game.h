@@ -53,6 +53,7 @@ public:
 
 	void run();
 	std::vector< vec3df > positions;
+	ISoundEngine* bgSoundEngine;
 	ISoundEngine* soundEngine;
 	ISoundEngine* gunSoundEngine;
 	ISound* music;
@@ -68,7 +69,7 @@ public:
 	sf::Sprite m_sfmlSprite;
 	sf::Texture m_sfmlTexture;
 	int gunNum = 1;
-
+	
 	// Menu screens
 	SplashScreen* m_splashScreen; // The splash screen
 	SFML* m_sfmlScreen;
@@ -112,7 +113,7 @@ public:
 		SPLASH
 	};
 
-	DrawState m_drawState = DrawState::MAIN;
+	DrawState m_drawState = DrawState::OPTIONS;
 
 private:
 	struct Model

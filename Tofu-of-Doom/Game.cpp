@@ -87,8 +87,10 @@ void Game::initialise()
 	m_ShotDelay = sf::seconds(.7f); // .7f is the length for the reload sound to finish
 	m_vibrateLength = sf::seconds(.1f); // .7f is the length for the reload sound to finish
 	soundEngine = createIrrKlangDevice();
+	bgSoundEngine = createIrrKlangDevice();
+
 	gunSoundEngine = createIrrKlangDevice();
-	background = soundEngine->play2D("horror.mp3" , true);
+	background = bgSoundEngine->play2D("horror.mp3" , true);
 	glm::vec3 soundPos(25, 0, 25);
 	vec3df position(25, 0, 25);
 	positions.push_back(position);
@@ -193,7 +195,7 @@ void Game::update(sf::Time t_deltaTime)
 		break;
 
 	case DrawState::OPTIONS:
-		m_optionsMenu->update(t_deltaTime);
+		m_optionsMenu->update(t_deltaTime, bgSoundEngine);
 		break;
 
 	case DrawState::GAME:

@@ -17,7 +17,7 @@ MainMenu::~MainMenu()
 
 void MainMenu::update(sf::Time t_deltaTime, bool t_soundFX)
 {
-	
+
 	std::cout << "start" << m_startUp << std::endl;
 	//when start up is true then screen tran is on 
 	if (m_startUp == true)
@@ -241,6 +241,11 @@ void MainMenu::setUpText()
 
 
 
+}
+
+void MainMenu::setStartUP(bool startup)
+{
+	m_startUp = startup;
 }
 
 void MainMenu::screenTransitionOn(sf::Time t_deltaTime)
