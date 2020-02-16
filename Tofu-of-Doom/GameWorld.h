@@ -18,7 +18,7 @@
 #include "Enemy.h"
 #include "Wall.h"
 #include "Quadtree.h"
-
+#include "Player.h"
 
 class GameWorld
 {
@@ -94,7 +94,8 @@ private:
 	sf::View m_mapView;
 	sf::Vector2f m_newPosition;
 	void setGunPosition();
-	sf::CircleShape m_player;
+	// sf::CircleShape m_player;
+	Player m_player;
 	sf::CircleShape m_playerGun;
 	std::vector<sf::Vector2f> m_startingPos;
 	glm::vec3 m_eye; // Current camera position

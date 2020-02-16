@@ -41,6 +41,7 @@
     <ClCompile Include="Options.cpp" />
     <ClCompile Include="ParticleEffect.cpp" />
     <ClCompile Include="Path.cpp" />
+    <ClCompile Include="Player.cpp" />
     <ClCompile Include="Quadtree.cpp" />
     <ClCompile Include="Raycast.cpp" />
     <ClCompile Include="sfml.cpp" />
@@ -100,6 +101,7 @@
     <ClInclude Include="Options.h" />
     <ClInclude Include="ParticleEffect.h" />
     <ClInclude Include="Path.h" />
+    <ClInclude Include="Player.h" />
     <ClInclude Include="Quadtree.h" />
     <ClInclude Include="Raycast.h" />
     <ClInclude Include="sfml.h" />
