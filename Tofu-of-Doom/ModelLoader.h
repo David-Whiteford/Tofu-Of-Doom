@@ -5,6 +5,7 @@
 
 #include "libs/glew/glew.h"
 #include "libs/glm/glm.hpp"
+#include "VBOIndexer.h"
 
 #include <iostream>
 #include <fstream>

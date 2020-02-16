@@ -9,6 +9,7 @@ bool tk::ModelLoader::loadOBJ(const char *path, std::vector<glm::vec3> &out_vert
 	std::vector<unsigned int> vertexIndices;
 	std::vector<unsigned int> uvIndices;
 	std::vector<unsigned int> normalIndices;
+
 	std::vector<glm::vec3> temp_vertices;
 	std::vector<glm::vec2> temp_uvs;
 	std::vector<glm::vec3> temp_normals;
@@ -69,9 +70,11 @@ bool tk::ModelLoader::loadOBJ(const char *path, std::vector<glm::vec3> &out_vert
 			vertexIndices.push_back(vertexIndex[0]);
 			vertexIndices.push_back(vertexIndex[1]);
 			vertexIndices.push_back(vertexIndex[2]);
+
 			uvIndices.push_back(uvIndex[0]);
 			uvIndices.push_back(uvIndex[1]);
 			uvIndices.push_back(uvIndex[2]);
+
 			normalIndices.push_back(normalIndex[0]);
 			normalIndices.push_back(normalIndex[1]);
 			normalIndices.push_back(normalIndex[2]);
@@ -104,6 +107,9 @@ bool tk::ModelLoader::loadOBJ(const char *path, std::vector<glm::vec3> &out_vert
 	}
 
 	fclose(file);
+
+	// Put indices in buffer array
+	//tk::VBOIndexer::VBOindexer(temp_out_vertices, temp_out_uvs, temp_out_normals, temp_out_tangents, temp_out_bitangents, indices, out_vertices, out_uvs, out_normals, tangents, bitangents);
 
 	return true;
 }

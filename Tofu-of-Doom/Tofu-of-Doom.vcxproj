@@ -50,6 +50,7 @@
     <ClCompile Include="SplashScreen.cpp" />
     <ClCompile Include="Transform.cpp" />
     <ClCompile Include="UI.cpp" />
+    <ClCompile Include="VBOIndexer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="aStarStuff\Graph.h" />
@@ -109,6 +110,7 @@
     <ClInclude Include="SplashScreen.h" />
     <ClInclude Include="Transform.h" />
     <ClInclude Include="UI.h" />
+    <ClInclude Include="VBOIndexer.h" />
     <ClInclude Include="Wall.h" />
     <ClInclude Include="WallType.h" />
     <ClInclude Include="Shader.h" />
