@@ -68,8 +68,16 @@ void Enemy::update(sf::CircleShape t_player)
 	//sets the node the player and the enemy are in
 	m_playerNode = m_gamePath->nodePos(t_player.getPosition());
 	m_enemyNode = m_gamePath->nodePos(m_enemy.getPosition());
+	offSet = sf::Vector2f(100, 100);
+	if (t_player.getPosition().x >= m_enemy.getPosition().x - offSet.x
+		&& t_player.getPosition().x <= m_enemy.getPosition().x + offSet.x
+		&& t_player.getPosition().y >= m_enemy.getPosition().y - offSet.y
+		&& t_player.getPosition().y <= m_enemy.getPosition().y + offSet.y)
+	{
 
-	sf::Vector2f offSet = sf::Vector2f(300, 300);
+		m_player.decreaseHealth(1);
+	}
+	offSet = sf::Vector2f(300, 300);
 	if (t_player.getPosition().x >= m_enemy.getPosition().x - offSet.x
 		&& t_player.getPosition().x <= m_enemy.getPosition().x + offSet.x
 		&& t_player.getPosition().y >= m_enemy.getPosition().y - offSet.y

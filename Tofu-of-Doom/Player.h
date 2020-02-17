@@ -2,7 +2,7 @@
 #define PLAYER_H
 
 #include <SFML/Graphics.hpp>
-
+#include <iostream>
 class Player
 {
 public:

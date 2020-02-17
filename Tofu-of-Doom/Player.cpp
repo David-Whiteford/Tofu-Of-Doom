@@ -47,6 +47,7 @@ void Player::setPosition(float t_x, float t_y)
 /// </summary>
 int Player::getHealth()
 {
+	std::cout << "health " << m_health << std::endl;
 	return m_health;
 }
 
