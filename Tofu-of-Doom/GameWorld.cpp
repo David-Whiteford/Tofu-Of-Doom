@@ -4,8 +4,9 @@
 /// Constructor for the GameWorld class
 /// </summary>
 GameWorld::GameWorld(sf::RenderWindow& t_window, sf::Time& t_deltaTime, Camera* t_camera)
-	: m_window(t_window), m_deltaTime(t_deltaTime), m_camera(*t_camera)
+	: m_window(t_window), m_deltaTime(t_deltaTime), m_camera(*t_camera), ui(t_window)
 {
+	
 	// Player
 	m_player.setPosition(10, 10);
 	m_player.setPosition(m_camera.getEye().x, m_camera.getEye().z); // Test starting position
@@ -181,6 +182,9 @@ void GameWorld::initialise()
 	for (int i = 0; i < 18; i++)
 	{
 		m_enemyVec[i]->setAlive(true);
+		m_enemyVec[i]->currentSize = .5f;
+		m_enemyVec[i]->canRender = true;
+		m_enemyVec[i]->enemyInit();
 
 		// Add enemy to the active vector
 		m_enemyActive.push_back(m_enemyVec[i]);
@@ -316,18 +320,31 @@ void GameWorld::reload(int t_guntType)
 	// handgun
 	if (t_guntType == 1)
 	{
-
+		while (m_player.getCurrentHandGunClip() < 9 && m_player.getCurrentHandGunBullets() > 0)
+		{
+			m_player.increaseCurrentGunClip(t_guntType);
+		}
+		ui.setAmmoTextBullet(m_player.getCurrentHandGunClip(), m_player.getCurrentHandGunBullets());
 	}
 	// shotgun
 	else if (t_guntType == 2)
 	{
-
+		while (m_player.getCurrentShotGunClip() < 5 && m_player.getCurrentShotGunBullets() > 0)
+		{
+			m_player.increaseCurrentGunClip(t_guntType);
+		}
+		ui.setAmmoTextBullet(m_player.getCurrentShotGunClip(), m_player.getCurrentShotGunBullets());
 	}
 	// machine gun
 	else
 	{
-
+		while (m_player.getCurrentMachineGunClip() < 50 && m_player.getCurrentMachineGunBullets() > 0)
+		{
+			m_player.increaseCurrentGunClip(t_guntType);
+		}
+		ui.setAmmoTextBullet(m_player.getCurrentMachineGunClip(), m_player.getCurrentMachineGunBullets());
 	}
+
 }
 
 /// <summary>
@@ -545,6 +562,14 @@ sf::Vector2f GameWorld::getEnemyPosition(int index)
 	}
 }
 
+float GameWorld::getEnemySize(int index)
+{
+	if (m_enemyActive.size() > 0)
+	{
+		return m_enemyActive.at(index)->currentSize;
+	}
+}
+
 /// <summary>
 /// Returns the current pitch of the camera
 /// </summary>
@@ -638,7 +663,7 @@ void GameWorld::checkEnemyInQueueAlive()
 
 		for (int i = 0; i < m_enemyActive.size(); i++)
 		{
-			if (m_enemyActive[i]->isAlive() == false)
+			if (m_enemyActive[i]->canRender == false)
 			{
 				m_enemyActive.erase(m_enemyActive.begin() + i);
 				removedEnemy = true;

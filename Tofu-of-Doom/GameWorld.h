@@ -62,6 +62,7 @@ public:
 	std::vector<glm::vec3> *getChairPositions();
 	std::vector<glm::vec3> *getTable1Positions();
 	std::vector<glm::vec3> *getTable2Positions();
+	float getEnemySize(int index);
 
 private:
 

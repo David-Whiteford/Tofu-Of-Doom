@@ -25,7 +25,12 @@ Enemy::~Enemy()
 
 void Enemy::enemyInit()
 {
-	
+
+	float startSize = 0.5f;
+	float currentSize = 0.5f;
+
+	float reduceSpeed = 0.01f;
+	bool canRender = true;
 	m_enemy.setRadius(m_radius);
 	m_enemy.setFillColor(sf::Color::Red);
 	m_enemy.setOrigin(sf::Vector2f(25.0f, 25.0f));
@@ -65,44 +70,50 @@ void Enemy::setPosition(sf::Vector2f t_pos)
 
 void Enemy::update(sf::CircleShape t_player)
 {
-	//sets the node the player and the enemy are in
-	m_playerNode = m_gamePath->nodePos(t_player.getPosition());
-	m_enemyNode = m_gamePath->nodePos(m_enemy.getPosition());
-	offSet = sf::Vector2f(100, 100);
-	if (t_player.getPosition().x >= m_enemy.getPosition().x - offSet.x
-		&& t_player.getPosition().x <= m_enemy.getPosition().x + offSet.x
-		&& t_player.getPosition().y >= m_enemy.getPosition().y - offSet.y
-		&& t_player.getPosition().y <= m_enemy.getPosition().y + offSet.y)
+	if (m_alive)
 	{
+		//sets the node the player and the enemy are in
+		m_playerNode = m_gamePath->nodePos(t_player.getPosition());
+		m_enemyNode = m_gamePath->nodePos(m_enemy.getPosition());
 
-		m_player.decreaseHealth(1);
-	}
-	offSet = sf::Vector2f(300, 300);
-	if (t_player.getPosition().x >= m_enemy.getPosition().x - offSet.x
-		&& t_player.getPosition().x <= m_enemy.getPosition().x + offSet.x
-		&& t_player.getPosition().y >= m_enemy.getPosition().y - offSet.y
-		&& t_player.getPosition().y <= m_enemy.getPosition().y + offSet.y)
-	{
-		
-		if (m_doOnceSeek != 1)
+		sf::Vector2f offSet = sf::Vector2f(300, 300);
+		if (t_player.getPosition().x >= m_enemy.getPosition().x - offSet.x
+			&& t_player.getPosition().x <= m_enemy.getPosition().x + offSet.x
+			&& t_player.getPosition().y >= m_enemy.getPosition().y - offSet.y
+			&& t_player.getPosition().y <= m_enemy.getPosition().y + offSet.y)
 		{
-			m_enemyBehaviour = EnemyBehaviour::SEEK_PLAYER;
-			m_doOnceSeek++;
-			graphPath.resize(0);
-			m_doOncePatrol = 0;
+
+			if (m_doOnceSeek != 1)
+			{
+				m_enemyBehaviour = EnemyBehaviour::SEEK_PLAYER;
+				m_doOnceSeek++;
+				graphPath.resize(0);
+				m_doOncePatrol = 0;
+			}
+		}
+		else
+		{
+			if (m_doOncePatrol != 1)
+			{
+				m_enemyBehaviour = EnemyBehaviour::PATROL_MAP;
+				m_doOncePatrol++;
+				graphPath.resize(0);
+				m_doOnceSeek = 0;
+			}
+		}
+		enemyMovement();
+	}
+	else if(canRender)
+	{
+		if (currentSize > 0)
+		{
+			currentSize -= reduceSpeed;
+		}
+		else
+		{
+			canRender = false;
 		}
 	}
-	else
-	{
-		if (m_doOncePatrol != 1)
-		{
-			m_enemyBehaviour = EnemyBehaviour::PATROL_MAP;
-			m_doOncePatrol++;
-			graphPath.resize(0);
-			m_doOnceSeek = 0;
-		}
-	}
-	enemyMovement();
 }
 
 void Enemy::draw()

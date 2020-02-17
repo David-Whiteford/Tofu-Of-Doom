@@ -36,9 +36,15 @@ public:
 	void setAlive(bool t_alive);
 	void setDead();
 	bool isAlive();
-	sf::Vector2f offSet;
-private:
 
+
+	float startSize = 0.5f;
+	float currentSize = 0.5f;
+
+	float reduceSpeed = 0.01f;
+	bool canRender = true;
+
+private:
 	Raycast m_rayCast;
 	bool m_alive;
 	float m_speedEn{ 5.0f };
@@ -69,7 +75,7 @@ private:
 	int endNode = 2237;
 
 
-	float m_radius = 33; // makes hitting enmies easier
+	float m_radius = 44; // makes hitting enmies easier
 	int m_aliveAt = 0;
 	float m_timeToLive = 2;
 	sf::Vector2f m_direction = sf::Vector2f(0, 0);
