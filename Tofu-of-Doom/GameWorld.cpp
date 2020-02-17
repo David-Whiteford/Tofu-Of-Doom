@@ -104,6 +104,11 @@ for (int i = 0; i < 100; i++)
 {
 	bullets[i] = new Bullet();
 }
+
+for (int i = 0; i < 10; i++)
+{
+	enemyBullet[i].init(sf::Vector2f(10, 10), sf::Vector2f(0, 1));
+}
 }
 
 /// <summary>
@@ -146,12 +151,44 @@ void GameWorld::updateWorld()
 	// Check enemy colliding with player
 	for (int i = 0; i < returnedEnemies.size(); i++)
 	{
-		if (Transform::distance(dynamic_cast<Enemy*>(returnedEnemies[i])->getPosition(), getPlayerPosition()) < 60)
+		float dist = Transform::distance(dynamic_cast<Enemy*>(returnedEnemies[i])->getPosition(), getPlayerPosition());
+		
+		if (dist < 60)
 		{
 			m_player.decreaseHealth(1);
 			ui.setHealth(m_player.getHealth());
 		}
+		else if (dist < 300)
+		{
+			for (int x = 0; x < 10; x++)
+			{
+				if (enemyBullet[x].active == false)
+				{
+					enemyBullet[x].init(returnedEnemies[i]->position, returnedEnemies[i]->position - getPlayerPosition());
+					break;
+				}
+
+			}
+		}
 	}
+
+	for (int i = 0; i < 10; i++)
+	{
+		if (enemyBullet[i].active)
+		{
+			enemyBullet[i].update();
+
+			if (Transform::distance(enemyBullet[i].bullet.getPosition(), getPlayerPosition()) < 55)
+			{
+				m_player.decreaseHealth(2);
+			}
+		}
+
+
+	
+	}
+
+	
 
 
 	quadtreeMoving.clear();
@@ -556,6 +593,8 @@ void GameWorld::checkPlayerRayCollsions(sf::Time t_deltaTime)
 		m_camera.popOutFromWall();
 	}
 }
+
+
 
 /// <summary>
 /// Returns the position of the player's origin

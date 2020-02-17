@@ -41,7 +41,7 @@ void Enemy::enemyInit()
 	int nodeEnd = getRandNode();
 	m_gamePath->newPath(m_enemyNode, nodeEnd);
 
-	setSpeed(25);
+	setSpeed(5);
 
 
 	dynamic_cast<GameObject*>(this)->setTag(ENEMY_TAG);

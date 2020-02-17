@@ -13,6 +13,7 @@
 #include "DisplayScale.h"
 #include "Camera.h"
 #include "Bullet.h"
+#include "EnemyBullet.h"
 #include "Transform.h"
 
 #include <stdlib.h>
@@ -45,6 +46,12 @@ public:
 
 	Bullet *bullets[100];
 	std::vector<Bullet*> activeBullets; // For a smaller loop
+	
+	EnemyBullet enemyBullet[10];
+
+	void ShootTowardsPlayer();
+
+
 	float Pi = 3.14;
 	sf::Vector2f getPlayerPosition();
 	glm::vec3 getCameraPosition();
