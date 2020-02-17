@@ -147,6 +147,8 @@ private:
 	Model m_machineGun;
 	Model m_rifle;
 	Model m_enemy;
+	Model m_enemyBall;
+	
 
 	// Shader IDs
 	const static int LIGHT_AMOUNT = 25;
@@ -175,6 +177,7 @@ private:
 	glm::mat4 m_machineGunModelMatrix;
 	glm::mat4 m_enemyModelMatrix;
 	glm::mat4 m_rotationMatrix; // Generic, used for anything
+	glm::mat4 m_enemyBall_modelMatrix;
 
 	// Projection matrix
 	glm::mat4 projection;	

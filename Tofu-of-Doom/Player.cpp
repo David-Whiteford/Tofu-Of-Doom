@@ -47,7 +47,6 @@ void Player::setPosition(float t_x, float t_y)
 /// </summary>
 int Player::getHealth()
 {
-	std::cout << "health " << m_health << std::endl;
 	return m_health;
 }
 
@@ -90,6 +89,19 @@ void Player::decreaseHealth(int t_healthAmount)
 
 		// Do the game over thing here
 	}
+}
+
+void Player::init()
+{
+	m_health = 100;	
+	currentHandGunBullets = 27;
+	currentHandgunCLip = 9;
+	currentShotGunShells = 10;
+	currentShotGunClip = 5;
+	currentMachineGunRounds = 100;
+	currentMachineGunClip = 30;
+
+
 }
 
 /// <summary>

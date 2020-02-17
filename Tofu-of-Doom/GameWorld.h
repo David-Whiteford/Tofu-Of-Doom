@@ -13,6 +13,7 @@
 #include "DisplayScale.h"
 #include "Camera.h"
 #include "Bullet.h"
+#include "EnemyBullet.h"
 #include "Transform.h"
 
 #include <stdlib.h>
@@ -45,6 +46,12 @@ public:
 
 	Bullet *bullets[100];
 	std::vector<Bullet*> activeBullets; // For a smaller loop
+	
+	EnemyBullet enemyBullet[10];
+
+	void ShootTowardsPlayer();
+
+
 	float Pi = 3.14;
 	sf::Vector2f getPlayerPosition();
 	glm::vec3 getCameraPosition();
@@ -79,6 +86,7 @@ private:
 
 
 	Quadtree quadtree = Quadtree(-50, -50, 2550, 2550, 0, 6);
+	Quadtree quadtreeMoving = Quadtree(-50, -50, 2550, 2550, 0, 3);
 	Quadtree quadtreeBullet = Quadtree(-500, -500, 3550, 3550, 0, 4);
 	Path* m_gamePath = new Path(m_window);
 	Enemy* m_enemyVec[18];

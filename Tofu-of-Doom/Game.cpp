@@ -6,7 +6,7 @@
 /// <summary>
 /// Constructor for the Game class
 /// </summary>
-Game::Game(sf::ContextSettings t_settings) : m_window{ sf::VideoMode{1280,720,32 }, "Tofu of Doom", sf::Style::Default, t_settings }
+Game::Game(sf::ContextSettings t_settings) : m_window{ sf::VideoMode::getDesktopMode(), "Tofu of Doom", sf::Style::Fullscreen, t_settings }
 {
 	// Initialise GLEW
 	GLuint m_error = glewInit();
@@ -133,6 +133,7 @@ void Game::initialise()
 	loadVAO("models/chair/chair.png", "models/chair/chair.obj", m_chair);
 	loadVAO("models/table_1/table_1.png", "models/table_1/table_1.obj", m_table_1);
 	loadVAO("models/table_2/table_2.png", "models/table_2/table_2.obj", m_table_2);
+	loadVAO("models/spikeballao.png", "models/spikeball.obj", m_enemyBall);
 	
 	// Projection matrix 
 	projection = glm::perspective(45.0f, 4.0f / 3.0f, 1.0f, 1000.0f); // Enable depth test
@@ -224,12 +225,15 @@ void Game::update(sf::Time t_deltaTime)
 
 			m_drawState = DrawState::MAIN;
 			m_gameWorld->initialise();
+			/*camera.transform.position = { 400,0, 50 };*/
+
 
 		}
 		if (m_gameWorld->getPlayerHealth() <= 0)
 		{
 			m_drawState = DrawState::MAIN;
 			m_gameWorld->initialise();
+			/*camera.transform.position = { 400,0, 50 };*/
 		}
 
 		break;
@@ -562,6 +566,26 @@ void Game::drawGameScene()
 		glDrawElements(GL_TRIANGLES, m_table_2.indices.size(), GL_UNSIGNED_SHORT, (void*)0);
 	}
 
+	glBindVertexArray(0);
+
+	//// balll spike
+	glActiveTexture(GL_TEXTURE11);
+	glBindTexture(GL_TEXTURE_2D, m_enemyBall.texture);
+
+	// Set shader to use Texture Unit 10
+	glUniform1i(m_currentTextureID, 11);
+	glBindVertexArray(m_enemyBall.VAO_ID);
+
+	for (int i = 0; i < 10; i++)
+	{
+		if (m_gameWorld->enemyBullet[i].active)
+		{
+			m_enemyBall_modelMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(m_gameWorld->enemyBullet[0].bullet.getPosition().x, 0.1f, m_gameWorld->enemyBullet[0].bullet.getPosition().y) * s_displayScale);
+			m_enemyBall_modelMatrix = glm::scale(m_enemyBall_modelMatrix, glm::vec3(2.0f, 2.0f, 2.0f));
+			glUniformMatrix4fv(m_modelMatrixID, 1, GL_FALSE, &m_enemyBall_modelMatrix[0][0]);
+			glDrawElements(GL_TRIANGLES, m_enemyBall.indices.size(), GL_UNSIGNED_SHORT, (void*)0);
+		}
+	}
 	glBindVertexArray(0);
 
 	// ---------------------------------------------------------------------------------------------------------------------

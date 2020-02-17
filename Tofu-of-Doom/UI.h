@@ -60,10 +60,11 @@ public:
 	sf::RenderWindow& window;
 	sf::RectangleShape getBorderHealth() { return healthBorder; }
 	sf::RectangleShape getBorderAmmo() { return ammoBorder; }
-	sf::Text getHealthText() { displayHealth.setString("Health: " + std::to_string(healthTest));  return displayHealth; }
+	sf::Text getHealthText() { displayHealth.setString("Health: " + std::to_string(health));  return displayHealth; }
 	sf::Text getAmmoText() { ammo.setString(std::to_string(clip) + " / " + std::to_string(reserve));  return ammo; }
 	sf::Sprite getRetina() { return retina; }
 	void update();
+	void setHealth(int t_value) { health = t_value; }
 	float x = 0, y = 0;
 
 	void setAmmoTextBullet(int bullet, int _reserve) { clip = bullet; reserve = _reserve; }
@@ -76,7 +77,7 @@ private:
 	sf::RectangleShape ammoBorder;
 
 	sf::Text displayHealth;
-	int healthTest = 100;
+	int health = 100;
 
 
 	sf::Font m_font;

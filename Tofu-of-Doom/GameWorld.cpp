@@ -48,61 +48,67 @@ GameWorld::GameWorld(sf::RenderWindow& t_window, sf::Time& t_deltaTime, Camera* 
 	m_startingPos.push_back(sf::Vector2f(2313, 2356));
 	m_startingPos.push_back(sf::Vector2f(1557, 260));
 	m_startingPos.push_back(sf::Vector2f(2364, 436));
-	m_startingPos.push_back(sf::Vector2f(375, 861));
-	m_startingPos.push_back(sf::Vector2f(71, 439));
-	m_startingPos.push_back(sf::Vector2f(72, 2121));
-	m_startingPos.push_back(sf::Vector2f(1577, 824));
-	m_startingPos.push_back(sf::Vector2f(1518, 1365));
-	m_startingPos.push_back(sf::Vector2f(2313, 2356));
+m_startingPos.push_back(sf::Vector2f(375, 861));
+m_startingPos.push_back(sf::Vector2f(71, 439));
+m_startingPos.push_back(sf::Vector2f(72, 2121));
+m_startingPos.push_back(sf::Vector2f(1577, 824));
+m_startingPos.push_back(sf::Vector2f(1518, 1365));
+m_startingPos.push_back(sf::Vector2f(2313, 2356));
 
-	for (int i = 0; i < 1; i++)
+for (int i = 0; i < 1; i++)
+{
+	m_enemyVec[i] = new Enemy(m_window, m_deltaTime, m_startingPos[i], m_gamePath);
+	m_enemyVec[i]->setAlive(true);
+
+
+	// Add enemy to the active vector
+	m_enemyActive.push_back(m_enemyVec[i]);
+}
+
+// View
+// m_mapView.setViewport(sf::FloatRect(0.0, 0.0f, 0.25f, 0.25f));
+m_mapView.setSize(m_window.getSize().x, m_window.getSize().y);
+
+int wallIndex = 0;
+quadtree.clear();
+m_player.init();
+
+// Create an array to store the walls in (for the pause screen map)
+for (int i = 0; i < m_map->getMap()->size(); ++i)
+{
+	if (m_map->getMap()->at(i).second == WallType::WALLTYPE_1)
 	{
-		m_enemyVec[i] = new Enemy(m_window, m_deltaTime, m_startingPos[i], m_gamePath);
-		m_enemyVec[i]->setAlive(true);
-		
+		m_wallVec.push_back(new Wall(m_window, s_wallWidth, sf::Vector2f(m_map->getMap()->at(i).first.x, m_map->getMap()->at(i).first.z)));
 
-		// Add enemy to the active vector
-		m_enemyActive.push_back(m_enemyVec[i]);
+		GameObject* wall = dynamic_cast<GameObject*>(m_wallVec.back());
+		wall->size = s_wallWidth;
+		wall->position = m_wallVec.back()->getShape().getPosition();
+
+		quadtree.addObject(wall);
 	}
+}
 
-	// View
-	// m_mapView.setViewport(sf::FloatRect(0.0, 0.0f, 0.25f, 0.25f));
-	m_mapView.setSize(m_window.getSize().x, m_window.getSize().y);
+// A*
+m_gamePath->initAStar(m_wallVec);
 
-	int wallIndex = 0;
-	quadtree.clear();
+for (int i = 0; i < 18; i++)
+{
+	m_enemyVec[i] = new Enemy(m_window, m_deltaTime, m_startingPos[i], m_gamePath);
+	m_enemyVec[i]->setAlive(true);
 
-	// Create an array to store the walls in (for the pause screen map)
-	for (int i = 0; i < m_map->getMap()->size(); ++i)
-	{
-		if (m_map->getMap()->at(i).second == WallType::WALLTYPE_1)
-		{
-			m_wallVec.push_back(new Wall(m_window, s_wallWidth, sf::Vector2f(m_map->getMap()->at(i).first.x, m_map->getMap()->at(i).first.z)));
+	// Add enemy to the active vector
+	m_enemyActive.push_back(m_enemyVec[i]);
+}
 
-			GameObject* wall = dynamic_cast<GameObject*>(m_wallVec.back());
-			wall->size = s_wallWidth;
-			wall->position = m_wallVec.back()->getShape().getPosition();
+for (int i = 0; i < 100; i++)
+{
+	bullets[i] = new Bullet();
+}
 
-			quadtree.addObject(wall);
-		}
-	}
-
-	// A*
-	m_gamePath->initAStar(m_wallVec);
-
-	for (int i = 0; i < 18; i++)
-	{
-		m_enemyVec[i] = new Enemy(m_window, m_deltaTime, m_startingPos[i], m_gamePath);
-		m_enemyVec[i]->setAlive(true);
-
-		// Add enemy to the active vector
-		m_enemyActive.push_back(m_enemyVec[i]);
-	}
-
-	for (int i = 0; i < 100; i++)
-	{
-		bullets[i] = new Bullet();
-	}
+for (int i = 0; i < 10; i++)
+{
+	enemyBullet[i].init(sf::Vector2f(10, 10), sf::Vector2f(0, 1));
+}
 }
 
 /// <summary>
@@ -117,11 +123,18 @@ GameWorld::~GameWorld()
 /// Update the world
 /// </summary>
 void GameWorld::updateWorld()
-{	
+{
+	for (int i = 0; i < getActiveEnemyCount(); i++)
+	{
+		quadtreeMoving.addObject(m_enemyActive[i]->myGameObject);
+	}
+
 	m_player.setPosition(m_camera.getEye().x * s_displayScale, m_camera.getEye().z * s_displayScale);
 	m_player.update();
 	setGunPosition();
 	updateBulletPhysics();
+
+
 
 	// Only update the active enemies
 	for (int i = 0; i < m_enemyActive.size(); i++)
@@ -131,6 +144,55 @@ void GameWorld::updateWorld()
 
 	// Check and remove objects
 	checkEnemyInQueueAlive();
+
+	std::vector<GameObject*> returnedEnemies = quadtreeMoving.getObjectsAt(getPlayerPosition().x,
+		getPlayerPosition().y, 25);
+
+	// Check enemy colliding with player
+	for (int i = 0; i < returnedEnemies.size(); i++)
+	{
+		float dist = Transform::distance(dynamic_cast<Enemy*>(returnedEnemies[i])->getPosition(), getPlayerPosition());
+		
+		if (dist < 60)
+		{
+			m_player.decreaseHealth(1);
+			ui.setHealth(m_player.getHealth());
+		}
+		else if (dist < 300)
+		{
+			for (int x = 0; x < 10; x++)
+			{
+				if (enemyBullet[x].active == false)
+				{
+					enemyBullet[x].init(returnedEnemies[i]->position, returnedEnemies[i]->position - getPlayerPosition());
+					break;
+				}
+
+			}
+		}
+	}
+
+	for (int i = 0; i < 10; i++)
+	{
+		if (enemyBullet[i].active)
+		{
+			enemyBullet[i].update();
+
+			if (Transform::distance(enemyBullet[i].bullet.getPosition(), getPlayerPosition()) < 55)
+			{
+				m_player.decreaseHealth(2);
+			}
+		}
+
+
+	
+	}
+
+	
+
+
+	quadtreeMoving.clear();
+	
 }
 
 /// <summary>
@@ -139,7 +201,6 @@ void GameWorld::updateWorld()
 void GameWorld::drawWorld()
 {
 	m_mapView.setCenter(m_player.getPosition());
-	ui_view.setCenter(m_player.getPosition());
 	m_window.setView(m_mapView);
 
 	for (int i = 0; i < m_enemyActive.size(); i++)
@@ -189,6 +250,7 @@ void GameWorld::initialise()
 		// Add enemy to the active vector
 		m_enemyActive.push_back(m_enemyVec[i]);
 	}
+	m_player.init();
 }
 
 int GameWorld::getPlayerHealth()
@@ -362,8 +424,7 @@ void GameWorld::updateBulletPhysics()
 		{
 			activeBullets[i]->update();
 			returnWall = quadtreeBullet.getObjectsAt(activeBullets[i]->getPosition().x, activeBullets[i]->getPosition().y, 8);
-			std::cout << "returnWall Count: " << std::to_string(returnWall.size()) << std::endl; // TODO: Delete this
-
+			
 			for (int x = 0; x < previousReturn.size(); x++)
 			{
 				if (activeBullets[i]->checkCollision(previousReturn.at(x)->position, previousReturn.at(x)->size / 2))
@@ -376,7 +437,6 @@ void GameWorld::updateBulletPhysics()
 						break;
 					}
 
-					std::cout << "previous hit" << std::endl; // TODO: Delete this
 				}
 			}
 
@@ -533,6 +593,8 @@ void GameWorld::checkPlayerRayCollsions(sf::Time t_deltaTime)
 		m_camera.popOutFromWall();
 	}
 }
+
+
 
 /// <summary>
 /// Returns the position of the player's origin

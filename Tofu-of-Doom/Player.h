@@ -15,6 +15,7 @@ public:
 	void setHealth(int t_healthAmount);
 	void increaseHealth(int t_healthAmount);
 	void decreaseHealth(int t_healthAmount);
+	void init();
 	sf::CircleShape getSprite();
 	void update();
 
