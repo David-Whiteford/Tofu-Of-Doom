@@ -191,6 +191,11 @@ void GameWorld::initialise()
 	}
 }
 
+int GameWorld::getPlayerHealth()
+{
+	return m_player.getHealth();
+}
+
 void GameWorld::drawUI()
 {
 

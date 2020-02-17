@@ -33,7 +33,7 @@ public:
 	void drawWorld();
 
 	void initialise();
-
+	int getPlayerHealth();
 	void drawUI();
 	bool fireBullet(int t_gunType);
 	void reload(int t_guntType);

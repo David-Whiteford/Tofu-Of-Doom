@@ -5,6 +5,7 @@
 #include "Transform.h"
 #include "Raycast.h"
 #include "Path.h"
+#include "Player.h"
 #include <stdlib.h>
 #include <ctime>
 #include "Globals.h"
@@ -14,7 +15,7 @@ class Enemy : public GameObject
 public:
 	Enemy(sf::RenderWindow& t_window, sf::Time& t_deltaTime, sf::Vector2f t_position , Path* t_gamePath);
 	~Enemy();
-	
+	Player m_player;
 	void enemyInit();
 	void setDamageAmount(int t_damage);
 	int getDamageAmount();

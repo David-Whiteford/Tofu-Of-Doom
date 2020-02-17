@@ -226,6 +226,11 @@ void Game::update(sf::Time t_deltaTime)
 			m_gameWorld->initialise();
 
 		}
+		if (m_gameWorld->getPlayerHealth() <= 0)
+		{
+			m_drawState = DrawState::MAIN;
+			m_gameWorld->initialise();
+		}
 
 		break;
 	}
