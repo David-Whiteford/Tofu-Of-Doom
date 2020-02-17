@@ -16,14 +16,16 @@
 class UI
 {
 public:
-	UI() {
+	UI(sf::RenderWindow &t_window) : window( t_window)
+	{
+		
 		healthBorder.setFillColor(sf::Color(0, 0, 0, 190));
 		healthBorder.setSize(sf::Vector2f(230, 70));
-		healthBorder.setPosition(30, 630);
+		healthBorder.setPosition(t_window.getSize().x * .15f, t_window.getSize().y  -t_window.getSize().y * .1f);
 
 		ammoBorder.setFillColor(sf::Color(0, 0, 0, 190));
 		ammoBorder.setSize(sf::Vector2f(230, 70));
-		ammoBorder.setPosition(900, 630);
+		ammoBorder.setPosition(sf::Vector2f(t_window.getSize().x - t_window.getSize().x * .23f, t_window.getSize().y - t_window.getSize().y * .1f));
 
 		if (!m_font.loadFromFile("models/AmazDooMRight.ttf"))
 		{
@@ -36,18 +38,18 @@ public:
 		}
 
 		retina.setTexture(retinaTexture);
-		retina.setPosition(580, 300);
+		retina.setPosition(t_window.getSize().x/2, t_window.getSize().y/2);
 		retina.setScale(.3f, .3f);
 
 		displayHealth.setFont(m_font);
 		displayHealth.setFillColor(sf::Color::Red);
-		displayHealth.setPosition(sf::Vector2f(65, 633));
+		displayHealth.setPosition(sf::Vector2f(t_window.getSize().x * .17f, t_window.getSize().y - t_window.getSize().y*.1f));
 		displayHealth.setCharacterSize(50); // in pixels, not points!
 		displayHealth.setScale(1, 1);
 
 		ammo.setFont(m_font);
 		ammo.setFillColor(sf::Color::Red);
-		ammo.setPosition(sf::Vector2f(920, 633));
+		ammo.setPosition(sf::Vector2f(t_window.getSize().x - t_window.getSize().x *.2f, t_window.getSize().y - t_window.getSize().y *.1f));
 		ammo.setCharacterSize(50); // in pixels, not points!
 		ammo.setScale(1, 1);
 
@@ -55,7 +57,7 @@ public:
 
 	~UI() {}
 
-
+	sf::RenderWindow& window;
 	sf::RectangleShape getBorderHealth() { return healthBorder; }
 	sf::RectangleShape getBorderAmmo() { return ammoBorder; }
 	sf::Text getHealthText() { displayHealth.setString("Health: " + std::to_string(healthTest));  return displayHealth; }
