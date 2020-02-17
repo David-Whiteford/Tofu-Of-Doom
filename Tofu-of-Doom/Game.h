@@ -190,6 +190,13 @@ private:
 	double m_pitch{ 0.0 }; // Look up and down (in degrees)
 	bool gunRecoil{ false };
 
+	bool gunReloading = false;
+	bool down = true;
+	float reloadSpeed = 0.0014f;
+	float currentAngle = 0;
+	void reload();
+	void reloadAnimation(glm::mat4& t_gunMatrix);
+
 	// Create particle object
 	ParticleEffect m_particleEffect = ParticleEffect(m_deltaTime);
 

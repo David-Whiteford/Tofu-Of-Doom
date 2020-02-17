@@ -36,6 +36,7 @@ public:
 
 	void drawUI();
 	bool fireBullet(int t_gunType);
+	void reload(int t_guntType);
 	void checkPlayerRayCollsions(sf::Time t_deltaTime); 
 	void updateBulletPhysics();
 	int getActiveEnemyCount();
