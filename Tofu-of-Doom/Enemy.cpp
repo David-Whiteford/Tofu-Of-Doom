@@ -25,7 +25,7 @@ Enemy::~Enemy()
 
 void Enemy::enemyInit()
 {
-
+	myGameObject = dynamic_cast<GameObject*>(this);
 	float startSize = 0.5f;
 	float currentSize = 0.5f;
 
@@ -40,6 +40,8 @@ void Enemy::enemyInit()
 	//Astar
 	int nodeEnd = getRandNode();
 	m_gamePath->newPath(m_enemyNode, nodeEnd);
+
+	setSpeed(25);
 
 
 	dynamic_cast<GameObject*>(this)->setTag(ENEMY_TAG);
@@ -75,6 +77,7 @@ void Enemy::update(sf::CircleShape t_player)
 		//sets the node the player and the enemy are in
 		m_playerNode = m_gamePath->nodePos(t_player.getPosition());
 		m_enemyNode = m_gamePath->nodePos(m_enemy.getPosition());
+		myGameObject->position = m_enemy.getPosition();
 
 		sf::Vector2f offSet = sf::Vector2f(300, 300);
 		if (t_player.getPosition().x >= m_enemy.getPosition().x - offSet.x

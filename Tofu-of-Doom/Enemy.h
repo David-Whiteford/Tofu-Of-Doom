@@ -41,8 +41,11 @@ public:
 	float startSize = 0.5f;
 	float currentSize = 0.5f;
 
-	float reduceSpeed = 0.01f;
+	float reduceSpeed = 0.03f;
 	bool canRender = true;
+
+
+	GameObject* myGameObject;
 
 private:
 	Raycast m_rayCast;
@@ -58,7 +61,6 @@ private:
 	Transform::Position enemyPos;
 	Transform::Position graphPos;
 
-
 	sf::CircleShape m_enemy;
 	std::vector<Node*> graphPath;
 	sf::RenderWindow& m_window;
@@ -69,7 +71,7 @@ private:
 	std::vector<int> m_endNodes;
 
 
-	int m_doOncePatrol = 0;
+	int m_doOncePatrol = 1;
 	int m_doOnceSeek = 0;
 	int startNode = 103;
 	int endNode = 2237;
