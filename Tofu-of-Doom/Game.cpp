@@ -91,28 +91,28 @@ void Game::initialise()
 
 	m_ShotDelay = sf::seconds(.7f); // .7f is the length for the reload sound to finish
 	m_vibrateLength = sf::seconds(.1f); // .7f is the length for the reload sound to finish
-	soundEngine = createIrrKlangDevice();
-	bgSoundEngine = createIrrKlangDevice();
+	//soundEngine = createIrrKlangDevice();
+	//bgSoundEngine = createIrrKlangDevice();
 
-	gunSoundEngine = createIrrKlangDevice();
-	background = bgSoundEngine->play2D("horror.mp3" , true);
+	//gunSoundEngine = createIrrKlangDevice();
+	//background = bgSoundEngine->play2D("horror.mp3" , true);
 	glm::vec3 soundPos(25, 0, 25);
-	vec3df position(25, 0, 25);
-	positions.push_back(position);
+	/*vec3df position(25, 0, 25);
+	positions.push_back(position);*/
 
-	shotgunSound = soundEngine->addSoundSourceFromFile("shotgun.mp3");
-	machinegunSound = soundEngine->addSoundSourceFromFile("cg1.wav");
-	pistolSound = soundEngine->addSoundSourceFromFile("9mm.mp3");
-	zombie = soundEngine->addSoundSourceFromFile("Monster.mp3");
-	outOfAmmo = soundEngine->addSoundSourceFromFile("outofammo.wav");
-	weaponLoad = soundEngine->addSoundSourceFromFile("weapload.wav");
+	//shotgunSound = soundEngine->addSoundSourceFromFile("shotgun.mp3");
+	//machinegunSound = soundEngine->addSoundSourceFromFile("cg1.wav");
+	//pistolSound = soundEngine->addSoundSourceFromFile("9mm.mp3");
+	//zombie = soundEngine->addSoundSourceFromFile("Monster.mp3");
+	//outOfAmmo = soundEngine->addSoundSourceFromFile("outofammo.wav");
+	//weaponLoad = soundEngine->addSoundSourceFromFile("weapload.wav");
 
-	shotgunQueue.push(shotgunSound); // 4
-	shotgunQueue.push(machinegunSound); // 3
-	shotgunQueue.push(pistolSound); // 2
-	shotgunQueue.push(shotgunSound); // 1	
+	//shotgunQueue.push(shotgunSound); // 4
+	//shotgunQueue.push(machinegunSound); // 3
+	//shotgunQueue.push(pistolSound); // 2
+	//shotgunQueue.push(shotgunSound); // 1	
 
-	soundEngine->play3D(zombie, zombiePosition, true, false, false, false);
+	//soundEngine->play3D(zombie, zombiePosition, true, false, false, false);
 	
 	// Load shaders
 	m_mainShader = new tk::Shader("shaders/mainShader.vert", "shaders/mainShader.frag");
@@ -156,6 +156,15 @@ void Game::initialise()
 	m_lightID = glGetUniformLocation(m_mainShader->m_programID, "LightPosition_worldspace");
 	m_lightPositionsID = glGetUniformLocation(m_mainShader->m_programID, "lightPositionsWorldspace");
 	m_muzzleFlashIntensityID = glGetUniformLocation(m_mainShader->m_programID, "muzzleFlashIntensity");
+}
+
+void Game::reload()
+{
+	if (camera.controller.aButtonDown())
+	{
+		m_gameWorld->reload(gunNum);
+		down = true;
+	}
 }
 
 /// <summary>
@@ -202,7 +211,7 @@ void Game::update(sf::Time t_deltaTime)
 		break;
 
 	case DrawState::OPTIONS:
-		m_optionsMenu->update(t_deltaTime, bgSoundEngine);
+		//m_optionsMenu->update(t_deltaTime, /*bgSoundEngine*/);
 		break;
 
 	case DrawState::GAME:
@@ -233,6 +242,7 @@ void Game::updateWorld(sf::Time t_deltaTime)
 	camera.transform.position.z = camera.getEye().z;
 
 	// Handle gun fire
+	reload();
 	fireGun();
 
 	// This is currently only used to display the mini-map
@@ -250,7 +260,7 @@ void Game::updateWorld(sf::Time t_deltaTime)
 	irrklang::vec3df velPerSecond(0, 0, 0); // Only relevant for doppler effects
 	irrklang::vec3df upVector(0, 1, 0); // Where 'up' is in your 3D scene
 
-	soundEngine->setListenerPosition(position, lookDirection, velPerSecond, upVector);
+	//soundEngine->setListenerPosition(position, lookDirection, velPerSecond, upVector);
 
 	// Send our transformation to the currently bound shader, in the "MVP" uniform
 	// This is done in the update loop since each model will have a different MVP matrix (At least for the M part)
@@ -381,6 +391,7 @@ void Game::drawGameScene()
 		glBindVertexArray(m_machineGun.VAO_ID);
 
 		gunAnimation(m_machineGunModelMatrix); // Does nothing if recoil is false
+		reloadAnimation(m_machineGunModelMatrix);
 
 		glUniformMatrix4fv(m_modelMatrixID, 1, GL_FALSE, &m_machineGunModelMatrix[0][0]);
 		glDrawElements(GL_TRIANGLES, m_machineGun.indices.size(), GL_UNSIGNED_SHORT, (void*)0);
@@ -444,6 +455,7 @@ void Game::drawGameScene()
 		glBindVertexArray(m_rifle.VAO_ID);
 
 		gunAnimation(m_rifleModelMatrix); // Does nothing if recoil is false
+		reloadAnimation(m_rifleModelMatrix);
 
 		glUniformMatrix4fv(m_modelMatrixID, 1, GL_FALSE, &m_rifleModelMatrix[0][0]);
 		glDrawElements(GL_TRIANGLES, m_rifle.indices.size(), GL_UNSIGNED_SHORT, (void*)0);
@@ -465,6 +477,7 @@ void Game::drawGameScene()
 		glBindVertexArray(m_pistol.VAO_ID);
 
 		gunAnimation(m_pistolModelMatrix); // Does nothing if recoil is false
+		reloadAnimation(m_pistolModelMatrix);
 
 		glUniformMatrix4fv(m_modelMatrixID, 1, GL_FALSE, &m_pistolModelMatrix[0][0]);
 		glDrawElements(GL_TRIANGLES, m_pistol.indices.size(), GL_UNSIGNED_SHORT, (void*)0);
@@ -698,12 +711,29 @@ void Game::loadVAO(std::string t_textureFilename, const char *t_modelFilename, M
 /// <summary>
 /// This function handles gun recoil
 /// </summary>
-void Game::gunAnimation(glm::mat4 &t_gunMatrix)
+void Game::gunAnimation(glm::mat4& t_gunMatrix)
 {
 	glm::vec3 gunDirection(camera.getDirection().x, 1.5f, camera.getDirection().z);
 
 	if (!gunRecoil)
 	{
+		t_gunMatrix = glm::translate(glm::mat4(1.0f), camera.getEye());
+	}
+	else
+	{
+		t_gunMatrix = glm::translate(glm::mat4(1.0f), camera.getEye() + camera.getDirection());
+	}
+
+	t_gunMatrix = glm::rotate(t_gunMatrix, glm::radians(camera.getYaw()), glm::vec3(0.0f, 1.0f, 0.0f));
+}
+
+void Game::reloadAnimation(glm::mat4& t_gunMatrix)
+{
+	glm::vec3 gunDirection(camera.getDirection().x, 1.5f, camera.getDirection().z);
+	currentAngle += reloadSpeed;
+	if (down)
+	{
+		t_gunMatrix = glm::rotate(t_gunMatrix, glm::radians(camera.getYaw()), glm::vec3(0 + currentAngle, 1.0f, 0.0f));
 		t_gunMatrix = glm::translate(glm::mat4(1.0f), camera.getEye());
 	}
 	else
@@ -725,7 +755,7 @@ void Game::fireGun()
 		{
 			if (m_gameWorld->fireBullet(gunNum))
 			{
-				gunSoundEngine->play2D(pistolSound);
+				/*gunSoundEngine->play2D(pistolSound);*/
 
 				m_time = sf::Time::Zero;
 				m_time = m_time.Zero;
@@ -745,7 +775,7 @@ void Game::fireGun()
 			{
 				m_time = sf::Time::Zero;
 				m_time = m_time.Zero;
-				gunSoundEngine->play2D(outOfAmmo);
+				/*gunSoundEngine->play2D(outOfAmmo);*/
 
 				camera.controller.Vibrate(0, 0);
 			}
@@ -761,7 +791,7 @@ void Game::fireGun()
 		{
 			if (m_gameWorld->fireBullet(gunNum))
 			{
-				gunSoundEngine->play2D(shotgunQueue.front());
+				/*gunSoundEngine->play2D(shotgunQueue.front());*/
 				m_time = sf::Time::Zero;
 				m_time = m_time.Zero;
 
@@ -780,7 +810,7 @@ void Game::fireGun()
 			{
 				m_time = sf::Time::Zero;
 				m_time = m_time.Zero;
-				gunSoundEngine->play2D(outOfAmmo);
+			/*	gunSoundEngine->play2D(outOfAmmo);*/
 
 				camera.controller.Vibrate(0, 0);
 			}
@@ -796,7 +826,7 @@ void Game::fireGun()
 		{
 			if (m_gameWorld->fireBullet(gunNum))
 			{
-				gunSoundEngine->play2D(machinegunSound);
+			/*	gunSoundEngine->play2D(machinegunSound);*/
 				m_time = sf::Time::Zero;
 				m_time = m_time.Zero;
 
@@ -816,7 +846,7 @@ void Game::fireGun()
 			{
 				m_time = sf::Time::Zero;
 				m_time = m_time.Zero;
-				gunSoundEngine->play2D(outOfAmmo);
+				/*gunSoundEngine->play2D(outOfAmmo);*/
 
 				camera.controller.Vibrate(0, 0);
 			}

@@ -303,7 +303,26 @@ bool GameWorld::fireBullet(int t_gunType)
 		}
 		return true;
 	}
-	return false;
+	return false; // we cant shoot
+}
+
+void GameWorld::reload(int t_guntType)
+{
+	// handgun
+	if (t_guntType == 1)
+	{
+
+	}
+	// shotgun
+	else if (t_guntType == 2)
+	{
+
+	}
+	// machine gun
+	else
+	{
+
+	}
 }
 
 /// <summary>
