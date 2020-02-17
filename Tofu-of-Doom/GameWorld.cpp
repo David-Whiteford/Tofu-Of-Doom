@@ -333,7 +333,7 @@ void GameWorld::reload(int t_guntType)
 	// machine gun
 	else
 	{
-		while (m_player.getCurrentMachineGunClip() < 5 && m_player.getCurrentMachineGunBullets() > 0)
+		while (m_player.getCurrentMachineGunClip() < 50 && m_player.getCurrentMachineGunBullets() > 0)
 		{
 			m_player.increaseCurrentGunClip(t_guntType);
 		}

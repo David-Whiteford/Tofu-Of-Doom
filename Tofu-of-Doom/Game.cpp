@@ -160,7 +160,7 @@ void Game::initialise()
 
 void Game::reload()
 {
-	if (camera.controller.aButton())
+	if (camera.controller.aButtonDown())
 	{
 		m_gameWorld->reload(gunNum);
 		gunSoundEngine->play2D(weaponLoad);
