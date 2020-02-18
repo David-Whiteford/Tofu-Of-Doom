@@ -14,6 +14,7 @@ public:
 	~Path();
 	void draw(sf::View t_view);
 	void neighbourAlgor();
+	void clearAStar();
 	void initAStar(std::vector<Wall *> &t_walls);
 
 

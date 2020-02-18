@@ -22,10 +22,10 @@ public:
 	void setSpeed(float t_speed);
 	void setDirection(sf::Vector2f t_dir);
 	void setPosition(sf::Vector2f t_pos);
-	void update(sf::CircleShape t_player);
-	void enemyMovement();
+	void update(sf::CircleShape t_player, sf::Time t_deltaTime);
+	void enemyMovement(sf::Time t_deltaTime);
 	void enemyFollowPlayer();
-	void moveEnemy();
+	void moveEnemy(sf::Time t_deltaTime);
 	void draw();
 
 	float getRadius();
@@ -50,7 +50,7 @@ public:
 private:
 	Raycast m_rayCast;
 	bool m_alive;
-	float m_speedEn{ 6 };
+	float m_speedEn = 0.18f;
 	sf::Time m_time;
 	int m_currentNode = 0;
 	int m_endNode = 0;
@@ -71,7 +71,7 @@ private:
 	std::vector<int> m_endNodes;
 
 
-	int m_doOncePatrol = 1;
+	int m_doOncePatrol = 0;
 	int m_doOnceSeek = 0;
 	int startNode = 103;
 	int endNode = 2237;

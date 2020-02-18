@@ -25,6 +25,8 @@ Enemy::~Enemy()
 
 void Enemy::enemyInit()
 {
+	m_gamePath->clearAStar();
+
 	myGameObject = dynamic_cast<GameObject*>(this);
 	float startSize = 0.5f;
 	float currentSize = 0.5f;
@@ -41,7 +43,7 @@ void Enemy::enemyInit()
 	int nodeEnd = getRandNode();
 	m_gamePath->newPath(m_enemyNode, nodeEnd);
 
-	setSpeed(5);
+	setSpeed(1);
 
 
 	dynamic_cast<GameObject*>(this)->setTag(ENEMY_TAG);
@@ -70,7 +72,7 @@ void Enemy::setPosition(sf::Vector2f t_pos)
 	m_position = t_pos;
 }
 
-void Enemy::update(sf::CircleShape t_player)
+void Enemy::update(sf::CircleShape t_player, sf::Time t_deltaTime)
 {
 	if (m_alive)
 	{
@@ -89,7 +91,7 @@ void Enemy::update(sf::CircleShape t_player)
 			if (m_doOnceSeek != 1)
 			{
 				m_enemyBehaviour = EnemyBehaviour::SEEK_PLAYER;
-				m_doOnceSeek++;
+				m_doOnceSeek = 1;
 				graphPath.resize(0);
 				m_doOncePatrol = 0;
 			}
@@ -99,12 +101,12 @@ void Enemy::update(sf::CircleShape t_player)
 			if (m_doOncePatrol != 1)
 			{
 				m_enemyBehaviour = EnemyBehaviour::PATROL_MAP;
-				m_doOncePatrol++;
+				m_doOncePatrol = 1;
 				graphPath.resize(0);
 				m_doOnceSeek = 0;
 			}
 		}
-		enemyMovement();
+		enemyMovement(t_deltaTime);
 	}
 	else if(canRender)
 	{
@@ -124,11 +126,11 @@ void Enemy::draw()
 	m_window.draw(m_enemy);
 
 }
-void Enemy::moveEnemy()
+void Enemy::moveEnemy(sf::Time t_deltaTime)
 {
 	graphPathVec = sf::Vector2f(graphPath.back()->m_data.m_x, graphPath.back()->m_data.m_y);
 
-	sf::Vector2f moveTo = m_transform.moveTowards(m_enemy.getPosition(), graphPathVec, m_speedEn);
+	sf::Vector2f moveTo = m_transform.moveTowards(m_enemy.getPosition(), graphPathVec, m_speedEn * t_deltaTime.asMilliseconds());
 	m_enemy.setPosition(moveTo);
 	if (m_enemy.getPosition().x == graphPath.back()->m_data.m_x &&
 		m_enemy.getPosition().y == graphPath.back()->m_data.m_y)
@@ -140,14 +142,14 @@ void Enemy::moveEnemy()
 /// <summary>
 /// Moves the enemy
 /// </summary>
-void Enemy::enemyMovement()
+void Enemy::enemyMovement(sf::Time t_deltaTime)
 {
 	switch (m_enemyBehaviour)
 	{
 		case EnemyBehaviour::SEEK_PLAYER:
 			if (graphPath.empty() == false)
 			{
-				moveEnemy();
+				moveEnemy(t_deltaTime);
 			}
 			else
 			{
@@ -161,7 +163,7 @@ void Enemy::enemyMovement()
 		case EnemyBehaviour::PATROL_MAP:
 			if (graphPath.empty() == false)
 			{
-				moveEnemy();
+				moveEnemy(t_deltaTime);
 			}
 			else
 			{
