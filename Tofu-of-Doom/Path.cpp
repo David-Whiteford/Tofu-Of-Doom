@@ -87,6 +87,11 @@ void Path::neighbourAlgor()
 	}
 }
 
+void Path::clearAStar()
+{
+	graphPath.clear();
+}
+
 void Path::initAStar(std::vector<Wall*> &t_walls)
 {
 	graph = new Graph<NodeData, int>(2500);

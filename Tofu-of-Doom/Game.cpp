@@ -219,22 +219,19 @@ void Game::update(sf::Time t_deltaTime)
 	case DrawState::GAME:
 		updateWorld(t_deltaTime);
 
-		if (m_gameWorld->getActiveEnemyCount() == 0)
+		if (m_gameWorld->getActiveEnemyCount() == 0 ||
+			m_gameWorld->getPlayerHealth() <= 0)
 		{
 			camera.controller.Vibrate(0, 0);
 
 			m_drawState = DrawState::MAIN;
-			m_gameWorld->initialise();
+			delete(m_gameWorld);
+			m_gameWorld = new GameWorld(m_window, m_deltaTime, &camera);
 			/*camera.transform.position = { 400,0, 50 };*/
 
 
 		}
-		if (m_gameWorld->getPlayerHealth() <= 0)
-		{
-			m_drawState = DrawState::MAIN;
-			m_gameWorld->initialise();
-			/*camera.transform.position = { 400,0, 50 };*/
-		}
+
 
 		break;
 	}

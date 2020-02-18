@@ -86,7 +86,7 @@ private:
 
 
 	Quadtree quadtree = Quadtree(-50, -50, 2550, 2550, 0, 6);
-	Quadtree quadtreeMoving = Quadtree(-50, -50, 2550, 2550, 0, 3);
+	Quadtree quadtreeMoving = Quadtree(-50, -50, 2550, 2550, 0, 2);
 	Quadtree quadtreeBullet = Quadtree(-500, -500, 3550, 3550, 0, 4);
 	Path* m_gamePath = new Path(m_window);
 	Enemy* m_enemyVec[18];

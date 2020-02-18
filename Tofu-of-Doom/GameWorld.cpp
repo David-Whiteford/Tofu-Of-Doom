@@ -126,7 +126,8 @@ void GameWorld::updateWorld()
 {
 	for (int i = 0; i < getActiveEnemyCount(); i++)
 	{
-		quadtreeMoving.addObject(m_enemyActive[i]->myGameObject);
+		if (m_enemyActive[i]->isAlive())
+			quadtreeMoving.addObject(m_enemyActive[i]->myGameObject);
 	}
 
 	m_player.setPosition(m_camera.getEye().x * s_displayScale, m_camera.getEye().z * s_displayScale);
@@ -139,7 +140,7 @@ void GameWorld::updateWorld()
 	// Only update the active enemies
 	for (int i = 0; i < m_enemyActive.size(); i++)
 	{
-		m_enemyActive[i]->update(m_player.getSprite());
+		m_enemyActive[i]->update(m_player.getSprite(),m_deltaTime);
 	}
 
 	// Check and remove objects
