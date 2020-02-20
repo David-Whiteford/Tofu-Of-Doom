@@ -27,12 +27,12 @@ public:
 		ammoBorder.setSize(sf::Vector2f(230, 70));
 		ammoBorder.setPosition(sf::Vector2f(t_window.getSize().x - t_window.getSize().x * .23f, t_window.getSize().y - t_window.getSize().y * .1f));
 
-		if (!m_font.loadFromFile("models/AmazDooMRight.ttf"))
+		if (!m_font.loadFromFile("fonts/AmazDooMRight.ttf"))
 		{
-			std::cout << "problem loading font" << std::endl;
+			std::cout << "Error loading font!" << std::endl;
 		}
 
-		if (!retinaTexture.loadFromFile("gunReticle.png"))
+		if (!retinaTexture.loadFromFile("images/gunReticle.png"))
 		{
 			// error...
 		}

@@ -6,12 +6,10 @@
 /// <summary>
 /// Constructor for the Game class
 /// </summary>
-Game::Game(sf::ContextSettings t_settings) : m_window{ sf::VideoMode::getDesktopMode(), "Tofu of Doom", sf::Style::Fullscreen, t_settings }
+Game::Game(sf::ContextSettings t_settings) : m_window{ sf::VideoMode{ 1920, 1080, 32 }, "Tofu of Doom", sf::Style::Default, t_settings }
 {
 	// Initialise GLEW
 	GLuint m_error = glewInit();
-
-
 	
 	// Initialise everything else
 	initialise();
@@ -19,9 +17,9 @@ Game::Game(sf::ContextSettings t_settings) : m_window{ sf::VideoMode::getDesktop
 	// Loads the SFML texture and the background music
 	m_splashScreen = new SplashScreen{ *this , m_font };
 	
-	if (!m_sfmlTexture.loadFromFile("sfml.png"))
+	if (!m_sfmlTexture.loadFromFile("images/sfml.png"))
 	{
-		std::cout << "Cant load sfml image " << std::endl;
+		std::cout << "Can't load image! " << std::endl;
 	}
 
 	m_sfmlSprite.setTexture(m_sfmlTexture);
@@ -77,7 +75,7 @@ void Game::run()
 void Game::initialise()
 {
 	// Load fonr
-	if (!m_font.loadFromFile("models/AmazDooMRight.ttf"))
+	if (!m_font.loadFromFile("fonts/AmazDooMRight.ttf"))
 	{
 		std::cout << "Error loading font!" << std::endl;
 	}
@@ -95,17 +93,17 @@ void Game::initialise()
 	bgSoundEngine = createIrrKlangDevice();
 
 	gunSoundEngine = createIrrKlangDevice();
-	background = bgSoundEngine->play2D("horror.mp3" , true);
+	background = bgSoundEngine->play2D("audio/horror.mp3" , true);
 	glm::vec3 soundPos(25, 0, 25);
 	vec3df position(25, 0, 25);
 	positions.push_back(position);
 
-	shotgunSound = soundEngine->addSoundSourceFromFile("shotgun.mp3");
-	machinegunSound = soundEngine->addSoundSourceFromFile("cg1.wav");
-	pistolSound = soundEngine->addSoundSourceFromFile("9mm.mp3");
-	zombie = soundEngine->addSoundSourceFromFile("Monster.mp3");
-	outOfAmmo = soundEngine->addSoundSourceFromFile("outofammo.wav");
-	weaponLoad = soundEngine->addSoundSourceFromFile("weapload.wav");
+	shotgunSound = soundEngine->addSoundSourceFromFile("audio/shotgun.mp3");
+	machinegunSound = soundEngine->addSoundSourceFromFile("audio/cg1.wav");
+	pistolSound = soundEngine->addSoundSourceFromFile("audio/9mm.mp3");
+	zombie = soundEngine->addSoundSourceFromFile("audio/Monster.mp3");
+	outOfAmmo = soundEngine->addSoundSourceFromFile("audio/outofammo.wav");
+	weaponLoad = soundEngine->addSoundSourceFromFile("audio/weapload.wav");
 
 	shotgunQueue.push(shotgunSound); // 4
 	shotgunQueue.push(machinegunSound); // 3
@@ -133,7 +131,7 @@ void Game::initialise()
 	loadVAO("models/chair/chair.png", "models/chair/chair.obj", m_chair);
 	loadVAO("models/table_1/table_1.png", "models/table_1/table_1.obj", m_table_1);
 	loadVAO("models/table_2/table_2.png", "models/table_2/table_2.obj", m_table_2);
-	loadVAO("models/spikeballao.png", "models/spikeball.obj", m_enemyBall);
+	loadVAO("models/spikeball/spikeball.png", "models/spikeball/spikeball.obj", m_enemyBall);
 	
 	// Projection matrix 
 	projection = glm::perspective(45.0f, 4.0f / 3.0f, 1.0f, 1000.0f); // Enable depth test

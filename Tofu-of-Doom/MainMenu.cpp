@@ -105,11 +105,11 @@ void MainMenu::render(sf::RenderWindow& t_window)
 void MainMenu::setUpContent()
 {
 	//load all textures
-	if (!m_bgTexture.loadFromFile("models/monster.jpg"))
+	if (!m_bgTexture.loadFromFile("images/monster.jpg"))
 	{
 		std::cout << "Cant load image " << std::endl;
 	}
-	if (!m_buttonTexture.loadFromFile("models/bloodybutton.png"))
+	if (!m_buttonTexture.loadFromFile("images/bloodybutton.png"))
 	{
 		std::cout << "Cant load bloody button image " << std::endl;
 	}
@@ -119,8 +119,8 @@ void MainMenu::setUpContent()
 		m_button[i].setPosition(50, 20 + space);
 		m_button[i].setScale(1.1, 1.5);
 		space += 200;
-
 	}
+
 	//set the size , position and colour of the outline rect
 	m_outlineRect.setSize(sf::Vector2f(165, 70));
 	m_outlineRect.setPosition(50, 20);

@@ -191,7 +191,7 @@ void Options::setUpContent()
 	m_musicmsgOn.setString(OFF_MSG);
 	m_musicmsgOn.setCharacterSize(40);
 
-	if (!m_buttonTexture.loadFromFile("models/bloodybutton.png"))
+	if (!m_buttonTexture.loadFromFile("images/bloodybutton.png"))
 	{
 		std::cout << "Cant load bloody button image " << std::endl;
 	}
