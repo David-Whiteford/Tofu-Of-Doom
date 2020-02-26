@@ -107,7 +107,7 @@ public:
 		EXIT
 	};
 
-	DrawState m_drawState = DrawState::SPLASH;
+	DrawState m_drawState = DrawState::GAME;
 
 private:
 	struct Model
@@ -147,8 +147,7 @@ private:
 	Model m_machineGun;
 	Model m_rifle;
 	Model m_enemy;
-	Model m_enemyBall;
-	
+	Model m_enemyBall;	
 
 	// Shader IDs
 	const static int LIGHT_AMOUNT = 25;

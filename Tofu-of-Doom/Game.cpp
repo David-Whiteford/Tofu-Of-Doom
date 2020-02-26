@@ -500,8 +500,14 @@ void Game::drawGameScene()
 
 	for (int i = 0; i < m_gameWorld->getActiveEnemyCount(); i++)
 	{
+		glm::vec3 enemyPos = glm::normalize(glm::vec3(m_gameWorld->getEnemyPosition(i).x, 0.0f, m_gameWorld->getEnemyPosition(i).y));
+		glm::vec3 playerPos = glm::normalize(glm::vec3(m_gameWorld->getPlayerPosition().x, 0.0f, m_gameWorld->getPlayerPosition().y));
+
+		glm::mat4 rotationMatrix = glm::transpose(glm::lookAt(enemyPos, playerPos, glm::vec3(0.0f, 1.0f, 0.0f)));
+
 		m_enemyModelMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(m_gameWorld->getEnemyPosition(i).x / s_displayScale, 3, m_gameWorld->getEnemyPosition(i).y / s_displayScale));
 		m_enemyModelMatrix = glm::scale(m_enemyModelMatrix, glm::vec3(m_gameWorld->getEnemySize(i), m_gameWorld->getEnemySize(i), m_gameWorld->getEnemySize(i)));
+		// m_enemyModelMatrix = m_enemyModelMatrix * rotationMatrix;
 		glUniformMatrix4fv(m_modelMatrixID, 1, GL_FALSE, &m_enemyModelMatrix[0][0]);
 		glDrawElements(GL_TRIANGLES, m_enemy.indices.size(), GL_UNSIGNED_SHORT, (void*)0);
 	}
@@ -563,11 +569,11 @@ void Game::drawGameScene()
 
 	glBindVertexArray(0);
 
-	//// balll spike
+	// Ball spike
 	glActiveTexture(GL_TEXTURE11);
 	glBindTexture(GL_TEXTURE_2D, m_enemyBall.texture);
 
-	// Set shader to use Texture Unit 10
+	// Set shader to use Texture Unit 11
 	glUniform1i(m_currentTextureID, 11);
 	glBindVertexArray(m_enemyBall.VAO_ID);
 
@@ -752,6 +758,9 @@ void Game::gunAnimation(glm::mat4& t_gunMatrix)
 	t_gunMatrix = glm::rotate(t_gunMatrix, glm::radians(camera.getYaw()), glm::vec3(0.0f, 1.0f, 0.0f));
 }
 
+/// <summary>
+/// This function handles reloading the gun
+/// </summary>
 void Game::reloadAnimation(glm::mat4& t_gunMatrix)
 {
 	glm::vec3 gunDirection(camera.getDirection().x, 1.5f, camera.getDirection().z);
@@ -866,7 +875,6 @@ void Game::fireGun()
 				m_muzzleFlashIntensity = 300.0f;
 				gunRecoil = true; // If the gun is being shot, create some recoil
 			}
-
 			else
 			{
 				m_time = sf::Time::Zero;
