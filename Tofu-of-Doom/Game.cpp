@@ -37,6 +37,7 @@ Game::~Game()
 {
 	delete m_mainShader;
 }
+
 void Game::resetScreenTrans()
 {
 	m_mainMenu->setStartUP(true);
@@ -132,6 +133,8 @@ void Game::initialise()
 	loadVAO("models/table_1/table_1.png", "models/table_1/table_1.obj", m_table_1);
 	loadVAO("models/table_2/table_2.png", "models/table_2/table_2.obj", m_table_2);
 	loadVAO("models/spikeball/spikeball.png", "models/spikeball/spikeball.obj", m_enemyBall);
+	loadVAO("models/skull/skull.jpg", "models/skull/skull.obj", m_enemySkull);
+	loadVAO("models/eyeball/eyeball.png", "models/eyeball/eyeball.obj", m_enemyEyeball);
 	
 	// Projection matrix 
 	projection = glm::perspective(45.0f, 4.0f / 3.0f, 1.0f, 1000.0f); // Enable depth test
@@ -155,6 +158,10 @@ void Game::initialise()
 	m_lightID = glGetUniformLocation(m_mainShader->m_programID, "LightPosition_worldspace");
 	m_lightPositionsID = glGetUniformLocation(m_mainShader->m_programID, "lightPositionsWorldspace");
 	m_muzzleFlashIntensityID = glGetUniformLocation(m_mainShader->m_programID, "muzzleFlashIntensity");
+
+	// Test matrices
+	m_enemySkull_modelMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(15.0f, 0.0f, 15.0f));
+	m_enemyEyeball_modelMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(30.0f, 3.0f, 15.0f));
 }
 
 void Game::reload()
@@ -381,8 +388,6 @@ void Game::drawGameScene()
 
 	glBindVertexArray(0);
 
-
-
 	// This section contains the machine gun draw data
 	if (gunNum == 3)
 	{
@@ -587,7 +592,36 @@ void Game::drawGameScene()
 			glDrawElements(GL_TRIANGLES, m_enemyBall.indices.size(), GL_UNSIGNED_SHORT, (void*)0);
 		}
 	}
+
 	glBindVertexArray(0);
+
+	// ---------------------------------------------------------------------------------------------------------------------
+
+	// Bind our texture in Texture Unit 12
+	//glActiveTexture(GL_TEXTURE12);
+	//glBindTexture(GL_TEXTURE_2D, m_enemySkull.texture);
+
+	//// Set shader to use Texture Unit 12
+	//glUniform1i(m_currentTextureID, 12);
+	//glBindVertexArray(m_enemySkull.VAO_ID);
+
+	//glUniformMatrix4fv(m_modelMatrixID, 1, GL_FALSE, &m_enemySkull_modelMatrix[0][0]);
+	//glDrawElements(GL_TRIANGLES, m_enemySkull.indices.size(), GL_UNSIGNED_SHORT, (void*)0);
+	//glBindVertexArray(0);
+
+	// ---------------------------------------------------------------------------------------------------------------------
+
+	// Bind our texture in Texture Unit 13
+	//glActiveTexture(GL_TEXTURE13);
+	//glBindTexture(GL_TEXTURE_2D, m_enemyEyeball.texture);
+
+	//// Set shader to use Texture Unit 12
+	//glUniform1i(m_currentTextureID, 13);
+	//glBindVertexArray(m_enemyEyeball.VAO_ID);
+
+	//glUniformMatrix4fv(m_modelMatrixID, 1, GL_FALSE, &m_enemyEyeball_modelMatrix[0][0]);
+	//glDrawElements(GL_TRIANGLES, m_enemyEyeball.indices.size(), GL_UNSIGNED_SHORT, (void*)0);
+	//glBindVertexArray(0);
 
 	// ---------------------------------------------------------------------------------------------------------------------
 
@@ -603,15 +637,14 @@ void Game::drawGameScene()
 	glBindTexture(GL_TEXTURE_2D, 0);
 	glActiveTexture(GL_TEXTURE0);
 
-
 	error = glGetError();
 
 	if (error != GL_NO_ERROR)
 	{
 		DEBUG_MSG(error);
 	}
-
 }
+
 /// <summary>
 /// Game controls
 /// </summary>
