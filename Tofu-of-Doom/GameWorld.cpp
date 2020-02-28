@@ -159,7 +159,7 @@ void GameWorld::updateWorld()
 			m_player.decreaseHealth(1);
 			ui.setHealth(m_player.getHealth());
 		}
-		else if (dist < 300)
+		else if (dist < 1000)
 		{
 			for (int x = 0; x < 10; x++)
 			{
@@ -464,10 +464,7 @@ void GameWorld::updateBulletPhysics()
 					if (activeBullets[i]->raycast.isInterpolating())
 					{
 						activeBullets[i]->raycast.addToHitObjects(m_enemyActive.at(x));
-					}
-					else
-					{
-						m_enemyActive.at(x)->setAlive(false);
+						hitPos = activeBullets[i]->raycast.getEndPoint();
 					}
 				}
 			}
@@ -488,6 +485,10 @@ void GameWorld::updateBulletPhysics()
 			if (activeBullets[i]->raycast.getClosest()->getTag() == ENEMY_TAG)
 			{
 				dynamic_cast<Enemy*>(activeBullets[i]->raycast.getClosest())->setDead();
+			}
+			else
+			{
+				hitWall = true;
 			}
 		}
 

@@ -71,6 +71,10 @@ public:
 	std::vector<glm::vec3> *getTable2Positions();
 	float getEnemySize(int index);
 
+
+	bool hitWall = false;
+	sf::Vector2f hitPos;
+
 private:
 
 	Graph<NodeData, int>* graph;

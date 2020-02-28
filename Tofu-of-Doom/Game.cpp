@@ -2,11 +2,13 @@
 
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
+#include <cstring>
+#include <string>
 
 /// <summary>
 /// Constructor for the Game class
 /// </summary>
-Game::Game(sf::ContextSettings t_settings) : m_window{ sf::VideoMode::getDesktopMode(), "Tofu of Doom", sf::Style::Fullscreen, t_settings }
+Game::Game(sf::ContextSettings t_settings) : m_window{ sf::VideoMode(1280,720,32), "Tofu of Doom", sf::Style::Default, t_settings }
 {
 	// Initialise GLEW
 	GLuint m_error = glewInit();
@@ -107,12 +109,27 @@ void Game::initialise()
 	outOfAmmo = soundEngine->addSoundSourceFromFile("outofammo.wav");
 	weaponLoad = soundEngine->addSoundSourceFromFile("weapload.wav");
 
+
+	ricochetOne = soundEngine->addSoundSourceFromFile("SoundEffects/Ricochet/ricochet1.wav");
+	ricochet.push_back(ricochetOne);
+	ricochetTwo = soundEngine->addSoundSourceFromFile("SoundEffects/Ricochet/ricochet2.wav");
+	ricochet.push_back(ricochetTwo);
+	ricochetThree = soundEngine->addSoundSourceFromFile("SoundEffects/Ricochet/ricochet3.wav");
+	ricochet.push_back(ricochetThree);
+	ricochetFour = soundEngine->addSoundSourceFromFile("SoundEffects/Ricochet/ricochet4.wav");
+	ricochet.push_back(ricochetFour);
+	ricochetFive = soundEngine->addSoundSourceFromFile("SoundEffects/Ricochet/ricochet5.wav");
+	ricochet.push_back(ricochetFive);
+	//ricochet = soundEngine->addSoundSourceFromFile("SoundEffects/Ricochet/ricochet1.wav");
+
+	
+
+
 	shotgunQueue.push(shotgunSound); // 4
 	shotgunQueue.push(machinegunSound); // 3
 	shotgunQueue.push(pistolSound); // 2
 	shotgunQueue.push(shotgunSound); // 1	
 
-	soundEngine->play3D(zombie, zombiePosition, true, false, false, false);
 	
 	// Load shaders
 	m_mainShader = new tk::Shader("shaders/mainShader.vert", "shaders/mainShader.frag");
@@ -252,6 +269,15 @@ void Game::updateWorld(sf::Time t_deltaTime)
 	reload();
 	fireGun();
 
+	if (m_gameWorld->hitWall == true)
+	{
+		int randNumber = rand() % 5;
+
+		gunSoundEngine->play2D(ricochet[randNumber]);
+		m_gameWorld->hitWall = false;
+		std::cout << "wall" << std::endl;
+	}
+
 	// This is currently only used to display the mini-map
 	gameControls(t_deltaTime);
 
@@ -321,7 +347,9 @@ void Game::render()
 	case DrawState::GAME:
 		drawGameScene();
 		m_window.pushGLStates();
+
 		m_gameWorld->drawUI();
+
 		m_window.popGLStates();
 		drawGameScene();
 		break;
