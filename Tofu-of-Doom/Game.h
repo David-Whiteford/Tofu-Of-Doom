@@ -112,7 +112,7 @@ public:
 private:
 	struct Model
 	{
-		unsigned char *data;
+		unsigned char* data;
 		GLuint VAO_ID;
 		GLuint VBO_ID;
 		GLuint normalBufferID;
@@ -126,14 +126,6 @@ private:
 		std::vector<unsigned short> indices;
 	};
 
-	sf::RenderWindow m_window;		
-	Camera camera; // Player camera
-	sf::Time m_deltaTime;
-	GameWorld* m_gameWorld = new GameWorld(m_window, m_deltaTime, &camera); // Create a game world
-
-	bool m_exitGame{ false };
-	bool m_buttonPressed = false;
-
 	// Models
 	Model m_wallType1;
 	Model m_wallType2;
@@ -143,11 +135,21 @@ private:
 	Model m_table_1;
 	Model m_table_2;
 	Model m_table_and_chair;
-	Model m_pistol;	
+	Model m_pistol;
 	Model m_machineGun;
 	Model m_rifle;
 	Model m_enemy;
-	Model m_enemyBall;	
+	Model m_enemyBall;
+	Model m_enemySkull;
+	Model m_enemyEyeball;
+
+	sf::RenderWindow m_window;		
+	Camera camera; // Player camera
+	sf::Time m_deltaTime;
+	GameWorld* m_gameWorld = new GameWorld(m_window, m_deltaTime, &camera); // Create a game world
+
+	bool m_exitGame{ false };
+	bool m_buttonPressed = false;
 
 	// Shader IDs
 	const static int LIGHT_AMOUNT = 25;
@@ -177,6 +179,8 @@ private:
 	glm::mat4 m_enemyModelMatrix;
 	glm::mat4 m_rotationMatrix; // Generic, used for anything
 	glm::mat4 m_enemyBall_modelMatrix;
+	glm::mat4 m_enemySkull_modelMatrix;
+	glm::mat4 m_enemyEyeball_modelMatrix;
 
 	// Projection matrix
 	glm::mat4 projection;	

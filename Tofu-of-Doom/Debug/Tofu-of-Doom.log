@@ -14,11 +14,11 @@ C:\Users\gameuser\Desktop\Tofu-Of-Doom\Tofu-of-Doom\UI.h(41,42): warning C4244: 
 C:\Users\gameuser\Desktop\Tofu-Of-Doom\Tofu-of-Doom\UI.h(41,42): warning C4244:             T=unsigned int
 C:\Users\gameuser\Desktop\Tofu-Of-Doom\Tofu-of-Doom\UI.h(41,42): warning C4244:         ]
 C:\Users\gameuser\Desktop\Tofu-Of-Doom\Tofu-of-Doom\GameWorld.h(55,17): warning C4305:  'initializing': truncation from 'double' to 'float'
-C:\Users\gameuser\Desktop\Tofu-Of-Doom\Tofu-of-Doom\Game.cpp(350,20): warning C4018:  '<': signed/unsigned mismatch
-C:\Users\gameuser\Desktop\Tofu-Of-Doom\Tofu-of-Doom\Game.cpp(369,20): warning C4018:  '<': signed/unsigned mismatch
-C:\Users\gameuser\Desktop\Tofu-Of-Doom\Tofu-of-Doom\Game.cpp(417,20): warning C4018:  '<': signed/unsigned mismatch
-C:\Users\gameuser\Desktop\Tofu-Of-Doom\Tofu-of-Doom\Game.cpp(438,20): warning C4018:  '<': signed/unsigned mismatch
-C:\Users\gameuser\Desktop\Tofu-Of-Doom\Tofu-of-Doom\Game.cpp(526,20): warning C4018:  '<': signed/unsigned mismatch
-C:\Users\gameuser\Desktop\Tofu-Of-Doom\Tofu-of-Doom\Game.cpp(544,20): warning C4018:  '<': signed/unsigned mismatch
-C:\Users\gameuser\Desktop\Tofu-Of-Doom\Tofu-of-Doom\Game.cpp(562,20): warning C4018:  '<': signed/unsigned mismatch
+C:\Users\gameuser\Desktop\Tofu-Of-Doom\Tofu-of-Doom\Game.cpp(357,20): warning C4018:  '<': signed/unsigned mismatch
+C:\Users\gameuser\Desktop\Tofu-Of-Doom\Tofu-of-Doom\Game.cpp(376,20): warning C4018:  '<': signed/unsigned mismatch
+C:\Users\gameuser\Desktop\Tofu-Of-Doom\Tofu-of-Doom\Game.cpp(422,20): warning C4018:  '<': signed/unsigned mismatch
+C:\Users\gameuser\Desktop\Tofu-Of-Doom\Tofu-of-Doom\Game.cpp(443,20): warning C4018:  '<': signed/unsigned mismatch
+C:\Users\gameuser\Desktop\Tofu-Of-Doom\Tofu-of-Doom\Game.cpp(531,20): warning C4018:  '<': signed/unsigned mismatch
+C:\Users\gameuser\Desktop\Tofu-Of-Doom\Tofu-of-Doom\Game.cpp(549,20): warning C4018:  '<': signed/unsigned mismatch
+C:\Users\gameuser\Desktop\Tofu-Of-Doom\Tofu-of-Doom\Game.cpp(567,20): warning C4018:  '<': signed/unsigned mismatch
   Tofu-of-Doom.vcxproj -> C:\Users\gameuser\Desktop\Tofu-Of-Doom\Debug\Tofu-of-Doom.exe
