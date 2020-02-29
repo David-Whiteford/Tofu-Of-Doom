@@ -65,11 +65,19 @@ public:
 	int getCurrentMachineGunClip() { return currentMachineGunClip; }
 	int getCurrentMachineGunBullets() { return currentMachineGunRounds; }
 
+	void setIsHurt(bool t_hurt) { m_hurt = t_hurt; }
+
+	bool isHurt() { return m_hurt; }
+
 
 private:
 	sf::CircleShape m_playerCircle;
 	int m_health{ 100 };
 	sf::Vector2f m_position;
+
+	bool m_hurt = false;
+	int m_currentHurtTimer = 0;
+	int m_maxHurtTimer = 60;
 
 	int currentHandGunBullets = 40, currentHandgunCLip = 7, currentShotGunShells = 12, currentShotGunClip = 3, currentMachineGunRounds= 320, currentMachineGunClip = 30;
 };

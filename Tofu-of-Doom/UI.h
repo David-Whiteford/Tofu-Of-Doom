@@ -36,10 +36,18 @@ public:
 		{
 			// error...
 		}
+		if (!vignetteTexture.loadFromFile("images/Hurt.png"))
+		{
+			// error...
+		}
 
 		retina.setTexture(retinaTexture);
-		retina.setPosition(t_window.getSize().x/2, t_window.getSize().y/2);
+		retina.setPosition(t_window.getSize().x / 2, t_window.getSize().y / 2);
 		retina.setScale(.3f, .3f);
+
+		vignetteSprite.setTexture(vignetteTexture);
+		vignetteSprite.setPosition(0, 0);
+		vignetteSprite.setScale(1, 1);
 
 		displayHealth.setFont(m_font);
 		displayHealth.setFillColor(sf::Color::Red);
@@ -63,6 +71,7 @@ public:
 	sf::Text getHealthText() { displayHealth.setString("Health: " + std::to_string(health));  return displayHealth; }
 	sf::Text getAmmoText() { ammo.setString(std::to_string(clip) + " / " + std::to_string(reserve));  return ammo; }
 	sf::Sprite getRetina() { return retina; }
+	sf::Sprite getVignette() { return vignetteSprite; }
 	void update();
 	void setHealth(int t_value) { health = t_value; }
 	float x = 0, y = 0;
@@ -75,6 +84,9 @@ private:
 
 	sf::RectangleShape healthBorder;
 	sf::RectangleShape ammoBorder;
+
+	sf::Sprite vignetteSprite;
+	sf::Texture vignetteTexture;
 
 	sf::Text displayHealth;
 	int health = 100;

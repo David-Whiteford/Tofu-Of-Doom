@@ -148,44 +148,58 @@ void GameWorld::updateWorld()
 		getPlayerPosition().y, 25);
 
 	// Check enemy colliding with player
-	for (int i = 0; i < returnedEnemies.size(); i++)
+
+	if (m_player.isHurt() == false)
 	{
-		float dist = Transform::distance(dynamic_cast<Enemy*>(returnedEnemies[i])->getPosition(), getPlayerPosition());
-		
-		if (dist < 60)
+		for (int i = 0; i < returnedEnemies.size(); i++)
 		{
-			m_player.decreaseHealth(1);
-			ui.setHealth(m_player.getHealth());
-		}
-		else if (dist < 1000)
-		{
-			for (int x = 0; x < 10; x++)
+
+			if (dynamic_cast<Enemy*>(returnedEnemies[i])->isAlive())
 			{
-				if (enemyBullet[x].active == false)
+				float dist = Transform::distance(dynamic_cast<Enemy*>(returnedEnemies[i])->getPosition(), getPlayerPosition());
+
+				if (dist < 60)
 				{
-					enemyBullet[x].init(returnedEnemies[i]->position, returnedEnemies[i]->position - getPlayerPosition());
+					m_player.decreaseHealth(10);
+					ui.setHealth(m_player.getHealth());
+					m_player.setIsHurt(true);
 					break;
 				}
+				// fire at player
+				else if (dist < 1000)
+				{
+					for (int x = 0; x < 10; x++)
+					{
+						if (enemyBullet[x].active == false)
+						{
+							enemyBullet[x].init(returnedEnemies[i]->position, returnedEnemies[i]->position - getPlayerPosition());
 
-			}
+							break;
+						}
+
+					}
+				}
+			} // if enemy alive (they shouldn't but just incase
 		}
-	}
 
-	for (int i = 0; i < 10; i++)
-	{
-		if (enemyBullet[i].active)
+		for (int i = 0; i < 10; i++)
 		{
-			enemyBullet[i].update();
-
-			if (Transform::distance(enemyBullet[i].bullet.getPosition(), getPlayerPosition()) < 55)
+			if (enemyBullet[i].active)
 			{
-				m_player.decreaseHealth(2);
+				enemyBullet[i].update();
+
+				if (Transform::distance(enemyBullet[i].bullet.getPosition(), getPlayerPosition()) < 55)
+				{
+					m_player.decreaseHealth(2);
+					m_player.setIsHurt(true);
+					break;
+				}
 			}
+
+
+
 		}
-
-
-	
-	}
+	} // end player is hurt false
 
 	
 
@@ -265,6 +279,11 @@ void GameWorld::drawUI()
 	m_window.draw(ui.getHealthText());
 	m_window.draw(ui.getBorderAmmo());
 	m_window.draw(ui.getAmmoText());
+
+	if (m_player.isHurt())
+	{
+		m_window.draw(ui.getVignette());
+	}
 
 
 	m_window.draw(ui.getRetina());
@@ -717,28 +736,13 @@ int GameWorld::getActiveEnemyCount()
 /// </summary>
 void GameWorld::checkEnemyInQueueAlive()
 {
-	bool reachedEnd = false;
 
-	while (!reachedEnd)
-	{
-		bool removedEnemy = false;
 
-		for (int i = 0; i < m_enemyActive.size(); i++)
-		{
-			if (m_enemyActive[i]->canRender == false)
-			{
-				m_enemyActive.erase(m_enemyActive.begin() + i);
-				removedEnemy = true;
-				break;
-			}
-		}
 
-		// We made it to the end so lets get out of this loop 
-		if (!removedEnemy)
-		{
-			reachedEnd = true;
-		}
-	}
+	m_enemyActive.erase(std::remove_if(m_enemyActive.begin(), m_enemyActive.end(), [](Enemy *en)
+		{return !en->canRender; }), m_enemyActive.end());
+
+			
 }
 
 /// <summary>

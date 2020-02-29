@@ -118,6 +118,18 @@ sf::CircleShape Player::getSprite()
 void Player::update()
 {
 	m_playerCircle.setPosition(m_position);
+
+
+	if (m_hurt)
+	{
+		m_currentHurtTimer++;
+
+		if (m_currentHurtTimer > m_maxHurtTimer)
+		{
+			m_currentHurtTimer = 0;
+			m_hurt = false;
+		}
+	}
 }
 
 
