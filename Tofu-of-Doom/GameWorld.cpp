@@ -265,6 +265,7 @@ void GameWorld::drawUI()
 	m_window.draw(ui.getHealthText());
 	m_window.draw(ui.getBorderAmmo());
 	m_window.draw(ui.getAmmoText());
+	m_window.draw(ui.getVignette());
 
 
 	m_window.draw(ui.getRetina());
