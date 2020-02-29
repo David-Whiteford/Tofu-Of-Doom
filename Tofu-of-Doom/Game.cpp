@@ -21,9 +21,9 @@ Game::Game(sf::ContextSettings t_settings) : m_window{ sf::VideoMode(1280,720,32
 	// Loads the SFML texture and the background music
 	m_splashScreen = new SplashScreen{ *this , m_font };
 	
-	if (!m_sfmlTexture.loadFromFile("sfml.png"))
+	if (!m_sfmlTexture.loadFromFile("images/sfml.png"))
 	{
-		std::cout << "Cant load sfml image " << std::endl;
+		std::cout << "Can't load image! " << std::endl;
 	}
 
 	m_sfmlSprite.setTexture(m_sfmlTexture);
@@ -41,6 +41,7 @@ Game::~Game()
 {
 	delete m_mainShader;
 }
+
 void Game::resetScreenTrans()
 {
 	m_mainMenu->setStartUP(true);
@@ -79,7 +80,7 @@ void Game::run()
 void Game::initialise()
 {
 	// Load fonr
-	if (!m_font.loadFromFile("models/AmazDooMRight.ttf"))
+	if (!m_font.loadFromFile("fonts/AmazDooMRight.ttf"))
 	{
 		std::cout << "Error loading font!" << std::endl;
 	}
@@ -97,17 +98,17 @@ void Game::initialise()
 	bgSoundEngine = createIrrKlangDevice();
 
 	gunSoundEngine = createIrrKlangDevice();
-	background = bgSoundEngine->play2D("horror.mp3" , true);
+	background = bgSoundEngine->play2D("audio/horror.mp3" , true);
 	glm::vec3 soundPos(25, 0, 25);
 	vec3df position(25, 0, 25);
 	positions.push_back(position);
 
-	shotgunSound = soundEngine->addSoundSourceFromFile("shotgun.mp3");
-	machinegunSound = soundEngine->addSoundSourceFromFile("cg1.wav");
-	pistolSound = soundEngine->addSoundSourceFromFile("9mm.mp3");
-	zombie = soundEngine->addSoundSourceFromFile("Monster.mp3");
-	outOfAmmo = soundEngine->addSoundSourceFromFile("outofammo.wav");
-	weaponLoad = soundEngine->addSoundSourceFromFile("weapload.wav");
+	shotgunSound = soundEngine->addSoundSourceFromFile("audio/shotgun.mp3");
+	machinegunSound = soundEngine->addSoundSourceFromFile("audio/cg1.wav");
+	pistolSound = soundEngine->addSoundSourceFromFile("audio/9mm.mp3");
+	zombie = soundEngine->addSoundSourceFromFile("audio/Monster.mp3");
+	outOfAmmo = soundEngine->addSoundSourceFromFile("audio/outofammo.wav");
+	weaponLoad = soundEngine->addSoundSourceFromFile("audio/weapload.wav");
 
 
 	ricochetOne = soundEngine->addSoundSourceFromFile("SoundEffects/Ricochet/ricochet1.wav");
@@ -150,7 +151,9 @@ void Game::initialise()
 	loadVAO("models/chair/chair.png", "models/chair/chair.obj", m_chair);
 	loadVAO("models/table_1/table_1.png", "models/table_1/table_1.obj", m_table_1);
 	loadVAO("models/table_2/table_2.png", "models/table_2/table_2.obj", m_table_2);
-	loadVAO("models/spikeballao.png", "models/spikeball.obj", m_enemyBall);
+	loadVAO("models/spikeball/spikeball.png", "models/spikeball/spikeball.obj", m_enemyBall);
+	loadVAO("models/skull/skull.jpg", "models/skull/skull.obj", m_enemySkull);
+	loadVAO("models/eyeball/eyeball.png", "models/eyeball/eyeball.obj", m_enemyEyeball);
 	
 	// Projection matrix 
 	projection = glm::perspective(45.0f, 4.0f / 3.0f, 1.0f, 1000.0f); // Enable depth test
@@ -174,6 +177,10 @@ void Game::initialise()
 	m_lightID = glGetUniformLocation(m_mainShader->m_programID, "LightPosition_worldspace");
 	m_lightPositionsID = glGetUniformLocation(m_mainShader->m_programID, "lightPositionsWorldspace");
 	m_muzzleFlashIntensityID = glGetUniformLocation(m_mainShader->m_programID, "muzzleFlashIntensity");
+
+	// Test matrices
+	m_enemySkull_modelMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(15.0f, 0.0f, 15.0f));
+	m_enemyEyeball_modelMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(30.0f, 3.0f, 15.0f));
 }
 
 void Game::reload()
@@ -411,8 +418,6 @@ void Game::drawGameScene()
 
 	glBindVertexArray(0);
 
-
-
 	// This section contains the machine gun draw data
 	if (gunNum == 3)
 	{
@@ -530,8 +535,14 @@ void Game::drawGameScene()
 
 	for (int i = 0; i < m_gameWorld->getActiveEnemyCount(); i++)
 	{
+		glm::vec3 enemyPos = glm::normalize(glm::vec3(m_gameWorld->getEnemyPosition(i).x, 0.0f, m_gameWorld->getEnemyPosition(i).y));
+		glm::vec3 playerPos = glm::normalize(glm::vec3(m_gameWorld->getPlayerPosition().x, 0.0f, m_gameWorld->getPlayerPosition().y));
+
+		glm::mat4 rotationMatrix = glm::transpose(glm::lookAt(enemyPos, playerPos, glm::vec3(0.0f, 1.0f, 0.0f)));
+
 		m_enemyModelMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(m_gameWorld->getEnemyPosition(i).x / s_displayScale, 3, m_gameWorld->getEnemyPosition(i).y / s_displayScale));
 		m_enemyModelMatrix = glm::scale(m_enemyModelMatrix, glm::vec3(m_gameWorld->getEnemySize(i), m_gameWorld->getEnemySize(i), m_gameWorld->getEnemySize(i)));
+		// m_enemyModelMatrix = m_enemyModelMatrix * rotationMatrix;
 		glUniformMatrix4fv(m_modelMatrixID, 1, GL_FALSE, &m_enemyModelMatrix[0][0]);
 		glDrawElements(GL_TRIANGLES, m_enemy.indices.size(), GL_UNSIGNED_SHORT, (void*)0);
 	}
@@ -593,11 +604,11 @@ void Game::drawGameScene()
 
 	glBindVertexArray(0);
 
-	//// balll spike
+	// Ball spike
 	glActiveTexture(GL_TEXTURE11);
 	glBindTexture(GL_TEXTURE_2D, m_enemyBall.texture);
 
-	// Set shader to use Texture Unit 10
+	// Set shader to use Texture Unit 11
 	glUniform1i(m_currentTextureID, 11);
 	glBindVertexArray(m_enemyBall.VAO_ID);
 
@@ -611,7 +622,36 @@ void Game::drawGameScene()
 			glDrawElements(GL_TRIANGLES, m_enemyBall.indices.size(), GL_UNSIGNED_SHORT, (void*)0);
 		}
 	}
+
 	glBindVertexArray(0);
+
+	// ---------------------------------------------------------------------------------------------------------------------
+
+	// Bind our texture in Texture Unit 12
+	//glActiveTexture(GL_TEXTURE12);
+	//glBindTexture(GL_TEXTURE_2D, m_enemySkull.texture);
+
+	//// Set shader to use Texture Unit 12
+	//glUniform1i(m_currentTextureID, 12);
+	//glBindVertexArray(m_enemySkull.VAO_ID);
+
+	//glUniformMatrix4fv(m_modelMatrixID, 1, GL_FALSE, &m_enemySkull_modelMatrix[0][0]);
+	//glDrawElements(GL_TRIANGLES, m_enemySkull.indices.size(), GL_UNSIGNED_SHORT, (void*)0);
+	//glBindVertexArray(0);
+
+	// ---------------------------------------------------------------------------------------------------------------------
+
+	// Bind our texture in Texture Unit 13
+	//glActiveTexture(GL_TEXTURE13);
+	//glBindTexture(GL_TEXTURE_2D, m_enemyEyeball.texture);
+
+	//// Set shader to use Texture Unit 12
+	//glUniform1i(m_currentTextureID, 13);
+	//glBindVertexArray(m_enemyEyeball.VAO_ID);
+
+	//glUniformMatrix4fv(m_modelMatrixID, 1, GL_FALSE, &m_enemyEyeball_modelMatrix[0][0]);
+	//glDrawElements(GL_TRIANGLES, m_enemyEyeball.indices.size(), GL_UNSIGNED_SHORT, (void*)0);
+	//glBindVertexArray(0);
 
 	// ---------------------------------------------------------------------------------------------------------------------
 
@@ -627,15 +667,14 @@ void Game::drawGameScene()
 	glBindTexture(GL_TEXTURE_2D, 0);
 	glActiveTexture(GL_TEXTURE0);
 
-
 	error = glGetError();
 
 	if (error != GL_NO_ERROR)
 	{
 		DEBUG_MSG(error);
 	}
-
 }
+
 /// <summary>
 /// Game controls
 /// </summary>
@@ -782,6 +821,9 @@ void Game::gunAnimation(glm::mat4& t_gunMatrix)
 	t_gunMatrix = glm::rotate(t_gunMatrix, glm::radians(camera.getYaw()), glm::vec3(0.0f, 1.0f, 0.0f));
 }
 
+/// <summary>
+/// This function handles reloading the gun
+/// </summary>
 void Game::reloadAnimation(glm::mat4& t_gunMatrix)
 {
 	glm::vec3 gunDirection(camera.getDirection().x, 1.5f, camera.getDirection().z);
@@ -896,7 +938,6 @@ void Game::fireGun()
 				m_muzzleFlashIntensity = 300.0f;
 				gunRecoil = true; // If the gun is being shot, create some recoil
 			}
-
 			else
 			{
 				m_time = sf::Time::Zero;

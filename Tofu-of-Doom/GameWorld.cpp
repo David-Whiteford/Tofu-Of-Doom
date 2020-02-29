@@ -5,8 +5,7 @@
 /// </summary>
 GameWorld::GameWorld(sf::RenderWindow& t_window, sf::Time& t_deltaTime, Camera* t_camera)
 	: m_window(t_window), m_deltaTime(t_deltaTime), m_camera(*t_camera), ui(t_window)
-{
-	
+{	
 	// Player
 	m_player.setPosition(10, 10);
 	m_player.setPosition(m_camera.getEye().x, m_camera.getEye().z); // Test starting position
@@ -15,7 +14,6 @@ GameWorld::GameWorld(sf::RenderWindow& t_window, sf::Time& t_deltaTime, Camera* 
 	m_playerGun.setFillColor(sf::Color::Red);
 	m_playerGun.setOrigin(sf::Vector2f(5, 5));
 	m_playerGun.setPosition(m_camera.getEye().x, m_camera.getEye().z + 5); // Test starting position
-
 
 	graph = new Graph<NodeData, int>(25);
 
@@ -48,67 +46,67 @@ GameWorld::GameWorld(sf::RenderWindow& t_window, sf::Time& t_deltaTime, Camera* 
 	m_startingPos.push_back(sf::Vector2f(2313, 2356));
 	m_startingPos.push_back(sf::Vector2f(1557, 260));
 	m_startingPos.push_back(sf::Vector2f(2364, 436));
-m_startingPos.push_back(sf::Vector2f(375, 861));
-m_startingPos.push_back(sf::Vector2f(71, 439));
-m_startingPos.push_back(sf::Vector2f(72, 2121));
-m_startingPos.push_back(sf::Vector2f(1577, 824));
-m_startingPos.push_back(sf::Vector2f(1518, 1365));
-m_startingPos.push_back(sf::Vector2f(2313, 2356));
+	m_startingPos.push_back(sf::Vector2f(375, 861));
+	m_startingPos.push_back(sf::Vector2f(71, 439));
+	m_startingPos.push_back(sf::Vector2f(72, 2121));
+	m_startingPos.push_back(sf::Vector2f(1577, 824));
+	m_startingPos.push_back(sf::Vector2f(1518, 1365));
+	m_startingPos.push_back(sf::Vector2f(2313, 2356));
 
-for (int i = 0; i < 1; i++)
-{
-	m_enemyVec[i] = new Enemy(m_window, m_deltaTime, m_startingPos[i], m_gamePath);
-	m_enemyVec[i]->setAlive(true);
-
-
-	// Add enemy to the active vector
-	m_enemyActive.push_back(m_enemyVec[i]);
-}
-
-// View
-// m_mapView.setViewport(sf::FloatRect(0.0, 0.0f, 0.25f, 0.25f));
-m_mapView.setSize(m_window.getSize().x, m_window.getSize().y);
-
-int wallIndex = 0;
-quadtree.clear();
-m_player.init();
-
-// Create an array to store the walls in (for the pause screen map)
-for (int i = 0; i < m_map->getMap()->size(); ++i)
-{
-	if (m_map->getMap()->at(i).second == WallType::WALLTYPE_1)
+	for (int i = 0; i < 1; i++)
 	{
-		m_wallVec.push_back(new Wall(m_window, s_wallWidth, sf::Vector2f(m_map->getMap()->at(i).first.x, m_map->getMap()->at(i).first.z)));
+		m_enemyVec[i] = new Enemy(m_window, m_deltaTime, m_startingPos[i], m_gamePath);
+		m_enemyVec[i]->setAlive(true);
 
-		GameObject* wall = dynamic_cast<GameObject*>(m_wallVec.back());
-		wall->size = s_wallWidth;
-		wall->position = m_wallVec.back()->getShape().getPosition();
 
-		quadtree.addObject(wall);
+		// Add enemy to the active vector
+		m_enemyActive.push_back(m_enemyVec[i]);
 	}
-}
 
-// A*
-m_gamePath->initAStar(m_wallVec);
+	// View
+	// m_mapView.setViewport(sf::FloatRect(0.0, 0.0f, 0.25f, 0.25f));
+	m_mapView.setSize(m_window.getSize().x, m_window.getSize().y);
 
-for (int i = 0; i < 18; i++)
-{
-	m_enemyVec[i] = new Enemy(m_window, m_deltaTime, m_startingPos[i], m_gamePath);
-	m_enemyVec[i]->setAlive(true);
+	int wallIndex = 0;
+	quadtree.clear();
+	m_player.init();
 
-	// Add enemy to the active vector
-	m_enemyActive.push_back(m_enemyVec[i]);
-}
+	// Create an array to store the walls in (for the pause screen map)
+	for (int i = 0; i < m_map->getMap()->size(); ++i)
+	{
+		if (m_map->getMap()->at(i).second == WallType::WALLTYPE_1)
+		{
+			m_wallVec.push_back(new Wall(m_window, s_wallWidth, sf::Vector2f(m_map->getMap()->at(i).first.x, m_map->getMap()->at(i).first.z)));
 
-for (int i = 0; i < 100; i++)
-{
-	bullets[i] = new Bullet();
-}
+			GameObject* wall = dynamic_cast<GameObject*>(m_wallVec.back());
+			wall->size = s_wallWidth;
+			wall->position = m_wallVec.back()->getShape().getPosition();
 
-for (int i = 0; i < 10; i++)
-{
-	enemyBullet[i].init(sf::Vector2f(10, 10), sf::Vector2f(0, 1));
-}
+			quadtree.addObject(wall);
+		}
+	}
+
+	// A*
+	m_gamePath->initAStar(m_wallVec);
+
+	for (int i = 0; i < 18; i++)
+	{
+		m_enemyVec[i] = new Enemy(m_window, m_deltaTime, m_startingPos[i], m_gamePath);
+		m_enemyVec[i]->setAlive(true);
+
+		// Add enemy to the active vector
+		m_enemyActive.push_back(m_enemyVec[i]);
+	}
+
+	for (int i = 0; i < 100; i++)
+	{
+		bullets[i] = new Bullet();
+	}
+
+	for (int i = 0; i < 10; i++)
+	{
+		enemyBullet[i].init(sf::Vector2f(10, 10), sf::Vector2f(0, 1));
+	}
 }
 
 /// <summary>

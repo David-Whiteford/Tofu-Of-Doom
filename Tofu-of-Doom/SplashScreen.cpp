@@ -95,9 +95,9 @@ void SplashScreen::setUpContent()
 	m_titlemessageSecond.setString(SECOND_TITLE_MESSAGE);
 	m_titlemessageSecond.setCharacterSize(85);
 
-	if (!m_backgroundTexture.loadFromFile("models/Splash.jpg"))
+	if (!m_backgroundTexture.loadFromFile("images/Splash.jpg"))
 	{
-		std::cout << "Cant Splash load image " << std::endl;
+		std::cout << "Can't load image!" << std::endl;
 	}
 	m_backgroundSprite.setTexture(m_backgroundTexture);
 	m_backgroundSprite.setPosition(0.0f, 0.0f);
