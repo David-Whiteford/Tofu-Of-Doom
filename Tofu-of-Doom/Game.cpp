@@ -12,7 +12,7 @@ Game::Game(sf::ContextSettings t_settings) : m_window{ sf::VideoMode(1280,720,32
 {
 	// Initialise GLEW
 	GLuint m_error = glewInit();
-
+	m_window.setMouseCursorVisible(false);
 
 	
 	// Initialise everything else
