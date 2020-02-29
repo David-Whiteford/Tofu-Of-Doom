@@ -65,6 +65,13 @@ public:
 	irrklang::ISoundSource* pistolSound;
 	irrklang::ISoundSource* outOfAmmo;
 	irrklang::ISoundSource* weaponLoad;
+	irrklang::ISoundSource* ricochetOne;
+	irrklang::ISoundSource* ricochetTwo;
+	irrklang::ISoundSource* ricochetThree;
+	irrklang::ISoundSource* ricochetFour;
+	irrklang::ISoundSource* ricochetFive;
+
+	std::vector<irrklang::ISoundSource*> ricochet;
 	bool vibrate = false;
 	vec3df zombiePosition;
 	ISound* zombieEnemies[11];
@@ -90,6 +97,7 @@ public:
 	ISound* pistol;
 	ISound* shotgun;
 	ISound* machinegun;
+
 
 	sf::Time m_time;
 	sf::Time m_ShotDelay;
