@@ -21,7 +21,11 @@ public:
 		
 		healthBorder.setFillColor(sf::Color(0, 0, 0, 190));
 		healthBorder.setSize(sf::Vector2f(230, 70));
-		healthBorder.setPosition(t_window.getSize().x * .15f, t_window.getSize().y  -t_window.getSize().y * .1f);
+		healthBorder.setPosition(t_window.getSize().x * .15f, t_window.getSize().y - t_window.getSize().y * .1f);
+		
+		enemyRemainBorder.setFillColor(sf::Color(0, 0, 0, 190));
+		enemyRemainBorder.setSize(sf::Vector2f(230, 70));
+		enemyRemainBorder.setPosition(t_window.getSize().x * .15f, t_window.getSize().y - t_window.getSize().y * .9f);
 
 		ammoBorder.setFillColor(sf::Color(0, 0, 0, 190));
 		ammoBorder.setSize(sf::Vector2f(230, 70));
@@ -51,9 +55,15 @@ public:
 
 		displayHealth.setFont(m_font);
 		displayHealth.setFillColor(sf::Color::Red);
-		displayHealth.setPosition(sf::Vector2f(t_window.getSize().x * .17f, t_window.getSize().y - t_window.getSize().y*.1f));
+		displayHealth.setPosition(sf::Vector2f(t_window.getSize().x * .17f, t_window.getSize().y - t_window.getSize().y * .1f));
 		displayHealth.setCharacterSize(50); // in pixels, not points!
 		displayHealth.setScale(1, 1);
+
+		displayEnemyRemaining.setFont(m_font);
+		displayEnemyRemaining.setFillColor(sf::Color::Red);
+		displayEnemyRemaining.setPosition(sf::Vector2f(t_window.getSize().x * .17f, t_window.getSize().y - t_window.getSize().y * .9f));
+		displayEnemyRemaining.setCharacterSize(50); // in pixels, not points!
+		displayEnemyRemaining.setScale(1, 1);
 
 		ammo.setFont(m_font);
 		ammo.setFillColor(sf::Color::Red);
@@ -66,9 +76,15 @@ public:
 	~UI() {}
 
 	sf::RenderWindow& window;
+
+	// Borders
 	sf::RectangleShape getBorderHealth() { return healthBorder; }
+	sf::RectangleShape getBorderRemainingEnemy() { return enemyRemainBorder; }
 	sf::RectangleShape getBorderAmmo() { return ammoBorder; }
+
+	// Text
 	sf::Text getHealthText() { displayHealth.setString("Health: " + std::to_string(health));  return displayHealth; }
+	sf::Text getEnemyRemainingText(int t_remain) { displayEnemyRemaining.setString("Enemy: " + std::to_string(t_remain));  return displayEnemyRemaining; }
 	sf::Text getAmmoText() { ammo.setString(std::to_string(clip) + " / " + std::to_string(reserve));  return ammo; }
 	sf::Sprite getRetina() { return retina; }
 	sf::Sprite getVignette() { return vignetteSprite; }
@@ -85,10 +101,13 @@ private:
 	sf::RectangleShape healthBorder;
 	sf::RectangleShape ammoBorder;
 
+	sf::RectangleShape enemyRemainBorder;
+
 	sf::Sprite vignetteSprite;
 	sf::Texture vignetteTexture;
 
 	sf::Text displayHealth;
+	sf::Text displayEnemyRemaining;
 	int health = 100;
 
 
