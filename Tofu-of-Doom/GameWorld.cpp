@@ -182,7 +182,7 @@ void GameWorld::updateWorld()
 			} // if enemy alive (they shouldn't but just incase
 		}
 
-		for (int i = 0; i < 10; i++)
+		/*for (int i = 0; i < 10; i++)
 		{
 			if (enemyBullet[i].active)
 			{
@@ -198,7 +198,7 @@ void GameWorld::updateWorld()
 
 
 
-		}
+		}*/
 	} // end player is hurt false
 
 	

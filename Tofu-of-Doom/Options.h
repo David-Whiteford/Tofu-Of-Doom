@@ -41,7 +41,7 @@ public:
 	bool m_volumn = false;
 	sf::RectangleShape m_volumnBarIn;
 	sf::RectangleShape m_volumnBarOuter;
-	sf::RectangleShape m_selectSoundSquare;
+
 	sf::RectangleShape m_radioBox[2];
 	int nextPos{ 0 };
 	bool m_moved{ false };
@@ -71,7 +71,7 @@ private:
 	// screen timers 
 	sf::SoundBuffer m_buffoptionMove;
 	sf::Sound m_moveOptionSound;
-	sf::Sprite m_button[6];
+	sf::Sprite m_button[4];
 	int m_offsetX = 0;
 	bool m_soundFX = true;
 	sf::Texture m_buttonTexture;
