@@ -22,6 +22,7 @@
 #include "irrKlang.h"
 #include "ParticleEffect.h"
 #include "SplashScreen.h"
+#include "GameOver.h"
 #include "SFML.h"
 #include "MainMenu.h"
 #include <iostream>
@@ -42,6 +43,7 @@ class SplashScreen;
 class SFML;
 class MainMenu;
 class Options;
+class GameOver;
 
 typedef GraphNode<NodeData, int> Node;
 
@@ -59,6 +61,7 @@ public:
 	ISound* music;
 	ISound* background;
 	sf::Font m_font; // Font used by message
+	sf::Font m_bloodFont; // Font used by message
 	irrklang::ISoundSource* zombie;
 	irrklang::ISoundSource* shotgunSound;
 	irrklang::ISoundSource* machinegunSound;
@@ -84,6 +87,7 @@ public:
 	SFML* m_sfmlScreen;
 	MainMenu* m_mainMenu;
 	Options* m_optionsMenu;
+	GameOver* m_gameOver;
 	void initialise();
 
 	// A* stuff with graph for storing nodes
@@ -112,7 +116,8 @@ public:
 		MAIN,
 		OPTIONS,
 		SPLASH,
-		EXIT
+		EXIT,
+		GAMEOVER
 	};
 
 	DrawState m_drawState = DrawState::SPLASH;

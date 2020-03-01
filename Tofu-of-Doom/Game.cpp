@@ -30,7 +30,7 @@ Game::Game(sf::ContextSettings t_settings) : m_window{ sf::VideoMode(1280,720,32
 	m_sfmlScreen = new SFML{ *this , m_font, m_sfmlSprite };
 	m_mainMenu = new MainMenu{ *this , m_font };
 	m_optionsMenu = new Options{ *this,m_font };
-
+	m_gameOver = new GameOver{ *this,m_bloodFont };
 	m_window.setFramerateLimit(120);
 }
 
@@ -81,6 +81,10 @@ void Game::initialise()
 {
 	// Load fonr
 	if (!m_font.loadFromFile("fonts/AmazDooMRight.ttf"))
+	{
+		std::cout << "Error loading font!" << std::endl;
+	}
+	if (!m_bloodFont.loadFromFile("fonts/plasdrip.ttf"))
 	{
 		std::cout << "Error loading font!" << std::endl;
 	}
@@ -227,7 +231,9 @@ void Game::update(sf::Time t_deltaTime)
 	case DrawState::SPLASH:
 		m_splashScreen->update(t_deltaTime);
 		break;
-
+	case DrawState::GAMEOVER:
+		m_gameOver->update(t_deltaTime);
+		break;
 	case DrawState::MAP:
 		updateWorld(t_deltaTime);
 		break;
@@ -248,7 +254,7 @@ void Game::update(sf::Time t_deltaTime)
 		{
 			camera.controller.Vibrate(0, 0);
 
-			m_drawState = DrawState::MAIN;
+			m_drawState = DrawState::GAMEOVER;
 			delete(m_gameWorld);
 			m_gameWorld = new GameWorld(m_window, m_deltaTime, &camera);
 			
@@ -328,6 +334,11 @@ void Game::render()
 	case DrawState::SPLASH:
 		m_window.pushGLStates();
 		m_splashScreen->render(m_window);
+		m_window.popGLStates();
+		break;
+	case DrawState::GAMEOVER:
+		m_window.pushGLStates();
+		m_gameOver->render(m_window);
 		m_window.popGLStates();
 		break;
 

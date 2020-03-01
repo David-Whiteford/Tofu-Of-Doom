@@ -49,7 +49,7 @@ void SplashScreen::update(sf::Time t_deltaTime)
 	{
 		screenTransitionOn(t_deltaTime);
 	}
-	std::cout << "TRans" << m_transition << std::endl;
+
 
 	if (m_transition == true)
 	{
