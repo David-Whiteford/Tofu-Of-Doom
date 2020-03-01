@@ -106,5 +106,6 @@ void GameOver::setFontText(sf::Font t_font, std::string FIRST_TITLE_MESSAGE, sf:
 	m_titleMessage.setString(FIRST_TITLE_MESSAGE);
 	m_titlemessageSecond.setString(SECOND_TITLE_MESSAGE);
 	m_backgroundSprite = t_backgroundSprite;
-
+	m_titlemessageSecond.setColor(sf::Color::Red);
+	m_titleMessage.setColor(sf::Color::Red);
 }
