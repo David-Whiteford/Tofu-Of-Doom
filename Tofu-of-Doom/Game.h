@@ -235,6 +235,8 @@ private:
 	void gunAnimation(glm::mat4& t_gunMatrix);
 	void fireGun();
 	void drawGameScene();
+
+	bool m_createdNewWorld = false;
 };
 
 #endif // !GAME_H

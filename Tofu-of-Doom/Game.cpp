@@ -244,6 +244,16 @@ void Game::update(sf::Time t_deltaTime)
 		m_splashScreen->update(t_deltaTime);
 		break;
 	case DrawState::GAMEOVER:
+
+		if (m_createdNewWorld == false)
+		{
+			camera.controller.Vibrate(0, 0);
+			m_gameOver->resetTime();
+
+			m_gameWorld = new GameWorld(m_window, m_deltaTime, &camera);
+			m_createdNewWorld = true;
+		}
+
 		m_gameOver->update(t_deltaTime);
 		break;
 	case DrawState::MAP:
@@ -264,8 +274,6 @@ void Game::update(sf::Time t_deltaTime)
 		if (m_gameWorld->getActiveEnemyCount() == 0 ||
 			m_gameWorld->getPlayerHealth() <= 0)
 		{
-			camera.controller.Vibrate(0, 0);
-			m_gameOver->resetTime();
 
 			if (m_gameWorld->getActiveEnemyCount() == 0)
 			{
@@ -281,7 +289,7 @@ void Game::update(sf::Time t_deltaTime)
 			
 			
 			delete(m_gameWorld);
-			m_gameWorld = new GameWorld(m_window, m_deltaTime, &camera);
+			m_createdNewWorld = false;
 			
 			/*camera.transform.position = { 400,0, 50 };*/
 
