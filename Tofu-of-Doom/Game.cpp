@@ -251,6 +251,7 @@ void Game::update(sf::Time t_deltaTime)
 			m_drawState = DrawState::MAIN;
 			delete(m_gameWorld);
 			m_gameWorld = new GameWorld(m_window, m_deltaTime, &camera);
+			
 			/*camera.transform.position = { 400,0, 50 };*/
 
 

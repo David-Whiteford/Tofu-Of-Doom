@@ -7,7 +7,14 @@ GameWorld::GameWorld(sf::RenderWindow& t_window, sf::Time& t_deltaTime, Camera* 
 	: m_window(t_window), m_deltaTime(t_deltaTime), m_camera(*t_camera), ui(t_window)
 {	
 	// Player
-	m_player.setPosition(10, 10);
+	m_player.init();
+
+	// Reset player position
+	m_camera.transform.position.x = 200;
+	m_camera.transform.position.y = 4;
+	m_camera.transform.position.z = 25;
+
+	m_camera.setEye(glm::vec3(200, 0, 50));
 	m_player.setPosition(m_camera.getEye().x, m_camera.getEye().z); // Test starting position
 	m_newPosition = sf::Vector2f(0, 0);
 	m_playerGun.setRadius(5.0f);
