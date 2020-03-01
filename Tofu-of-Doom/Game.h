@@ -200,6 +200,7 @@ private:
 	glm::mat4 m_enemyBall_modelMatrix;
 	glm::mat4 m_enemySkull_modelMatrix;
 	glm::mat4 m_enemyEyeball_modelMatrix;
+	glm::mat4 originalEnemyRotationMatrix; // Set this to default rotation (identidy matrix)
 
 	// Projection matrix
 	glm::mat4 projection;	
@@ -235,6 +236,7 @@ private:
 	void gunAnimation(glm::mat4& t_gunMatrix);
 	void fireGun();
 	void drawGameScene();
+	double getAngleBetweenVectors(glm::vec3 t_vector_1, glm::vec3 t_vector_2, double *reflex_angle = 0);
 };
 
 #endif // !GAME_H
