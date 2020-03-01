@@ -8,7 +8,7 @@
 /// <summary>
 /// Constructor for the Game class
 /// </summary>
-Game::Game(sf::ContextSettings t_settings) : m_window{ sf::VideoMode(1280,720,32), "Tofu of Doom", sf::Style::Default, t_settings }
+Game::Game(sf::ContextSettings t_settings) : m_window{ sf::VideoMode(1280,720,32), "Tofu of Doom", sf::Style::Fullscreen, t_settings }
 {
 	// Initialise GLEW
 	GLuint m_error = glewInit();

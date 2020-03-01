@@ -115,7 +115,7 @@ public:
 		EXIT
 	};
 
-	DrawState m_drawState = DrawState::GAME;
+	DrawState m_drawState = DrawState::OPTIONS;
 
 private:
 	struct Model

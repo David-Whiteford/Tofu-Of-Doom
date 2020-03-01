@@ -26,15 +26,16 @@ void Options::update(sf::Time t_deltaTime, ISoundEngine* bgSoundEngine)
 	}
 
 	//function call for navigating mennus
-	if (m_optionsPos == 0 || m_optionsPos == 1 || m_optionsPos == 2)
+	if (m_optionsPos < 2)
 	{
 		navMenu(t_deltaTime, bgSoundEngine);
 	}
-	else if (m_optionsPos == 3 || m_optionsPos == 4)
+	else
 	{
 		navInnerMenu();
 		if (m_controller.yButton() == true)
 		{
+			m_optionsPos = 0;
 			m_outlineRect.setPosition(sf::Vector2f(100.0f, 100.0f));
 		}
 	}
@@ -70,21 +71,21 @@ void Options::update(sf::Time t_deltaTime, ISoundEngine* bgSoundEngine)
 
 		if (m_optionsPos == 0)
 		{
-			m_outlineRect.setPosition(m_button[4].getPosition());
+			m_outlineRect.setPosition(m_button[2].getPosition());
+			m_optionsPos = 2;
 			navInnerMenu();
+		}
+		else if (m_optionsPos == 2)
+		{
+			changeMusicState(bgSoundEngine);
 		}
 		else if (m_optionsPos == 3)
 		{
 			changeMusicState(bgSoundEngine);
 		}
-		else if (m_optionsPos == 4)
-		{
-			changeMusicState(bgSoundEngine);
-		}
 	}
 
-	std::cout << "outline Pos: " << m_outlineRect.getPosition().x << " , " << m_outlineRect.getPosition().y << std::endl;
-	std::cout << "option Pos int : " << m_optionsPos << std::endl;
+
 }
 /// <summary>
 /// render to t_window
@@ -95,19 +96,18 @@ void Options::render(sf::RenderWindow& t_window)
 
 	t_window.clear(sf::Color::Black);
 
-	for (int i = 0; i < 6; i++)
+	for (int i = 0; i < 4; i++)
 	{
-		if (i != 3)
-		{
-			t_window.draw(m_button[i]);
-		}
+
+		t_window.draw(m_button[i]);
+		
 	}
 	//draw messages
 	t_window.draw(m_musicMessage);
 	t_window.draw(m_volumnMessage);
 
 	//draw volumn bar inner and outer, draw select sound square
-	t_window.draw(m_selectSoundSquare);
+
 	t_window.draw(m_volumnBarIn);
 	t_window.draw(m_volumnBarOuter);
 
@@ -139,18 +139,15 @@ void Options::checkButtonPosition()
 		m_volumnMessage.setColor(sf::Color(sf::Color::Yellow));
 		m_musicmsgOff.setColor(sf::Color(sf::Color::White));
 	}
-	if (m_optionsPos == 2)
-	{
 
-	}
-	if (m_optionsPos == 3)
+	if (m_optionsPos == 2)
 	{
 		m_musicmsgOff.setColor(sf::Color(sf::Color::Yellow));
 		m_volumnMessage.setColor(sf::Color(sf::Color::White));
 		m_musicMessage.setColor(sf::Color(sf::Color::White));
 		m_musicmsgOn.setColor(sf::Color(sf::Color::White));
 	}
-	if (m_optionsPos == 4)
+	if (m_optionsPos == 3)
 	{
 
 
@@ -195,7 +192,7 @@ void Options::setUpContent()
 	{
 		std::cout << "Cant load bloody button image " << std::endl;
 	}
-	for (int i = 0; i < 6; i++)
+	for (int i = 0; i < 4; i++)
 	{
 		m_button[i].setTexture(m_buttonTexture);
 		m_button[i].setPosition(100, 100 + m_offsetX);
@@ -204,12 +201,13 @@ void Options::setUpContent()
 
 	}
 	sf::Vector2f offset = sf::Vector2f(0, 100);
-	m_button[4].setPosition(600, 0 + offset.y);
-	m_button[5].setPosition(600, 78 + offset.y);
+	m_button[2].setPosition(600, 0 + offset.y);
+	m_button[3].setPosition(600, 78 + offset.y);
 
 	m_outlineRect.setSize(sf::Vector2f(200.0f, 70.0f));
 	m_outlineRect.setPosition(100.0f, 100.0f);
 	m_outlineRect.setFillColor(sf::Color::Yellow);
+
 	//both volumn bars are set to the same size but one is a different color from the other 
 	m_volumnBarIn.setSize(sf::Vector2f(200.0f, 50.0f));
 	m_volumnBarIn.setPosition(100.0f, 350.0f);
@@ -218,10 +216,9 @@ void Options::setUpContent()
 	m_volumnBarOuter.setSize(sf::Vector2f(200.0f, 50.0f));
 	m_volumnBarOuter.setPosition(100.0f, 350.0f);
 	m_volumnBarOuter.setFillColor(sf::Color::Green);
+
+
 	//sound select rects size ,position and the color
-	m_selectSoundSquare.setSize(sf::Vector2f(40.0f, 40.0f));
-	m_selectSoundSquare.setPosition(230.0f, 510.0f);
-	m_selectSoundSquare.setFillColor(sf::Color::Green);
 
 	setUpText();
 	m_pressBackMessage.setFont(m_font);
@@ -234,7 +231,7 @@ void Options::navMenu(sf::Time t_deltaTime, ISoundEngine* bgSoundEngine)
 {
 
 	//downwards on the d pad
-	if (m_controller.downButton() == true && m_moved == false)
+	if (m_controller.downButton() == true && m_moved == false && m_optionsPos != 1 && m_optionsPos != 3)
 	{
 		//set moved to true 
 		m_moved = true;
@@ -252,7 +249,7 @@ void Options::navMenu(sf::Time t_deltaTime, ISoundEngine* bgSoundEngine)
 		m_outlineRect.setPosition(100.0f, m_spaceOutline);
 	}
 	//up on the d pad
-	if (m_controller.upButton() == true && m_moved == false)
+	if (m_controller.upButton() == true && m_moved == false && m_optionsPos != 0 && m_optionsPos != 2)
 	{
 		//set moved to true 
 		m_moved = true;
@@ -395,13 +392,13 @@ void Options::setUpText()
 	//m_exitText.setCharacterSize(40);
 	offset = (sf::Vector2f(55.0f, 15.0f));
 	m_musicmsgOff.setFont(m_font);
-	m_musicmsgOff.setPosition(m_button[4].getPosition().x + offset.x, m_button[4].getPosition().y + offset.y);
+	m_musicmsgOff.setPosition(m_button[2].getPosition().x + offset.x, m_button[2].getPosition().y + offset.y);
 	m_musicmsgOff.setString("Off");
 	m_musicmsgOff.setCharacterSize(40);
 
 	offset = (sf::Vector2f(55.0f, 15.0f));
 	m_musicmsgOn.setFont(m_font);
-	m_musicmsgOn.setPosition(m_button[5].getPosition().x + offset.x, m_button[5].getPosition().y + offset.y);
+	m_musicmsgOn.setPosition(m_button[3].getPosition().x + offset.x, m_button[3].getPosition().y + offset.y);
 	m_musicmsgOn.setString("On");
 	m_musicmsgOn.setCharacterSize(40);
 
@@ -411,7 +408,7 @@ void Options::setUpText()
 
 void Options::changeMusicState(ISoundEngine* bgSoundEngine)
 {
-	if (m_optionsPos == 3)
+	if (m_optionsPos == 2)
 	{
 		//radio button for background music off
 		m_radioBox[0].setFillColor(sf::Color::Green);
@@ -419,7 +416,7 @@ void Options::changeMusicState(ISoundEngine* bgSoundEngine)
 		m_backgrdMusic = false;
 		bgSoundEngine->setAllSoundsPaused(true);
 	}
-	else if (m_optionsPos == 4)
+	else if (m_optionsPos == 3)
 	{
 		//The radio button for on
 		m_radioBox[0].setFillColor(sf::Color::Red);
