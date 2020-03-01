@@ -237,6 +237,7 @@ private:
 	void fireGun();
 	void drawGameScene();
 	double getAngleBetweenVectors(glm::vec3 t_vector_1, glm::vec3 t_vector_2, double *reflex_angle = 0);
+	bool m_createdNewWorld = false;
 };
 
 #endif // !GAME_H
