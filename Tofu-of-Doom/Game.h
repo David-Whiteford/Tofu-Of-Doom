@@ -63,7 +63,8 @@ public:
 	sf::Font m_font; // Font used by message
 	sf::Font m_bloodFont; // Font used by message
 
-	
+	sf::Sprite m_backgroundLooseSprite;
+	sf::Sprite m_backgroundWinSprite;
 	sf::Texture m_backgroundLooseTexture; //bgtexture
 	sf::Texture m_backgroundWinTexture; //bgtexture
 

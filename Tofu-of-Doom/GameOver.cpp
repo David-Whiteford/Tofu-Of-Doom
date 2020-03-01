@@ -72,7 +72,7 @@ void GameOver::setUpContent()
 void GameOver::screenTransitionOn(sf::Time t_deltaTime)
 {
 
-	if (transitionTimer >= sf::seconds(0.0) && transitionTimer <= sf::seconds(5.0f))
+	if (transitionTimer >= sf::seconds(0.0) && transitionTimer <= sf::seconds(4.0f))
 	{
 		//increment timer
 		transitionTimer += t_deltaTime;
@@ -87,7 +87,7 @@ void GameOver::screenTransitionOn(sf::Time t_deltaTime)
 			, m_titleMessage.getColor().a - 1));
 
 	}
-	else if (transitionTimer >= sf::seconds(4.8f))
+	else if (transitionTimer >= sf::seconds(4.0f))
 	{
 		m_game.resetScreenTrans();
 		m_game.m_drawState = m_game.DrawState::MAIN;
@@ -100,11 +100,11 @@ void GameOver::resetTime()
 	transitionTimer = sf::seconds(0.0);
 }
 
-void GameOver::setFontText(sf::Font t_font, std::string FIRST_TITLE_MESSAGE, sf::Texture m_backgroundTexture)
+void GameOver::setFontText(sf::Font t_font, std::string FIRST_TITLE_MESSAGE, sf::Sprite t_backgroundSprite)
 {
 	m_font = t_font;
 	m_titleMessage.setString(FIRST_TITLE_MESSAGE);
 	m_titlemessageSecond.setString(SECOND_TITLE_MESSAGE);
-	m_backgroundSprite.setTexture(m_backgroundTexture);
+	m_backgroundSprite = t_backgroundSprite;
 
 }

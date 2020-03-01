@@ -24,7 +24,7 @@ public:
 	sf::Time screenTimer{ sf::seconds(0.0f)};
 	void screenTransitionOn(sf::Time t_deltaTime);
 	void resetTime();
-	void setFontText(sf::Font t_font, std::string FIRST_TITLE_MESSAGE, sf::Texture m_backgroundTexture);
+	void setFontText(sf::Font t_font, std::string FIRST_TITLE_MESSAGE, sf::Sprite m_backgroundSprite);
 
 private:
 	Game& m_game; // refrence to game object 

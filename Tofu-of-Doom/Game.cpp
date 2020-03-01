@@ -93,14 +93,14 @@ void Game::initialise()
 	{
 		std::cout << "Can't load image!" << std::endl;
 	}
-	
+	m_backgroundLooseSprite.setTexture(m_backgroundLooseTexture);
 	//Win texture for background
 	if (!m_backgroundWinTexture.loadFromFile("images/YouWin.jpg"))
 	{
 		std::cout << "Can't load image!" << std::endl;
 	}
+	m_backgroundWinSprite.setTexture(m_backgroundWinTexture);
 	
-
 	// Set light positions
 	for (int i = 0; i < LIGHT_AMOUNT; ++i)
 	{
@@ -269,13 +269,13 @@ void Game::update(sf::Time t_deltaTime)
 
 			if (m_gameWorld->getActiveEnemyCount() == 0)
 			{
-				std::string FIRST_TITLE_MESSAGE{ "YOU ARE THE WINNER  " };
-				m_gameOver->setFontText(m_font, FIRST_TITLE_MESSAGE, m_backgroundWinTexture);
+				std::string TITLE_MESSAGE{ "YOU ARE THE WINNER" };
+				m_gameOver->setFontText(m_font, TITLE_MESSAGE, m_backgroundWinSprite);
 			}
 			else if (m_gameWorld->getPlayerHealth() <= 0)
 			{
-				std::string FIRST_TITLE_MESSAGE{ "YOU HAVE DIED" };
-				m_gameOver->setFontText(m_bloodFont ,FIRST_TITLE_MESSAGE , m_backgroundLooseTexture);
+				std::string TITLE_MESSAGE{ "YOU HAVE DIED" };
+				m_gameOver->setFontText(m_bloodFont , TITLE_MESSAGE, m_backgroundLooseSprite);
 			}
 			m_drawState = DrawState::GAMEOVER;
 			
