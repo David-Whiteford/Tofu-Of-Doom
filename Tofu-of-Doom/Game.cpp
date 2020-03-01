@@ -186,7 +186,10 @@ void Game::initialise()
 	// Uniforms for model, view and projection matrices
 	m_modelMatrixID = glGetUniformLocation(m_mainShader->m_programID, "M");
 	m_viewMatrixID = glGetUniformLocation(m_mainShader->m_programID, "V");
-	m_projectionMatrixID = glGetUniformLocation(m_mainShader->m_programID, "P");	
+	m_projectionMatrixID = glGetUniformLocation(m_mainShader->m_programID, "P");
+
+	// This is an empty matrix for the enemy rotations
+	originalEnemyRotationMatrix = glm::mat4(1.0f);
 
 	// Other uniforms
 	m_currentTextureID = glGetUniformLocation(m_mainShader->m_programID, "currentTexture");
@@ -583,11 +586,13 @@ void Game::drawGameScene()
 		glm::vec3 enemyPos = glm::normalize(glm::vec3(m_gameWorld->getEnemyPosition(i).x, 0.0f, m_gameWorld->getEnemyPosition(i).y));
 		glm::vec3 playerPos = glm::normalize(glm::vec3(m_gameWorld->getPlayerPosition().x, 0.0f, m_gameWorld->getPlayerPosition().y));
 
-		glm::mat4 rotationMatrix = glm::transpose(glm::lookAt(enemyPos, playerPos, glm::vec3(0.0f, 1.0f, 0.0f)));
+		float angle = getAngleBetweenVectors(enemyPos, playerPos);
+		
+		m_rotationMatrix = glm::rotate(originalEnemyRotationMatrix, angle, glm::vec3(0.0f, 1.0f, 0.0f));
 
-		m_enemyModelMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(m_gameWorld->getEnemyPosition(i).x / s_displayScale, 3, m_gameWorld->getEnemyPosition(i).y / s_displayScale));
+		m_enemyModelMatrix = glm::translate(m_rotationMatrix, glm::vec3(m_gameWorld->getEnemyPosition(i).x / s_displayScale, 3, m_gameWorld->getEnemyPosition(i).y / s_displayScale));
 		m_enemyModelMatrix = glm::scale(m_enemyModelMatrix, glm::vec3(m_gameWorld->getEnemySize(i), m_gameWorld->getEnemySize(i), m_gameWorld->getEnemySize(i)));
-		// m_enemyModelMatrix = m_enemyModelMatrix * rotationMatrix;
+
 		glUniformMatrix4fv(m_modelMatrixID, 1, GL_FALSE, &m_enemyModelMatrix[0][0]);
 		glDrawElements(GL_TRIANGLES, m_enemy.indices.size(), GL_UNSIGNED_SHORT, (void*)0);
 	}
@@ -718,6 +723,33 @@ void Game::drawGameScene()
 	{
 		DEBUG_MSG(error);
 	}
+}
+
+/// <summary>
+/// Gets the angle between two vectors
+/// </summary>
+double Game::getAngleBetweenVectors(glm::vec3 t_vector_1, glm::vec3 t_vector_2, double *reflexAngle)
+{
+	// Unitize the input vectors
+	t_vector_1 = glm::normalize(t_vector_1);
+	t_vector_2 = glm::normalize(t_vector_2);
+
+	double dot = glm::dot(t_vector_1, t_vector_2);
+
+	// Force the dot product of the two input vectors to
+	// fall within the domain for inverse cosine, which
+	// is -1 <= x <= 1. This will prevent runtime
+	// "domain error" math exceptions.
+	dot = (dot < -1.0 ? -1.0 : (dot > 1.0 ? 1.0 : dot));
+
+	double angle = acos(dot);
+
+	if (reflexAngle)
+	{
+		*reflexAngle = (glm::pi<double>() * 2) - angle;
+	}	
+	
+	return angle;
 }
 
 /// <summary>
