@@ -231,42 +231,18 @@ void Options::navMenu(sf::Time t_deltaTime, ISoundEngine* bgSoundEngine)
 {
 
 	//downwards on the d pad
-	if (m_controller.downButton() == true && m_moved == false && m_optionsPos != 1 && m_optionsPos != 3)
+	if (m_controller.downButton() == true && m_moved == false && m_optionsPos != 1)
 	{
 		//set moved to true 
 		m_moved = true;
-		//if the outline rect is less than 500
-		if (m_spaceOutline < 500.0f)
-		{   // move rect down 150
-			m_spaceOutline += 150.0f;
-			//play ove sound
-			if (m_soundFX == true)
-			{
-				m_moveOptionSound.play();
-			}
-		}
-		//set the position od the outline rect
-		m_outlineRect.setPosition(100.0f, m_spaceOutline);
+		m_optionsPos++;
 	}
 	//up on the d pad
-	if (m_controller.upButton() == true && m_moved == false && m_optionsPos != 0 && m_optionsPos != 2)
+	if (m_controller.upButton() == true && m_moved == false && m_optionsPos != 0)
 	{
 		//set moved to true 
 		m_moved = true;
-		//if the outline rect is greater than 100
-		if (m_spaceOutline > 100.0f)
-		{
-			/// move rect up 150
-			m_spaceOutline -= 150.0f;
-			//play the move sound 
-			if (m_soundFX == true)
-			{
-				m_moveOptionSound.play();
-			}
-		}
-		//set the position of the outline rect
-
-		m_outlineRect.setPosition(100, m_spaceOutline);
+		m_optionsPos--;
 	}
 
 	//if at position 1
@@ -292,30 +268,23 @@ void Options::navMenu(sf::Time t_deltaTime, ISoundEngine* bgSoundEngine)
 void Options::checkPosition()
 {
 	//check the position of the outline rect and set its position variable dependong on the position
-	if (m_outlineRect.getPosition().y == 100.0f && m_outlineRect.getPosition().x == 100.0f)
+	if (m_optionsPos == 0)
 	{
-		//set to 0
-		m_optionsPos = 0;
+		m_outlineRect.setPosition(100.0f, 100.0f);
+	}
+	else if(m_optionsPos == 1)
+	{
+		m_outlineRect.setPosition(100.0f, 250.0f);
+	}
+	else if (m_optionsPos == 2)
+	{
+		m_outlineRect.setPosition(600.0f, 100.0f);
+	}
+	else if (m_optionsPos == 3)
+	{
+		m_outlineRect.setPosition(600.0f, 170.0f);
 	}
 
-	if (m_outlineRect.getPosition().y == 250.0f && m_outlineRect.getPosition().x == 100.0f)
-	{
-		//go to the volumn
-		m_optionsPos = 1;
-	}
-	if (m_outlineRect.getPosition().y == 400.0f && m_outlineRect.getPosition().x == 100.0f)
-	{
-		//set to 2
-		m_optionsPos = 2;
-	}
-	if (m_outlineRect.getPosition().y == 100.0f && m_outlineRect.getPosition().x == 600.0f)
-	{
-		m_optionsPos = 3;
-	}
-	if (m_outlineRect.getPosition().y == 170.0f && m_outlineRect.getPosition().x == 600.0f)
-	{
-		m_optionsPos = 4;
-	}
 }
 
 
@@ -333,40 +302,20 @@ void Options::navInnerMenu()
 	{
 		//set moved to true 
 		m_moved = true;
-		//if the outline rect is less than 500
-		if (m_spaceOutline < 170.0f)
-		{   // add on 200
-			m_spaceOutline += 70.0f;
-			//play ove sound
-			if (m_soundFX == true)
-			{
-				m_moveOptionSound.play();
-			}
-
+		if (m_optionsPos != 3)
+		{
+			m_optionsPos++;
 		}
-		//set the position od the outline rect
-		m_outlineRect.setPosition(m_outlineRect.getPosition().x, m_spaceOutline);
 	}
 	//up on the d pad
 	if (m_controller.upButton() == true && m_moved == false)
 	{
 		//set moved to true 
 		m_moved = true;
-		//if the outline rect is greater than 100
-		if (m_spaceOutline > 100.0f)
+		if (m_optionsPos != 2)
 		{
-			//subtract 200
-			m_spaceOutline -= 70.0f;
-			//play the move sound 
-			if (m_soundFX == true)
-			{
-				m_moveOptionSound.play();
-			}
-
+			m_optionsPos--;
 		}
-		//set the position of the outline rect
-
-		m_outlineRect.setPosition(m_outlineRect.getPosition().x, m_spaceOutline);
 	}
 }
 void Options::setUpText()
