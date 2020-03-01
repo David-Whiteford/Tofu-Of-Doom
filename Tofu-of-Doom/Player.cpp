@@ -102,6 +102,9 @@ void Player::init()
 	currentMachineGunClip = 30;
 
 
+	m_playerCircle.setPosition(600, 50);
+
+
 }
 
 /// <summary>
