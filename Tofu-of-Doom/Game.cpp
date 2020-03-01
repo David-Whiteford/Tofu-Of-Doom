@@ -89,6 +89,18 @@ void Game::initialise()
 		std::cout << "Error loading font!" << std::endl;
 	}
 
+	if (!m_backgroundLooseTexture.loadFromFile("images/YouDied.jpg"))
+	{
+		std::cout << "Can't load image!" << std::endl;
+	}
+	
+	//Win texture for background
+	if (!m_backgroundWinTexture.loadFromFile("images/YouWin.jpg"))
+	{
+		std::cout << "Can't load image!" << std::endl;
+	}
+	
+
 	// Set light positions
 	for (int i = 0; i < LIGHT_AMOUNT; ++i)
 	{
@@ -253,8 +265,21 @@ void Game::update(sf::Time t_deltaTime)
 			m_gameWorld->getPlayerHealth() <= 0)
 		{
 			camera.controller.Vibrate(0, 0);
+			m_gameOver->resetTime();
 
+			if (m_gameWorld->getActiveEnemyCount() == 0)
+			{
+				std::string FIRST_TITLE_MESSAGE{ "YOU ARE THE WINNER  " };
+				m_gameOver->setFontText(m_font, FIRST_TITLE_MESSAGE, m_backgroundWinTexture);
+			}
+			else if (m_gameWorld->getPlayerHealth() <= 0)
+			{
+				std::string FIRST_TITLE_MESSAGE{ "YOU HAVE DIED" };
+				m_gameOver->setFontText(m_bloodFont ,FIRST_TITLE_MESSAGE , m_backgroundLooseTexture);
+			}
 			m_drawState = DrawState::GAMEOVER;
+			
+			
 			delete(m_gameWorld);
 			m_gameWorld = new GameWorld(m_window, m_deltaTime, &camera);
 			

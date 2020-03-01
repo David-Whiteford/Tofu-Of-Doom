@@ -62,6 +62,11 @@ public:
 	ISound* background;
 	sf::Font m_font; // Font used by message
 	sf::Font m_bloodFont; // Font used by message
+
+	
+	sf::Texture m_backgroundLooseTexture; //bgtexture
+	sf::Texture m_backgroundWinTexture; //bgtexture
+
 	irrklang::ISoundSource* zombie;
 	irrklang::ISoundSource* shotgunSound;
 	irrklang::ISoundSource* machinegunSound;

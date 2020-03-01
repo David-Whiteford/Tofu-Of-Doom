@@ -116,11 +116,21 @@ void SplashScreen::screenTransitionOn(sf::Time t_deltaTime)
 	{
 		//increment timer
 		transitionTimer += t_deltaTime;
-		std::cout << "TIMER: " << transitionTimer.asSeconds() << std::endl;
+		
 		m_backgroundSprite.setColor(sf::Color(255, 255, 255, m_backgroundSprite.getColor().a - 1));
-		m_titlemessageSecond.setColor(sf::Color(255, 255, 255, m_backgroundSprite.getColor().a - 1));
-		m_titleMessage.setColor(sf::Color(255, 255, 255, m_backgroundSprite.getColor().a - 1));
-		m_pressstartMessage.setColor(sf::Color(255, 255, 255, m_backgroundSprite.getColor().a - 1));
+		m_titlemessageSecond.setColor(sf::Color(m_titlemessageSecond.getColor().r
+			,m_titlemessageSecond.getColor().g, m_titlemessageSecond.getColor().b
+			, m_titlemessageSecond.getColor().a - 1));
+
+		m_titleMessage.setColor(sf::Color(m_titleMessage.getColor().r
+			, m_titleMessage.getColor().g, m_titleMessage.getColor().b
+			, m_titleMessage.getColor().a - 1));
+
+		m_pressstartMessage.setColor(sf::Color(m_pressstartMessage.getColor().r
+			, m_pressstartMessage.getColor().g, m_pressstartMessage.getColor().b
+			, m_pressstartMessage .getColor().a - 1));
+
+		
 
 	}
 	else if (transitionTimer >= sf::seconds(4.0f))
