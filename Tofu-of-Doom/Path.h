@@ -34,7 +34,6 @@ private:
 	int startNode = 103;
 	
 
-
 	std::vector<Node*> graphPath;
 
 	std::vector<std::vector<Node*>> paths;

@@ -26,7 +26,7 @@ Enemy::~Enemy()
 void Enemy::enemyInit()
 {
 	m_gamePath->clearAStar();
-
+	graphPath.reserve(169);
 	myGameObject = dynamic_cast<GameObject*>(this);
 	float startSize = 0.5f;
 	float currentSize = 0.5f;
@@ -80,7 +80,7 @@ void Enemy::update(sf::CircleShape t_player, sf::Time t_deltaTime)
 		m_playerNode = m_gamePath->nodePos(t_player.getPosition());
 		m_enemyNode = m_gamePath->nodePos(m_enemy.getPosition());
 		myGameObject->position = m_enemy.getPosition();
-
+		
 		sf::Vector2f offSet = sf::Vector2f(300, 300);
 		if (t_player.getPosition().x >= m_enemy.getPosition().x - offSet.x
 			&& t_player.getPosition().x <= m_enemy.getPosition().x + offSet.x

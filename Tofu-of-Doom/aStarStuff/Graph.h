@@ -488,8 +488,6 @@ inline void Graph<NodeType, ArcType>::aStar(Node* start, Node* dest , std::vecto
 	int nodesProcessed = 0;
 	while (pq.size() != 0 && pq.top() != goalNode /**&& timer not expired*/&& m_timer.getElapsedTime().asMilliseconds() <= 50)
 	{
-		
-		
 		//f_visit(pq.top());
 		auto iter = pq.top()->arcList().begin();
 		auto endIter = pq.top()->arcList().end();

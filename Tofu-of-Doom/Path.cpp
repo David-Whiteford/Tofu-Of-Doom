@@ -95,7 +95,7 @@ void Path::clearAStar()
 void Path::initAStar(std::vector<Wall*> &t_walls)
 {
 	graph = new Graph<NodeData, int>(2500);
-
+	graphPath.reserve(169);
 	int nodeIndex = 0;
 	for (int i = 0; i < ROWS; i++)
 	{
@@ -142,7 +142,7 @@ void Path::initAStar(std::vector<Wall*> &t_walls)
 	
 	neighbourAlgor();
 
-
+	
 }
 
 void Path::update()
@@ -154,6 +154,7 @@ void Path::setPath()
 {
 	graph->clearMarks();
 	graph->aStar(graph->nodeIndex(startNode), graph->nodeIndex(endNode), graphPath);
+
 }
 void Path::setNewPath()
 {

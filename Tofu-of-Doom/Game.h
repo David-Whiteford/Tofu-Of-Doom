@@ -115,7 +115,7 @@ public:
 		EXIT
 	};
 
-	DrawState m_drawState = DrawState::OPTIONS;
+	DrawState m_drawState = DrawState::SPLASH;
 
 private:
 	struct Model

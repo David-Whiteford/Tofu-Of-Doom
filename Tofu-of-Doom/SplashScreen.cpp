@@ -31,12 +31,12 @@ void SplashScreen::update(sf::Time t_deltaTime)
 		if (m_timer >= 0 && m_timer <= 100 || m_timer >= 200 && m_timer <= 300 || m_timer >= 400 && m_timer <= 500
 			|| m_timer >= 600 && m_timer <= 700 || m_timer >= 800 && m_timer <= 900)
 		{
-			m_pressstartMessage.setFillColor(sf::Color::White);
+			m_pressstartMessage.setColor(sf::Color::Black);
 		}
 		//if the timer is between the numbers below then its yellow
 		else
 		{
-			m_pressstartMessage.setFillColor(sf::Color::Yellow);
+			m_pressstartMessage.setFillColor(sf::Color::Red);
 		}
 	}
 	// if the start is preed then continue set transition to false
@@ -85,17 +85,21 @@ void SplashScreen::setUpContent()
 
 	//sets up the message for the first title message
 	m_titleMessage.setFont(m_font);
-	m_titleMessage.setPosition(800.0f, 20.0f);
+	m_titleMessage.setPosition(800.0f, 100.0f);
 	m_titleMessage.setString(FIRST_TITLE_MESSAGE);
 	m_titleMessage.setCharacterSize(85);
 
 	//sets up the message for the second title message
 	m_titlemessageSecond.setFont(m_font);
-	m_titlemessageSecond.setPosition(820.0f, 100.0f);
+	m_titlemessageSecond.setPosition(820.0f, 180.0f);
 	m_titlemessageSecond.setString(SECOND_TITLE_MESSAGE);
 	m_titlemessageSecond.setCharacterSize(85);
 
-	if (!m_backgroundTexture.loadFromFile("images/Splash.jpg"))
+	m_titlemessageSecond.setColor(sf::Color::Black);
+	m_titleMessage.setColor(sf::Color::Black);
+	
+
+	if (!m_backgroundTexture.loadFromFile("images/bloodySplash.jpg"))
 	{
 		std::cout << "Can't load image!" << std::endl;
 	}
