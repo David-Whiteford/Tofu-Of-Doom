@@ -1,4 +1,5 @@
 #include "ParticleEffect.h"
+#include <iostream>
 
 /// <summary>
 /// Constructor for the ParticleEffect class.
@@ -59,7 +60,8 @@ void ParticleEffect::generateParticles(glm::vec3 t_cameraPosition)
 {
 	// Generate 10 new particles each millisecond but limit to 16 ms (60 fps), or if you have 1 long frame (1 sec) then
 	// the new particles will be huge and the next frame even longer
-	int newparticles = (int)(delta.asMilliseconds() * 10000.0);
+	int newparticles = (int)(delta.asMilliseconds() * 100.0);
+	std::cout << newparticles << std::endl;
 
 	if (newparticles > (int)(0.016f * 10000.0))
 	{

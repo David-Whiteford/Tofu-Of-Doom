@@ -170,6 +170,9 @@ void Game::initialise()
 	loadVAO("models/spikeball/spikeball.png", "models/spikeball/spikeball.obj", m_enemyBall);
 	loadVAO("models/skull/skull.jpg", "models/skull/skull.obj", m_enemySkull);
 	loadVAO("models/eyeball/eyeball.png", "models/eyeball/eyeball.obj", m_enemyEyeball);
+
+	// Load particle effect texture
+	loadTexture("images/particle.png", m_particleTexture);
 	
 	// Projection matrix 
 	projection = glm::perspective(45.0f, 4.0f / 3.0f, 1.0f, 1000.0f); // Enable depth test
@@ -196,6 +199,12 @@ void Game::initialise()
 	m_lightID = glGetUniformLocation(m_mainShader->m_programID, "LightPosition_worldspace");
 	m_lightPositionsID = glGetUniformLocation(m_mainShader->m_programID, "lightPositionsWorldspace");
 	m_muzzleFlashIntensityID = glGetUniformLocation(m_mainShader->m_programID, "muzzleFlashIntensity");
+
+	// Particle uniforms
+	m_cameraRightWorldspaceID = glGetUniformLocation(m_particleShader->m_programID, "CameraRight_worldspace");
+	m_cameraUpWorldspaceID = glGetUniformLocation(m_particleShader->m_programID, "CameraUp_worldspace");
+	m_VP_ID = glGetUniformLocation(m_particleShader->m_programID, "VP");
+	m_particleTextureID = glGetUniformLocation(m_particleShader->m_programID, "myTextureSampler");
 
 	// Test matrices
 	m_enemySkull_modelMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(15.0f, 0.0f, 15.0f));
@@ -325,7 +334,7 @@ void Game::updateWorld(sf::Time t_deltaTime)
 
 		gunSoundEngine->play2D(ricochet[randNumber]);
 		m_gameWorld->hitWall = false;
-		std::cout << "wall" << std::endl;
+		// std::cout << "wall" << std::endl;
 	}
 
 	// This is currently only used to display the mini-map
@@ -350,6 +359,7 @@ void Game::updateWorld(sf::Time t_deltaTime)
 	glUniformMatrix4fv(m_viewMatrixID, 1, GL_FALSE, &camera.getView()[0][0]);
 	glUniformMatrix4fv(m_projectionMatrixID, 1, GL_FALSE, &projection[0][0]);
 
+	// Muzzle flash
 	glm::vec3 lightPos = camera.getEye();
 	glUniform3f(m_lightID, lightPos.x, lightPos.y, lightPos.z);
 
@@ -418,6 +428,27 @@ void Game::render()
 /// </summary>
 void Game::drawGameScene()
 {
+	// Particles
+	//glUseProgram(m_particleShader->m_programID);
+	//m_particleEffect.generateParticles(glm::vec3(m_gameWorld->getEnemyPosition(0).x / s_displayScale, 3.0f, m_gameWorld->getEnemyPosition(0).y / s_displayScale));
+	//
+	//glm::vec3 f_up = glm::vec3(0.0f, 1.0f, 0.0f);
+	//glm::vec3 f_cameraRight = glm::normalize(glm::cross(f_up, camera.getDirection()));
+	//glm::vec3 f_cameraUp = glm::cross(camera.getDirection(), f_cameraRight);
+	//glm::mat4 f_viewProjection = camera.getView() * projection;
+
+	//glUniform3f(m_cameraRightWorldspaceID, f_cameraRight.x, f_cameraRight.y, f_cameraRight.z);
+	//glUniform3f(m_cameraUpWorldspaceID, f_cameraUp.x, f_cameraUp.y, f_cameraUp.z);
+	//glUniformMatrix4fv(m_VP_ID, 1, GL_FALSE, &f_viewProjection[0][0]);
+
+	//glActiveTexture(GL_TEXTURE0);
+	//glBindTexture(GL_TEXTURE_2D, m_particleTexture);
+	//glUniform1i(m_particleTextureID, 0);
+
+	//m_particleEffect.drawParticles();
+
+	//---------------------------------------------------------------------------------------------------------
+
 	// Use shader
 	glUseProgram(m_mainShader->m_programID);
 
@@ -706,13 +737,6 @@ void Game::drawGameScene()
 
 	// ---------------------------------------------------------------------------------------------------------------------
 
-	// Particles! Particles! Particles!
-	//glUseProgram(m_particleShader->m_programID);
-	//m_particleEffect.generateParticles(m_eye);
-	//m_particleEffect.drawParticles();
-
-	// ---------------------------------------------------------------------------------------------------------------------
-
 	// Reset OpenGL
 	glBindVertexArray(GL_NONE);
 	glBindTexture(GL_TEXTURE_2D, 0);
@@ -737,9 +761,37 @@ double Game::getAngleBetweenVectors(glm::vec3 t_vector_1, glm::vec3 t_vector_2, 
 	dir = dir / normaliseValue;
 	float a = std::atan2(dir.y, dir.x);
 
-	std::cout << a << std::endl;
+	// std::cout << a << std::endl;
 
 	return (-a + 1.6f); 
+}
+
+/// <summary>
+/// Loads a texture
+/// </summary>
+void Game::loadTexture(std::string t_textureFilename, GLuint &t_texture)
+{
+	// This is used to hold the texture data
+	unsigned char* f_data;
+
+	// Width, height, texture component and colour type (RGBA is the default value)
+	int f_width;
+	int f_height;
+	int f_compCount;
+	const int f_number = 4;
+
+	// Load model texture
+	stbi_set_flip_vertically_on_load(false);
+	f_data = stbi_load(t_textureFilename.c_str(), &f_width, &f_height, &f_compCount, 4);
+
+	glGenTextures(1, &t_texture);
+	glBindTexture(GL_TEXTURE_2D, t_texture);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, f_width, f_height, 0, GL_RGBA, GL_UNSIGNED_BYTE, f_data);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+
+	stbi_image_free(f_data); // Unload data from CPU as it's on the GPU now
 }
 
 /// <summary>

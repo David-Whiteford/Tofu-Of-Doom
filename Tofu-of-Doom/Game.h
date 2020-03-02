@@ -129,6 +129,13 @@ public:
 	DrawState m_drawState = DrawState::SPLASH;
 
 private:
+	// Particle uniforms
+	GLuint m_cameraRightWorldspaceID;
+	GLuint m_cameraUpWorldspaceID;
+	GLuint m_VP_ID;
+	GLuint m_particleTextureID;
+	GLuint m_particleTexture;
+
 	struct Model
 	{
 		unsigned char* data;
@@ -237,6 +244,8 @@ private:
 	void fireGun();
 	void drawGameScene();
 	double getAngleBetweenVectors(glm::vec3 t_vector_1, glm::vec3 t_vector_2, double *reflex_angle = 0);
+	void loadTexture(std::string t_textureFilename, GLuint &t_texture);
+
 	bool m_createdNewWorld = false;
 };
 
