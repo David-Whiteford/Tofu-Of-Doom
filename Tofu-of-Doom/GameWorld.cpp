@@ -6,6 +6,12 @@
 GameWorld::GameWorld(sf::RenderWindow& t_window, sf::Time& t_deltaTime, Camera* t_camera)
 	: m_window(t_window), m_deltaTime(t_deltaTime), m_camera(*t_camera), ui(t_window)
 {	
+
+
+	for (int i = 0; i < 10; i++)
+	{
+		enemyBullet[i] = new ProjectileEnemy(m_window);
+	}
 	// Player
 	m_player.init();
 
@@ -111,10 +117,6 @@ GameWorld::GameWorld(sf::RenderWindow& t_window, sf::Time& t_deltaTime, Camera* 
 		bullets[i] = new Bullet();
 	}
 
-	for (int i = 0; i < 10; i++)
-	{
-		enemyBullet[i].init(sf::Vector2f(10, 10), sf::Vector2f(0, 1));
-	}
 }
 
 /// <summary>
@@ -157,6 +159,8 @@ void GameWorld::updateWorld()
 
 	// Check enemy colliding with player
 
+	
+
 	if (m_player.isHurt() == false)
 	{
 		for (int i = 0; i < returnedEnemies.size(); i++)
@@ -174,14 +178,14 @@ void GameWorld::updateWorld()
 					break;
 				}
 				// fire at player
-				else if (dist < 1000)
+				else if (dist < 1000 && firedAt > fireWait)
 				{
 					for (int x = 0; x < 10; x++)
 					{
-						if (enemyBullet[x].active == false)
+						if (enemyBullet[x]->isAlive() == false)
 						{
-							enemyBullet[x].init(returnedEnemies[i]->position, returnedEnemies[i]->position - getPlayerPosition());
-
+							enemyBullet[x]->init(dynamic_cast<Enemy*>(returnedEnemies[i])->getPosition(), (getPlayerPosition() - dynamic_cast<Enemy*>(returnedEnemies[i])->getPosition()));
+							firedAt = 0;
 							break;
 						}
 
@@ -190,28 +194,33 @@ void GameWorld::updateWorld()
 			} // if enemy alive (they shouldn't but just incase
 		}
 
-		/*for (int i = 0; i < 10; i++)
+		for (int i = 0; i < 10; i++)
 		{
-			if (enemyBullet[i].active)
+			if (enemyBullet[i]->isAlive())
 			{
-				enemyBullet[i].update();
+				std::cout << "Active: " + std::to_string(i) << std::endl;
+				std::cout << "x: " +  std::to_string(enemyBullet[i]->getPosition().x) + ", y: " + std::to_string(enemyBullet[i]->getPosition().y) << std::endl;
+				
+				enemyBullet[i]->update(m_deltaTime);
 
-				if (Transform::distance(enemyBullet[i].bullet.getPosition(), getPlayerPosition()) < 55)
+				if (Transform::distance(enemyBullet[i]->getPosition(), getPlayerPosition()) < 55)
 				{
-					m_player.decreaseHealth(2);
+					m_player.decreaseHealth(5);
+					ui.setHealth(m_player.getHealth());
 					m_player.setIsHurt(true);
-					break;
+					enemyBullet[i]->setAlive(false);
+					//break;
 				}
 			}
 
 
 
-		}*/
+		}
 	} // end player is hurt false
 
 	
 
-
+	firedAt++;
 	quadtreeMoving.clear();
 	
 }
@@ -239,6 +248,14 @@ void GameWorld::drawWorld()
 	for (int i = 0; i < m_enemyActive.size(); i++)
 	{
 		m_enemyActive[i]->draw();
+	}
+
+	for (int i = 0; i < 10; i++)
+	{
+		if (enemyBullet[i]->isAlive())
+		{
+			enemyBullet[i]->draw();
+		}
 	}
 
 	m_window.draw(m_player.getSprite());

@@ -13,8 +13,8 @@
 #include "DisplayScale.h"
 #include "Camera.h"
 #include "Bullet.h"
-#include "EnemyBullet.h"
 #include "Transform.h"
+#include "ProjectileEnemy.h"
 
 #include <stdlib.h>
 #include <ctime>
@@ -47,9 +47,14 @@ public:
 	Bullet *bullets[100];
 	std::vector<Bullet*> activeBullets; // For a smaller loop
 	
-	EnemyBullet enemyBullet[10];
+	ProjectileEnemy* enemyBullet[10];
+	int firedAt = 110;
+	int fireWait = 100;
+
 
 	void ShootTowardsPlayer();
+
+
 
 
 	float Pi = 3.14;
