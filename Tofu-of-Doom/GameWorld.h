@@ -49,7 +49,7 @@ public:
 	
 	ProjectileEnemy* enemyBullet[10];
 	int firedAt = 110;
-	int fireWait = 100;
+	int fireWait = 45;
 
 
 	void ShootTowardsPlayer();

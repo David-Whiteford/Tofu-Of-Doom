@@ -637,6 +637,29 @@ void GameWorld::checkPlayerRayCollsions(sf::Time t_deltaTime)
 	{
 		m_camera.popOutFromWall();
 	}
+
+
+	for (int i = 0; i < 10; i++)
+	{
+		if (enemyBullet[i]->isAlive())
+		{
+			std::vector<GameObject*> returnObjectsProjectile = quadtree.getObjectsAt(enemyBullet[i]->getPosition().x, enemyBullet[i]->getPosition().y, 0);
+
+			for (int x = 0; x < returnObjectsProjectile.size(); x++)
+			{
+				float dist = std::sqrtf(std::powf(enemyBullet[i]->getPosition().x - returnObjectsProjectile[x]->position.x, 2) - std::powf(enemyBullet[i]->getPosition().y - returnObjectsProjectile[x]->position.y, 2));
+				//std::cout << "dist" + std::to_string(dist) << std::endl;
+				//std::cout << "size" + std::to_string(returnObjectsProjectile[x]->size / 2 + enemyBullet[i]->getRadius()) << std::endl;
+				
+				if (dist < enemyBullet[i]->getRadius() / 2)
+				{
+					enemyBullet[i]->setAlive(false);
+					std::cout << "collided with: wall" << std::endl;
+					break;
+				}
+			}
+		}
+	}
 }
 
 
