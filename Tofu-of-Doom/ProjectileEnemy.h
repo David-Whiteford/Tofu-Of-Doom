@@ -44,7 +44,7 @@ public:
 private:
 
 	bool m_alive;
-	float m_speed = 5.0f;
+	float m_speed = 10.0f;
 
 	int damageAmount = 10;
 

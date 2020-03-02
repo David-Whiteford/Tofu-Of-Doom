@@ -25,6 +25,9 @@
 #include "UI.h"
 #include "Player.h"
 #include "Boss.h"
+#include "AmmoPickUp.h"
+
+
 class GameWorld
 {
 public:
@@ -81,7 +84,12 @@ public:
 	bool hitWall = false;
 	sf::Vector2f hitPos;
 
+	AmmoPickUp* ammo[5];
+
 private:
+
+	int killCount = 0;
+	const int SPAWN_AMMO_AT = 5;
 
 	Graph<NodeData, int>* graph;
 

@@ -105,7 +105,7 @@ GameObject* Raycast::getClosest()
 	bool first = true;
 	while (hitObjects.size() > 0)
 	{
-		if (first)
+		if (first && hitObjects.front() != nullptr)
 		{
 			closest = hitObjects.front();
 			hitObjects.pop();

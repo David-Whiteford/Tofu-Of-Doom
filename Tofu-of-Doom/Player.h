@@ -73,6 +73,7 @@ public:
 
 	bool isHurt() { return m_hurt; }
 
+	void maxAmmo() { currentHandGunBullets = 40; currentHandgunCLip = 7; currentShotGunShells = 12; currentShotGunClip = 3; currentMachineGunRounds = 320; currentMachineGunClip = 30; }
 
 private:
 	sf::CircleShape m_playerCircle;
