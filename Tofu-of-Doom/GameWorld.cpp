@@ -60,15 +60,15 @@ GameWorld::GameWorld(sf::RenderWindow& t_window, sf::Time& t_deltaTime, Camera* 
 	m_startingPos.push_back(sf::Vector2f(1518, 1365));
 	m_startingPos.push_back(sf::Vector2f(2313, 2356));
 
-	for (int i = 0; i < 1; i++)
-	{
-		m_enemyVec[i] = new Enemy(m_window, m_deltaTime, m_startingPos[i], m_gamePath);
-		m_enemyVec[i]->setAlive(true);
+	//for (int i = 0; i < 1; i++)
+	//{
+	//	m_enemyVec[i] = new Enemy(m_window, m_deltaTime, m_startingPos[i], m_gamePath);
+	//	m_enemyVec[i]->setAlive(true);
 
 
-		// Add enemy to the active vector
-		m_enemyActive.push_back(m_enemyVec[i]);
-	}
+	//	// Add enemy to the active vector
+	//	m_enemyActive.push_back(m_enemyVec[i]);
+	//}
 
 	// View
 	// m_mapView.setViewport(sf::FloatRect(0.0, 0.0f, 0.25f, 0.25f));
@@ -96,7 +96,8 @@ GameWorld::GameWorld(sf::RenderWindow& t_window, sf::Time& t_deltaTime, Camera* 
 	// A*
 	m_gamePath->initAStar(m_wallVec);
 
-	for (int i = 0; i < 18; i++)
+
+	for (int i = 0; i < 1; i++)
 	{
 		m_enemyVec[i] = new Enemy(m_window, m_deltaTime, m_startingPos[i], m_gamePath);
 		m_enemyVec[i]->setAlive(true);
