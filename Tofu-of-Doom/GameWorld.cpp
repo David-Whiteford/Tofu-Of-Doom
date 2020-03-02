@@ -103,7 +103,7 @@ GameWorld::GameWorld(sf::RenderWindow& t_window, sf::Time& t_deltaTime, Camera* 
 	m_gamePath->initAStar(m_wallVec);
 
 
-	for (int i = 0; i < 1; i++)
+	for (int i = 0; i < 25; i++)
 	{
 		m_enemyVec[i] = new Enemy(m_window, m_deltaTime, m_startingPos[i], m_gamePath);
 		m_enemyVec[i]->setAlive(true);
@@ -198,8 +198,6 @@ void GameWorld::updateWorld()
 		{
 			if (enemyBullet[i]->isAlive())
 			{
-				std::cout << "Active: " + std::to_string(i) << std::endl;
-				std::cout << "x: " +  std::to_string(enemyBullet[i]->getPosition().x) + ", y: " + std::to_string(enemyBullet[i]->getPosition().y) << std::endl;
 				
 				enemyBullet[i]->update(m_deltaTime);
 

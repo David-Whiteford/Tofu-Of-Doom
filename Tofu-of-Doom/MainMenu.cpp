@@ -91,7 +91,7 @@ void MainMenu::render(sf::RenderWindow& t_window)
 {
 	t_window.draw(m_bg);
 	//loop through buttons and render
-	for (int i = 0; i < 5; i++)
+	for (int i = 0; i < 3; i++)
 	{
 		t_window.draw(m_button[i]);
 	}
@@ -130,7 +130,7 @@ void MainMenu::setUpContent()
 	{
 		std::cout << "Cant load bloody button image " << std::endl;
 	}
-	for (int i = 0; i < 4; i++)
+	for (int i = 0; i < 3; i++)
 	{
 		m_button[i].setTexture(m_buttonTexture);
 		m_button[i].setPosition(50, 20 + space);
@@ -199,10 +199,7 @@ void MainMenu::checkPosition()
 			m_playText.setColor(sf::Color(sf::Color::White));
 			m_optionsText.setColor(sf::Color(sf::Color::White));
 		}
-		if (m_outlineRect.getPosition().y == 620)
-		{
-			m_selectPos = 3;
-		}
+
 	}
 }
 
