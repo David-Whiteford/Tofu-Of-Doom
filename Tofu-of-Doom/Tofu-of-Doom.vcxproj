@@ -43,6 +43,7 @@
     <ClCompile Include="Options.cpp" />
     <ClCompile Include="ParticleEffect.cpp" />
     <ClCompile Include="Path.cpp" />
+    <ClCompile Include="Pause.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="ProjectileEnemy.cpp" />
     <ClCompile Include="Quadtree.cpp" />
@@ -107,6 +108,7 @@
     <ClInclude Include="Options.h" />
     <ClInclude Include="ParticleEffect.h" />
     <ClInclude Include="Path.h" />
+    <ClInclude Include="Pause.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="ProjectileEnemy.h" />
     <ClInclude Include="Quadtree.h" />

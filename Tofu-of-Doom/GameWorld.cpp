@@ -464,6 +464,7 @@ void GameWorld::reload(int t_guntType)
 		}
 		ui.setAmmoTextBullet(m_player.getCurrentMachineGunClip(), m_player.getCurrentMachineGunBullets());
 	}
+	
 
 }
 

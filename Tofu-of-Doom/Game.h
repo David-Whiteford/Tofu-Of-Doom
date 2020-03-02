@@ -35,6 +35,8 @@
 #include "Camera.h"
 #include "DisplayScale.h"
 #include "Collider2D.h"
+#include "Pause.h"
+#include "Controller.h"
 
 using namespace irrklang;
 #pragma comment(lib, "irrKlang.lib") // link with irrKlang.dll
@@ -44,12 +46,14 @@ class SFML;
 class MainMenu;
 class Options;
 class GameOver;
+class PauseScreen;
 
 typedef GraphNode<NodeData, int> Node;
 
 class Game
 {
 public:	
+	CXBOXController m_controller;
 	Game(sf::ContextSettings t_settings);
 	~Game();
 
@@ -94,6 +98,7 @@ public:
 	MainMenu* m_mainMenu;
 	Options* m_optionsMenu;
 	GameOver* m_gameOver;
+	PauseScreen* m_pause;
 	void initialise();
 
 	// A* stuff with graph for storing nodes
@@ -123,7 +128,8 @@ public:
 		OPTIONS,
 		SPLASH,
 		EXIT,
-		GAMEOVER
+		GAMEOVER,
+		START
 	};
 
 	DrawState m_drawState = DrawState::SPLASH;
@@ -174,7 +180,7 @@ private:
 	sf::RenderWindow m_window;		
 	Camera camera; // Player camera
 	sf::Time m_deltaTime;
-	GameWorld* m_gameWorld = new GameWorld(m_window, m_deltaTime, &camera); // Create a game world
+	GameWorld* m_gameWorld = new GameWorld( m_window, m_deltaTime, &camera); // Create a game world
 
 	bool m_exitGame{ false };
 	bool m_buttonPressed = false;

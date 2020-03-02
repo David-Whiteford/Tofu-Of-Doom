@@ -31,6 +31,7 @@ Game::Game(sf::ContextSettings t_settings) : m_window{ sf::VideoMode(1920,1080,3
 	m_mainMenu = new MainMenu{ *this , m_font };
 	m_optionsMenu = new Options{ *this,m_font };
 	m_gameOver = new GameOver{ *this,m_bloodFont };
+	m_pause = new PauseScreen{ *this,m_font };
 	m_window.setFramerateLimit(120);
 }
 
@@ -255,6 +256,9 @@ void Game::update(sf::Time t_deltaTime)
 	case DrawState::SPLASH:
 		m_splashScreen->update(t_deltaTime);
 		break;
+	case DrawState::START:
+		m_pause->update(t_deltaTime);
+		break;
 	case DrawState::GAMEOVER:
 
 		if (m_createdNewWorld == false)
@@ -282,7 +286,10 @@ void Game::update(sf::Time t_deltaTime)
 
 	case DrawState::GAME:
 		updateWorld(t_deltaTime);
-
+		if (m_controller.startButton() == true)
+		{
+			m_drawState = DrawState::START;
+		}
 		if (m_gameWorld->getActiveEnemyCount() == 0 ||
 			m_gameWorld->getPlayerHealth() <= 0)
 		{
@@ -380,6 +387,11 @@ void Game::render()
 	case DrawState::SPLASH:
 		m_window.pushGLStates();
 		m_splashScreen->render(m_window);
+		m_window.popGLStates();
+		break;
+	case DrawState::START:
+		m_window.pushGLStates();
+		m_pause->render(m_window);
 		m_window.popGLStates();
 		break;
 	case DrawState::GAMEOVER:
