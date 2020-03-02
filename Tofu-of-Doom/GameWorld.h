@@ -35,7 +35,7 @@ public:
 
 	void initialise();
 	int getPlayerHealth();
-	void drawUI();
+	void drawUI(int t_gunType);
 	bool fireBullet(int t_gunType);
 	void reload(int t_guntType);
 	void checkPlayerRayCollsions(sf::Time t_deltaTime); 

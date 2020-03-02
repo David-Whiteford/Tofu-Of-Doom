@@ -49,6 +49,36 @@ public:
 		{
 			// error...
 		}
+		if (!gun1Texture.loadFromFile("images/piecemarker.png"))
+		{
+			// more error had here happened
+		}
+
+		if (!gun2Texture.loadFromFile("images/sg1.png"))
+		{
+			// more error had here happened
+		}
+
+		if (!gun3Texture.loadFromFile("images/sg2.png"))
+		{
+			// more error had here happened
+		}
+
+
+		gun[0].setTexture(gun1Texture);
+		gun[1].setTexture(gun2Texture);
+		gun[2].setTexture(gun3Texture);
+
+		gun[0].setScale(4,4);
+		gun[1].setScale(4,4);
+		gun[2].setScale(4,4);
+
+		gun[0].setPosition(sf::Vector2f(t_window.getSize().x - t_window.getSize().x * .25f, t_window.getSize().y - t_window.getSize().y * .2f));
+		gun[1].setPosition(sf::Vector2f(t_window.getSize().x - t_window.getSize().x * .25f, t_window.getSize().y - t_window.getSize().y * .2f));
+		gun[2].setPosition(sf::Vector2f(t_window.getSize().x - t_window.getSize().x * .25f, t_window.getSize().y - t_window.getSize().y * .2f));
+
+
+
 
 		retina.setTexture(retinaTexture);
 		retina.setPosition(t_window.getSize().x / 2, t_window.getSize().y / 2);
@@ -101,6 +131,9 @@ public:
 	sf::Text getScoreText() { scoreVal.setString("Score: " + std::to_string(score));  return scoreVal; }
 	sf::Sprite getRetina() { return retina; }
 	sf::Sprite getVignette() { return vignetteSprite; }
+
+	sf::Sprite drawCurrentWeapon(int t_weapon) { return gun[t_weapon - 1]; }
+
 	void update();
 	void setHealth(int t_value) { health = t_value; }
 	float x = 0, y = 0;
@@ -121,6 +154,10 @@ private:
 	sf::Text scoreVal;
 	sf::Text displayHealth;
 	sf::Text displayEnemyRemaining;
+
+	sf::Sprite gun[3];
+	sf::Texture gun1Texture, gun2Texture, gun3Texture;
+
 	int health = 100;
 
 
