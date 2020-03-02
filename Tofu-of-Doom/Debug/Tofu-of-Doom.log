@@ -14,12 +14,12 @@ C:\Users\Carillon AC-1\Desktop\Tofu-Of-Doom\Tofu-of-Doom\UI.h(49,43): warning C4
               T=unsigned int
           ]
 C:\Users\Carillon AC-1\Desktop\Tofu-Of-Doom\Tofu-of-Doom\GameWorld.h(55,17): warning C4305: 'initializing': truncation from 'double' to 'float'
-C:\Users\Carillon AC-1\Desktop\Tofu-Of-Doom\Tofu-of-Doom\Game.cpp(427,20): warning C4018: '<': signed/unsigned mismatch
-C:\Users\Carillon AC-1\Desktop\Tofu-Of-Doom\Tofu-of-Doom\Game.cpp(446,20): warning C4018: '<': signed/unsigned mismatch
-C:\Users\Carillon AC-1\Desktop\Tofu-Of-Doom\Tofu-of-Doom\Game.cpp(492,20): warning C4018: '<': signed/unsigned mismatch
-C:\Users\Carillon AC-1\Desktop\Tofu-Of-Doom\Tofu-of-Doom\Game.cpp(513,20): warning C4018: '<': signed/unsigned mismatch
-C:\Users\Carillon AC-1\Desktop\Tofu-Of-Doom\Tofu-of-Doom\Game.cpp(581,15): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-C:\Users\Carillon AC-1\Desktop\Tofu-Of-Doom\Tofu-of-Doom\Game.cpp(603,20): warning C4018: '<': signed/unsigned mismatch
-C:\Users\Carillon AC-1\Desktop\Tofu-Of-Doom\Tofu-of-Doom\Game.cpp(621,20): warning C4018: '<': signed/unsigned mismatch
-C:\Users\Carillon AC-1\Desktop\Tofu-Of-Doom\Tofu-of-Doom\Game.cpp(639,20): warning C4018: '<': signed/unsigned mismatch
+C:\Users\Carillon AC-1\Desktop\Tofu-Of-Doom\Tofu-of-Doom\Game.cpp(466,20): warning C4018: '<': signed/unsigned mismatch
+C:\Users\Carillon AC-1\Desktop\Tofu-Of-Doom\Tofu-of-Doom\Game.cpp(485,20): warning C4018: '<': signed/unsigned mismatch
+C:\Users\Carillon AC-1\Desktop\Tofu-Of-Doom\Tofu-of-Doom\Game.cpp(531,20): warning C4018: '<': signed/unsigned mismatch
+C:\Users\Carillon AC-1\Desktop\Tofu-Of-Doom\Tofu-of-Doom\Game.cpp(552,20): warning C4018: '<': signed/unsigned mismatch
+C:\Users\Carillon AC-1\Desktop\Tofu-Of-Doom\Tofu-of-Doom\Game.cpp(622,15): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Users\Carillon AC-1\Desktop\Tofu-Of-Doom\Tofu-of-Doom\Game.cpp(643,20): warning C4018: '<': signed/unsigned mismatch
+C:\Users\Carillon AC-1\Desktop\Tofu-Of-Doom\Tofu-of-Doom\Game.cpp(661,20): warning C4018: '<': signed/unsigned mismatch
+C:\Users\Carillon AC-1\Desktop\Tofu-Of-Doom\Tofu-of-Doom\Game.cpp(679,20): warning C4018: '<': signed/unsigned mismatch
   Tofu-of-Doom.vcxproj -> C:\Users\Carillon AC-1\Desktop\Tofu-Of-Doom\Debug\Tofu-of-Doom.exe
