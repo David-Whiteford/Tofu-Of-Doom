@@ -103,7 +103,7 @@ GameWorld::GameWorld(sf::RenderWindow& t_window, sf::Time& t_deltaTime, Camera* 
 	m_gamePath->initAStar(m_wallVec);
 
 
-	for (int i = 0; i < 25; i++)
+	for (int i = 0; i < 99; i++)
 	{
 		m_enemyVec[i] = new Enemy(m_window, m_deltaTime, m_startingPos[i], m_gamePath);
 		m_enemyVec[i]->setAlive(true);
