@@ -413,7 +413,7 @@ void Game::render()
 		drawGameScene();
 		m_window.pushGLStates();
 
-		m_gameWorld->drawUI();
+		m_gameWorld->drawUI(gunNum);
 
 		m_window.popGLStates();
 		drawGameScene();

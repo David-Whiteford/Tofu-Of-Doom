@@ -103,7 +103,7 @@ GameWorld::GameWorld(sf::RenderWindow& t_window, sf::Time& t_deltaTime, Camera* 
 	m_gamePath->initAStar(m_wallVec);
 
 
-	for (int i = 0; i < 25; i++)
+	for (int i = 0; i < 99; i++)
 	{
 		m_enemyVec[i] = new Enemy(m_window, m_deltaTime, m_startingPos[i], m_gamePath);
 		m_enemyVec[i]->setAlive(true);
@@ -291,7 +291,7 @@ int GameWorld::getPlayerHealth()
 	return m_player.getHealth();
 }
 
-void GameWorld::drawUI()
+void GameWorld::drawUI(int t_gunType)
 {
 	m_window.draw(ui.getBorderHealth());
 	m_window.draw(ui.getHealthText());
@@ -301,6 +301,8 @@ void GameWorld::drawUI()
 	m_window.draw(ui.getScoreText());
 	m_window.draw(ui.getBorderRemainingEnemy());
 	m_window.draw(ui.getEnemyRemainingText(m_enemyActive.size()));
+
+	m_window.draw(ui.drawCurrentWeapon(t_gunType));
 
 	if (m_player.isHurt())
 	{
