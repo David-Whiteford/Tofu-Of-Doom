@@ -87,7 +87,6 @@ void Enemy::update(sf::CircleShape t_player, sf::Time t_deltaTime)
 			&& t_player.getPosition().y >= m_enemy.getPosition().y - offSet.y
 			&& t_player.getPosition().y <= m_enemy.getPosition().y + offSet.y)
 		{
-
 			if (m_doOnceSeek != 1)
 			{
 				m_enemyBehaviour = EnemyBehaviour::SEEK_PLAYER;

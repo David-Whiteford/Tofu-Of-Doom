@@ -15,6 +15,10 @@ public:
 	void setHealth(int t_healthAmount);
 	void increaseHealth(int t_healthAmount);
 	void decreaseHealth(int t_healthAmount);
+	int getScore();
+	void resetScore();
+	void increaseScore(int t_scoreAmount);
+
 	void init();
 	sf::CircleShape getSprite();
 	void update();
@@ -74,7 +78,7 @@ private:
 	sf::CircleShape m_playerCircle;
 	int m_health{ 100 };
 	sf::Vector2f m_position;
-
+	int m_score{ 0 };
 	bool m_hurt = false;
 	int m_currentHurtTimer = 0;
 	int m_maxHurtTimer = 60;

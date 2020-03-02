@@ -215,9 +215,6 @@ void GameWorld::updateWorld()
 
 		}
 	} // end player is hurt false
-
-	
-
 	firedAt++;
 	quadtreeMoving.clear();
 	
@@ -296,12 +293,12 @@ int GameWorld::getPlayerHealth()
 
 void GameWorld::drawUI()
 {
-
-
 	m_window.draw(ui.getBorderHealth());
 	m_window.draw(ui.getHealthText());
 	m_window.draw(ui.getBorderAmmo());
+	m_window.draw(ui.getScoreAmmo());
 	m_window.draw(ui.getAmmoText());
+	m_window.draw(ui.getScoreText());
 	m_window.draw(ui.getBorderRemainingEnemy());
 	m_window.draw(ui.getEnemyRemainingText(m_enemyActive.size()));
 
@@ -507,6 +504,8 @@ void GameWorld::updateBulletPhysics()
 					{
 						activeBullets[i]->raycast.addToHitObjects(m_enemyActive.at(x));
 						hitPos = activeBullets[i]->raycast.getEndPoint();
+						m_player.increaseScore(5);
+						ui.setScore(m_player.getScore());
 					}
 				}
 			}
@@ -767,6 +766,7 @@ void GameWorld::checkEnemyInQueueAlive()
 	m_enemyActive.erase(std::remove_if(m_enemyActive.begin(), m_enemyActive.end(), [](Enemy *en)
 		{return !en->canRender; }), m_enemyActive.end());
 
+
 			
 }
 
@@ -777,7 +777,6 @@ void GameWorld::populateQuadtree()
 {
 	for (int i = 0; i < m_wallVec.size(); i++)
 	{
-
 		quadtree.addObject(m_wallVec.at(i)->myGameObject);
 		quadtreeBullet.addObject(m_wallVec.at(i)->myGameObject);
 	}
