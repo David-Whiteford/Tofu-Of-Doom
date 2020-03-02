@@ -1,4 +1,4 @@
-#include "Game.h"
+﻿#include "Game.h"
 
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
@@ -8,7 +8,7 @@
 /// <summary>
 /// Constructor for the Game class
 /// </summary>
-Game::Game(sf::ContextSettings t_settings) : m_window{ sf::VideoMode(1280,720,32), "Tofu of Doom", sf::Style::Fullscreen, t_settings }
+Game::Game(sf::ContextSettings t_settings) : m_window{ sf::VideoMode(1280,720,32), "Tofu of Doom", sf::Style::Default, t_settings }
 {
 	// Initialise GLEW
 	GLuint m_error = glewInit();
@@ -580,17 +580,18 @@ void Game::drawGameScene()
 	// Set shader to use Texture Unit 7
 	glUniform1i(m_currentTextureID, 7);
 	glBindVertexArray(m_enemy.VAO_ID);
-
+	
+	glm::vec3 playerPos = glm::vec3(m_gameWorld->getPlayerPosition().x / s_displayScale, 0.0f, m_gameWorld->getPlayerPosition().y / s_displayScale);
 	for (int i = 0; i < m_gameWorld->getActiveEnemyCount(); i++)
 	{
-		glm::vec3 enemyPos = glm::normalize(glm::vec3(m_gameWorld->getEnemyPosition(i).x, 0.0f, m_gameWorld->getEnemyPosition(i).y));
-		glm::vec3 playerPos = glm::normalize(glm::vec3(m_gameWorld->getPlayerPosition().x, 0.0f, m_gameWorld->getPlayerPosition().y));
+		glm::vec3 enemyPos = glm::vec3(m_gameWorld->getEnemyPosition(i).x / s_displayScale, 0.0f, m_gameWorld->getEnemyPosition(i).y / s_displayScale);
+
+		m_enemyModelMatrix = glm::translate(glm::mat4(1), glm::vec3(enemyPos.x, 3, enemyPos.z));
 
 		float angle = getAngleBetweenVectors(enemyPos, playerPos);
-		
-		m_rotationMatrix = glm::rotate(originalEnemyRotationMatrix, angle, glm::vec3(0.0f, 1.0f, 0.0f));
 
-		m_enemyModelMatrix = glm::translate(m_rotationMatrix, glm::vec3(m_gameWorld->getEnemyPosition(i).x / s_displayScale, 3, m_gameWorld->getEnemyPosition(i).y / s_displayScale));
+
+		m_enemyModelMatrix = glm::rotate(m_enemyModelMatrix, angle, glm::vec3(0, 1, 0));//rotation y = 0.0 degrees
 		m_enemyModelMatrix = glm::scale(m_enemyModelMatrix, glm::vec3(m_gameWorld->getEnemySize(i), m_gameWorld->getEnemySize(i), m_gameWorld->getEnemySize(i)));
 
 		glUniformMatrix4fv(m_modelMatrixID, 1, GL_FALSE, &m_enemyModelMatrix[0][0]);
@@ -730,26 +731,15 @@ void Game::drawGameScene()
 /// </summary>
 double Game::getAngleBetweenVectors(glm::vec3 t_vector_1, glm::vec3 t_vector_2, double *reflexAngle)
 {
-	// Unitize the input vectors
-	t_vector_1 = glm::normalize(t_vector_1);
-	t_vector_2 = glm::normalize(t_vector_2);
-
-	double dot = glm::dot(t_vector_1, t_vector_2);
-
-	// Force the dot product of the two input vectors to
-	// fall within the domain for inverse cosine, which
-	// is -1 <= x <= 1. This will prevent runtime
-	// "domain error" math exceptions.
-	dot = (dot < -1.0 ? -1.0 : (dot > 1.0 ? 1.0 : dot));
-
-	double angle = acos(dot);
-
-	if (reflexAngle)
-	{
-		*reflexAngle = (glm::pi<double>() * 2) - angle;
-	}	
 	
-	return angle;
+	sf::Vector2f dir = sf::Vector2f(t_vector_2.x - t_vector_1.x, t_vector_2.z - t_vector_1.z);
+	float normaliseValue = sqrt(dir.x * dir.x + dir.y * dir.y);
+	dir = dir / normaliseValue;
+	float a = std::atan2(dir.y, dir.x);
+
+	std::cout << a << std::endl;
+
+	return (-a + 1.6f); 
 }
 
 /// <summary>
