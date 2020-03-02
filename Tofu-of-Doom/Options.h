@@ -41,7 +41,8 @@ public:
 	bool m_volumn = false;
 	sf::RectangleShape m_volumnBarIn;
 	sf::RectangleShape m_volumnBarOuter;
-
+	sf::Sprite m_bg;
+	sf::Texture m_bgTexture;
 	sf::RectangleShape m_radioBox[2];
 	int nextPos{ 0 };
 	bool m_moved{ false };

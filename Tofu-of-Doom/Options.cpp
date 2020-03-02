@@ -95,7 +95,7 @@ void Options::render(sf::RenderWindow& t_window)
 {
 
 	t_window.clear(sf::Color::Black);
-
+	t_window.draw(m_bg);
 	for (int i = 0; i < 4; i++)
 	{
 
@@ -119,7 +119,7 @@ void Options::render(sf::RenderWindow& t_window)
 	t_window.draw(m_musicmsgOff);
 	t_window.draw(m_musicmsgOn);
 	t_window.draw(m_pressBackMessage);
-
+	
 	t_window.display();
 }
 void Options::checkButtonPosition()
@@ -162,7 +162,13 @@ void Options::checkButtonPosition()
 
 void Options::setUpContent()
 {
-
+	if (!m_bgTexture.loadFromFile("images/bloodySplash.jpg"))
+	{
+		std::cout << "Cant load image " << std::endl;
+	}
+	m_bg.setTexture(m_bgTexture);
+	m_bg.setPosition(0.0f, 0.0f);
+	
 	for (int i = 0; i < 2; i++)
 	{
 		//set their size pos and the color

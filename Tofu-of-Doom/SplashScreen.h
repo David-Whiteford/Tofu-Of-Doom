@@ -31,11 +31,12 @@ private:
 	sf::Font m_font; // font loaded by game
 	sf::Text m_pressstartMessage; // sf text used for message
 	// sf text used for title messages
-	sf::Text m_titleMessage;
-	sf::Text m_titlemessageSecond; // sf text used for message
+
 	sf::Sprite m_backgroundSprite;//background sprite
 	sf::Texture m_backgroundTexture; //bgtexture
 	int m_timer{ 0 };//timer
+	sf::Text m_titleMessage;
+	sf::Text m_titlemessageSecond; // sf text used for message
 	const std::string FIRST_TITLE_MESSAGE{ "TOFU OF" }; // string for message
 	const std::string SECOND_TITLE_MESSAGE{ "DOOM" }; // stringfor message
 	//size of the message and transition timer

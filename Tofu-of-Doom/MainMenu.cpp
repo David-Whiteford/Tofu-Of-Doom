@@ -99,13 +99,30 @@ void MainMenu::render(sf::RenderWindow& t_window)
 	t_window.draw(m_playText);
 	t_window.draw(m_optionsText);
 	t_window.draw(m_exitText);
+	t_window.draw(m_titleMessage);
+	t_window.draw(m_titlemessageSecond);
+
 	t_window.display();
 }
 
 void MainMenu::setUpContent()
 {
+
+
+	//sets up the message for the first title message
+	m_titleMessage.setFont(m_font);
+	m_titleMessage.setPosition(800.0f, 100.0f);
+	m_titleMessage.setString(FIRST_TITLE_MESSAGE);
+	m_titleMessage.setCharacterSize(85);
+	m_titleMessage.setColor(sf::Color::Black);
+	//sets up the message for the second title message
+	m_titlemessageSecond.setFont(m_font);
+	m_titlemessageSecond.setPosition(820.0f, 180.0f);
+	m_titlemessageSecond.setString(SECOND_TITLE_MESSAGE);
+	m_titlemessageSecond.setCharacterSize(85);
+	m_titlemessageSecond.setColor(sf::Color::Black);
 	//load all textures
-	if (!m_bgTexture.loadFromFile("images/monster.jpg"))
+	if (!m_bgTexture.loadFromFile("images/bloodySplash.jpg"))
 	{
 		std::cout << "Cant load image " << std::endl;
 	}
@@ -126,7 +143,7 @@ void MainMenu::setUpContent()
 	m_outlineRect.setPosition(50, 20);
 
 	m_bg.setTexture(m_bgTexture);
-	m_bg.setPosition(400.0f, -50.0f);
+	m_bg.setPosition(0.0f, 0.0f);
 	m_bg.setColor(sf::Color(255, 255, 255, 0));
 	setUpText();
 }

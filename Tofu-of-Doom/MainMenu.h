@@ -50,7 +50,10 @@ private:
 	sf::Text m_playText;
 	sf::Text m_optionsText;
 	sf::Text m_exitText;
-
+	sf::Text m_titleMessage;
+	sf::Text m_titlemessageSecond; // sf text used for message
+	const std::string FIRST_TITLE_MESSAGE{ "TOFU OF" }; // string for message
+	const std::string SECOND_TITLE_MESSAGE{ "DOOM" }; // stringfor message
 	//timer for button navigation
 	sf::Time timer{ sf::seconds(0.0f) };
 	sf::Time transitionTimer{ sf::seconds(0.0f) };
