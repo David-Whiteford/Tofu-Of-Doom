@@ -86,7 +86,7 @@ public:
 
 		vignetteSprite.setTexture(vignetteTexture);
 		vignetteSprite.setPosition(0, 0);
-		vignetteSprite.setScale(1, 1);
+		vignetteSprite.setScale(1.5f, 1.5f);
 
 		displayHealth.setFont(m_font);
 		displayHealth.setFillColor(sf::Color::Red);

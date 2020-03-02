@@ -44,7 +44,7 @@ public:
 private:
 
 	bool m_alive;
-	float m_speed = 0.5f;
+	float m_speed = 5.0f;
 
 	int damageAmount = 10;
 
@@ -64,7 +64,7 @@ private:
 
 	float m_radius = 23; 
 	int m_aliveAt = 0;
-	float m_timeToLive = 150;
+	float m_timeToLive = 400;
 
 	sf::Vector2f m_direction = sf::Vector2f(0, 0);
 	sf::Vector2f m_position = sf::Vector2f(0, 0);

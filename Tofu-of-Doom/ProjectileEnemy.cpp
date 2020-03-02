@@ -16,6 +16,9 @@ void ProjectileEnemy::init(sf::Vector2f startPosition, sf::Vector2f moveDirectio
 {
 	m_position = startPosition;
 	m_direction = moveDirection / s_displayScale;
+
+	m_direction = m_direction / sqrtf(m_direction.x * m_direction.x - m_direction.y * m_direction.y);
+	m_aliveAt = 0;
 	m_alive = true;
 }
 
@@ -31,7 +34,7 @@ int ProjectileEnemy::getDamageAmount()
 
 void ProjectileEnemy::update(sf::Time t_deltaTime)
 {
-	m_position += sf::Vector2f(m_direction.x + (m_speed), m_direction.y + (m_speed));
+	m_position += sf::Vector2f(m_direction.x * (m_speed), m_direction.y * (m_speed));
 
 	m_bulletShape.setPosition(m_position);
 	m_aliveAt++;
