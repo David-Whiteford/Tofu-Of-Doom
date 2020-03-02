@@ -1,0 +1,69 @@
+#ifndef BOSS_H
+#define BOSS_H
+
+#include "Game.h"
+#include<SFML\Graphics.hpp>
+#include <string.h>
+#include <iostream>
+#include "Transform.h"
+#include "Raycast.h"
+#include "Path.h"
+#include "Player.h"
+
+
+class Boss
+{
+public:
+	
+	Boss(sf::Vector2f t_position);
+	~Boss();
+	//class functions
+	void update(sf::Time t_deltaTime, sf::CircleShape t_player);
+	void setHealth(int t_healthAmount);
+	int getHealth();
+	void setUpBoss();
+	void render(sf::RenderWindow& t_window);
+	void decreaseHealth(int t_healthAmount);
+	void enemyMovement(sf::Time t_deltaTime);
+	void moveEnemy(sf::Time t_deltaTime);
+	void setAlive(bool t_alive);
+	void setDead();
+	bool isAlive();
+	float getRadius();
+	sf::CircleShape getSprite();
+	int getRandNode();
+
+private:
+	Path* m_gamePath;
+	float m_speedEn = 0.18f;
+	std::vector<Node*> graphPath;
+	sf::CircleShape m_bossCircle;
+	int m_enemyNode = 0;
+	int m_playerNode = 0;
+	int m_health = 0;
+	sf::Time m_bossTimer = sf::seconds(0.0);
+	
+	sf::Vector2f m_position;
+	Transform m_transform;
+	Transform::Position enemyPos;
+	Transform::Position graphPos;
+	sf::Vector2f graphPathVec;
+	sf::Vector2f getPosition();
+	float m_radius = 33; // makes hitting enmies easier
+
+	std::vector<int> m_startNodes;
+	std::vector<int> m_endNodes;
+	bool m_alive;
+	int m_doOncePatrol = 0;
+	int m_doOnceSeek = 0;
+	enum class EnemyBehaviour
+	{
+		PATROL,
+		SEEK_PLAYER,
+		STOP,
+		RETREAT
+	}
+	m_enemyBehaviour;
+};
+
+#endif // End Boss
