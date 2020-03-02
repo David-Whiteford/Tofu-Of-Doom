@@ -24,7 +24,7 @@
 #include "Quadtree.h"
 #include "UI.h"
 #include "Player.h"
-
+#include "Boss.h"
 class GameWorld
 {
 public:
@@ -46,7 +46,7 @@ public:
 
 	Bullet *bullets[100];
 	std::vector<Bullet*> activeBullets; // For a smaller loop
-	
+	Boss* m_bossAi;
 	ProjectileEnemy* enemyBullet[10];
 	int firedAt = 110;
 	int fireWait = 100;

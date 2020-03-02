@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Boss.cpp" />
     <ClCompile Include="Bullet.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Collider2D.cpp" />
@@ -59,6 +60,7 @@
     <ClInclude Include="aStarStuff\GraphArc.h" />
     <ClInclude Include="aStarStuff\GraphNode.h" />
     <ClInclude Include="aStarStuff\NodeData.h" />
+    <ClInclude Include="Boss.h" />
     <ClInclude Include="Bullet.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Collider2D.h" />

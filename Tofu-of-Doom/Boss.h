@@ -1,28 +1,24 @@
 #ifndef BOSS_H
 #define BOSS_H
-
-#include "Game.h"
 #include<SFML\Graphics.hpp>
 #include <string.h>
 #include <iostream>
 #include "Transform.h"
 #include "Raycast.h"
 #include "Path.h"
-#include "Player.h"
-
 
 class Boss
 {
 public:
 	
-	Boss(sf::Vector2f t_position);
+	Boss(sf::RenderWindow& t_window, sf::Time& t_deltaTime, sf::Vector2f t_position, Path* t_gamePath);
 	~Boss();
 	//class functions
 	void update(sf::Time t_deltaTime, sf::CircleShape t_player);
 	void setHealth(int t_healthAmount);
 	int getHealth();
 	void setUpBoss();
-	void render(sf::RenderWindow& t_window);
+	void render();
 	void decreaseHealth(int t_healthAmount);
 	void enemyMovement(sf::Time t_deltaTime);
 	void moveEnemy(sf::Time t_deltaTime);
@@ -42,7 +38,8 @@ private:
 	int m_playerNode = 0;
 	int m_health = 0;
 	sf::Time m_bossTimer = sf::seconds(0.0);
-	
+	sf::RenderWindow& m_window;
+	sf::Time& m_deltaTime;
 	sf::Vector2f m_position;
 	Transform m_transform;
 	Transform::Position enemyPos;

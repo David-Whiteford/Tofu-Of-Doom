@@ -111,6 +111,10 @@ GameWorld::GameWorld(sf::RenderWindow& t_window, sf::Time& t_deltaTime, Camera* 
 		// Add enemy to the active vector
 		m_enemyActive.push_back(m_enemyVec[i]);
 	}
+	sf::Vector2f bossPos = sf::Vector2f(2300, 1978);
+	m_bossAi = new Boss(m_window, m_deltaTime, bossPos, m_gamePath);
+	m_bossAi->setAlive(true);
+
 
 	for (int i = 0; i < 100; i++)
 	{
@@ -137,7 +141,7 @@ void GameWorld::updateWorld()
 		if (m_enemyActive[i]->isAlive())
 			quadtreeMoving.addObject(m_enemyActive[i]->myGameObject);
 	}
-
+	
 	m_player.setPosition(m_camera.getEye().x * s_displayScale, m_camera.getEye().z * s_displayScale);
 	m_player.update();
 	setGunPosition();
@@ -150,6 +154,7 @@ void GameWorld::updateWorld()
 	{
 		m_enemyActive[i]->update(m_player.getSprite(),m_deltaTime);
 	}
+	m_bossAi->update(m_deltaTime ,m_player.getSprite());
 
 	// Check and remove objects
 	checkEnemyInQueueAlive();
@@ -232,6 +237,7 @@ void GameWorld::drawWorld()
 	{
 		m_window.draw(m_enemyActive[i]->getSprite());
 	}
+	m_bossAi->render();
 
 	for (int i = 0; i < m_wallVec.size(); ++i)
 	{
@@ -283,6 +289,8 @@ void GameWorld::initialise()
 		// Add enemy to the active vector
 		m_enemyActive.push_back(m_enemyVec[i]);
 	}
+
+	
 	m_player.init();
 }
 

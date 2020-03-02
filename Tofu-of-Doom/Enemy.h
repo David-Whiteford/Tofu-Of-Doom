@@ -64,6 +64,7 @@ private:
 	sf::CircleShape m_enemy;
 	std::vector<Node*> graphPath;
 	sf::RenderWindow& m_window;
+	
 	Path *m_gamePath;
 	sf::Vector2f graphPathVec;
 	bool follow = false;

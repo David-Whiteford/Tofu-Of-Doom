@@ -123,7 +123,6 @@ void Enemy::update(sf::CircleShape t_player, sf::Time t_deltaTime)
 void Enemy::draw()
 {
 	m_window.draw(m_enemy);
-
 }
 void Enemy::moveEnemy(sf::Time t_deltaTime)
 {

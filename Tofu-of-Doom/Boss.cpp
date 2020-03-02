@@ -1,8 +1,11 @@
 #include "Boss.h"
 
-Boss::Boss(sf::Vector2f t_position):
-	m_position(t_position)
+Boss::Boss(sf::RenderWindow& t_window, sf::Time& t_deltaTime, sf::Vector2f t_position, Path* t_gamePath)
+	: m_window(t_window), m_deltaTime(t_deltaTime),
+	m_position(t_position), m_enemyBehaviour(EnemyBehaviour::STOP),
+	m_gamePath(t_gamePath)
 {
+
 	setUpBoss();
 }
 
@@ -98,10 +101,9 @@ void Boss::setUpBoss()
 	m_bossCircle.setPosition(m_position); // Test starting position
 }
 
-void Boss::render(sf::RenderWindow& t_window)
+void Boss::render()
 {
-	t_window.draw(m_bossCircle);
-	t_window.display();
+	m_window.draw(m_bossCircle);
 }
 
 void Boss::decreaseHealth(int t_healthAmount)
