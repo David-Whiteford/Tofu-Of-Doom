@@ -519,6 +519,20 @@ void GameWorld::updateBulletPhysics()
 					}
 				}
 			}
+			for (int x = 0; x < m_enemyActive.size(); x++)
+			{
+				if (activeBullets[i]->checkCollision(m_bossAi->getPosition(), m_bossAi->getRadius()))
+				{
+					if (activeBullets[i]->raycast.isInterpolating())
+					{
+						
+						hitPos = activeBullets[i]->raycast.getEndPoint();
+						m_bossAi->decreaseHealth(1);
+						//m_player.increaseScore(5);
+						//ui.setScore(m_player.getScore());
+					}
+				}
+			}
 
 			// Set to previous for checks
 			previousReturn = returnWall;

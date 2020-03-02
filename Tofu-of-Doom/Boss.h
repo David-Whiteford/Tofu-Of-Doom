@@ -28,6 +28,7 @@ public:
 	float getRadius();
 	sf::CircleShape getSprite();
 	int getRandNode();
+	sf::Vector2f getPosition();
 
 private:
 	Path* m_gamePath;
@@ -36,7 +37,7 @@ private:
 	sf::CircleShape m_bossCircle;
 	int m_enemyNode = 0;
 	int m_playerNode = 0;
-	int m_health = 0;
+	int m_health = 500;
 	sf::Time m_bossTimer = sf::seconds(0.0);
 	sf::RenderWindow& m_window;
 	sf::Time& m_deltaTime;
@@ -45,7 +46,7 @@ private:
 	Transform::Position enemyPos;
 	Transform::Position graphPos;
 	sf::Vector2f graphPathVec;
-	sf::Vector2f getPosition();
+	
 	float m_radius = 33; // makes hitting enmies easier
 
 	std::vector<int> m_startNodes;
