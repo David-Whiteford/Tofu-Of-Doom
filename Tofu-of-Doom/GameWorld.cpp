@@ -699,6 +699,20 @@ float GameWorld::getEnemySize(int index)
 	}
 }
 
+sf::Vector2f GameWorld::getBossPosition()
+{
+		return m_bossAi->getSprite().getPosition();
+	
+}
+
+float GameWorld::getBossSize()
+{
+	
+	return m_bossAi->currentSize;
+	
+}
+
+
 /// <summary>
 /// Returns the current pitch of the camera
 /// </summary>

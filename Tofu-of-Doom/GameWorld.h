@@ -43,7 +43,8 @@ public:
 	int getActiveEnemyCount();
 	void checkEnemyInQueueAlive();
 	void populateQuadtree();
-
+	sf::Vector2f getBossPosition();
+	float getBossSize();
 	Bullet *bullets[100];
 	std::vector<Bullet*> activeBullets; // For a smaller loop
 	Boss* m_bossAi;
@@ -99,7 +100,7 @@ private:
 	Quadtree quadtreeBullet = Quadtree(-500, -500, 3550, 3550, 0, 4);
 	Path* m_gamePath = new Path(m_window);
 	Enemy* m_enemyVec[99];
-
+	float currentSize = 0.5f;
 	std::vector<GameObject*> previousReturn;
 	std::vector<GameObject*> returnWall;
 	std::vector<Node*> graphPath;

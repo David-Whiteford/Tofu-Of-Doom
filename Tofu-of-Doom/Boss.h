@@ -29,7 +29,7 @@ public:
 	sf::CircleShape getSprite();
 	int getRandNode();
 	sf::Vector2f getPosition();
-
+	float currentSize = 0.5f;
 private:
 	Path* m_gamePath;
 	float m_speedEn = 0.18f;

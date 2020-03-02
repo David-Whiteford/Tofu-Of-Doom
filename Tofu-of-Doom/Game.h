@@ -168,6 +168,8 @@ private:
 	Model m_enemyBall;
 	Model m_enemySkull;
 	Model m_enemyEyeball;
+	
+
 
 	sf::RenderWindow m_window;		
 	Camera camera; // Player camera
