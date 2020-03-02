@@ -19,7 +19,7 @@ void Boss::update(sf::Time t_deltaTime , sf::CircleShape t_player)
 	m_playerNode = m_gamePath->nodePos(t_player.getPosition());
 	m_enemyNode = m_gamePath->nodePos(m_bossCircle.getPosition());
 
-
+	std::cout << "playerNode: " << m_playerNode << std::endl;
 	sf::Vector2f offSet = sf::Vector2f(300, 300);
 	if (t_player.getPosition().x >= m_bossCircle.getPosition().x - offSet.x
 		&& t_player.getPosition().x <= m_bossCircle.getPosition().x + offSet.x
@@ -44,6 +44,7 @@ void Boss::update(sf::Time t_deltaTime , sf::CircleShape t_player)
 			m_doOnceSeek = 0;
 		}
 	}
+	enemyMovement(t_deltaTime);
 }
 
 void Boss::enemyMovement(sf::Time t_deltaTime)
@@ -73,7 +74,7 @@ void Boss::enemyMovement(sf::Time t_deltaTime)
 void Boss::moveEnemy(sf::Time t_deltaTime)
 {
 	graphPathVec = sf::Vector2f(graphPath.back()->m_data.m_x, graphPath.back()->m_data.m_y);
-
+	std::cout << " hhhhhh" << std::endl;
 	sf::Vector2f moveTo = m_transform.moveTowards(m_bossCircle.getPosition(), graphPathVec, m_speedEn * t_deltaTime.asMilliseconds());
 	m_bossCircle.setPosition(moveTo);
 	if (m_bossCircle.getPosition().x == graphPath.back()->m_data.m_x &&
