@@ -39,7 +39,7 @@ private:
 	bool m_moved = false;
 	int m_doOnce = 0;
 	int space = 0;
-	sf::Sprite m_button[5];
+	sf::Sprite m_button[3];
 	//textures , sound buffers rectangles
 	sf::Texture m_buttonTexture;
 	sf::RectangleShape m_outlineRect;
