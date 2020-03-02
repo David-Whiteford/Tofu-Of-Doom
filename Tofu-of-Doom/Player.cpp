@@ -57,6 +57,13 @@ void Player::setHealth(int t_healthAmount)
 {
 	m_health = t_healthAmount;
 }
+/// <summary>
+/// reset the score to zero
+/// </summary>
+void Player::resetScore()
+{
+	m_score = 0;
+}
 
 /// <summary>
 /// Increase the player's health by a specified amount
@@ -69,6 +76,14 @@ void Player::increaseHealth(int t_healthAmount)
 	{
 		m_health = 100;
 	}
+}
+/// <summary>
+/// Increase the player's score by a specified amount
+/// </summary>
+void Player::increaseScore(int t_scoreAmount)
+{
+	m_score += t_scoreAmount;
+	
 }
 
 /// <summary>
@@ -89,6 +104,11 @@ void Player::decreaseHealth(int t_healthAmount)
 
 		// Do the game over thing here
 	}
+}
+
+int Player::getScore()
+{
+	return m_score;
 }
 
 void Player::init()
