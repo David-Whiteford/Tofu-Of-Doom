@@ -199,11 +199,19 @@ void GameWorld::updateWorld()
 			} // if enemy alive (they shouldn't but just incase
 		}
 
+		float bossDist = Transform::distance(m_bossAi->getPosition(), getPlayerPosition());
+
+		if (bossDist < 60)
+		{
+			m_player.decreaseHealth(15);
+			ui.setHealth(m_player.getHealth());
+			m_player.setIsHurt(true);
+		}
+
 		for (int i = 0; i < 10; i++)
 		{
 			if (enemyBullet[i]->isAlive())
 			{
-				
 				enemyBullet[i]->update(m_deltaTime);
 
 				if (Transform::distance(enemyBullet[i]->getPosition(), getPlayerPosition()) < 55)
@@ -528,8 +536,14 @@ void GameWorld::updateBulletPhysics()
 						
 						hitPos = activeBullets[i]->raycast.getEndPoint();
 						m_bossAi->decreaseHealth(1);
-						//m_player.increaseScore(5);
-						//ui.setScore(m_player.getScore());
+						if (m_bossAi <= 0 && m_bossAi->getHealth() == true)
+						{
+							m_player.increaseScore(5);
+							ui.setScore(m_player.getScore());
+							m_bossAi->setAlive(false);
+
+						}
+						
 					}
 				}
 			}

@@ -716,16 +716,14 @@ void Game::drawGameScene()
 	glUniform1i(m_currentTextureID, 7);
 	glBindVertexArray(m_enemySkull.VAO_ID);
 
-	//glm::vec3 playerPos = glm::vec3(m_gameWorld->getPlayerPosition().x / s_displayScale, 0.0f, m_gameWorld->getPlayerPosition().y / s_displayScale);
-	
-		glm::vec3 enemyBossPos = glm::vec3(m_gameWorld->getBossPosition().x / s_displayScale, 0.0f, m_gameWorld->getBossPosition().y / s_displayScale);
-		m_enemySkull_modelMatrix = glm::translate(glm::mat4(1), glm::vec3(enemyBossPos.x, 3, enemyBossPos.z));
-		float angle = getAngleBetweenVectors(enemyBossPos, playerPos);
-		m_enemySkull_modelMatrix = glm::rotate(m_enemySkull_modelMatrix, angle, glm::vec3(0, 1, 0));//rotation y = 0.0 degrees
-		m_enemySkull_modelMatrix = glm::scale(m_enemySkull_modelMatrix, glm::vec3(m_gameWorld->getBossSize(), m_gameWorld->getBossSize(), m_gameWorld->getBossSize()));
+	glm::vec3 enemyBossPos = glm::vec3(m_gameWorld->getBossPosition().x / s_displayScale, 0.0f, m_gameWorld->getBossPosition().y / s_displayScale);
+	m_enemySkull_modelMatrix = glm::translate(glm::mat4(1), glm::vec3(enemyBossPos.x, 3, enemyBossPos.z));
+	float angle = getAngleBetweenVectors(enemyBossPos, playerPos);
+	m_enemySkull_modelMatrix = glm::rotate(m_enemySkull_modelMatrix, angle, glm::vec3(0, 1, 0));//rotation y = 0.0 degrees
+	m_enemySkull_modelMatrix = glm::scale(m_enemySkull_modelMatrix, glm::vec3(m_gameWorld->getBossSize(), m_gameWorld->getBossSize(), m_gameWorld->getBossSize()));
 
-		glUniformMatrix4fv(m_modelMatrixID, 1, GL_FALSE, &m_enemySkull_modelMatrix[0][0]);
-		glDrawElements(GL_TRIANGLES, m_enemySkull.indices.size(), GL_UNSIGNED_SHORT, (void*)0);
+	glUniformMatrix4fv(m_modelMatrixID, 1, GL_FALSE, &m_enemySkull_modelMatrix[0][0]);
+	glDrawElements(GL_TRIANGLES, m_enemySkull.indices.size(), GL_UNSIGNED_SHORT, (void*)0);
 	
 
 	glBindVertexArray(0);

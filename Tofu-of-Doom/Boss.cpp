@@ -74,7 +74,7 @@ void Boss::enemyMovement(sf::Time t_deltaTime)
 void Boss::moveEnemy(sf::Time t_deltaTime)
 {
 	graphPathVec = sf::Vector2f(graphPath.back()->m_data.m_x, graphPath.back()->m_data.m_y);
-	std::cout << " hhhhhh" << std::endl;
+	
 	sf::Vector2f moveTo = m_transform.moveTowards(m_bossCircle.getPosition(), graphPathVec, m_speedEn * t_deltaTime.asMilliseconds());
 	m_bossCircle.setPosition(moveTo);
 	if (m_bossCircle.getPosition().x == graphPath.back()->m_data.m_x &&
