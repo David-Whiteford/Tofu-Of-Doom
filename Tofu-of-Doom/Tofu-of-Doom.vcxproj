@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="AmmoPickUp.cpp" />
     <ClCompile Include="Boss.cpp" />
     <ClCompile Include="Bullet.cpp" />
     <ClCompile Include="Camera.cpp" />
@@ -57,6 +58,7 @@
     <ClCompile Include="VBOIndexer.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AmmoPickUp.h" />
     <ClInclude Include="aStarStuff\Graph.h" />
     <ClInclude Include="aStarStuff\GraphArc.h" />
     <ClInclude Include="aStarStuff\GraphNode.h" />

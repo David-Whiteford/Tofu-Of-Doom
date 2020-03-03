@@ -75,7 +75,7 @@ private:
 	int m_doOncePatrol = 0;
 	int m_doOnceSeek = 0;
 	int startNode = 103;
-	int endNode = 2450;
+	int endNode = 2227;
 
 
 	float m_radius = 33; // makes hitting enmies easier

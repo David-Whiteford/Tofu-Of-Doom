@@ -121,6 +121,11 @@ GameWorld::GameWorld(sf::RenderWindow& t_window, sf::Time& t_deltaTime, Camera* 
 		bullets[i] = new Bullet();
 	}
 
+	for (int i = 0; i < 5; i++)
+	{
+		ammo[i] = new AmmoPickUp(m_window);
+	}
+
 }
 
 /// <summary>
@@ -146,6 +151,19 @@ void GameWorld::updateWorld()
 	m_player.update();
 	setGunPosition();
 	updateBulletPhysics();
+
+
+	for (int i = 0; i < 5; i++)
+	{
+		if (ammo[i]->isAlive())
+		{
+			if (Transform::distance(getPlayerPosition(), ammo[i]->getPosition()) < m_player.getSprite().getRadius() + ammo[i]->getRadius())
+			{
+				m_player.maxAmmo();
+				ammo[i]->setAlive(false);
+			}
+		}
+	}
 
 
 
@@ -175,7 +193,7 @@ void GameWorld::updateWorld()
 			{
 				float dist = Transform::distance(dynamic_cast<Enemy*>(returnedEnemies[i])->getPosition(), getPlayerPosition());
 
-				if (dist < 60)
+				if (dist < 95)
 				{
 					m_player.decreaseHealth(10);
 					ui.setHealth(m_player.getHealth());
@@ -201,7 +219,7 @@ void GameWorld::updateWorld()
 
 		float bossDist = Transform::distance(m_bossAi->getPosition(), getPlayerPosition());
 
-		if (bossDist < 60)
+		if (bossDist < 95)
 		{
 			m_player.decreaseHealth(15);
 			ui.setHealth(m_player.getHealth());
@@ -283,6 +301,16 @@ void GameWorld::drawWorld()
 			activeBullets[i]->update();
 		}
 	}
+
+
+	for (int i = 0; i < 5; i++)
+	{
+		if (ammo[i]->isAlive())
+		{
+			ammo[i]->draw();
+		}
+	}
+
 }
 
 void GameWorld::initialise()
@@ -528,7 +556,7 @@ void GameWorld::updateBulletPhysics()
 					}
 				}
 			}
-			for (int x = 0; x < m_enemyActive.size(); x++)
+			/*for (int x = 0; x < m_enemyActive.size(); x++)
 			{
 				if (activeBullets[i]->checkCollision(m_bossAi->getPosition(), m_bossAi->getRadius()))
 				{
@@ -547,7 +575,7 @@ void GameWorld::updateBulletPhysics()
 						
 					}
 				}
-			}
+			}*/
 
 			// Set to previous for checks
 			previousReturn = returnWall;
@@ -565,6 +593,26 @@ void GameWorld::updateBulletPhysics()
 			if (activeBullets[i]->raycast.getClosest()->getTag() == ENEMY_TAG)
 			{
 				dynamic_cast<Enemy*>(activeBullets[i]->raycast.getClosest())->setDead();
+
+				killCount++;
+
+				if (killCount >= SPAWN_AMMO_AT)
+				{
+					/*for (int i = 0; i < 5; i++)
+					{
+						if (ammo[i]->isAlive() == false)
+						{
+							ammo[i]->setAlive(true);
+							ammo[i]->setPosition(sf::Vector2f(150,150));
+							killCount = 0;
+							break;
+						}
+					}*/
+
+					m_player.maxAmmo();
+					killCount = 0;
+				}
+				break;
 			}
 			else
 			{
@@ -598,6 +646,12 @@ void GameWorld::updateBulletPhysics()
 	}
 
 	quadtreeBullet.clear();
+
+
+
+
+
+
 }
 
 /// <summary>
