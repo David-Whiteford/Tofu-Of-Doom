@@ -597,16 +597,19 @@ void GameWorld::updateBulletPhysics()
 
 				if (killCount >= SPAWN_AMMO_AT)
 				{
-					for (int i = 0; i < 5; i++)
+					/*for (int i = 0; i < 5; i++)
 					{
 						if (ammo[i]->isAlive() == false)
 						{
 							ammo[i]->setAlive(true);
-							ammo[i]->setPosition(activeBullets[i]->raycast.getEndPoint() * s_displayScale);
+							ammo[i]->setPosition(sf::Vector2f(150,150));
 							killCount = 0;
 							break;
 						}
-					}
+					}*/
+
+					m_player.maxAmmo();
+					killCount = 0;
 				}
 				break;
 			}

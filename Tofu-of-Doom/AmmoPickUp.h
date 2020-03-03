@@ -47,7 +47,7 @@ private:
 
 
 
-	float m_radius = 23;
+	float m_radius = 52;
 
 
 	sf::Vector2f m_position = sf::Vector2f(0, 0);
